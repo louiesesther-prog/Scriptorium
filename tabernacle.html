@@ -3,486 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCRIPTORIUM | Tabernacle Mishkan (5D Cinematic View)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>SCRIPTORIUM | Tabernacle Mishkan (Cinematic 5D Engine)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/shared.css">
     <script src="assets/audio/scriptorium-audio.js" defer></script>
     <style>
         :root {
-            --obsidian: #050505;
-            --obsidian-2: #080808;
-            --museum-gold: #d4af37;
-            --museum-gold-dim: rgba(212, 175, 55, 0.6);
-            --museum-gold-faint: rgba(212, 175, 55, 0.12);
-            --sacrificial-crimson: #ae2222;
-            --incense-smoke: rgba(220, 215, 200, 0.25);
+            --obsidian: #030303;
+            --clay-dark: #0a0807;
+            --gold-metallic: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --bronze-metallic: linear-gradient(135deg, #765330 0%, #b08d57 50%, #543d2b 100%);
+            --sacrificial-crimson: #7a1212;
+            --linen-white: #e8e4db;
             --sidebar-w: 80px;
         }
-
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--obsidian);
-            color: #e0e0e0;
-            font-family: 'Cormorant Garamond', serif;
-            overflow: hidden;
-            display: flex;
-        }
-
-        /* 5D Atmosphere Engine Wrappers */
-        .cinematic-fx-container {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 5;
-            overflow: hidden;
-        }
-
-        /* Ambient Incense smoke and ash drift animations */
-        .smoke-drift, .ash-ember-drift {
-            position: absolute;
-            width: 200%; height: 100%;
-            background-repeat: repeat-x;
-            will-change: transform, opacity;
-            opacity: 0;
-            transition: opacity 3s ease-in-out;
-        }
-
-        .smoke-drift {
-            background: radial-gradient(circle at 30% 80%, var(--incense-smoke) 0%, transparent 45%),
-                        radial-gradient(circle at 75% 40%, rgba(240,235,220,0.15) 0%, transparent 50%);
-            animation: moveClouds 40s linear infinite;
-        }
-
-        .ash-ember-drift {
-            background: radial-gradient(circle at 10% 90%, rgba(230, 90, 40, 0.08) 0%, transparent 15%),
-                        radial-gradient(circle at 60% 70%, rgba(230, 90, 40, 0.05) 0%, transparent 20%);
-            animation: moveClouds 25s linear infinite;
-        }
-
-        /* Main App Interface Layout */
-        .tabernacle-main-content {
-            margin-left: var(--sidebar-w);
-            width: calc(100vw - var(--sidebar-w));
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .tabernacle-header {
-            padding: 25px 40px;
-            text-align: center;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
-            background: linear-gradient(180deg, #0f0f0f 0%, transparent 100%);
-            z-index: 10;
-        }
-
-        .cinzel-title {
-            font-family: 'Cinzel', serif;
-            letter-spacing: 5px;
-            color: var(--museum-gold);
-            margin: 0 0 5px 0;
-            font-size: 1.8rem;
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
-        }
-
-        .archival-subtitle {
-            font-size: 0.95rem;
-            letter-spacing: 2px;
-            color: #888;
-            margin: 0;
-        }
-
-        .layer-navigation {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .nav-seal {
-            background: #0d0d0d;
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            color: #8c8c8c;
-            padding: 10px 22px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .nav-seal.active, .nav-seal:hover {
-            border-color: var(--museum-gold);
-            color: var(--museum-gold);
-            box-shadow: 0 0 20px var(--museum-gold-faint);
-            background: rgba(212, 175, 55, 0.03);
-        }
-
-        /* Main Workspace Split */
-        .explorer-workspace {
-            flex-grow: 1;
-            display: flex;
-            padding: 30px;
-            gap: 30px;
-            z-index: 10;
-        }
-
-        .canvas-column {
-            flex-grow: 2;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        /* Blueprint Canvas Area */
-        .blueprint-canvas {
-            flex-grow: 1;
-            height: 60vh;
-            background: radial-gradient(circle at 50% 50%, rgba(15, 12, 10, 0.9) 0%, #050505 100%);
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            border-radius: 4px;
-            position: relative;
-            box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
-            transition: background 1.5s ease;
-        }
-
-        /* Specialized Room Lighting Filters (The 5D Flickering Torchlight effect) */
-        .blueprint-canvas::after {
-            content: '';
-            position: absolute;
-            top:0; left:0; width:100%; height:100%;
-            pointer-events: none;
-            mix-blend-mode: color-dodge;
-            opacity: 0.15;
-            transition: background 1.5s ease;
-        }
-
-        .blueprint-canvas.lighting-outer::after { background: radial-gradient(circle, #ffaa44 0%, transparent 80%); animation: torchFlicker 4s infinite alternate; }
-        .blueprint-canvas.lighting-holy::after { background: radial-gradient(circle at 50% 50%, #ffd466 0%, transparent 60%); animation: torchFlicker 2.5s infinite alternate; }
-        .blueprint-canvas.lighting-holies::after { background: radial-gradient(circle at 55% 50%, #ff4444 0%, transparent 40%); animation: deepPulse 5s infinite alternate; }
-
-        /* Interactive Blueprint Nodes */
-        .vessel-node {
-            position: absolute;
-            border: 1px dashed var(--museum-gold-dim);
-            background: rgba(10, 10, 10, 0.92);
-            color: var(--museum-gold);
-            font-family: 'Cinzel', serif;
-            font-size: 0.75rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            cursor: pointer;
-            letter-spacing: 1px;
-            padding: 10px;
-            box-sizing: border-box;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s, box-shadow 0.4s;
-            transform: translate(-50%, -50%);
-        }
-
-        .vessel-node:hover {
-            transform: translate(-50%, -52%) scale(1.04) !important;
-            border-style: solid;
-            border-color: #fff;
-            box-shadow: 0 0 25px rgba(255,255,255,0.15);
-        }
-
-        /* Priesthood Node Custom Configurations */
-        .vessel-node[data-priest="true"] {
-            border: 1px solid var(--sacrificial-crimson);
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(174, 34, 34, 0.18) 0%, #0a0a0a 100%);
-            color: #eee;
-        }
-
-        .vessel-node[data-priest="true"]:hover {
-            border-color: #ff5555;
-            box-shadow: 0 0 30px rgba(174, 34, 34, 0.4);
-        }
-
-        /* Telemetry Ticker */
-        #ritual-ticker-bar {
-            background: #090909;
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            border-radius: 4px;
-            padding: 18px 25px;
-            display: flex;
-            align-items: center;
-            gap: 40px;
-            transition: border-color 0.6s ease;
-        }
-
-        #ritual-ticker-bar.zone-outer { border-color: rgba(174, 34, 34, 0.35); }
-        #ritual-ticker-bar.zone-holy { border-color: rgba(212, 175, 55, 0.4); }
-        #ritual-ticker-bar.zone-holies { border-color: var(--sacrificial-crimson); box-shadow: inset 0 0 15px rgba(174, 34, 34, 0.15); }
-
-        .ticker-header { display: flex; align-items: center; gap: 12px; min-width: 220px; }
-        .pulsing-liturgical-dot { width: 8px; height: 8px; background-color: var(--museum-gold); border-radius: 50%; box-shadow: 0 0 8px var(--museum-gold); animation: tickerPulse 2s infinite ease-in-out; }
-        
-        #ritual-ticker-bar.zone-outer .pulsing-liturgical-dot { background-color: #8c8c8c; box-shadow: 0 0 8px #8c8c8c; }
-        #ritual-ticker-bar.zone-holy .pulsing-liturgical-dot { background-color: var(--museum-gold); box-shadow: 0 0 8px var(--museum-gold); }
-        #ritual-ticker-bar.zone-holies .pulsing-liturgical-dot { background-color: var(--sacrificial-crimson); box-shadow: 0 0 12px var(--sacrificial-crimson); }
-
-        .ticker-label { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 2px; color: #777; }
-        #ticker-message { font-size: 0.88rem; letter-spacing: 1px; color: #ccc; font-style: italic; }
-
-        /* Sidebar Metadata Inspection Panel */
-        .artifact-inspector-panel {
-            width: 380px;
-            background: #080808;
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-        }
-
-        .gold-text { font-family: 'Cinzel', serif; font-size: 1.1rem; letter-spacing: 3px; color: var(--museum-gold); margin: 0; text-align: center; }
-        .meta-separator { height: 1px; background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4), transparent); margin: 20px 0; }
-        .garamond-text { font-size: 1.15rem; line-height: 1.6; color: #b5b5b5; text-align: justify; }
-
-        /* Typology Blocks */
-        .typology-wrapper {
-            margin-top: auto;
-            border-top: 1px dashed rgba(212, 175, 55, 0.2);
-            padding-top: 20px;
-        }
-        .typ-label { font-family: 'Cinzel', serif; font-size: 0.7rem; color: var(--museum-gold-dim); letter-spacing: 2px; margin-bottom: 5px; }
-        .typ-val { font-size: 1.1rem; color: #e0e0e0; font-style: italic; margin-bottom: 12px; }
-
-        /* The Grand Ark Overlay Veil (Takeover Display) */
-        #arkOverlay {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle, rgba(10,5,2,0.98) 0%, #020202 100%);
-            z-index: 100000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 0; pointer-events: none;
-            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
+        body { margin: 0; padding: 0; background-color: var(--obsidian); color: #e0e0e0; font-family: 'Cormorant Garamond', serif; overflow: hidden; }
+        .cinematic-environment { position: fixed; top: 0; left: var(--sidebar-w); width: calc(100vw - var(--sidebar-w)); height: 100%; pointer-events: none; z-index: 4; overflow: hidden; }
+        .fog-blanket { position: absolute; width: 200%; height: 100%; background: radial-gradient(circle at 50% 80%, rgba(212, 175, 55, 0.04) 0%, transparent 60%), radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.02) 0%, transparent 40%); animation: drift 35s linear infinite; mix-blend-mode: screen; }
+        #particle-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 6; }
+        .tabernacle-main-content { margin-left: var(--sidebar-w); width: calc(100vw - var(--sidebar-w)); height: 100vh; display: flex; flex-direction: column; position: relative; z-index: 5; }
+        .tabernacle-header { padding: 25px 40px; text-align: center; border-bottom: 1px solid rgba(212, 175, 55, 0.15); background: linear-gradient(180deg, #0d0c0b 0%, transparent 100%); }
+        .cinzel-title { font-family: 'Cinzel', serif; letter-spacing: 6px; background: linear-gradient(to right, #fff 20%, #d4af37 50%, #fff 80%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 2rem; font-weight: 700; margin: 0; filter: drop-shadow(0 2px 10px rgba(212,175,55,0.2)); }
+        .archival-subtitle { font-size: 0.95rem; letter-spacing: 2px; color: #888; margin: 0; }
+        .layer-navigation { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+        .nav-seal { background: #0a0908; border: 1px solid rgba(212, 175, 55, 0.3); color: #a39e93; padding: 12px 26px; font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 3px; cursor: pointer; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); position: relative; }
+        .nav-seal.active, .nav-seal:hover { color: #fff; border-color: #e6c667; box-shadow: 0 0 15px rgba(212, 175, 55, 0.15), inset 0 0 8px rgba(212, 175, 55, 0.1); background: rgba(212, 175, 55, 0.02); transform: translateY(-1px); }
+        .nav-seal .zone-explore-dot { position: absolute; top: -4px; right: -4px; width: 8px; height: 8px; border-radius: 50%; background: rgba(212,175,55,0.3); border: 1px solid rgba(212,175,55,0.5); transition: all 0.3s; }
+        .nav-seal .zone-explore-dot.explored { background: #d4af37; box-shadow: 0 0 8px rgba(212,175,55,0.6); }
+        .explorer-workspace { flex-grow: 1; display: flex; padding: 30px; gap: 30px; overflow: hidden; }
+        .canvas-column { flex-grow: 2; display: flex; flex-direction: column; gap: 25px; min-width: 0; }
+        .blueprint-canvas { flex-grow: 1; background: radial-gradient(circle at 50% 40%, #161310 0%, #050505 100%); border: 1px solid rgba(212, 175, 55, 0.12); border-radius: 6px; position: relative; overflow: hidden; box-shadow: inset 0 0 100px rgba(0,0,0,0.95), 0 10px 40px rgba(0,0,0,0.6); perspective: 1000px; min-height: 300px; }
+        .cubit-grid { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.15; transition: opacity 1s; }
+        .sanctuary-floor-grid { position: absolute; width: 85%; height: 75%; border-radius: 4px; transition: all 1s ease-in-out; display: flex; justify-content: center; align-items: center; box-shadow: 0 20px 50px rgba(0,0,0,0.8); z-index: 2; }
+        .floor-outer { background: radial-gradient(ellipse at 30% 40%, rgba(120,100,70,0.15) 0%, transparent 50%), radial-gradient(ellipse at 70% 60%, rgba(80,60,40,0.1) 0%, transparent 40%), repeating-conic-gradient(rgba(100,80,50,0.03) 0% 25%, transparent 0% 50%) 0 0 / 20px 20px, linear-gradient(180deg, #1f1b16 0%, #151210 100%); border: 3px double rgba(118, 83, 48, 0.4); }
+        .floor-holy { background: radial-gradient(circle at 50% 30%, rgba(212,175,55,0.08) 0%, transparent 40%), repeating-linear-gradient(0deg, rgba(180,150,80,0.04) 0px, transparent 2px, transparent 40px), repeating-linear-gradient(90deg, rgba(180,150,80,0.04) 0px, transparent 2px, transparent 40px), linear-gradient(180deg, #120e0a 0%, #0a0806 100%); border: 2px solid rgba(212, 175, 55, 0.3); }
+        .floor-holies { background: radial-gradient(circle at 50% 50%, rgba(122,18,18,0.15) 0%, transparent 50%), repeating-linear-gradient(45deg, rgba(80,10,10,0.06) 0px, transparent 1px, transparent 20px), linear-gradient(180deg, #0a0303 0%, #050101 100%); border: 2px solid var(--sacrificial-crimson); }
+        .sanctuary-lighting-cast { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; mix-blend-mode: color-dodge; opacity: 0.4; transition: background 1s ease, opacity 1s ease; z-index: 3; }
+        .cast-outer { background: radial-gradient(circle at 35% 50%, #ff8833 0%, transparent 60%); animation: ambientFlicker 4s infinite alternate; }
+        .cast-holy { background: radial-gradient(circle at 50% 50%, #ffe082 0%, transparent 50%), linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent); animation: ambientFlicker 2s infinite alternate; }
+        .cast-holies { background: radial-gradient(circle at 50% 50%, #ff3333 0%, transparent 35%); animation: supernaturalPulse 6s infinite alternate; }
+        .veil-curtain { position: absolute; top: 0; left: 50%; width: 50%; height: 100%; z-index: 5; pointer-events: none; transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease; transform-origin: left center; transform: translateX(-50%); }
+        .veil-left, .veil-right { position: absolute; top: 0; width: 50%; height: 100%; background: linear-gradient(180deg, rgba(30,10,60,0.95) 0%, rgba(60,20,80,0.85) 30%, rgba(80,25,90,0.7) 60%, rgba(40,15,50,0.9) 100%); border-right: 1px solid rgba(212,175,55,0.2); }
+        .veil-left { left: 0; transform-origin: left center; }
+        .veil-right { left: 50%; transform-origin: right center; }
+        .veil-curtain.parting .veil-left { transform: translateX(-100%); opacity: 0; }
+        .veil-curtain.parting .veil-right { transform: translateX(100%); opacity: 0; }
+        .vessel-node { position: absolute; color: #fff; font-family: 'Cinzel', serif; font-size: 0.65rem; font-weight: 600; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; text-align: center; letter-spacing: 1.5px; box-sizing: border-box; border-radius: 4px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); text-shadow: 0 2px 5px rgba(0,0,0,0.9); box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 10; gap: 4px; padding: 4px; }
+        .vessel-node .vessel-icon { width: 32px; height: 32px; flex-shrink: 0; }
+        .mat-bronze { background: var(--bronze-metallic); border: 1px solid #91693f; box-shadow: 0 0 20px rgba(118,83,48,0.3), 0 10px 25px rgba(0,0,0,0.7); }
+        .mat-gold { background: var(--gold-metallic); border: 1px solid #ffd97d; color: #111 !important; text-shadow: 0 1px 2px rgba(255,255,255,0.6); box-shadow: 0 0 25px rgba(212,175,55,0.25), 0 12px 30px rgba(0,0,0,0.8); }
+        .mat-priest { background: radial-gradient(circle, #ffffff 0%, #d4ceb8 100%); border: 2px solid var(--sacrificial-crimson); border-radius: 50% !important; color: #111 !important; font-weight: 700; text-shadow: none !important; }
+        .vessel-node:hover { transform: translate(-50%, -58%) scale(1.06) rotateX(5deg) !important; box-shadow: 0 20px 40px rgba(0,0,0,0.9), 0 0 30px rgba(255,255,255,0.2); filter: brightness(1.15); }
+        .vessel-node.ritual-active { animation: ritualGlow 2s infinite alternate; }
+        .vessel-node.ritual-active.mat-bronze { box-shadow: 0 0 40px rgba(255,120,40,0.6), 0 10px 25px rgba(0,0,0,0.7); }
+        .vessel-node.ritual-active.mat-gold { box-shadow: 0 0 50px rgba(212,175,55,0.5), 0 12px 30px rgba(0,0,0,0.8); }
+        @keyframes ritualGlow { 0% { filter: brightness(1); } 100% { filter: brightness(1.3); } }
+        .vessel-tooltip { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); background: rgba(10,8,6,0.95); border: 1px solid rgba(212,175,55,0.3); border-radius: 3px; padding: 8px 12px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 100; white-space: nowrap; font-family: 'Cormorant Garamond', serif; font-size: 0.8rem; color: #d4af37; font-style: italic; box-shadow: 0 4px 20px rgba(0,0,0,0.8); }
+        .vessel-node:hover .vessel-tooltip { opacity: 1; }
+        .vessel-tooltip .tip-ref { font-size: 0.65rem; color: #888; display: block; margin-top: 3px; }
+        .vessel-fire-emitter { position: absolute; top: -5px; width: 6px; height: 12px; background: radial-gradient(circle, #fff 0%, #ffaa00 40%, transparent 80%); border-radius: 50%; filter: blur(1px); animation: flameWobble 0.3s infinite alternate; mix-blend-mode: screen; }
+        #ritual-ticker-bar { background: linear-gradient(90deg, #0a0908 0%, #14110f 100%); border-left: 4px solid var(--museum-gold); border-top: 1px solid rgba(212,175,55,0.15); border-right: 1px solid rgba(212, 175, 55, 0.15); border-bottom: 1px solid rgba(212, 175, 55, 0.15); padding: 20px 30px; display: flex; align-items: center; gap: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .ticker-header { display: flex; align-items: center; gap: 12px; min-width: 200px; }
+        .pulsing-liturgical-dot { width: 9px; height: 9px; background-color: var(--museum-gold); border-radius: 50%; box-shadow: 0 0 10px var(--museum-gold); animation: pulse 1.8s infinite ease-in-out; }
+        .ticker-label { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 2px; color: #88837a; }
+        #ticker-message { font-size: 0.95rem; font-style: italic; color: #d1cbc0; font-family: 'Cormorant Garamond'; letter-spacing: 0.5px; }
+        .artifact-inspector-panel { width: 400px; background: linear-gradient(180deg, #090807 0%, #030303 100%); border: 1px solid rgba(212, 175, 55, 0.18); border-radius: 4px; padding: 35px; display: flex; flex-direction: column; box-shadow: -15px 0 40px rgba(0,0,0,0.8); box-sizing: border-box; max-height: 100%; overflow: hidden; }
+        .inspector-scroll { flex-grow: 1; overflow-y: auto; padding-right: 5px; }
+        .gold-text { font-family: 'Cinzel', serif; font-size: 1.25rem; letter-spacing: 3px; color: #e6c667; margin: 0; text-align: center; }
+        .meta-separator { height: 1px; background: linear-gradient(90deg, transparent, #b38728, transparent); margin: 20px 0; }
+        .garamond-text { font-size: 1.2rem; line-height: 1.65; color: #c4bfae; text-align: justify; }
+        .typology-wrapper { margin-top: auto; border-top: 1px solid rgba(212, 175, 55, 0.15); padding-top: 25px; background: rgba(212, 175, 55, 0.01); }
+        .typ-label { font-family: 'Cinzel', serif; font-size: 0.7rem; color: #b38728; letter-spacing: 2px; margin-bottom: 6px; }
+        .typ-val { font-size: 1.15rem; color: #fff; font-style: italic; margin-bottom: 14px; }
+        .typ-verse-link { display: inline-block; color: #d4af37; text-decoration: none; border-bottom: 1px dashed rgba(212,175,55,0.3); cursor: pointer; transition: all 0.2s; }
+        .typ-verse-link:hover { color: #fff; border-color: #fff; }
+        #arkOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle, rgba(12, 6, 4, 0.99) 0%, #020202 100%); z-index: 100000; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
         #arkOverlay.active { opacity: 1; pointer-events: auto; }
-        .ark-frame-glow { width: 300px; height: 200px; border: 1px solid var(--museum-gold); background: rgba(212,175,55,0.02); box-shadow: 0 0 50px rgba(212,175,55,0.15); display:flex; justify-content:center; align-items:center; font-family:'Cinzel'; color:var(--museum-gold); letter-spacing:3px; font-size:0.8rem; margin-bottom:30px; }
-        .close-ark-btn { background:transparent; border:1px solid rgba(212,175,55,0.4); color:var(--museum-gold); padding:10px 25px; font-family:'Cinzel'; font-size:0.7rem; letter-spacing:2px; cursor:pointer; transition:all 0.3s; }
-        .close-ark-btn:hover { background:rgba(212,175,55,0.1); border-color:#fff; color:#fff; }
-
-        /* Keyframe Animations */
-        @keyframes torchFlicker {
-            0%, 100% { opacity: 0.12; transform: scale(1); }
-            50% { opacity: 0.18; transform: scale(1.02); }
-        }
-        @keyframes deepPulse {
-            0%, 100% { opacity: 0.08; }
-            50% { opacity: 0.22; }
-        }
-        @keyframes moveClouds {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-50%, 0, 0); }
-        }
-        @keyframes tickerPulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+        .ark-emblem-container { position: relative; width: 300px; height: 200px; margin-bottom: 40px; animation: levitate 4s infinite ease-in-out; }
+        .ark-emblem-container svg { width: 100%; height: 100%; }
+        .close-ark-btn { background: transparent; border: 1px solid #bf953f; color: #d4af37; padding: 12px 30px; font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 3px; cursor: pointer; margin-top: 20px; transition: all 0.4s; }
+        .close-ark-btn:hover { background: rgba(212,175,55,0.08); border-color: #fff; color: #fff; }
+        .zone-transition-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #030303; z-index: 50; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; }
+        .zone-transition-overlay.active { opacity: 1; }
+        .parallax-light { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; background: radial-gradient(circle at var(--px, 50%) var(--py, 50%), rgba(212,175,55,0.03) 0%, transparent 40%); transition: background 0.3s ease; }
+        @keyframes drift { 0% { transform: translate3d(0,0,0); } 100% { transform: translate3d(-50%,0,0); } }
+        @keyframes ambientFlicker { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.48; } }
+        @keyframes supernaturalPulse { 0%, 100% { opacity: 0.2; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.03); } }
+        @keyframes flameWobble { 0% { transform: scaleX(1) rotate(-2deg); } 100% { transform: scaleX(1.2) rotate(2deg); height: 14px; } }
+        @keyframes levitate { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
         @keyframes textFade { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: translateX(0); } }
-
-        @media (max-width: 900px) {
-            .explorer-workspace { flex-direction: column; }
-            .artifact-inspector-panel { width: 100%; }
-            .cinzel-title { font-size: 1.2rem; letter-spacing: 3px; }
-        }
-
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.2); border-radius: 2px; }
+        @media (max-width: 900px) { .explorer-workspace { flex-direction: column; } .artifact-inspector-panel { width: 100%; max-height: 40vh; } .cinzel-title { font-size: 1.2rem; letter-spacing: 3px; } .layer-navigation { flex-wrap: wrap; } .nav-seal { padding: 8px 16px; font-size: 0.65rem; } }
+        ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.2); border-radius: 2px; }
     </style>
 </head>
 <body>
-
-    <div class="cinematic-fx-container">
-        <div id="fx-smoke" class="smoke-drift"></div>
-        <div id="fx-ash" class="ash-ember-drift"></div>
+    <div id="sidebarContainer"></div>
+    <div class="cinematic-environment">
+        <div class="fog-blanket"></div>
+        <canvas id="particle-canvas"></canvas>
     </div>
-
     <main class="tabernacle-main-content">
         <header class="tabernacle-header">
             <h1 class="cinzel-title">THE SANCTUARY MISHKAN</h1>
-            <p class="archival-subtitle">A sensory archaeological schematic tracking liturgical motion across antiquity</p>
-            
+            <p class="archival-subtitle">Interactive 5D Cinematic Blueprint Schema of Antiquity</p>
             <div class="layer-navigation">
-                <button class="nav-seal active" onclick="switchSanctuaryZone('outer', this)">THE OUTER COURT</button>
-                <button class="nav-seal" onclick="switchSanctuaryZone('holy', this)">THE HOLY PLACE</button>
-                <button class="nav-seal" onclick="switchSanctuaryZone('holies', this)">THE HOLY OF HOLIES</button>
+                <button class="nav-seal active" onclick="switchSanctuaryZone('outer', this)">THE OUTER COURT<span class="zone-explore-dot" id="dot-outer"></span></button>
+                <button class="nav-seal" onclick="switchSanctuaryZone('holy', this)">THE HOLY PLACE<span class="zone-explore-dot" id="dot-holy"></span></button>
+                <button class="nav-seal" onclick="switchSanctuaryZone('holies', this)">THE HOLY OF HOLIES<span class="zone-explore-dot" id="dot-holies"></span></button>
             </div>
         </header>
-
         <div class="explorer-workspace">
             <div class="canvas-column">
-                <div class="blueprint-canvas" id="blueprint-zone"></div>
-
-                <div id="ritual-ticker-bar" class="zone-outer">
-                    <div class="ticker-header">
-                        <span class="pulsing-liturgical-dot"></span>
-                        <span class="ticker-label">LITURGICAL TELEMETRY</span>
-                    </div>
+                <div class="blueprint-canvas" id="blueprint-zone">
+                    <div class="zone-transition-overlay" id="zoneTransition"></div>
+                    <div class="parallax-light" id="parallaxLight"></div>
+                    <div id="lighting-overlay" class="sanctuary-lighting-cast cast-outer"></div>
+                    <div id="floor-layer" class="sanctuary-floor-grid floor-outer"></div>
+                    <div class="veil-curtain" id="veilCurtain"><div class="veil-left"></div><div class="veil-right"></div></div>
+                </div>
+                <div id="ritual-ticker-bar">
+                    <div class="ticker-header"><span class="pulsing-liturgical-dot"></span><span class="ticker-label">LITURGICAL STATE</span></div>
                     <div id="ticker-message">Initializing Scriptorium structural schematics...</div>
                 </div>
             </div>
-
             <aside class="artifact-inspector-panel">
-                <div style="flex-grow:1;">
-                    <h2 id="inspector-title" class="gold-text">COURTYARD VIEW</h2>
+                <div class="inspector-scroll">
+                    <h2 id="inspector-title" class="gold-text">SANCTUARY SCHEMATIC</h2>
                     <div class="meta-separator"></div>
-                    <p id="inspector-description" class="garamond-text">
-                        Select a holy vessel or priest entity inside the map viewport layer to track scriptural cubit volumes, functions, and historical accounts.
-                    </p>
+                    <p id="inspector-description" class="garamond-text">Interact with any object, entity, or priest operating on the schematic layout floor to view material configurations, dimensional weights, and historical scripts.</p>
                 </div>
-
                 <div id="typology-section" class="typology-wrapper" style="display: none;">
-                    <div class="typ-label">PROPHETIC ANTITYPE</div>
-                    <div id="typ-antitype" class="typ-val">-</div>
-                    <div class="typ-label">SCRIPTURAL RECORD</div>
-                    <div id="typ-scripture" class="typ-val" style="font-family:'Cinzel'; font-size:0.75rem; color:#fff;">-</div>
-                    <div class="typ-label">EXPOSITION ANCHOR</div>
-                    <div id="typ-exposition" class="garamond-text" style="font-size:1.05rem;">-</div>
+                    <div class="typ-label">PROPHETIC TYPOLOGY</div><div id="typ-antitype" class="typ-val">-</div>
+                    <div class="typ-label">RECORD VERSE</div><div id="typ-scripture" class="typ-val" style="font-family:'Cinzel'; font-size:0.8rem; color:#e6c667;">-</div>
+                    <div class="typ-label">EXEGETICAL ACCOUNT</div><div id="typ-exposition" class="garamond-text" style="font-size:1.05rem; line-height:1.5;">-</div>
                 </div>
             </aside>
         </div>
     </main>
-
     <div id="arkOverlay">
-        <div class="ark-frame-glow">[ HOLY OF HOLIES ARCHIVAL VEIL ]</div>
-        <h1 class="cinzel-title" style="font-size:2.2rem; margin-bottom:10px;">THE ARK OF THE COVENANT</h1>
-        <p class="garamond-text" style="max-width:600px; text-align:center; margin-bottom:40px; font-size:1.25rem; color:#d4af37; font-style:italic;">
-            "And there I will meet with thee, and I will commune with thee from above the mercy seat, from between the two cherubims which are upon the ark of the testimony..." — Exodus 25:22
-        </p>
+        <div class="ark-emblem-container">
+            <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+                <defs><linearGradient id="arkGold" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#bf953f"/><stop offset="25%" style="stop-color:#fcf6ba"/><stop offset="50%" style="stop-color:#b38728"/><stop offset="75%" style="stop-color:#fbf5b7"/><stop offset="100%" style="stop-color:#aa771c"/></linearGradient>
+                <filter id="arkGlow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+                <rect x="80" y="100" width="140" height="60" rx="4" fill="url(#arkGold)" stroke="#ffd97d" stroke-width="1" filter="url(#arkGlow)"/>
+                <rect x="90" y="90" width="120" height="14" rx="3" fill="url(#arkGold)" stroke="#ffd97d" stroke-width="0.5"/>
+                <g transform="translate(100, 30)"><path d="M20,60 Q5,40 10,20 Q15,10 20,15 Q25,10 30,20 Q35,40 20,60Z" fill="url(#arkGold)" opacity="0.9"/><path d="M10,25 Q0,15 5,5 Q10,0 15,8" fill="none" stroke="#ffd97d" stroke-width="1" opacity="0.7"/><path d="M30,25 Q40,15 35,5 Q30,0 25,8" fill="none" stroke="#ffd97d" stroke-width="1" opacity="0.7"/></g>
+                <g transform="translate(180, 30)"><path d="M20,60 Q5,40 10,20 Q15,10 20,15 Q25,10 30,20 Q35,40 20,60Z" fill="url(#arkGold)" opacity="0.9"/><path d="M10,25 Q0,15 5,5 Q10,0 15,8" fill="none" stroke="#ffd97d" stroke-width="1" opacity="0.7"/><path d="M30,25 Q40,15 35,5 Q30,0 25,8" fill="none" stroke="#ffd97d" stroke-width="1" opacity="0.7"/></g>
+                <path d="M130,25 Q150,5 170,25" fill="none" stroke="#ffd97d" stroke-width="1.5" opacity="0.6"/>
+                <rect x="90" y="158" width="8" height="12" rx="2" fill="url(#arkGold)"/><rect x="202" y="158" width="8" height="12" rx="2" fill="url(#arkGold)"/>
+                <rect x="78" y="98" width="144" height="64" rx="5" fill="none" stroke="#ffd97d" stroke-width="0.5" opacity="0.4"/>
+            </svg>
+        </div>
+        <h1 class="cinzel-title" style="font-size: 2.5rem; margin-bottom: 15px;">THE ARK OF THE COVENANT</h1>
+        <p class="garamond-text" style="max-width: 650px; text-align: center; margin-bottom: 40px; font-size: 1.3rem; color: #e6c667; font-style: italic;">"And the cherubims shall stretch forth their wings on high, covering the mercy seat with their wings, and their faces shall look one to another..." — Exodus 25:20</p>
         <button class="close-ark-btn" onclick="closeArkOverlay()">RETREAT BEHIND THE VEIL ✕</button>
     </div>
-
     <script>
         const ZONE_DATA = {
-            outer: {
-                title: "THE OUTER COURT",
-                tickerClass: "zone-outer",
-                lightingClass: "lighting-outer",
-                smokeOpacity: 0.1,
-                ashOpacity: 0.8,
-                tickerMessage: "Status: Sacrificial Fire Blazing — Heavy soot drifting from the Bronze Altar. Priests washing hands and feet before sanctuary approach.",
-                description: "An enclosed open-air perimeter canvas (100x50 cubits). Wrapped completely in fine twisted white linen columns anchored deep into heavy bronze sockets, catching the raw heat, smoke, and blazing sun of the desert wilderness context.",
-                vessels: [
-                    { name: "Altar of Burnt Offering", w: "130px", h: "130px", t: "50%", l: "28%", info: "Forged out of acacia wood planks wrapped completely in sheets of industrial bronze. This central furnace burns continuously, handling animal sacrifice offerings. Fitted with deep horns at its corners where expiation blood lines are painted.", typology: { antitype: "The Perfect Sacrificial Offering of Christ", scripture: "Hebrews 9:14", exposition: "The heavy bronze sheets protected the vulnerable acacia wood from the ongoing devouring flames, reflecting how endurance shields flesh from transactional death judgments." } },
-                    { name: "The Bronze Laver", w: "85px", h: "85px", t: "50%", l: "62%", info: "Crafted directly out of the polished bronze looking-glasses of the women who assembled at the congregation entry gate. Always loaded with fresh structural water reserves for priests to track purification wash codes.", typology: { antitype: "Regeneration & Baptismal Cleansing", scripture: "Titus 3:5", exposition: "Priests were legally required to wash at this point before making programmatic entry into the interior holy modules under strict threat of death." } },
-                    { name: "Levitical Priests", w: "55px", h: "55px", t: "22%", l: "45%", isPriest: true, info: "Operating pairs in pure white linen coats bound with high sashes. They process raw offerings, stack cedar woods across the furnace rails, and carefully manage the removal of sacred altar ashes.", typology: { antitype: "The Universal Liturgical Priesthood", scripture: "1 Peter 2:9", exposition: "Woven linen textures provided thermodynamic durability in heavy heat indices while remaining cleanly scrubbable during complex ritual activities." } }
-                ]
-            },
-            holy: {
-                title: "THE HOLY PLACE",
-                tickerClass: "zone-holy",
-                lightingClass: "lighting-holy",
-                smokeOpacity: 0.9,
-                ashOpacity: 0.0,
-                tickerMessage: "Status: Incense Cloud Formed — Scent of pure myrrh and frankincense heavy in the air. The Golden Menorah lamps burning clean olive oils.",
-                description: "The first internal structural vault room (20x10 cubits). Completely enclosed behind heavy golden walls and thick multi-layered blue, purple, and scarlet tapestries, completely cutting off the natural sunlight of the outer court landscape.",
-                vessels: [
-                    { name: "The Golden Menorah", w: "70px", h: "95px", t: "22%", l: "45%", info: "Beaten completely out of a single continuous talent block of pure gold. Houses seven distinct channels loaded with pure hand-beaten olive oils, casting flickering spiritual lighting elements into the windowless enclosure room.", typology: { antitype: "The Light of the World / The Holy Spirit", scripture: "John 8:12", exposition: "Crafted with stylized almond blossom bowls, knops, and floral indicators, mirroring an organic tree of life blazing with continuous fires." } },
-                    { name: "Table of Showbread", w: "120px", h: "70px", t: "78%", l: "45%", info: "Acacia frame wrapped in polished gold leaf trims. Holds twelve fresh loaves of unleavened bread stacked cleanly into two parallel columns of six, completely swapped out every single Sabbath cycle.", typology: { antitype: "Christ the Bread of Life / Spiritual Sustenance", scripture: "John 6:35", exposition: "Topped with small cups of pure frankincense resins, acting as a non-perishable reminder of ongoing tribal visibility before the throne room boundaries." } },
-                    { name: "Altar of Incense", w: "80px", h: "80px", t: "50%", l: "82%", info: "A high square golden table structure sitting right up against the heavy partition veil curtain. Burns a specialized compound recipe of stacte, onycha, galbanum, and frankincense twice daily.", typology: { antitype: "The Intercessory Prayers of the Saints", scripture: "Revelation 8:3", exposition: "The smoke created a thick, protective visual filter, clouding the workspace so that priests would not see past the veil or look at the Mercy Seat directly." } },
-                    { name: "Priest Officiating", w: "55px", h: "55px", t: "50%", l: "60%", isPriest: true, info: "A selected priest inside the gold chamber trimming lamp wicks with golden tweezers, adjusting bread arrays, and scattering fresh coals over the Altar of Incense.", typology: { antitype: "Continuous Corporate Intercession", scripture: "Luke 1:9", exposition: "Moving slowly in the dimly-lit golden room, the ringing of minor garment attachments signaled their accurate functional deployment loops to witnesses outside." } }
-                ]
-            },
-            holies: {
-                title: "THE HOLY OF HOLIES",
-                tickerClass: "zone-holies",
-                lightingClass: "lighting-holies",
-                smokeOpacity: 0.4,
-                ashOpacity: 0.0,
-                tickerMessage: "CRITICAL ALERT: Absolute Sanctuary Restrained. The High Priest steps past the veil alone carrying sacrificial blood vectors.",
-                description: "A perfect 10-cubit cube vault representing the terrestrial foothold of the King of Kings. Completely pitch black except for the supernatural Shekinah glow emanating directly off the golden throne area.",
-                vessels: [
-                    { name: "The Ark of the Covenant", w: "140px", h: "90px", t: "50%", l: "62%", isArk: true, info: "The architectural center of the ancient world. An acacia ark chest holding the Decalogue tablets, Aaron's rod, and Manna. Crowned by the solid gold Mercy Seat and two outstretched Cherubim.", typology: { antitype: "The Throne of Grace / Propitiation Hub", scripture: "Romans 3:25", exposition: "Once a year, blood is sprinkled directly onto the top plate, bridging the gap between moral law inside the chest and divine mercy above it." } },
-                    { name: "High Priest (Yom Kippur)", w: "55px", h: "55px", t: "50%", l: "28%", isPriest: true, info: "The High Priest operating in humble white linen garments rather than his standard golden robes. Processes past the veil carrying a golden blood bowl and fire censer.", typology: { antitype: "Christ our Great High Priest Entering Heaven", scripture: "Hebrews 9:11-12", exposition: "He enters under intense sensory tension, using dense incense columns to shade his vision from looking at the raw Mercy Seat geometry." } }
-                ]
-            }
+            outer: { title: "THE OUTER COURT", lightingClass: "sanctuary-lighting-cast cast-outer", floorClass: "sanctuary-floor-grid floor-outer", tickerMessage: "Status: Sacrificial Fire Active — Smoke and ash rising from the Bronze Altar. Priests executing cleansing wash routines at the Laver.", description: "An open-air courtyard measuring 100 cubits by 50 cubits, bounded by pristine columns of white twisted linen. Exposed completely to the burning heat, winds, and sands of the wilderness landscape, framing an intense sensory environment of fire, blood, and purification.", particleType: "embers", vessels: [
+                { name: "Altar of Burnt Offering", w: "140px", h: "140px", t: "50%", l: "28%", matClass: "mat-bronze", hasFire: true, ritualKey: "altar", tooltip: "Continuous fire since Sinai", tipRef: "Leviticus 6:13", icon: `<svg viewBox="0 0 32 32" class="vessel-icon"><rect x="6" y="14" width="20" height="14" rx="2" fill="rgba(0,0,0,0.3)" stroke="rgba(0,0,0,0.5)" stroke-width="1"/><rect x="8" y="10" width="16" height="6" rx="1" fill="rgba(0,0,0,0.2)" stroke="rgba(0,0,0,0.4)" stroke-width="0.5"/><path d="M16 10 Q13 4 16 1 Q19 4 16 10Z" fill="#ff6600" opacity="0.8"/><path d="M16 10 Q14 6 16 3 Q18 6 16 10Z" fill="#ffaa00" opacity="0.9"/></svg>`, info: "A hollow chest built of acacia wood heavily plated in industrial bronze sheets to withstand non-stop fires.", typology: { antitype: "The Supreme Sacrifice / The Cross", scripture: "Hebrews 13:10", exposition: "Bronze shielded timber from devouring flames." } },
+                { name: "The Bronze Laver", w: "90px", h: "90px", t: "50%", l: "62%", matClass: "mat-bronze", hasFire: false, ritualKey: "laver", tooltip: "Mirror-forged basin", tipRef: "Exodus 30:18", icon: `<svg viewBox="0 0 32 32" class="vessel-icon"><ellipse cx="16" cy="22" rx="10" ry="6" fill="rgba(0,0,0,0.3)" stroke="rgba(0,0,0,0.5)" stroke-width="1"/><ellipse cx="16" cy="20" rx="9" ry="5" fill="rgba(100,150,200,0.15)" stroke="rgba(0,0,0,0.3)" stroke-width="0.5"/></svg>`, info: "A massive bronze basin forged from polished hand-mirrors.", typology: { antitype: "Sanctification & Cleansing", scripture: "Titus 3:5", exposition: "Washing required before sanctuary entry." } },
+                { name: "Levitical Priests", w: "60px", h: "60px", t: "22%", l: "45%", matClass: "mat-priest", hasFire: false, ritualKey: "priest", tooltip: "White linen vestments", tipRef: "Exodus 28:4", icon: `<svg viewBox="0 0 32 32" class="vessel-icon"><circle cx="16" cy="10" r="5" fill="rgba(0,0,0,0.15)" stroke="rgba(0,0,0,0.4)" stroke-width="1"/><path d="M10 16 L16 14 L22 16 L20 28 L12 28Z" fill="rgba(0,0,0,0.1)" stroke="rgba(0,0,0,0.3)" stroke-width="0.8"/></svg>`, info: "Dressed in pure white linen vestments.", typology: { antitype: "The Universal Priesthood", scripture: "1 Peter 2:9", exposition: "Linen provided heat reflection and cleanliness." } }
+            ]},
+            holy: { title: "THE HOLY PLACE", lightingClass: "sanctuary-lighting-cast cast-holy", floorClass: "sanctuary-floor-grid floor-holy", tickerMessage: "Status: Sanctuary Sealed — Deep scent of sweet frankincense and myrrh. The Golden Menorah lamps casting shifting light paths.", description: "The primary internal sanctuary chamber (20x10 cubits). Completely enclosed behind thick golden wall panels and layers of deep blue, purple, and scarlet tapestries.", particleType: "smoke", vessels: [
+                { name: "The Golden Menorah", w: "70px", h: "100px", t: "22%", l: "45%", matClass: "mat-gold", hasFire: true, ritualKey: "menorah", tooltip: "Seven branches of pure gold", tipRef: "Exodus 25:31", icon: `<svg viewBox="0 0 32 32" class="vessel-icon"><rect x="14" y="20" width="4" height="8" fill="rgba(0,0,0,0.2)"/><path d="M16 20 Q16 12 8 8" fill="none" stroke="rgba(0,0,0,0.5)" stroke-width="1.5"/><path d="M16 20 Q16 12 24 8" fill="none" stroke="rgba(0,0,0,0.5)" stroke-width="1.5"/><path d="M16 20 L16 6" fill="none" stroke="rgba(0,0,0,0.5)" stroke-width="1.5"/><circle cx="8" cy="7" r="2" fill="#ffaa00" opacity="0.8"/><circle cx="24" cy="7" r="2" fill="#ffaa00" opacity="0.8"/><circle cx="16" cy="5" r="2" fill="#ffaa00" opacity="0.8"/></svg>`, info: "Beaten from a single talent of solid pure gold.", typology: { antitype: "Divine Illumination / Holy Spirit", scripture: "John 8:12", exposition: "Organic tree of light in windowless room." } },
+                { name: "Table of Showbread", w: "120px", h: "75px", t: "78%", l: "45%", matClass: "mat-gold", hasFire: false, ritualKey: "showbread", tooltip: "Twelve loaves of presence", tipRef: "Leviticus 24:5", icon: `<svg viewBox="0 0 32 32" class="vessel-icon"><rect x="4" y="18" width="24" height="8" rx="1" fill="rgba(0,0,0,0.2)" stroke="rgba(0,0,0,0.4)" stroke-width="0.8"/><rect x="6" y="14" width="4" height="5" rx="1" fill="rgba(0,0,0,0.15)"/><rect x="14" y="14" width="4" height="5" rx="1" fill="rgba(0,0,0,0.15)"/><rect x="22" y="14" width="4" height="5" rx="1" fill="rgba(0,0,0,0.15)"/></svg>`, info: "Acacia frame enveloped in pure gold leaf.", typology: { antitype: "Bread of Presence / Life", scripture: "John 6:35", exposition: "Tribal visibility before the throne." } },
+                { name: "Altar of Incense", w: "80px", h: "80px", t: "50%", l: "80%", matClass: "mat-gold", hasFire: true, ritualKey: "incense", tooltip: "Sacred incense compound", tipRef: "Exodus 30:34", icon: `<svg viewBox="0 0 32 32" class="vessel-icon"><rect x="10" y="16" width="12" height="10" rx="1" fill="rgba(0,0,0,0.2)" stroke="rgba(0,0,0,0.4)" stroke-width="0.8"/><path d="M14 16 Q13 10 16 6 Q19 10 18 16" fill="none" stroke="rgba(200,200,200,0.4)" stroke-width="1"/></svg>`, info: "Golden altar before the Holy of Holies veil.", typology: { antitype: "Intercessory Prayers", scripture: "Revelation 8:3", exposition: "Smoke clouded visibility to protect priests." } }
+            ]},
+            holies: { title: "THE HOLY OF HOLIES", lightingClass: "sanctuary-lighting-cast cast-holies", floorClass: "sanctuary-floor-grid floor-holies", tickerMessage: "CRITICAL STATUS: Sanctum Sanctorum Active. The great veil is pulled.", description: "A perfect 10-cubit cube room forming the absolute epicenter of liturgical mystery.", particleType: "none", vessels: [
+                { name: "Ark of the Covenant", w: "150px", h: "95px", t: "50%", l: "62%", matClass: "mat-gold", hasFire: false, isArk: true, ritualKey: "ark", tooltip: "The Mercy Seat throne", tipRef: "Exodus 25:22", icon: `<svg viewBox="0 0 32 32" class="vessel-icon"><rect x="6" y="16" width="20" height="10" rx="2" fill="rgba(0,0,0,0.2)" stroke="rgba(0,0,0,0.5)" stroke-width="1"/><rect x="8" y="14" width="16" height="3" rx="1" fill="rgba(0,0,0,0.15)"/><path d="M12 14 Q16 8 20 14" fill="none" stroke="rgba(0,0,0,0.4)" stroke-width="1"/></svg>`, info: "Gold-wrapped acacia chest with Mercy Seat.", typology: { antitype: "Throne of Grace / Propitiation", scripture: "Romans 3:25", exposition: "Blood bridged law and mercy." } },
+                { name: "High Priest", w: "60px", h: "60px", t: "50%", l: "28%", matClass: "mat-priest", hasFire: false, ritualKey: "highpriest", tooltip: "Yom Kippur entry", tipRef: "Hebrews 9:7", icon: `<svg viewBox="0 0 32 32" class="vessel-icon"><circle cx="16" cy="10" r="5" fill="rgba(0,0,0,0.15)" stroke="rgba(122,18,18,0.6)" stroke-width="1.5"/><path d="M10 16 L16 14 L22 16 L20 28 L12 28Z" fill="rgba(0,0,0,0.1)" stroke="rgba(122,18,18,0.4)" stroke-width="0.8"/></svg>`, info: "Enters in white linen on Yom Kippur.", typology: { antitype: "Christ Our Mediator", scripture: "Hebrews 9:12", exposition: "Incense canopy prevented direct view." } }
+            ]}
         };
-
-        function switchSanctuaryZone(zoneKey, btnElement) {
-            document.querySelectorAll('.nav-seal').forEach(btn => btn.classList.remove('active'));
-            if(btnElement) btnElement.classList.add('active');
-
-            const zone = ZONE_DATA[zoneKey];
-            const canvas = document.getElementById('blueprint-zone');
-
-            canvas.className = "blueprint-canvas " + zone.lightingClass;
-            document.getElementById('fx-smoke').style.opacity = zone.smokeOpacity;
-            document.getElementById('fx-ash').style.opacity = zone.ashOpacity;
-
-            const ticker = document.getElementById('ritual-ticker-bar');
-            ticker.className = zone.tickerClass;
-            
-            const msg = document.getElementById('ticker-message');
-            msg.style.animation = 'none'; msg.offsetHeight;
-            msg.innerText = zone.tickerMessage;
-            msg.style.animation = "textFade 0.5s ease forward";
-
-            document.getElementById('inspector-title').innerText = zone.title + " DESCRIPTION";
-            document.getElementById('inspector-description').innerText = zone.description;
-            document.getElementById('typology-section').style.display = 'none';
-
-            canvas.innerHTML = "";
-            zone.vessels.forEach(v => {
-                const node = document.createElement('div');
-                node.className = "vessel-node";
-                node.innerText = v.name;
-                node.style.width = v.w;
-                node.style.height = v.h;
-                node.style.top = v.t;
-                node.style.left = v.l;
-                node.style.transform = "translate(-50%, -50%)";
-
-                if (v.isPriest) node.setAttribute('data-priest', 'true');
-
-                node.onclick = (e) => {
-                    e.stopPropagation();
-                    document.getElementById('inspector-title').innerText = v.name.toUpperCase();
-                    document.getElementById('inspector-description').innerText = v.info;
-
-                    if(v.typology) {
-                        document.getElementById('typology-section').style.display = 'block';
-                        document.getElementById('typ-antitype').innerText = v.typology.antitype;
-                        document.getElementById('typ-scripture').innerText = v.typology.scripture;
-                        document.getElementById('typ-exposition').innerText = v.typology.exposition;
-                    }
-
-                    if (v.isArk) {
-                        if (window.ScriptoriumAudio) ScriptoriumAudio.transitionTo('nt');
-                        setTimeout(() => {
-                            document.getElementById('arkOverlay').classList.add('active');
-                        }, 1200);
-                    }
-                };
-
-                canvas.appendChild(node);
-            });
-        }
-
-        function closeArkOverlay() {
-            document.getElementById('arkOverlay').classList.remove('active');
-            if (window.ScriptoriumAudio) ScriptoriumAudio.transitionTo('ot');
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeArkOverlay();
-        });
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const initialBtn = document.querySelector('.nav-seal.active');
-            if (initialBtn) switchSanctuaryZone('outer', initialBtn);
-        });
+        let currentZone = null, exploredZones = new Set(), ritualStates = {}, particleCtx = null, particles = [], audioElements = {};
+        function initZoneAudio() { try { ['outer','holy','holies'].forEach(k => { audioElements[k] = new Audio(); audioElements[k].loop = true; audioElements[k].volume = 0; }); } catch(e) {} }
+        function setZoneAudio(zoneKey) { Object.keys(audioElements).forEach(k => { try { audioElements[k].volume = k === zoneKey ? 0.3 : 0; if (k === zoneKey) audioElements[k].play().catch(()=>{}); } catch(e) {} }); }
+        function initParticleCanvas() { const c = document.getElementById('particle-canvas'); if (!c) return; particleCtx = c.getContext('2d'); resizeParticleCanvas(); window.addEventListener('resize', resizeParticleCanvas); }
+        function resizeParticleCanvas() { const c = document.getElementById('particle-canvas'); if (!c) return; const r = c.parentElement.getBoundingClientRect(); c.width = r.width; c.height = r.height; }
+        function spawnParticles(type, count) { particles = []; for (let i = 0; i < count; i++) { if (type === 'embers') particles.push({ x: Math.random()*400+100, y: Math.random()*300+200, vx: (Math.random()-0.5)*0.5, vy: -Math.random()*1.5-0.3, size: Math.random()*3+1, life: Math.random()*200+100, maxLife: 300, r: 255, g: Math.floor(Math.random()*100+100), b: 0, alpha: Math.random()*0.6+0.2 }); else if (type === 'smoke') particles.push({ x: Math.random()*600+100, y: Math.random()*200+300, vx: (Math.random()-0.5)*0.3, vy: -Math.random()*0.8-0.2, size: Math.random()*20+10, life: Math.random()*300+200, maxLife: 500, r: 200, g: 195, b: 180, alpha: Math.random()*0.15+0.05 }); } }
+        function animateParticles() { if (!particleCtx) return; const c = particleCtx.canvas; particleCtx.clearRect(0,0,c.width,c.height); particles.forEach((p,i) => { p.x += p.vx; p.y += p.vy; p.life--; if (p.life <= 0) { particles.splice(i,1); return; } const lr = p.life/p.maxLife; particleCtx.beginPath(); particleCtx.arc(p.x,p.y,p.size,0,Math.PI*2); particleCtx.fillStyle = `rgba(${p.r},${p.g},${p.b},${p.alpha*lr})`; particleCtx.fill(); }); requestAnimationFrame(animateParticles); }
+        function drawCubitGrid() { const f = document.getElementById('floor-layer'); if (!f) return; let svg = f.querySelector('.cubit-grid'); if (!svg) { svg = document.createElementNS('http://www.w3.org/2000/svg','svg'); svg.classList.add('cubit-grid'); svg.setAttribute('width','100%'); svg.setAttribute('height','100%'); f.appendChild(svg); } const w = f.clientWidth||600, h = f.clientHeight||400, cw = w/10, ch = h/10; let html = `<defs><pattern id="cubitP" width="${cw}" height="${ch}" patternUnits="userSpaceOnUse"><path d="M ${cw} 0 L 0 0 0 ${ch}" fill="none" stroke="rgba(212,175,55,0.15)" stroke-width="0.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#cubitP)"/>`; for(let i=1;i<=10;i++) { html += `<text x="${i*cw}" y="${h-4}" fill="rgba(212,175,55,0.2)" font-size="8" font-family="Cinzel" text-anchor="middle">${i}</text>`; html += `<text x="4" y="${i*ch}" fill="rgba(212,175,55,0.2)" font-size="8" font-family="Cinzel">${i}</text>`; } svg.innerHTML = html; }
+        function switchSanctuaryZone(zoneKey, btnElement) { if (zoneKey === currentZone) return; document.querySelectorAll('.nav-seal').forEach(b => b.classList.remove('active')); if(btnElement) btnElement.classList.add('active'); const t = document.getElementById('zoneTransition'); t.classList.add('active'); setTimeout(() => { currentZone = zoneKey; exploredZones.add(zoneKey); const dot = document.getElementById('dot-'+zoneKey); if(dot) dot.classList.add('explored'); const zone = ZONE_DATA[zoneKey], floor = document.getElementById('floor-layer'), lighting = document.getElementById('lighting-overlay'), veil = document.getElementById('veilCurtain'); floor.className = zone.floorClass; lighting.className = zone.lightingClass; veil.classList.toggle('parting', zoneKey==='holies'); document.getElementById('ticker-message').style.animation = 'none'; document.getElementById('ticker-message').offsetHeight; document.getElementById('ticker-message').innerText = zone.tickerMessage; document.getElementById('ticker-message').style.animation = 'textFade 0.5s ease forward'; document.getElementById('inspector-title').innerText = zone.title + " BLUEPRINT"; document.getElementById('inspector-description').innerText = zone.description; document.getElementById('typology-section').style.display = 'none'; floor.innerHTML = ""; drawCubitGrid(); zone.vessels.forEach(v => { const node = document.createElement('div'); node.className = `vessel-node ${v.matClass}`; node.style.width = v.w; node.style.height = v.h; node.style.top = v.t; node.style.left = v.l; node.style.transform = "translate(-50%, -50%) rotateX(0deg)"; if(v.icon) node.innerHTML = v.icon; node.innerHTML += `<span>${v.name}</span>`; if(v.tooltip) node.innerHTML += `<div class="vessel-tooltip">${v.tooltip}<span class="tip-ref">${v.tipRef}</span></div>`; if(v.hasFire) { const flame = document.createElement('div'); flame.className = "vessel-fire-emitter"; node.appendChild(flame); } if(ritualStates[v.ritualKey]) node.classList.add('ritual-active'); node.onclick = (e) => { e.stopPropagation(); handleVesselClick(v, node); }; floor.appendChild(node); }); setZoneAudio(zoneKey); if(zone.particleType==='embers') spawnParticles('embers',60); else if(zone.particleType==='smoke') spawnParticles('smoke',40); else particles = []; t.classList.remove('active'); }, 600); }
+        function handleVesselClick(v, node) { document.getElementById('inspector-title').innerText = v.name.toUpperCase(); document.getElementById('inspector-description').innerText = v.info; if(v.typology) { document.getElementById('typology-section').style.display = 'block'; document.getElementById('typ-antitype').innerText = v.typology.antitype; document.getElementById('typ-scripture').innerHTML = `<span class="typ-verse-link" onclick="openCanonForVerse('${v.typology.scripture}')">${v.typology.scripture}</span>`; document.getElementById('typ-exposition').innerText = v.typology.exposition; } if(v.ritualKey && !ritualStates[v.ritualKey]) { ritualStates[v.ritualKey] = true; node.classList.add('ritual-active'); } if(v.isArk) { if(window.ScriptoriumAudio) ScriptoriumAudio.transitionTo('nt'); setTimeout(() => document.getElementById('arkOverlay').classList.add('active'), 1200); } }
+        function openCanonForVerse(ref) { const book = ref.split(' ')[0].toLowerCase(); if(book.includes('hebrews')||book.includes('romans')||book.includes('revelation')||book.includes('john')||book.includes('titus')||book.includes('peter')||book.includes('luke')) window.location.href = 'nt.html'; else window.location.href = 'ot.html'; }
+        function closeArkOverlay() { document.getElementById('arkOverlay').classList.remove('active'); if(window.ScriptoriumAudio) ScriptoriumAudio.transitionTo('ot'); }
+        function initParallax() { const c = document.getElementById('blueprint-zone'), l = document.getElementById('parallaxLight'); if(!c||!l) return; c.addEventListener('mousemove', (e) => { const r = c.getBoundingClientRect(); l.style.setProperty('--px', ((e.clientX-r.left)/r.width)*100+'%'); l.style.setProperty('--py', ((e.clientY-r.top)/r.height)*100+'%'); }); }
+        document.addEventListener('keydown', (e) => { if(e.key==='Escape') closeArkOverlay(); });
+        window.addEventListener('DOMContentLoaded', () => { initParticleCanvas(); initZoneAudio(); initParallax(); animateParticles(); const btn = document.querySelector('.nav-seal.active'); if(btn) switchSanctuaryZone('outer', btn); });
     </script>
-
     <script src="assets/js/sidebar.js"></script>
     <script src="assets/js/scriptorium-core.js"></script>
 </body>
