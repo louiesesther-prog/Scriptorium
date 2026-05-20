@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+        body, html { margin:0;padding:0;background:#050505;color:rgba(255,255,255,0.92);font-family:'Cinzel',serif;overflow:hidden;height:100vh; }
+        .museum-sidebar { position:fixed;left:0;top:0;bottom:0;width:80px;background:#080808;border-right:1px solid rgba(212,175,55,0.2);z-index:2000;display:flex;flex-direction:column;align-items:center; }
+        .sidebar-nav { flex:1;display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:4px; }
+        .nav-link { position:relative;display:flex;align-items:center;justify-content:center;width:50px;height:50px;color:rgba(255,255,255,0.55);text-decoration:none;border:1px solid transparent;border-radius:6px;font-size: 24px;transition:all 0.25s; }
+        .nav-link:hover { color:#d4af37;border-color:rgba(212,175,55,0.2);background:rgba(212,175,55,0.12); }
+        h2 { margin-left:100px;color:#d4af37; }
+    </style>
+</head>
+<body>
+<aside class="museum-sidebar">
+    <nav class="sidebar-nav">
+        <a href="scriptorium.html" class="nav-link active">&#8984;</a>
+        <a href="MAP.html" class="nav-link">&#127760;</a>
+        <a href="genealogy.html" class="nav-link">&#9812;</a>
+        <a href="archive.html" class="nav-link">&#128214;</a>
+        <a href="login.html" class="nav-link">&#128273;</a>
+    </nav>
+</aside>
+<h2>Do sidebar links work?</h2>
+<p style="margin-left:100px;color:gold;">Hover over the icons on the left — does the cursor change? Do they navigate?</p>
+</body>
+</html>

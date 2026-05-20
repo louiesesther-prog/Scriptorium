@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scriptorium - Side-by-Side Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --obsidian: #050505;
+            --obsidian-2: #080808;
+            --museum-gold: #d4af37;
+            --museum-gold-dim: rgba(212, 175, 55, 0.6);
+            --museum-gold-faint: rgba(212, 175, 55, 0.12);
+            --museum-bronze: #7a5f1a;
+            --border-gold: rgba(212,175,55,0.2);
+            --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body, html {
+            margin: 0; padding: 0;
+            background: var(--obsidian);
+            color: rgba(255,255,255,0.97);
+            font-family: 'Cinzel', serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            animation: fadeInPage 1.8s var(--transition-smooth) both;
+        }
+
+        @keyframes fadeInPage {
+            from { opacity: 0; filter: blur(8px); }
+            to   { opacity: 1; filter: blur(0); }
+        }
+
+        .museum-sidebar {
+            position: fixed;
+            left: 0; top: 0; bottom: 0;
+            width: 72px;
+            background: var(--obsidian-2);
+            border-right: 1px solid var(--border-gold);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0;
+        }
+
+        .sidebar-logo {
+            width: 100%;
+            padding: 14px 0 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--border-gold);
+        }
+
+        .sidebar-logo svg {
+            width: 28px; height: 28px;
+            opacity: 0.85;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 0;
+            gap: 4px;
+        }
+
+        .nav-link {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px; height: 50px;
+            color: rgba(255,255,255,0.98);
+            text-decoration: none;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            font-size: 24px;
+            transition: all 0.25s var(--transition-smooth);
+        }
+        .nav-link:hover {
+            color: var(--museum-gold);
+            border-color: var(--border-gold);
+            background: var(--museum-gold-faint);
+        }
+        .nav-link.active {
+            color: var(--museum-gold);
+            border-color: var(--museum-gold);
+            background: var(--museum-gold-faint);
+        }
+
+        .nav-link .badge {
+            position: absolute;
+            top: 4px; right: 4px;
+            width: 8px; height: 8px;
+            background: var(--museum-gold);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--museum-gold);
+        }
+
+        .nav-link .tooltip {
+            position: absolute;
+            left: 64px;
+            background: var(--obsidian-2);
+            border: 1px solid var(--border-gold);
+            color: var(--museum-gold);
+            padding: 6px 12px;
+            font-size: 12px;
+            white-space: nowrap;
+            border-radius: 4px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 1px;
+        }
+        .nav-link:hover .tooltip { opacity: 1; }
+
+        .main-content {
+            margin-left: 72px;
+            padding: 40px 30px;
+            min-height: 100vh;
+        }
+
+        .comparison-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .comparison-header h2 {
+            font-size: 28.8px;
+            color: var(--museum-gold);
+            letter-spacing: 6px;
+            margin: 0 0 10px;
+        }
+
+        .comparison-header p {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 19.2px;
+            color: rgba(255,255,255,0.5);
+            margin: 0;
+        }
+
+        .controls-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-group label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .control-group select,
+        .control-group input[type="range"] {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-gold);
+            color: var(--museum-gold);
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14.4px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .control-group select:hover,
+        .control-group select:focus {
+            border-color: var(--museum-gold);
+            outline: none;
+        }
+
+        .control-group input[type="range"] {
+            width: 80px;
+            -webkit-appearance: none;
+            height: 4px;
+            padding: 0;
+        }
+        .control-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px; height: 14px;
+            background: var(--museum-gold);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .comparison-pane {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-gold);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .pane-label {
+            padding: 10px 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            letter-spacing: 3px;
+            color: var(--museum-gold);
+            background: rgba(212,175,55,0.08);
+            border-bottom: 1px solid var(--border-gold);
+        }
+
+        .microscope-container {
+            position: relative;
+            width: 100%;
+            height: 420px;
+            overflow: hidden;
+            cursor: crosshair;
+            background: #111;
+        }
+
+        .microscope-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .zoom-lens {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border: 2px solid var(--museum-gold);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(212,175,55,0.4), inset 0 0 10px rgba(212,175,55,0.1);
+            pointer-events: none;
+            z-index: 10;
+            display: none;
+        }
+
+        .zoom-result {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            width: 200px;
+            height: 200px;
+            border: 2px solid var(--museum-gold);
+            border-radius: 8px;
+            background-repeat: no-repeat;
+            opacity: 0;
+            z-index: 20;
+            pointer-events: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+        }
+
+        .scribes-guide {
+            background: rgba(212,175,55,0.05);
+            border: 1px solid var(--border-gold);
+            border-radius: 8px;
+            padding: 24px 28px;
+        }
+
+        .scribes-guide h3 {
+            font-size: 16.8px;
+            color: var(--museum-gold);
+            letter-spacing: 4px;
+            margin: 0 0 16px;
+            text-align: center;
+        }
+
+        .guide-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .guide-item {
+            padding: 14px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(212,175,55,0.85);
+            border-radius: 6px;
+        }
+
+        .guide-item h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: var(--museum-gold);
+            margin: 0 0 8px;
+        }
+
+        .guide-item p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 16.8px;
+            color: rgba(255,255,255,0.98);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .exit-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(139,0,0,0.3);
+            border: 1px solid rgba(139,0,0,0.6);
+            color: rgba(255,255,255,0.8);
+            padding: 8px 16px;
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+            z-index: 2100;
+        }
+        .exit-btn:hover {
+            background: rgba(139,0,0,0.5);
+            border-color: rgba(139,0,0,0.9);
+            color: #fff;
+        }
+
+        .cross-reference-section {
+            margin-top: 28px;
+            padding: 20px;
+            background: rgba(212,175,55,0.04);
+            border: 1px solid var(--border-gold);
+            border-radius: 8px;
+        }
+
+        .cross-reference-section h3 {
+            font-size: 14.4px;
+            color: var(--museum-gold);
+            letter-spacing: 3px;
+            margin: 0 0 16px;
+            text-align: center;
+        }
+
+        .ref-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .ref-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(212,175,55,0.85);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ref-item:hover {
+            border-color: var(--museum-gold);
+            background: rgba(212,175,55,0.08);
+        }
+
+        .ref-icon {
+            font-size: 24px;
+            opacity: 0.8;
+        }
+
+        .ref-text {
+            flex: 1;
+        }
+
+        .ref-text strong {
+            font-family: 'Cinzel', serif;
+            font-size: 13.2px;
+            color: var(--museum-gold);
+            display: block;
+        }
+
+        .ref-text span {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10.8px;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 900px) {
+            .comparison-grid { grid-template-columns: 1fr; }
+            .guide-grid { grid-template-columns: 1fr; }
+            .ref-grid { grid-template-columns: 1fr; }
+            .microscope-container { height: 300px; }
+            .zoom-result { width: 140px; height: 140px; }
+        }
+        .scribe-citation {
+            font-size: 0.72rem;
+        }
+    </style>
+<script src="assets/audio/scriptorium-audio.js"></script>
+</head>
+<body>
+
+    <div id="sidebarContainer"></div>
+
+<button class="exit-btn" onclick="window.location.href='scriptorium.html'">[ X ] RETURN</button>
+
+<div class="main-content">
+    <div class="comparison-header">
+        <h2>MANUSCRIPT COMPARISON</h2>
+        <p>Comparing Scribal Hands: Ge'ez vs. Qumran Aramaic</p>
+    </div>
+
+    <div class="controls-bar">
+        <div class="control-group">
+            <label>LEFT FRAGMENT</label>
+            <select id="selectA" onchange="loadFragment('A', this.value)">
+                <option value="garima">Garima Gospels (Ge'ez) — GAR-001</option>
+                <option value="qumran_aramaic">4Q119 — Septuagint Leviticus</option>
+                <option value="isaiah_scroll">Great Isaiah Scroll — 1QIsaa</option>
+                <option value="sinaiticus">Codex Sinaiticus — Matthew 24</option>
+                <option value="p66_john">Papyrus 66 — Gospel of John</option>
+                <option value="dead_sea">1QpHab — Habakkuk Commentary</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label>MAGNIFICATION</label>
+            <input type="range" id="zoomSlider" min="2" max="8" value="4" oninput="updateZoom(this.value)">
+        </div>
+        <div class="control-group">
+            <label>RIGHT FRAGMENT</label>
+            <select id="selectB" onchange="loadFragment('B', this.value)">
+                <option value="qumran_aramaic">4Q119 — Septuagint Leviticus</option>
+                <option value="garima">Garima Gospels (Ge'ez) — GAR-001</option>
+                <option value="isaiah_scroll">Great Isaiah Scroll — 1QIsaa</option>
+                <option value="p52_rylands">Rylands P52 — John 18</option>
+                <option value="dead_sea">1QpHab — Habakkuk Commentary</option>
+                <option value="sinaiticus">Codex Sinaiticus — Matthew 24</option>
+            </select>
+        </div>
+    </div>
+
+    <div style="text-align:center;margin-bottom:20px;">
+        <div class="control-group" style="display:inline-flex;flex-wrap:wrap;gap:8px;">
+            <label style="line-height:32px;">PALEOGRAPHY PRESETS:</label>
+            <button onclick="setComparison('dead_sea','p52_rylands')" style="padding:6px 12px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);color:var(--museum-gold);cursor:pointer;font-size: 12px;border-radius:4px;font-family:'Montserrat';">2nd c. BC → 2nd c. AD</button>
+            <button onclick="setComparison('isaiah_scroll','p52_rylands')" style="padding:6px 12px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);color:var(--museum-gold);cursor:pointer;font-size: 12px;border-radius:4px;font-family:'Montserrat';">Uncial → Ge'ez Script</button>
+            <button onclick="setComparison('sinaiticus','dead_sea')" style="padding:6px 12px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);color:var(--museum-gold);cursor:pointer;font-size: 12px;border-radius:4px;font-family:'Montserrat';">4th c. → 2nd c. BC</button>
+            <button onclick="setComparison('p52_rylands','sinaiticus')" style="padding:6px 12px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);color:var(--museum-gold);cursor:pointer;font-size: 12px;border-radius:4px;font-family:'Montserrat';">Minuscule → Uncial</button>
+        </div>
+    </div>
+
+    <div class="comparison-grid">
+        <div class="comparison-pane">
+            <div class="pane-label" id="paneLabelA">Garima Gospels — GAR-001</div>
+            <div class="microscope-container" id="paneA" onmousemove="syncMove(event, 'A')" onmouseleave="hideLens()">
+                <div id="lensA" class="zoom-lens"></div>
+                <img id="imgA" src="https://upload.wikimedia.org/wikipedia/commons/0/01/Garima-Gospels-completed-project-2.jpg" alt="Garima Gospels">
+                <div id="resA" class="zoom-result"></div>
+            </div>
+        </div>
+
+        <div class="comparison-pane">
+            <div class="pane-label" id="paneLabelB">4Q119 — Septuagint Leviticus (Qumran)</div>
+            <div class="microscope-container" id="paneB" onmousemove="syncMove(event, 'B')" onmouseleave="hideLens()">
+                <div id="lensB" class="zoom-lens"></div>
+                <img id="imgB" src="https://upload.wikimedia.org/wikipedia/commons/4/47/4Q119_frg._1.jpg" alt="Qumran Fragment">
+                <div id="resB" class="zoom-result"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="scribes-guide">
+        <h3>SCRIBE'S GUIDE</h3>
+        <div class="guide-grid">
+            <div class="guide-item">
+                <h4>LIGATURES</h4>
+                <p>Notice how the Ge'ez letters connect compared to the block Aramaic script. Ethiopian script flows vertically with decorative ligatures, while Qumran scribes used rigid block forms.</p>
+            </div>
+            <div class="guide-item">
+                <h4>VOWEL MARKERS</h4>
+                <p>In the Ethiopian script, vowels are attached to the consonants (Abugida), whereas the ancient Dead Sea scrolls often lacked vowel points entirely, relying on context.</p>
+            </div>
+            <div class="guide-item">
+                <h4>PUNCTUATION</h4>
+                <p>Identify the "Diamond" separators in Ge'ez used to mark the end of a thought. Compare these with the paragraph markers and sentence dividers found in Qumran texts.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="cross-reference-section">
+        <h3>CROSS-REFERENCE ARCHAEOLOGICAL LINKS</h3>
+        <div class="ref-grid">
+            <div class="ref-item" onclick="setComparison('garima', 'qumran_aramaic')">
+                <div class="ref-icon">&#9752;</div>
+                <div class="ref-text">
+                    <strong>Ethiopic &amp; Qumran</strong>
+                    <span>GE'EZ SCRIPT vs QUMRAN SEMITIC</span>
+                </div>
+            </div>
+            <div class="ref-item" onclick="setComparison('sinaiticus', 'dead_sea')">
+                <div class="ref-icon">&#10022;</div>
+                <div class="ref-text">
+                    <strong>Codex vs Scroll</strong>
+                    <span>4TH CENTURY CODEX vs 2ND CENTURY BC SCROLL</span>
+                </div>
+            </div>
+            <div class="ref-item" onclick="setComparison('isaiah_scroll', 'p66_john')">
+                <div class="ref-icon">&#128220;</div>
+                <div class="ref-text">
+                    <strong>Isaiah &amp; John</strong>
+                    <span>HEBREW PROPHECY vs GREEK GOSPEL</span>
+                </div>
+            </div>
+            <div class="ref-item" onclick="setComparison('p52_rylands', 'dead_sea')">
+                <div class="ref-icon">&#128214;</div>
+                <div class="ref-text">
+                    <strong>P52 &amp; Qumran</strong>
+                    <span>EARLIEST NT FRAGMENT vs DSS CONTEXT</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="scribe-citation">
+        Digital manuscript imagery is provided courtesy of the 
+        <a href="https://www.deadseascrolls.org.il/" target="_blank">Leon Levy Dead Sea Scrolls Digital Library</a> 
+        and the <a href="https://www.bl.uk/manuscripts" target="_blank">British Library</a>. 
+        Transcription data curated via the <a href="https://csntm.org/" target="_blank">CSNTM</a> archives.
+        <br>
+        <span style="font-style: italic; margin-top: 5px; display: block;">
+            "Preserving the Word across the corridors of time."
+        </span>
+    </div>
+</div>
+
+<script>
+    const FRAGMENTS = {
+        'garima': {
+            src: 'https://upload.wikimedia.org/wikipedia/commons/0/01/Garima-Gospels-completed-project-2.jpg',
+            label: 'Garima Gospels (Ge\'ez) — GAR-001'
+        },
+        'qumran_aramaic': {
+            src: 'https://upload.wikimedia.org/wikipedia/commons/4/47/4Q119_frg._1.jpg',
+            label: '4Q119 — Septuagint Leviticus (Qumran)'
+        },
+        'isaiah_scroll': {
+            src: 'https://upload.wikimedia.org/wikipedia/commons/3/31/Great_Isaiah_Scroll.jpg',
+            label: 'Great Isaiah Scroll — 1QIsaa'
+        },
+        'sinaiticus': {
+            src: 'https://upload.wikimedia.org/wikipedia/commons/4/41/Codex_Sinaiticus_-_Matthew_24.JPG',
+            label: 'Codex Sinaiticus — Matthew 24'
+        },
+        'p66_john': {
+            src: 'https://upload.wikimedia.org/wikipedia/commons/8/8e/Papyrus_66_-_John_1.jpg',
+            label: 'Papyrus 66 — Gospel of John'
+        },
+        'dead_sea': {
+            src: 'https://upload.wikimedia.org/wikipedia/commons/9/9f/1QpHab_-_Col._1.jpg',
+            label: '1QpHab — Habakkuk Commentary (DSS)'
+        },
+        'p52_rylands': {
+            src: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg',
+            label: 'Rylands P52 — John 18 (earliest NT fragment)'
+        }
+    };
+
+    let currentZoom = 4;
+
+    function loadFragment(pane, key) {
+        const frag = FRAGMENTS[key];
+        if (!frag) return;
+        document.getElementById('img' + pane).src = frag.src;
+        document.getElementById('img' + pane).alt = frag.label;
+        var labelEl = document.getElementById('paneLabel' + pane);
+        if (labelEl) labelEl.textContent = frag.label;
+    }
+
+    function updateZoom(val) {
+        currentZoom = parseInt(val);
+    }
+
+    function syncMove(e, source) {
+        const panes = {
+            'A': { img: 'imgA', lens: 'lensA', res: 'resA' },
+            'B': { img: 'imgB', lens: 'lensB', res: 'resB' }
+        };
+
+        const current = panes[source];
+
+        const img = document.getElementById(current.img);
+        const rect = img.getBoundingClientRect();
+
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        if (x < 0 || y < 0 || x > rect.width || y > rect.height) return;
+
+        const lensWidth = 120;
+        const lensHeight = 120;
+
+        [current].forEach(function(p) {
+            const l = document.getElementById(p.lens);
+            const r = document.getElementById(p.res);
+            const i = document.getElementById(p.img);
+
+            l.style.display = 'block';
+            l.style.left = (x - lensWidth / 2) + 'px';
+            l.style.top = (y - lensHeight / 2) + 'px';
+
+            r.style.backgroundImage = "url('" + i.src + "')";
+            r.style.backgroundSize = (i.naturalWidth * currentZoom) + 'px ' + (i.naturalHeight * currentZoom) + 'px';
+            r.style.backgroundPosition = '-' + ((x * currentZoom) - (r.offsetWidth / 2)) + 'px -' + ((y * currentZoom) - (r.offsetHeight / 2)) + 'px';
+            r.style.opacity = '1';
+        });
+    }
+
+    function hideLens() {
+        ['lensA', 'lensB'].forEach(function(id) {
+            var l = document.getElementById(id);
+            if (l) l.style.display = 'none';
+        });
+        ['resA', 'resB'].forEach(function(id) {
+            var r = document.getElementById(id);
+            if (r) r.style.opacity = '0';
+        });
+    }
+
+    function setComparison(left, right) {
+        document.getElementById('selectA').value = left;
+        document.getElementById('selectB').value = right;
+        loadFragment('A', left);
+        loadFragment('B', right);
+    }
+
+    document.querySelectorAll('.microscope-container img').forEach(function(img) {
+        img.addEventListener('load', function() {
+            if (this.naturalWidth === 0) {
+                this.style.opacity = '0.3';
+            }
+        });
+        img.addEventListener('error', function() {
+            this.style.opacity = '0.2';
+            this.alt = 'Fragment unavailable';
+        });
+    });
+</script>
+
+    <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/scriptorium-core.js"></script>
+</body>
+</html>

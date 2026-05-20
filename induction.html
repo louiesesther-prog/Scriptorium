@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCRIPTORIUM | Induction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="assets/audio/scriptorium-audio.js" defer></script>
+    <style>
+        :root{--obsidian:#050505;--museum-gold:#d4af37;--museum-gold-dim:rgba(212,175,55,0.4);}
+        *,*::before,*::after{box-sizing:border-box;}
+        body{margin:0;padding:0;background:var(--obsidian);color:#fff;font-family:'Cinzel',serif;display:flex;justify-content:center;align-items:center;min-height:100vh;animation:fadeInPage 2s ease both;}
+        @keyframes fadeInPage{from{opacity:0;filter:blur(12px)}to{opacity:1;filter:blur(0)}}
+        .glow-overlay{position:fixed;inset:0;background:radial-gradient(circle,rgba(212,175,55,0.04) 0%,transparent 70%);pointer-events:none;}
+        .scroll-frame{width:520px;max-width:92vw;padding:50px 44px;background:rgba(10,10,10,0.88);border:1px solid var(--museum-gold-dim);backdrop-filter:blur(20px);text-align:center;box-shadow:0 0 100px rgba(0,0,0,1);position:relative;z-index:1;border-radius:4px;}
+        .scroll-frame .label{font-family:'Montserrat',sans-serif;font-size: 0.48rem;letter-spacing:5px;color:rgba(212,175,55,0.2);display:block;margin-bottom:8px;}
+        .scroll-frame h1{font-size: 0.66rem;letter-spacing:8px;color:var(--museum-gold);margin:0 0 10px;text-shadow:0 0 30px rgba(212,175,55,0.06);}
+        .seal-icon{font-size: 3rem;opacity:0.3;margin-bottom:12px;}
+        .induction-text{font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color:rgba(255,255,255,0.2);line-height:1.8;margin:16px 0 32px;font-style:italic;}
+        .induction-text strong{color:rgba(212,175,55,0.3);}
+        .steps{text-align:left;margin:0 0 32px;}
+        .step{display:flex;gap:14px;margin-bottom:14px;align-items:flex-start;}
+        .step-num{font-family:'Cinzel',serif;font-size: 0.66rem;color:var(--museum-gold-dim);min-width:24px;opacity:0.4;}
+        .step-text{font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color:rgba(255,255,255,0.45);line-height:1.6;}
+        .step-text strong{color:rgba(212,175,55,0.2);}
+        .actions{display:flex;flex-direction:column;gap:10px;align-items:center;}
+        .seal-btn{background:transparent;border:1px solid rgba(212,175,55,0.85);color:var(--museum-gold-dim);padding:12px 32px;font-family:'Cinzel',serif;font-size: 0.54rem;letter-spacing:4px;cursor:pointer;border-radius:4px;transition:all 0.5s ease;text-decoration:none;display:inline-block;}
+        .seal-btn:hover{background:var(--museum-gold);color:#000;box-shadow:0 0 30px rgba(212,175,55,0.2);}
+        .guest-link{font-family:'Montserrat',sans-serif;font-size: 0.72rem;letter-spacing:2px;color:rgba(255,255,255,0.04);text-decoration:none;transition:color 0.3s;}
+        .guest-link:hover{color:rgba(212,175,55,0.1);}
+    </style>
+</head>
+<body>
+<div class="glow-overlay"></div>
+<div class="scroll-frame">
+    <span class="label">OFFICE OF THE ARCHIVE</span>
+    <div class="seal-icon">&#x2726;</div>
+    <h1>THE RITE OF INDUCTION</h1>
+    <div class="induction-text">
+        Before you may access the deeper chambers of the Scriptorium, your soul must be sealed to the eternal record. The Rite of Induction binds your identity to the Archive and allows the Celestial Flame to recognize your devotion.
+    </div>
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">I.</div>
+            <div class="step-text"><strong>Present Yourself</strong> &mdash; Offer your name, your region, and the title by which you wish to be known among the Scribes.</div>
+        </div>
+        <div class="step">
+            <div class="step-num">II.</div>
+            <div class="step-text"><strong>Forge Your Cipher</strong> &mdash; A secret key known only to you and the Archive. Guard it well, for it is the seal of your witness.</div>
+        </div>
+        <div class="step">
+            <div class="step-num">III.</div>
+            <div class="step-text"><strong>Declare Your Scholarship</strong> &mdash; The Order recognizes four degrees of knowledge. Choose the path that reflects your journey with the Word.</div>
+        </div>
+        <div class="step">
+            <div class="step-num">IV.</div>
+            <div class="step-text"><strong>Affix Your Seal</strong> &mdash; Once the rite is complete, your name is written in the Lamb&rsquo;s Scroll and your vigil begins.</div>
+        </div>
+    </div>
+    <div class="actions">
+        <a href="register.html" class="seal-btn">BEGIN THE RITE</a>
+        <a href="login.html" class="guest-link">ALREADY SEALED? SIGN IN</a>
+        <a href="scriptorium.html" class="guest-link" style="margin-top:2px;">ENTER AS A GUEST</a>
+    </div>
+</div>
+</body>
+</html>

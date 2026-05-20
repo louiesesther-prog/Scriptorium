@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCRIPTORIUM | The Royal Lineage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;1,600&display=swap" rel="stylesheet">
+    <script src="assets/audio/scriptorium-audio.js"></script>
+    <style>
+        :root {
+            --obsidian: #050505;
+            --museum-gold: #d4af37;
+            --museum-bronze: #7a5f1a;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            background: var(--obsidian);
+            color: #fff;
+            font-family: 'Cinzel', serif;
+            scroll-behavior: smooth;
+            animation: fadeInPage 1.5s ease-in-out;
+        }
+
+        @keyframes fadeInPage {
+            from { opacity: 0; filter: blur(10px); }
+            to { opacity: 1; filter: blur(0); }
+        }
+
+        /* 1. SIDEBAR */
+        .museum-sidebar {
+            position: fixed;
+            left: 0; top: 0; bottom: 0;
+            width: 80px;
+            background: #080808;
+            border-right: 1px solid rgba(212, 175, 55, 0.15);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 10px;
+            gap: 10px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            border: 1px solid rgba(197,160,89,0.15);
+            border-radius: 4px;
+            font-size: 24px;
+            transition: all 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--museum-gold);
+            border-color: var(--museum-gold);
+            background: rgba(197,160,89,0.08);
+        }
+
+        /* 2. GENEALOGY STAGE */
+        .genealogy-stage {
+            margin-left: 80px;
+            padding: 100px 0 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* The Royal Thread */
+        .vine-line {
+            position: absolute;
+            top: 180px;
+            bottom: 100px;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, var(--museum-gold), var(--museum-bronze), var(--museum-gold), transparent);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Page Header */
+        .header-title {
+            text-align: center;
+            margin-bottom: 120px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-title h1 {
+            font-size: 3rem;
+            letter-spacing: 12px;
+            color: var(--museum-gold);
+            margin: 10px 0 0;
+            text-shadow: 0 0 40px rgba(212,175,55,0.3);
+        }
+
+        .header-title p {
+            font-size: 0.72rem;
+            letter-spacing: 5px;
+            color: var(--museum-bronze);
+            margin: 0;
+        }
+
+        /* Individual Generation Nodes */
+        .generation {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 100px;
+            display: flex;
+            justify-content: center;
+            opacity: 0.25;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .generation.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .name-box {
+            text-align: center;
+            background: var(--obsidian);
+            padding: 15px 35px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            position: relative;
+            z-index: 2;
+        }
+
+        .name-box h2 {
+            margin: 0;
+            font-size: 1.56rem;
+            letter-spacing: 4px;
+            color: var(--museum-gold);
+        }
+
+        .name-box p {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            color: #666;
+            margin: 6px 0 0;
+            font-size: 1.14rem;
+        }
+
+        /* Royal Node Connector */
+        .node-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--obsidian);
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+        }
+
+        .royal-crown {
+            font-size: 0.9rem;
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--museum-gold);
+        }
+
+        /* Royal/Anchor nodes — solid gold dot */
+        .generation.royal .node-dot {
+            background: var(--museum-gold);
+            border-color: var(--museum-gold);
+            box-shadow: 0 0 12px rgba(212,175,55,0.6);
+        }
+
+        .generation.royal .name-box {
+            border-color: var(--museum-gold);
+        }
+
+        /* Major royal: Abraham, David, Jesus — larger */
+        .generation.royal-major .name-box h2 {
+            font-size: 1.92rem;
+        }
+
+        .generation.royal-major .name-box {
+            padding: 20px 45px;
+        }
+
+        .generation.royal-major .royal-crown {
+            font-size: 1.2rem;
+            top: -28px;
+        }
+
+        /* Jesus as the Final Fruit */
+        .generation.jesus {
+            margin-bottom: 0;
+        }
+
+        .generation.jesus .name-box {
+            border-color: var(--museum-gold);
+            border-width: 2px;
+            box-shadow: 0 0 40px rgba(212,175,55,0.2);
+        }
+
+        .generation.jesus .name-box h2 {
+            font-size: 2.16rem;
+            text-shadow: 0 0 20px rgba(212,175,55,0.5);
+        }
+
+        .generation.jesus .node-dot {
+            background: var(--museum-gold);
+            border-color: var(--museum-gold);
+            width: 16px;
+            height: 16px;
+            box-shadow: 0 0 20px rgba(212,175,55,0.8);
+        }
+
+        /* OT Hidden Generations — smaller, muted */
+        .generation.hidden-gen .name-box h2 {
+            font-size: 1.14rem;
+            color: rgba(212,175,55,0.5);
+            letter-spacing: 2px;
+        }
+
+        .generation.hidden-gen .name-box p {
+            font-size: 0.96rem;
+        }
+
+        /* NT Figures */
+        .generation.nt-figure .name-box h2 {
+            color: #e8d5a3;
+        }
+
+        /* Vine Line Pulse */
+        @keyframes pulseLine {
+            0% { box-shadow: 0 0 8px rgba(212, 175, 55, 0.2); }
+            50% { box-shadow: 0 0 25px rgba(212, 175, 55, 0.5); }
+            100% { box-shadow: 0 0 8px rgba(212, 175, 55, 0.2); }
+        }
+
+        .vine-line {
+            animation: pulseLine 5s infinite ease-in-out;
+        }
+
+        /* Covenant Scrolls */
+        .covenant-scroll {
+            width: 100%;
+            max-width: 460px;
+            margin: 0 auto 100px;
+            padding: 25px 30px;
+            border-top: 1px dashed rgba(212, 175, 55, 0.2);
+            border-bottom: 1px dashed rgba(212, 175, 55, 0.2);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1.2s ease, transform 1.2s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .covenant-scroll.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .scroll-content p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.38rem;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.55);
+            line-height: 1.9;
+            margin: 0 0 12px;
+        }
+
+        .scroll-content span {
+            display: block;
+            font-size: 0.78rem;
+            letter-spacing: 3px;
+            color: var(--museum-bronze);
+        }
+
+    </style>
+</head>
+<body>
+
+    <aside class="museum-sidebar">
+        <nav>
+            <a href="scriptorium.html" class="nav-link" title="The Threshold">&#8984;</a>
+            <a href="covenant-map.html" class="nav-link" title="Covenant Map">&#128337;</a>
+            <a href="archive.html" class="nav-link" title="The Archive">&#128214;</a>
+            <a href="genealogy.html" class="nav-link active" title="Genealogy">&#9812;</a>
+            <a href="ethiopian-canon.html" class="nav-link" title="Ethiopian Canon">&#10022;</a>
+            <a href="scribes-chamber.html" class="nav-link" title="Scribes Chamber">&#128218;</a>
+            <a href="comparison-mode.html" class="nav-link" title="Comparison Mode">&#128100;</a>
+            <a href="settings.html" class="nav-link" title="Restoration Room">&#9881;</a>
+        </nav>
+    </aside>
+
+    <main class="genealogy-stage">
+        <div class="vine-line"></div>
+
+        <header class="header-title">
+            <p>THE SEED OF THE WOMAN</p>
+            <h1>LINEAGE</h1>
+        </header>
+
+        <!-- Adam -->
+        <div class="generation royal-major">
+            <span class="royal-crown">✦</span>
+            <div class="node-dot"></div>
+            <div class="name-box">
+                <h2>ADAM</h2>
+                <p>The First Man</p>
+            </div>
+        </div>
+
+        <!-- Seth -->
+        <div class="generation hidden-gen">
+            <div class="node-dot"></div>
+            <div class="name-box">
+                <h2>SETH</h2>
+                <p>The Appointed One</p>
+            </div>
+        </div>
+
+        <!-- Noah -->
+        <div class="generation royal">
+            <div class="node-dot"></div>
+            <div class="name-box">
+                <h2>NOAH</h2>
+                <p>Rest &amp; Comfort</p>
+            </div>
+        </div>
+
+        <!-- Protoevangelium -->
+        <div class="covenant-scroll">
+            <div class="scroll-content">
+                <p>"I will put enmity between you and the woman, and between your offspring and her offspring; he shall bruise your head."</p>
+                <span>GENESIS 3:15</span>
+            </div>
+        </div>
+
+        <!-- Shem -->
+        <div class="generation hidden-gen">
+            <div class="node-dot"></div>
+            <div class="name-box">
+                <h2>SHEM</h2>
+                <p>Name / Renown</p>
+            </div>
+        </div>
+
+        <!-- Abraham — Major Royal -->
+        <div class="generation royal-major">
+            <span class="royal-crown">♕</span>
+            <div class="node-dot"></div>
+            <div class="name-box">
+                <h2>ABRAHAM</h2>
+                <p>Father of Nations</p>
+            </div>
+        </div>
+
+        <!-- Abrahamic Covenant -->
+        <div class="covenant-scroll">
+            <div class="scroll-content">
+                <p>"In your seed shall all the nations of the earth be blessed."</p>
+                <span>GENESIS 22:18</span>
+            </div>
+        </div>
+
+        <!-- Isaac -->
+        <div class="generation royal">
+            <div class="node-dot"></div>
+            <div class="name-box">
+                <h2>ISAAC</h2>
+                <p>He Laughs</p>
+            </div>
+        </div>
+
+        <!-- Jacob -->
+        <div class="generation royal">
+            <div class="node-dot"></div>
+            <div class="name-box">
+                <h2>JACOB</h2>
+                <p>Holder of the Heel</p>
+            </div>
+        </div>
+
+        <!-- Judah -->
+        <div class="generation royal">
+            <span class="royal-crown">♕</span>
+            <div class="node-dot"></div>
+            <div class="name-box">
+                <h2>JUDAH</h2>
+                <p>The King's Tribe</p>
+            </div>
+        </div>
+
+        <!-- David — Major Royal -->
+        <div class="generation royal-major">
+            <span class="royal-crown">♕</span>
+            <div class="node-dot"></div>
+            <div class="name-box">
+                <h2>DAVID</h2>
+                <p>The Beloved King</p>
+            </div>
+        </div>
+
+        <!-- Davidic Covenant -->
+        <div class="covenant-scroll">
+            <div class="scroll-content">
+                <p>"I will establish your throne forever... and your kingdom shall endure before me forever."</p>
+                <span>2 SAMUEL 7:13-14</span>
+            </div>
+        </div>
+
+        <!-- Solomon -->
+        <div class="generation royal">
+            <div class="node-dot"></div>
+            <div class="name-box">
+                <h2>SOLOMON</h2>
+                <p>Peace &amp; Wisdom</p>
+            </div>
+        </div>
+
+        <!-- The Captivity -->
+        <div class="generation hidden-gen">
+            <div class="node-dot"></div>
+            <div class="name-box">
+                <h2>EXILE TO BABYLON</h2>
+                <p>The Silent Years</p>
+            </div>
+        </div>
+
+        <!-- Return -->
+        <div class="generation hidden-gen">
+            <div class="node-dot"></div>
+            <div class="name-box">
+                <h2>EZRA &amp; NEHEMIAH</h2>
+                <p>Restoration</p>
+            </div>
+        </div>
+
+        <!-- John the Baptist -->
+        <div class="generation nt-figure">
+            <div class="node-dot"></div>
+            <div class="name-box">
+                <h2>JOHN THE BAPTIST</h2>
+                <p>Elias, Who Is to Come</p>
+            </div>
+        </div>
+
+        <!-- Mary -->
+        <div class="generation nt-figure">
+            <div class="node-dot"></div>
+            <div class="name-box">
+                <h2>MARY</h2>
+                <p>Full of Grace</p>
+            </div>
+        </div>
+
+        <!-- The Incarnation Declaration -->
+        <div class="covenant-scroll">
+            <div class="scroll-content">
+                <p>"Concerning his Son Jesus Christ our Lord, who was born of the seed of David according to the flesh."</p>
+                <span>ROMANS 1:3-4</span>
+            </div>
+        </div>
+
+        <!-- Jesus — THE FRUIT -->
+        <div class="generation jesus">
+            <span class="royal-crown">✦ ✦ ✦</span>
+            <div class="node-dot"></div>
+            <div class="name-box">
+                <h2>JESUS CHRIST</h2>
+                <p>The Word Made Flesh</p>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const observerOptions = { threshold: 0.3 };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.generation, .covenant-scroll').forEach(function(el) {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCRIPTORIUM | Access the Archive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="assets/audio/scriptorium-audio.js" defer></script>
+    <script src="assets/js/sidebar.js"></script>
+    <style>
+        :root{--obsidian:#050505;--museum-gold:#d4af37;--museum-gold-dim:rgba(212,175,55,0.4);--museum-gold-faint:rgba(212,175,55,0.08);}
+        *,*::before,*::after{box-sizing:border-box;}
+        body{margin:0;padding:0;background:var(--obsidian);color:#fff;font-family:'Cinzel',serif;display:flex;justify-content:center;align-items:center;height:100vh;overflow:hidden;animation:fadeInPage 2s ease both;padding-left:80px;}
+        @keyframes fadeInPage{from{opacity:0;filter:blur(12px)}to{opacity:1;filter:blur(0)}}
+        .glow-overlay{position:fixed;inset:0;background:radial-gradient(circle,rgba(212,175,55,0.04) 0%,transparent 70%);pointer-events:none;}
+        .login-box{width:400px;max-width:90vw;padding:50px 44px;background:rgba(10,10,10,0.88);border:1px solid var(--museum-gold-dim);backdrop-filter:blur(20px);text-align:center;box-shadow:0 0 100px rgba(0,0,0,1);position:relative;z-index:1;border-radius:4px;transition:opacity 0.8s ease,transform 0.8s ease;}
+        .login-box.authenticating{opacity:0;transform:scale(0.96) translateY(10px);}
+        .login-box .label{font-family:'Montserrat',sans-serif;font-size: 0.66rem;letter-spacing:5px;color:rgba(212,175,55,0.5);display:block;margin-bottom:8px;}
+        .login-box h1{font-size: 1.92rem;letter-spacing:8px;color:var(--museum-gold);margin:0 0 32px;text-shadow:0 0 30px rgba(212,175,55,0.06);}
+        .input-group{margin-bottom:24px;text-align:left;}
+        .input-group label{display:block;font-family:'Montserrat',sans-serif;font-size: 0.66rem;letter-spacing:2px;color:rgba(212,175,55,0.85);margin-bottom:4px;}
+        .input-group input{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(212,175,55,0.17);color:rgba(255,255,255,0.98);font-family:'Cormorant Garamond',serif;font-size: 0.66rem;padding:8px 2px;outline:none;transition:border-color 0.3s,color 0.3s;}
+        .input-group input:focus{border-bottom-color:rgba(212,175,55,0.5);color:#fff;}
+        .input-group input::placeholder{color:rgba(255,255,255,0.15);font-style:italic;}
+        .seal-btn{background:transparent;border:1px solid rgba(212,175,55,0.2);color:rgba(212,175,55,0.7);padding:14px 40px;font-family:'Cinzel',serif;font-size: 0.66rem;letter-spacing:4px;cursor:pointer;border-radius:4px;transition:all 0.5s ease;margin-top:12px;}
+        .seal-btn:hover{background:var(--museum-gold);color:#000;box-shadow:0 0 30px rgba(212,175,55,0.2);}
+        .seal-btn:disabled{opacity:0.3;cursor:not-allowed;}
+        .seal-btn:disabled:hover{background:transparent;color:var(--museum-gold-dim);box-shadow:none;}
+        .error-msg{font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color:#e53935;margin-top:12px;min-height:20px;font-style:italic;}
+        .links{margin-top:16px;}
+        .links a{font-family:'Montserrat',sans-serif;font-size: 0.66rem;letter-spacing:2px;color:rgba(255,255,255,0.2);text-decoration:none;transition:color 0.3s;display:block;margin:8px 0;}
+        .links a:hover{color:rgba(212,175,55,0.85);}
+        .back-link{display:block;margin-top:16px;font-family:'Montserrat',sans-serif;font-size: 0.66rem;letter-spacing:2px;color:rgba(255,255,255,0.15);text-decoration:none;transition:color 0.3s;}
+        .back-link:hover{color:rgba(212,175,55,0.85);}
+        .forgot-panel{display:none;margin-top:16px;padding-top:16px;border-top:1px solid rgba(212,175,55,0.04);}
+        .forgot-panel h3{font-family:'Cinzel',serif;font-size: 0.66rem;letter-spacing:3px;color:var(--museum-gold-dim);margin:0 0 8px;}
+        .forgot-panel p{font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color:rgba(255,255,255,0.25);margin:0 0 12px;}
+        .forgot-panel input{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(212,175,55,0.08);color:rgba(255,255,255,0.98);font-family:'Cormorant Garamond',serif;font-size: 0.66rem;padding:6px 2px;outline:none;margin-bottom:12px;}
+        .forgot-panel button{background:transparent;border:1px solid rgba(212,175,55,0.1);color:rgba(212,175,55,0.3);padding:8px 20px;font-family:'Cinzel',serif;font-size: 0.66rem;letter-spacing:2px;cursor:pointer;border-radius:3px;transition:0.3s;margin-bottom:8px;}
+        .forgot-panel button:hover{border-color:var(--museum-gold);color:var(--museum-gold);}
+        @keyframes shake{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-4px)}20%,40%,60%,80%{transform:translateX(4px)}}
+        .shake{animation:shake 0.4s ease;}
+        .museum-sidebar { position:fixed;left:0;top:0;bottom:0;width:80px;background:#080808;border-right:1px solid rgba(212,175,55,0.2);z-index:2000;display:flex;flex-direction:column;align-items:center;padding:0; }
+        .sidebar-nav { flex:1;display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:4px; }
+        .nav-link { position:relative;display:flex;align-items:center;justify-content:center;width:50px;height:50px;color:rgba(255,255,255,0.98);text-decoration:none;border:1px solid transparent;border-radius:6px;font-size: 24px;transition:all 0.25s; }
+        .nav-link:hover { color:#d4af37;border-color:rgba(212,175,55,0.2);background:rgba(212,175,55,0.17); }
+        .nav-link::after { content: attr(title);position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%);background:#111;border:1px solid rgba(212,175,55,0.2);color:#d4af37;font-family:'Cinzel',serif;font-size: 0.66rem;letter-spacing:2px;white-space:nowrap;padding:5px 10px;pointer-events:none;opacity:0;transition:opacity 0.2s ease;z-index:9999; }
+        .nav-link:hover::after { opacity: 1; }
+        .nav-link.active { color:#d4af37;border-color:rgba(212,175,55,0.3);background:rgba(212,175,55,0.08); }
+        .sidebar-rank { width:100%;padding:10px 0 12px;font-size: 0.66rem;letter-spacing:1.5px;color:#d4af37;text-align:center;line-height:1.6;opacity:0.85;border-top:1px solid rgba(212,175,55,0.2);flex-shrink:0; }
+        .nav-divider { width:28px;height:1px;background:rgba(212,175,55,0.2);flex-shrink:0;margin:4px 0; }
+        .sidebar-logo { width:100%;padding:14px 0 12px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(212,175,55,0.2);flex-shrink:0; }
+        .sidebar-logo svg { width:28px;height:28px;opacity:0.85; }
+    </style>
+</head>
+<body>
+<div id="sidebarContainer"></div>
+<div class="glow-overlay"></div>
+<div class="login-box" id="loginBox">
+    <span class="label">OFFICE OF THE ARCHIVE</span>
+    <h1>ACCESS THE ARCHIVE</h1>
+    <div class="input-group">
+        <label>SCRIBE ID</label>
+        <input type="text" id="loginId" placeholder="Unique_ID_123" required>
+    </div>
+    <div class="input-group">
+        <label>CIPHER KEY</label>
+        <input type="password" id="loginPass" onkeydown="if(event.key==='Enter')attemptLogin()" required>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:10px;">
+            <input type="checkbox" id="rememberMe" style="accent-color:#d4af37;width:14px;height:14px;margin:0;cursor:pointer;">
+            <label for="rememberMe" style="font-family:'Montserrat',sans-serif;font-size: 0.66rem;letter-spacing:2px;color:rgba(212,175,55,0.5);cursor:pointer;">REMEMBER ME</label>
+        </div>
+        <div style="text-align:right;margin-top:4px;"><a href="#" onclick="event.preventDefault();toggleForgotPanel()" style="font-family:'Montserrat',sans-serif;font-size: 0.66rem;letter-spacing:1px;color:rgba(212,175,55,0.2);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='rgba(212,175,55,0.4)'" onmouseout="this.style.color='rgba(212,175,55,0.2)'">RESTORE ACCESS</a></div>
+    </div>
+    <button class="seal-btn" id="loginBtn" onclick="attemptLogin()">ENTER THE VAULT</button>
+    <div class="error-msg" id="loginError"></div>
+    <div class="links">
+            <a href="register.html">UNDERGO INDUCTION</a>
+            <a href="scriptorium.html">ENTER AS GUEST</a>
+            <a href="scriptorium.html" class="back-link">&#8592; RETURN TO THE THRESHOLD</a>
+        </div>
+        <div class="forgot-panel" id="forgotPanel">
+        <h3>RESTORE ACCESS</h3>
+        <p>Verify your identity to reforge your Cipher Key.</p>
+        <input type="email" id="resetEmail" placeholder="Email Parchment">
+        <input type="date" id="resetDob" placeholder="Day of Origin">
+        <button onclick="reforgeCipher()">REFORGE CIPHER KEY</button>
+        <button onclick="document.getElementById('forgotPanel').style.display='none'" style="font-size: 0.48rem;color:rgba(255,255,255,0.1);border:none;">CANCEL</button>
+    </div>
+</div>
+
+<script>
+    var MAX_ATTEMPTS = 3;
+    var LOCKOUT_MINUTES = 5;
+
+    async function hashPassword(pass) {
+        if (!crypto || !crypto.subtle || !crypto.subtle.digest) {
+            throw new Error('CRYPTO_UNAVAILABLE');
+        }
+        var enc = new TextEncoder();
+        var buf = await crypto.subtle.digest('SHA-256', enc.encode(pass));
+        var arr = Array.from(new Uint8Array(buf));
+        return arr.map(function(b) { return b.toString(16).padStart(2,'0'); }).join('');
+    }
+
+    async function attemptLogin() {
+        var now = Date.now();
+        var lockoutUntil = localStorage.getItem('lockout_until');
+
+        if (lockoutUntil && now < parseInt(lockoutUntil)) {
+            var remaining = Math.ceil((parseInt(lockoutUntil) - now) / 60000);
+            showLoginError('The Archive is sealed. Try again in ' + remaining + ' minute(s).');
+            return;
+        }
+
+        var id = document.getElementById('loginId').value.trim();
+        var pass = document.getElementById('loginPass').value;
+        var stored = JSON.parse(localStorage.getItem('activeScribe'));
+
+        if (!id || !pass) { showLoginError('Both Scribe ID and Cipher Key are required.'); return; }
+
+        var hashed;
+        try { hashed = await hashPassword(pass); } catch (h) {
+            if (h.message === 'CRYPTO_UNAVAILABLE') { showLoginError('Your browser does not support cryptographic functions on file://. Please use Chrome, Edge, or Firefox.'); return; }
+            showLoginError('An unexpected error occurred during authentication.'); return;
+        }
+        if (stored && stored.userId === id && stored.password === hashed) {
+            stored.lastActive = Date.now();
+            var remember = document.getElementById('rememberMe').checked;
+            var storage = remember ? localStorage : sessionStorage;
+            storage.setItem('activeScribe', JSON.stringify(stored));
+            storage.setItem('scriptorium_session', Date.now().toString());
+            if (!remember) {
+                localStorage.removeItem('activeScribe');
+                localStorage.removeItem('scriptorium_session');
+            }
+            localStorage.removeItem('failed_attempts');
+            localStorage.removeItem('lockout_until');
+            if (window.ScriptoriumAudio) { try { ScriptoriumAudio.transitionTo('ot'); } catch(e) {} }
+            document.getElementById('loginBox').classList.add('authenticating');
+            setTimeout(function() { window.location.href = 'MAP.html'; }, 1200);
+        } else {
+            var attempts = parseInt(localStorage.getItem('failed_attempts') || '0') + 1;
+            localStorage.setItem('failed_attempts', attempts);
+
+            if (attempts >= MAX_ATTEMPTS) {
+                localStorage.setItem('lockout_until', Date.now() + LOCKOUT_MINUTES * 60 * 1000);
+                showLoginError('Too many failed attempts. Please wait before trying again.');
+                document.getElementById('loginBtn').disabled = true;
+                setTimeout(function() { document.getElementById('loginBtn').disabled = false; }, LOCKOUT_MINUTES * 60 * 1000);
+            } else {
+                showLoginError('Incorrect Cipher. ' + (MAX_ATTEMPTS - attempts) + ' attempt(s) remaining.');
+                document.getElementById('loginBox').classList.add('shake');
+                setTimeout(function() { document.getElementById('loginBox').classList.remove('shake'); }, 500);
+            }
+            if (window.ScriptoriumAudio) { try { ScriptoriumAudio.transitionTo('nt'); } catch(e) {} }
+        }
+    }
+
+    function showLoginError(msg) { document.getElementById('loginError').textContent = msg; }
+
+    function toggleForgotPanel() {
+        var p = document.getElementById('forgotPanel');
+        p.style.display = p.style.display === 'none' ? 'block' : 'none';
+    }
+
+    async function reforgeCipher() {
+        var email = document.getElementById('resetEmail').value.trim();
+        var dob = document.getElementById('resetDob').value;
+        var stored = JSON.parse(localStorage.getItem('activeScribe'));
+        if (stored && stored.email === email && stored.dob === dob) {
+            var newPass = prompt('Enter your new Cipher Key (8+ chars, 1 number, 1 special char):');
+            if (newPass && /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(newPass)) {
+                stored.password = await hashPassword(newPass);
+                stored.lastActive = Date.now();
+                localStorage.setItem('activeScribe', JSON.stringify(stored));
+                alert('Your Cipher has been reforged. You may now enter.');
+                window.location.reload();
+            } else {
+                alert('The new Cipher Key does not meet the strength requirements.');
+            }
+        } else {
+            alert('The details provided do not match the Eternal Record.');
+        }
+    }
+
+    var s = JSON.parse(localStorage.getItem('activeScribe')) || JSON.parse(sessionStorage.getItem('activeScribe'));
+    var sess = localStorage.getItem('scriptorium_session') || sessionStorage.getItem('scriptorium_session');
+    if (s && s.password && sess && Date.now() - parseInt(sess) < 7200000) {
+        window.location.href = 'MAP.html';
+    }
+</script>
+    <script src="assets/js/scriptorium-core.js" defer></script>
+</body>
+</html>

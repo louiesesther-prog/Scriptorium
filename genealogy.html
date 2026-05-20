@@ -1,0 +1,2714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCRIPTORIUM | Ancestral Scroll</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/shared.css">
+    <script src="assets/audio/scriptorium-audio.js" defer></script>
+    <style>
+        :root {
+            --obsidian: #050505;
+            --obsidian-2: #080808;
+            --museum-gold: #d4af37;
+            --museum-gold-dim: rgba(212, 175, 55, 0.6);
+            --museum-gold-faint: rgba(212, 175, 55, 0.12);
+            --museum-bronze: #7a5f1a;
+            --sidebar-w: 80px;
+            --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body, html {
+            margin: 0; padding: 0;
+            background: var(--obsidian);
+            color: rgba(255,255,255,0.97);
+            font-family: 'Cinzel', serif;
+            animation: fadeInPage 1.8s var(--transition-smooth) both;
+        }
+
+        .museum-sidebar {
+            position: fixed; left: 0; top: 0; bottom: 0;
+            width: var(--sidebar-w);
+            background: #080808;
+            border-right: 1px solid rgba(212, 175, 55, 0.15);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 10px;
+        }
+
+        .sidebar-logo {
+            width: 100%; padding: 14px 0 12px;
+            display: flex; align-items: center; justify-content: center;
+            border-bottom: 1px solid rgba(212,175,55,0.1); flex-shrink: 0;
+        }
+
+        .sidebar-logo svg { width: 26px; height: 26px; opacity: 0.85; }
+
+        .streak-flame { margin: 8px 0; position: relative; }
+
+        .sidebar-nav {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; padding: 8px 0; gap: 4px;
+        }
+
+        .nav-link {
+            display: flex; align-items: center; justify-content: center;
+            width: 50px; height: 50px;
+            color: rgba(255,255,255,0.5); text-decoration: none;
+            border: 1px solid transparent; border-radius: 6px;
+            font-size: 24px; transition: all 0.25s;
+        }
+        .nav-link:hover { color: var(--museum-gold); border-color: rgba(212,175,55,0.4); background: var(--museum-gold-faint); }
+        .nav-link.active { color: var(--museum-gold); border-color: var(--museum-gold); }
+
+        .sidebar-rank {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 8.4px; letter-spacing: 3px;
+            color: rgba(212,175,55,0.4); text-align: center;
+            border-top: 1px solid rgba(212,175,55,0.17); padding-top: 10px; width: 100%;
+        }
+
+        /* ═══════════════════════════════════════
+           GENEALOGY SCROLL
+        ═══════════════════════════════════════ */
+        .genealogy-scroll {
+            margin-left: var(--sidebar-w);
+            padding: 60px 20px 120px;
+            min-height: 100vh;
+            position: relative;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .scroll-header {
+            text-align: center;
+            padding: 40px 20px 20px;
+            max-width: 700px;
+            margin: 0 auto 60px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .scroll-header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.64rem; letter-spacing: 14px;
+            color: var(--museum-gold);
+            margin: 0 0 16px;
+            text-shadow: 0 0 40px rgba(212,175,55,0.85);
+        }
+
+        .scroll-header .subtitle {
+            font-style: italic; font-size: 1.32rem;
+            color: rgba(255,255,255,0.98);
+            letter-spacing: 2px;
+        }
+
+        .filter-bar {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 1px solid rgba(212,175,55,0.3);
+            color: var(--museum-gold-dim);
+            padding: 10px 28px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.84rem; letter-spacing: 4px;
+            cursor: pointer;
+            transition: all 0.4s;
+            border-radius: 4px;
+        }
+
+        .filter-btn.active {
+            background: rgba(212,175,55,0.1);
+            border-color: var(--museum-gold);
+            color: var(--museum-gold);
+            box-shadow: 0 0 30px rgba(212,175,55,0.1);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--museum-gold);
+            color: var(--museum-gold);
+        }
+
+        /* LINEAGE SPINE */
+        .lineage-spine {
+            position: absolute;
+            left: 50%;
+            top: 0; bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom,
+                transparent 0%,
+                rgba(212,175,55,0.08) 5%,
+                rgba(212,175,55,0.85) 20%,
+                rgba(212,175,55,0.85) 40%,
+                rgba(212,175,55,0.3) 60%,
+                rgba(212,175,55,0.85) 80%,
+                transparent 100%
+            );
+            z-index: 0;
+        }
+
+        .lineage-spine::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 10px; height: 10px;
+            background: var(--museum-gold);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--museum-gold);
+        }
+
+        .lineage-spine::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 6px; height: 60px;
+            background: linear-gradient(to bottom, var(--museum-gold), transparent);
+        }
+
+        /* ERA SECTIONS */
+        .era-section {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 20px;
+        }
+
+        .era-header {
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.66rem;
+            letter-spacing: 8px;
+            color: rgba(212,175,55,0.3);
+            padding: 60px 0 20px;
+            position: relative;
+        }
+
+        .era-header::before, .era-header::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 20%;
+            height: 1px;
+            background: linear-gradient(to left, transparent, rgba(212,175,55,0.1));
+        }
+        .era-header::before { left: 10%; }
+        .era-header::after { right: 10%; background: linear-gradient(to right, transparent, rgba(212,175,55,0.1)); }
+
+        /* GENEALOGY NODE */
+        .genealogy-node {
+            width: 420px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            background: rgba(12, 12, 12, 0.95);
+            border: 1px solid rgba(212, 175, 55, 0.12);
+            padding: 24px 28px;
+            transition: all 0.5s var(--transition-smooth);
+            backdrop-filter: blur(4px);
+        }
+
+        .genealogy-node:hover {
+            background: rgba(18, 18, 18, 0.98);
+            border-color: rgba(212, 175, 55, 0.35);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+        }
+
+        .genealogy-node.messianic {
+            border-color: rgba(212, 175, 55, 0.3);
+            background: rgba(16, 14, 8, 0.95);
+        }
+
+        .genealogy-node.messianic:hover {
+            border-color: var(--museum-gold);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.08), 0 8px 40px rgba(0,0,0,0.6);
+        }
+
+        .genealogy-node { transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        .messianic-view .genealogy-node:not(.messianic) {
+            opacity: 0.08;
+            filter: grayscale(1) blur(2px);
+            transform: scale(0.92);
+            pointer-events: none;
+        }
+
+        .messianic-view .genealogy-node.messianic {
+            border-color: var(--museum-gold);
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.3), 0 8px 40px rgba(0,0,0,0.6);
+            transform: scale(1.02);
+            z-index: 10;
+        }
+
+        .messianic-view .lineage-spine {
+            background: var(--museum-gold);
+            box-shadow: 0 0 15px var(--museum-gold);
+        }
+
+        /* LIFESPAN DECAY CHART */
+        .lifespan-chart {
+            max-width: 700px;
+            margin: 0 auto 50px;
+            padding: 20px 30px;
+            background: rgba(10,10,10,0.6);
+            border: 1px solid rgba(212,175,55,0.08);
+            border-radius: 4px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .lifespan-chart h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.54rem;
+            letter-spacing: 4px;
+            color: rgba(212,175,55,0.3);
+            margin: 0 0 16px;
+            text-align: center;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            height: 100px;
+            gap: 3px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, rgba(212,175,55,0.3), rgba(212,175,55,0.05));
+            border-radius: 2px 2px 0 0;
+            position: relative;
+            transition: height 1s ease;
+            min-width: 8px;
+        }
+
+        .chart-bar:hover {
+            background: linear-gradient(to top, var(--museum-gold-dim), rgba(212,175,55,0.1));
+        }
+
+        .chart-bar .bar-label {
+            position: absolute;
+            bottom: -18px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-45deg);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.48rem;
+            color: rgba(255,255,255,0.2);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .chart-bar .bar-value {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.48rem;
+            color: rgba(212,175,55,0.2);
+        }
+
+        .node-content h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.32rem;
+            letter-spacing: 6px;
+            margin: 0 0 6px;
+            color: #e0e0e0;
+            transition: transform 0.4s, opacity 0.3s;
+        }
+
+        .genealogy-node.messianic .node-content h3 {
+            color: var(--museum-gold);
+            text-shadow: 0 0 20px rgba(212,175,55,0.85);
+        }
+
+        /* Linguistic hover-to-reveal */
+        .name-container {
+            position: relative;
+            height: 36px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        .name-container .modern-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.32rem;
+            letter-spacing: 6px;
+            color: inherit;
+            transition: transform 0.4s, opacity 0.3s;
+        }
+        .genealogy-node.messianic .name-container .modern-name { color: var(--museum-gold); text-shadow: 0 0 20px rgba(212,175,55,0.85); }
+        .name-container .ancient-scripts {
+            position: absolute;
+            opacity: 0;
+            transform: translateY(10px);
+            display: flex;
+            gap: 14px;
+            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+            color: var(--museum-gold-dim);
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+        .name-container .ancient-scripts .lang-heb { font-family: 'Times New Roman', serif; color: #e0c88a; }
+        .name-container .ancient-scripts .lang-gez { font-family: 'Times New Roman', serif; color: #c9a033; }
+        .genealogy-node:hover .name-container .modern-name {
+            opacity: 0;
+            transform: translateY(-12px);
+        }
+        .genealogy-node:hover .name-container .ancient-scripts {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Messianic line connection glow */
+        .messianic-view .genealogy-node.messianic {
+            border-color: var(--museum-gold);
+            box-shadow: 0 0 25px rgba(212,175,55,0.3), 0 8px 40px rgba(0,0,0,0.6);
+            background: rgba(212,175,55,0.03);
+            z-index: 5;
+        }
+        .messianic-view .lineage-spine {
+            background: var(--museum-gold);
+            box-shadow: 0 0 15px var(--museum-gold);
+        }
+
+        .node-content .lifespan {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.66rem;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.3);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .node-content .node-detail {
+            font-size: 1.08rem;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.6;
+            margin: 0 0 10px;
+            font-style: italic;
+        }
+
+        .node-content .node-meta {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.2);
+        }
+
+        .node-content .node-ref {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.54rem;
+            letter-spacing: 1px;
+            color: rgba(212,175,55,0.3);
+            margin-top: 4px;
+        }
+
+        .node-content .tribal-seal {
+            display: inline-block;
+            font-size: 1.44rem;
+            margin-right: 8px;
+            opacity: 0.6;
+            vertical-align: middle;
+        }
+
+        /* LIFESPAN BAR */
+        .lifespan-bar {
+            width: 100%;
+            height: 3px;
+            background: rgba(255,255,255,0.05);
+            margin: 8px 0 10px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .lifespan-bar .fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 1s ease;
+        }
+
+        .lifespan-bar .fill.antediluvian { background: linear-gradient(to right, var(--museum-gold), #8b6914); width: 100%; }
+        .lifespan-bar .fill.patriarch { background: linear-gradient(to right, var(--museum-gold-dim), var(--museum-bronze)); width: 70%; }
+        .lifespan-bar .fill.standard { background: linear-gradient(to right, var(--museum-bronze), #4a3510); width: 30%; }
+        .lifespan-bar .fill.king { background: linear-gradient(to right, var(--museum-gold), var(--museum-gold-dim)); width: 50%; }
+
+        /* ARCHAEOLOGY BADGE */
+        .arch-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.66rem;
+            letter-spacing: 1px;
+            color: var(--museum-gold-dim);
+            margin-top: 12px;
+            padding: 6px 12px;
+            border: 1px solid rgba(212,175,55,0.17);
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .arch-badge:hover {
+            background: rgba(212,175,55,0.06);
+            border-color: rgba(212,175,55,0.3);
+            color: var(--museum-gold);
+        }
+
+        .arch-badge .icon { font-size: 0.96rem; }
+
+        /* MESSIANIC THREAD INDICATOR */
+        .messianic-thread {
+            position: absolute;
+            left: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(to bottom, transparent, var(--museum-gold), transparent);
+            border-radius: 3px;
+            opacity: 0.4;
+        }
+
+        .genealogy-node:hover .messianic-thread {
+            opacity: 0.8;
+        }
+
+        /* LINE CONNECTOR */
+        .line-connector {
+            width: 80px;
+            height: 30px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .line-connector::before {
+            content: '';
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(212,175,55,0.08), rgba(212,175,55,0.85), rgba(212,175,55,0.08));
+        }
+
+        .line-connector .dot {
+            width: 4px;
+            height: 4px;
+            background: rgba(212,175,55,0.2);
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .genealogy-node { width: 90%; }
+            .scroll-header h1 { font-size: 1.68rem; letter-spacing: 8px; }
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.2); border-radius: 2px; }
+
+        /* ═══════════════════════════════════════
+           TWELVE TRIBES GRID
+        ═══════════════════════════════════════ */
+        .tribes-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tribe-card {
+            background: rgba(12,12,12,0.9);
+            border: 1px solid rgba(212,175,55,0.08);
+            padding: 16px 12px;
+            text-align: center;
+            transition: all 0.4s;
+            cursor: default;
+        }
+
+        .tribe-card:hover {
+            border-color: rgba(212,175,55,0.85);
+            background: rgba(18,18,18,0.95);
+            transform: translateY(-2px);
+        }
+
+        .tribe-card .tribe-icon { font-size: 2.16rem; margin-bottom: 6px; opacity: 0.6; }
+        .tribe-card h4 { font-family:'Cinzel',serif; font-size: 0.66rem; letter-spacing:3px; color:#ccc; margin:0 0 4px; }
+        .tribe-card .tribe-color { display:inline-block; width:20px; height:3px; border-radius:2px; margin-bottom:6px; }
+        .tribe-card .tribe-blessing { font-family:'Cormorant Garamond',serif; font-size: 0.66rem; color:rgba(255,255,255,0.3); font-style:italic; margin:0 0 4px; }
+        .tribe-card .tribe-region { font-family:'Montserrat',sans-serif; font-size: 0.54rem; color:rgba(255,255,255,0.45); letter-spacing:1px; }
+
+        .tribe-card.shattered {
+            opacity: 0.1;
+            filter: grayscale(1);
+            pointer-events: none;
+            transition: all 1.5s ease;
+        }
+
+        /* ═══════════════════════════════════════
+           TRIBAL SIDEBAR MAP
+        ═══════════════════════════════════════ */
+        .tribal-sidebar {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 140px;
+            background: rgba(8,8,8,0.92);
+            border: 1px solid rgba(212,175,55,0.17);
+            backdrop-filter: blur(8px);
+            padding: 16px;
+            z-index: 100;
+            display: none;
+            transition: all 0.5s;
+        }
+
+        .tribal-sidebar.visible { display: block; }
+
+        .tribal-sidebar .tribe-mini-map {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3px;
+            margin-bottom: 12px;
+        }
+
+        .tribal-sidebar .mini-territory {
+            height: 18px;
+            border-radius: 2px;
+            opacity: 0.15;
+            transition: all 0.4s;
+            border: 1px solid transparent;
+        }
+
+        .tribal-sidebar .mini-territory.active {
+            opacity: 0.8;
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 0 8px currentColor;
+        }
+
+        .tribal-sidebar .mini-territory.shattered {
+            opacity: 0.02;
+            transform: translateX(20px) rotate(5deg);
+            filter: blur(1px);
+            pointer-events: none;
+            transition: all 2s ease;
+        }
+
+        .tribal-sidebar .tribe-id-card { text-align: center; }
+        .tribal-sidebar .tribe-id-card .card-icon { font-size: 1.68rem; opacity:0.5; margin-bottom:4px; }
+        .tribal-sidebar .tribe-id-card .card-name { font-family:'Cinzel',serif; font-size: 0.66rem; letter-spacing:3px; color:var(--museum-gold-dim); margin:0 0 4px; }
+        .tribal-sidebar .tribe-id-card .card-blessing { font-family:'Cormorant Garamond',serif; font-size: 0.66rem; color:rgba(255,255,255,0.53); font-style:italic; margin:0; line-height:1.4; }
+        .tribal-sidebar .tribe-id-card .card-artifact { font-family:'Montserrat',sans-serif; font-size: 0.48rem; color:rgba(212,175,55,0.2); letter-spacing:1px; margin-top:6px; padding-top:6px; border-top:1px solid rgba(212,175,55,0.06); }
+
+        @media (max-width: 1100px) {
+            .tribal-sidebar { display: none !important; }
+            .tribes-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 700px) {
+            .tribes-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* ═══════════════════════════════════════
+           LINGUISTIC LAB
+        ═══════════════════════════════════════ */
+        .linguistic-lab {
+            position: fixed;
+            bottom: 0;
+            left: var(--sidebar-w);
+            right: 0;
+            background: rgba(6,6,6,0.95);
+            border-top: 1px solid rgba(212,175,55,0.1);
+            backdrop-filter: blur(12px);
+            z-index: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 10px 20px;
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .linguistic-lab.visible { transform: translateY(0); }
+
+        .linguistic-lab .mirror-side {
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .linguistic-lab .script-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.48rem;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.2);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .linguistic-lab .script-text {
+            font-size: 1.92rem;
+            margin: 0;
+            line-height: 1.3;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .linguistic-lab .script-text.morphing {
+            opacity: 0.3;
+            transform: scale(0.95);
+        }
+
+        .linguistic-lab .script-text.hebrew { color: #e0c88a; font-family: 'Times New Roman', serif; }
+        .linguistic-lab .script-text.geez { color: #c9a033; font-family: 'Times New Roman', serif; }
+
+        .linguistic-lab .mirror-divider {
+            width: 1px;
+            height: 40px;
+            background: rgba(212,175,55,0.1);
+        }
+
+        .linguistic-lab .etymology-footer {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.54rem;
+            color: rgba(255,255,255,0.2);
+            letter-spacing: 1px;
+            margin-left: 10px;
+            padding-left: 20px;
+            border-left: 1px solid rgba(212,175,55,0.06);
+        }
+
+        .linguistic-lab .etymology-footer strong {
+            color: rgba(212,175,55,0.4);
+        }
+
+        .linguistic-lab .linguistic-close {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: 1px solid rgba(212,175,55,0.1);
+            color: rgba(255,255,255,0.2);
+            font-family: 'Cinzel', serif;
+            font-size: 0.48rem;
+            letter-spacing: 2px;
+            padding: 4px 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .linguistic-lab .linguistic-close:hover {
+            border-color: var(--museum-gold);
+            color: var(--museum-gold);
+        }
+
+        /* Hover-to-reveal linguistic badges on nodes */
+        .node-lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-family: 'Montserrat', sans-serif; font-size: 0.48rem;
+            letter-spacing: 1px; color: rgba(255,255,255,0.1);
+            margin-top: 6px; padding: 3px 8px;
+            border: 1px solid rgba(212,175,55,0.04);
+            border-radius: 3px; cursor: pointer;
+            transition: all 0.4s;
+        }
+        .node-lang-badge:hover {
+            color: var(--museum-gold-dim);
+            border-color: rgba(212,175,55,0.17);
+            background: rgba(212,175,55,0.03);
+        }
+        .node-lang-badge .lang-heb { font-family:'Times New Roman',serif; font-size: 0.66rem; color:rgba(212,175,55,0.2); transition:color 0.3s; }
+        .node-lang-badge:hover .lang-heb { color:rgba(212,175,55,0.5); }
+        .node-lang-badge .lang-gez { font-family:'Times New Roman',serif; font-size: 0.66rem; color:rgba(201,160,51,0.2); transition:color 0.3s; }
+        .node-lang-badge:hover .lang-gez { color:rgba(201,160,51,0.5); }
+
+        /* ═══ COLLAPSIBLE SECTIONS ═══ */
+        .era-collapse-toggle {
+            display: inline-block;
+            background: transparent; border: none;
+            color: rgba(212,175,55,0.2);
+            font-family: 'Cinzel', serif;
+            font-size: 0.6rem; letter-spacing: 3px;
+            cursor: pointer;
+            transition: color 0.3s;
+            padding: 0; margin-left: 10px;
+        }
+        .era-collapse-toggle:hover { color: var(--museum-gold-dim); }
+        .era-section.collapsed .era-content { max-height: 0; opacity: 0; overflow: hidden; padding: 0; }
+        .era-section .era-content { max-height: none; opacity: 1; transition: max-height 0.6s ease, opacity 0.5s ease, padding 0.4s ease; }
+
+        /* ═══ ERA JUMP NAV ═══ */
+        .era-jump-nav {
+            position: fixed;
+            right: 16px; top: 50%;
+            transform: translateY(-50%);
+            z-index: 200;
+            display: flex; flex-direction: column; gap: 6px;
+            background: rgba(8,8,8,0.85);
+            border: 1px solid rgba(212,175,55,0.1);
+            backdrop-filter: blur(8px);
+            padding: 10px 6px;
+            border-radius: 4px;
+        }
+        .era-jump-btn {
+            display: block;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.48rem; letter-spacing: 2px;
+            color: rgba(255,255,255,0.15);
+            background: transparent; border: none;
+            padding: 6px 3px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .era-jump-btn:hover { color: var(--museum-gold-dim); }
+        .era-jump-btn.active { color: var(--museum-gold); }
+        @media (max-width: 900px) { .era-jump-nav { display: none; } }
+
+        /* ═══ TYPOLOGY OVERLAY ═══ */
+        .typology-badge {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.54rem; letter-spacing: 1px;
+            color: rgba(200,180,100,0.6);
+            background: rgba(212,175,55,0.04);
+            border: 1px solid rgba(212,175,55,0.12);
+            border-radius: 3px;
+            padding: 6px 10px;
+            margin-top: 8px;
+            display: none;
+            line-height: 1.5;
+        }
+        .typology-active .typology-badge { display: block; }
+        .typology-active .genealogy-node.typology-node {
+            border-color: rgba(212,175,55,0.35);
+            box-shadow: 0 0 12px rgba(212,175,55,0.06);
+        }
+
+        /* ═══ WOMEN SIDE-NODE ═══ */
+        .women-section {
+            max-width: 420px; margin: 0 auto;
+            position: relative; z-index: 2;
+        }
+        .women-card {
+            background: rgba(14,12,8,0.92);
+            border: 1px solid rgba(212,175,55,0.08);
+            border-left: 3px solid rgba(212,175,55,0.2);
+            padding: 14px 20px;
+            margin-bottom: 10px;
+            transition: all 0.4s;
+        }
+        .women-card:hover {
+            border-color: rgba(212,175,55,0.25);
+            background: rgba(18,16,12,0.95);
+        }
+        .women-card h4 {
+            font-family: 'Cinzel', serif;
+            font-size: 0.96rem; letter-spacing: 4px;
+            color: var(--museum-gold-dim);
+            margin: 0 0 4px;
+        }
+        .women-card .women-ref {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic; font-size: 1.08rem;
+            color: rgba(255,255,255,0.4);
+            margin: 0 0 4px;
+        }
+        .women-card .women-note {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.6rem; letter-spacing: 1px;
+            color: rgba(255,255,255,0.2);
+        }
+        .women-card .women-significance {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.66rem; font-style: italic;
+            color: rgba(212,175,55,0.3);
+            margin-top: 6px;
+        }
+
+        /* ═══ LUKE 3 DIVERGENT LINE ═══ */
+        .luke-line-toggle {
+            text-align: center;
+            margin: 20px auto;
+            max-width: 420px;
+        }
+        .luke-line-content { display: none; }
+        .luke-line-content.visible { display: block; }
+        .luke-node {
+            background: rgba(10,10,14,0.92);
+            border: 1px solid rgba(100,140,200,0.12);
+            border-left: 3px solid rgba(100,140,200,0.2);
+            padding: 14px 20px;
+            margin: 0 auto 6px;
+            max-width: 420px;
+            transition: all 0.4s;
+        }
+        .luke-node:hover {
+            border-color: rgba(100,140,200,0.3);
+            background: rgba(14,14,18,0.95);
+        }
+        .luke-node h5 {
+            font-family: 'Cinzel', serif;
+            font-size: 0.84rem; letter-spacing: 3px;
+            color: rgba(180,200,230,0.6);
+            margin: 0 0 4px;
+        }
+        .luke-node .luke-detail {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic; font-size: 0.6rem;
+            color: rgba(255,255,255,0.3);
+        }
+        .luke-node .luke-ref {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.48rem; letter-spacing: 1px;
+            color: rgba(255,255,255,0.12);
+            margin-top: 4px;
+        }
+        .luke-node.biological-line {
+            border-left-color: rgba(200,180,100,0.3);
+        }
+        .luke-node.biological-line h5 { color: var(--museum-gold-dim); }
+
+        /* Silent Years nodes — dashed borders, reduced opacity */
+        .genealogy-node.silent-node {
+            border-style: dashed;
+            border-color: rgba(212,175,55,0.08);
+            opacity: 0.75;
+        }
+        .genealogy-node.silent-node:hover {
+            border-color: rgba(212,175,55,0.2);
+            opacity: 0.95;
+        }
+
+        @media (max-width: 800px) {
+            .linguistic-lab { flex-wrap: wrap; gap: 8px; padding: 8px 12px; }
+            .linguistic-lab .script-text { font-size: 1.44rem; }
+            .linguistic-lab .etymology-footer { border-left: none; padding-left: 0; width: 100%; text-align: center; }
+        }
+    </style>
+    <script src="assets/js/sidebar.js"></script>
+</head>
+<body>
+<script src="assets/js/scriptorium-core.js"></script>
+
+<div id="sidebarContainer"></div>
+
+<main class="genealogy-scroll">
+    <div class="lineage-spine"></div>
+    <svg id="messianicSpine" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></svg>
+
+    <header class="scroll-header">
+        <h1>THE ANCESTRAL SCROLL</h1>
+        <div class="subtitle">From the First Breath to the Silent Years — The Line of the Chosen</div>
+    </header>
+
+    <div class="lifespan-chart">
+        <h4>THE LIFESPAN DECAY — FROM EDEN TO EXILE</h4>
+        <div class="chart-bars" id="lifespanChart"></div>
+    </div>
+
+    <div class="filter-bar">
+        <button class="filter-btn" id="messianicToggle" onclick="toggleMessianicPath()">&#9812; REVEAL THE SEED</button>
+        <button class="filter-btn" id="typologyToggle" onclick="toggleTypology()" style="margin-left:10px;">&#128214; TYPOLOGY</button>
+    </div>
+
+    <!-- ════════════════════════════════
+         ERA I: ANTE-DILUVIAN
+    ════════════════════════════════ -->
+    <div class="era-section" data-era="patriarchs">
+        <div class="era-header">THE ANTE-DILUVIAN LINE</div>
+
+        <div class="genealogy-node messianic" id="node-adam" data-linguistic="ADAM">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <div class="name-container">
+                    <span class="modern-name">ADAM</span>
+                    <div class="ancient-scripts">
+                        <span class="lang-heb">&#1488;&#1464;&#1491;&#1464;&#1501;</span>
+                        <span class="lang-gez">&#4640;&#4655;&#4635;&#4749;</span>
+                    </div>
+                </div>
+                <span class="lifespan">930 Years — Created in the Image of God</span>
+                <div class="lifespan-bar"><div class="fill antediluvian"></div></div>
+                <p class="node-detail">The first man. Through him sin entered the world, and through his line the Redeemer was promised.</p>
+                <div class="node-meta">GENESIS 1:27 — 5:5</div>
+                <div class="node-ref">NT References: Luke 3:38, Romans 5:14, 1 Corinthians 15:45</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-seth">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>SETH</h3>
+                <span class="lifespan">912 Years — The Appointed Seed</span>
+                <div class="lifespan-bar"><div class="fill antediluvian"></div></div>
+                <p class="node-detail">Given by God to replace Abel. From his line the righteous seed was preserved through the flood.</p>
+                <div class="node-meta">GENESIS 4:25 — 5:8</div>
+                <div class="node-ref">NT References: Luke 3:38</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-enosh">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>ENOSH</h3>
+                <span class="lifespan">905 Years — The Mortal One</span>
+                <div class="lifespan-bar"><div class="fill antediluvian"></div></div>
+                <p class="node-detail">In his days men began to call upon the name of the LORD. The first flicker of communal worship.</p>
+                <div class="node-meta">GENESIS 4:26 — 5:11</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-cainan">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>CAINAN</h3>
+                <span class="lifespan">910 Years</span>
+                <div class="lifespan-bar"><div class="fill antediluvian"></div></div>
+                <p class="node-detail">Son of Enosh. The genealogy continues unbroken toward the flood and the covenant.</p>
+                <div class="node-meta">GENESIS 5:12-14</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-mahalalel">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>MAHALALEL</h3>
+                <span class="lifespan">895 Years — Praise of God</span>
+                <div class="lifespan-bar"><div class="fill antediluvian"></div></div>
+                <p class="node-detail">His name means "Blessing of God." A link in the chain from Adam to the ark.</p>
+                <div class="node-meta">GENESIS 5:15-17</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-jared">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>JARED</h3>
+                <span class="lifespan">962 Years — Descent</span>
+                <div class="lifespan-bar"><div class="fill antediluvian"></div></div>
+                <p class="node-detail">Father of Enoch who walked with God. The longest-lived of the antediluvian patriarchs.</p>
+                <div class="node-meta">GENESIS 5:18-20</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-enoch">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>ENOCH</h3>
+                <span class="lifespan">365 Years — Walked with God</span>
+                <div class="lifespan-bar"><div class="fill antediluvian" style="width:40%"></div></div>
+                <p class="node-detail">He walked with God and was not, for God took him. The only man to escape death before Christ.</p>
+                <div class="node-meta">GENESIS 5:21-24</div>
+                <div class="node-ref">NT References: Hebrews 11:5, Jude 14-15</div>
+                <div class="arch-badge" onclick="alert('1 Enoch fragments found at Qumran (4Q201-212) preserve this text in Aramaic.')"><span class="icon">&#128220;</span> 1 Enoch — Qumran Cave 4</div>
+                <div class="node-lang-badge" onclick="openLinguisticLab('ENOCH')"><span class="lang-heb">&#1495;&#1504;&#1493;&#1498;</span> / <span class="lang-gez">&#4640;&#4756;&#4653;&#4632;</span></div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-methuselah">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>METHUSELAH</h3>
+                <span class="lifespan">969 Years — The Longest Life</span>
+                <div class="lifespan-bar"><div class="fill antediluvian" style="width:100%"></div></div>
+                <p class="node-detail">The oldest man in Scripture. His death in the year of the flood marks the end of an age.</p>
+                <div class="node-meta">GENESIS 5:25-27</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-lamech">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>LAMECH</h3>
+                <span class="lifespan">777 Years</span>
+                <div class="lifespan-bar"><div class="fill antediluvian" style="width:80%"></div></div>
+                <p class="node-detail">Father of Noah. He prophesied that his son would bring comfort from the curse on the ground.</p>
+                <div class="node-meta">GENESIS 5:28-31</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-noah" data-linguistic="NOAH">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>NOAH</h3>
+                <span class="lifespan">950 Years — The Restorer</span>
+                <div class="lifespan-bar"><div class="fill antediluvian"></div></div>
+                <p class="node-detail">Preserver of the seed through the deluge. The covenant of the rainbow was established through him.</p>
+                <div class="node-meta">GENESIS 6:9 — 9:29</div>
+                <div class="node-ref">NT References: Matthew 24:37, Hebrews 11:7, 1 Peter 3:20</div>
+                <div class="arch-badge" onclick="alert('The Gilgamesh Epic (Standard Babylonian Version, Tablet XI) preserves a flood narrative parallel to Genesis 6-9.')"><span class="icon">&#128220;</span> Gilgamesh Tablet XI (651 BC)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         ERA II: PATRIARCHS
+    ════════════════════════════════ -->
+    <div class="era-section" data-era="patriarchs">
+        <div class="era-header">THE PATRIARCHS</div>
+
+        <div class="genealogy-node messianic" id="node-shem">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>SHEM</h3>
+                <span class="lifespan">600 Years — The Blessed Line</span>
+                <div class="lifespan-bar"><div class="fill patriarch"></div></div>
+                <p class="node-detail">The son of Noah through whom the Messianic line continued. From Shem came the Semitic peoples.</p>
+                <div class="node-meta">GENESIS 10:21-31</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-arpachshad">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>ARPACHSHAD</h3>
+                <span class="lifespan">438 Years</span>
+                <div class="lifespan-bar"><div class="fill patriarch"></div></div>
+                <p class="node-detail">Born two years after the flood. The line through which Abraham would descend.</p>
+                <div class="node-meta">GENESIS 10:22, 11:10-13</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node" id="node-shelah">
+            <div class="node-content">
+                <h3>SHELAH</h3>
+                <span class="lifespan">433 Years</span>
+                <div class="lifespan-bar"><div class="fill patriarch"></div></div>
+                <p class="node-detail">Son of Arpachshad. The genealogy narrows toward the call of Abram.</p>
+                <div class="node-meta">GENESIS 10:24, 11:12-15</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node" id="node-eber">
+            <div class="node-content">
+                <h3>EBER</h3>
+                <span class="lifespan">464 Years</span>
+                <div class="lifespan-bar"><div class="fill patriarch"></div></div>
+                <p class="node-detail">The namesake of the Hebrews. From Eber comes the word "Hebrew."</p>
+                <div class="node-meta">GENESIS 10:24-25, 11:14-17</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node" id="node-peleg">
+            <div class="node-content">
+                <h3>PELEG</h3>
+                <span class="lifespan">239 Years — Division</span>
+                <div class="lifespan-bar"><div class="fill standard"></div></div>
+                <p class="node-detail">In his days the earth was divided. Likely referring to the dispersion at Babel.</p>
+                <div class="node-meta">GENESIS 10:25, 11:16-19</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node" id="node-reu">
+            <div class="node-content">
+                <h3>REU</h3>
+                <span class="lifespan">239 Years</span>
+                <div class="lifespan-bar"><div class="fill standard"></div></div>
+                <p class="node-detail">Son of Peleg. The generations between Babel and Abraham.</p>
+                <div class="node-meta">GENESIS 11:18-21</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node" id="node-serug">
+            <div class="node-content">
+                <h3>SERUG</h3>
+                <span class="lifespan">230 Years</span>
+                <div class="lifespan-bar"><div class="fill standard"></div></div>
+                <p class="node-detail">Father of Nahor. The patriarchs begin to live shorter lives after the flood.</p>
+                <div class="node-meta">GENESIS 11:20-23</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node" id="node-nahor">
+            <div class="node-content">
+                <h3>NAHOR</h3>
+                <span class="lifespan">148 Years</span>
+                <div class="lifespan-bar"><div class="fill standard"></div></div>
+                <p class="node-detail">Father of Terah. The line narrows to the father of Abram.</p>
+                <div class="node-meta">GENESIS 11:22-25</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node" id="node-terah">
+            <div class="node-content">
+                <h3>TERAH</h3>
+                <span class="lifespan">205 Years</span>
+                <div class="lifespan-bar"><div class="fill standard"></div></div>
+                <p class="node-detail">Father of Abram, Nahor, and Haran. He set out for Canaan but settled in Haran.</p>
+                <div class="node-meta">GENESIS 11:26-32</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-abraham" data-linguistic="ABRAHAM">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>ABRAHAM</h3>
+                <span class="lifespan">175 Years — Father of Many Nations</span>
+                <div class="lifespan-bar"><div class="fill patriarch"></div></div>
+                <p class="node-detail">The covenant bearer. Justified by faith, he received the promise that all nations would be blessed through his seed.</p>
+                <div class="node-meta">GENESIS 12:1 — 25:8</div>
+                <div class="node-ref">NT References: Romans 4:1-25, Galatians 3:6-29, Hebrews 11:8-19 (mentioned 74 times)</div>
+                <div class="arch-badge" onclick="alert('The Covenant of the Pieces (Genesis 15) is one of the most archaeologically significant covenant ceremonies recorded.')"><span class="icon">&#128220;</span> Ancient Near Eastern Covenant Parallels</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-isaac" data-linguistic="ISAAC">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>ISAAC</h3>
+                <span class="lifespan">180 Years — The Promised Son</span>
+                <div class="lifespan-bar"><div class="fill patriarch"></div></div>
+                <p class="node-detail">The child of the covenant. Bound on the altar, he prefigured the sacrifice of Christ.</p>
+                <div class="node-meta">GENESIS 21:1 — 35:29</div>
+                <div class="node-ref">NT References: Matthew 8:11, Romans 9:7, Hebrews 11:17-20</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-jacob" data-linguistic="JACOB">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>JACOB</h3>
+                <span class="lifespan">147 Years — Israel</span>
+                <div class="lifespan-bar"><div class="fill patriarch"></div></div>
+                <p class="node-detail">The supplanter who became Israel. His twelve sons became the twelve tribes of the covenant people.</p>
+                <div class="node-meta">GENESIS 25:21 — 49:33</div>
+                <div class="node-ref">NT References: Matthew 1:2, John 4:5, Romans 9:13</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-judah" data-tribe="Judah">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3><span class="tribal-seal">&#129529;</span> JUDAH</h3>
+                <span class="lifespan">Royal Line — The Lion's Tribe</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">The tribe from which the Messiah would come. "The scepter shall not depart from Judah."</p>
+                <div class="node-meta">GENESIS 49:8-12</div>
+                <div class="node-ref">NT References: Matthew 1:2-3, Hebrews 7:14, Revelation 5:5</div>
+                <div class="arch-badge" onclick="alert('The Tel Dan Stele (9th c. BC) mentions the \"House of David\" — the earliest extra-biblical reference to the Davidic dynasty.')"><span class="icon">&#128220;</span> Tel Dan Stele — House of David</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         ERA II-B: THE TWELVE TRIBES
+    ════════════════════════════════ -->
+    <div class="era-section" data-era="tribes">
+        <div class="era-header">THE TWELVE TRIBES OF ISRAEL</div>
+        <div class="tribes-grid">
+            <div class="tribe-card" data-tribe="Reuben" data-region="south">
+                <div class="tribe-icon">&#128014;</div>
+                <h4>REUBEN</h4>
+                <span class="tribe-color" style="background:#c0392b;"></span>
+                <p class="tribe-blessing">"Unstable as water, you shall not excel."</p>
+                <span class="tribe-region">South — Transjordan</span>
+            </div>
+            <div class="tribe-card" data-tribe="Simeon" data-region="south">
+                <div class="tribe-icon">&#9878;</div>
+                <h4>SIMEON</h4>
+                <span class="tribe-color" style="background:#27ae60;"></span>
+                <p class="tribe-blessing">"I will scatter them in Jacob."</p>
+                <span class="tribe-region">South — absorbed by Judah</span>
+            </div>
+            <div class="tribe-card" data-tribe="Levi" data-region="scattered">
+                <div class="tribe-icon">&#10017;</div>
+                <h4>LEVI</h4>
+                <span class="tribe-color" style="background:#8e44ad;"></span>
+                <p class="tribe-blessing">"They shall teach Jacob your rules."</p>
+                <span class="tribe-region">Scattered — Priestly cities</span>
+            </div>
+            <div class="tribe-card" data-tribe="Judah" data-region="south">
+                <div class="tribe-icon">&#129529;</div>
+                <h4>JUDAH</h4>
+                <span class="tribe-color" style="background:#2980b9;"></span>
+                <p class="tribe-blessing">"The scepter shall not depart from Judah."</p>
+                <span class="tribe-region">South — Jerusalem</span>
+            </div>
+            <div class="tribe-card" data-tribe="Dan" data-region="north">
+                <div class="tribe-icon">&#128018;</div>
+                <h4>DAN</h4>
+                <span class="tribe-color" style="background:#e67e22;"></span>
+                <p class="tribe-blessing">"Dan shall judge his people."</p>
+                <span class="tribe-region">North — Laish</span>
+            </div>
+            <div class="tribe-card" data-tribe="Naphtali" data-region="north">
+                <div class="tribe-icon">&#129420;</div>
+                <h4>NAPHTALI</h4>
+                <span class="tribe-color" style="background:#f1c40f;"></span>
+                <p class="tribe-blessing">"He gives beautiful words."</p>
+                <span class="tribe-region">North — Galilee</span>
+            </div>
+            <div class="tribe-card" data-tribe="Gad" data-region="east">
+                <div class="tribe-icon">&#128056;</div>
+                <h4>GAD</h4>
+                <span class="tribe-color" style="background:#2c3e50;"></span>
+                <p class="tribe-blessing">"Raided by raiders, but he raids at their heels."</p>
+                <span class="tribe-region">East — Transjordan</span>
+            </div>
+            <div class="tribe-card" data-tribe="Asher" data-region="north">
+                <div class="tribe-icon">&#127806;</div>
+                <h4>ASHER</h4>
+                <span class="tribe-color" style="background:#556b2f;"></span>
+                <p class="tribe-blessing">"His bread shall be rich."</p>
+                <span class="tribe-region">North — Coastal Galilee</span>
+            </div>
+            <div class="tribe-card" data-tribe="Issachar" data-region="north">
+                <div class="tribe-icon">&#128024;</div>
+                <h4>ISSACHAR</h4>
+                <span class="tribe-color" style="background:#d35400;"></span>
+                <p class="tribe-blessing">"He bowed his shoulder to bear."</p>
+                <span class="tribe-region">North — Jezreel Valley</span>
+            </div>
+            <div class="tribe-card" data-tribe="Zebulun" data-region="north">
+                <div class="tribe-icon">&#128674;</div>
+                <h4>ZEBULUN</h4>
+                <span class="tribe-color" style="background:#ecf0f1;"></span>
+                <p class="tribe-blessing">"He shall dwell at the shore of the sea."</p>
+                <span class="tribe-region">North — Haifa coast</span>
+            </div>
+            <div class="tribe-card" data-tribe="Joseph" data-region="central">
+                <div class="tribe-icon">&#127855;</div>
+                <h4>JOSEPH</h4>
+                <span class="tribe-color" style="background:#b8860b;"></span>
+                <p class="tribe-blessing">"Joseph is a fruitful vine."</p>
+                <span class="tribe-region">Central — Ephraim &amp; Manasseh</span>
+            </div>
+            <div class="tribe-card" data-tribe="Benjamin" data-region="south">
+                <div class="tribe-icon">&#128058;</div>
+                <h4>BENJAMIN</h4>
+                <span class="tribe-color" style="background:#5c4033;"></span>
+                <p class="tribe-blessing">"Benjamin is a ravenous wolf."</p>
+                <span class="tribe-region">South — Central Highlands</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         ERA III: FROM EGYPT TO THE JUDGES
+    ════════════════════════════════ -->
+    <div class="era-section" data-era="egypt">
+        <div class="era-header">THE SOJOURN &amp; THE EXODUS</div>
+
+        <div class="genealogy-node" id="node-perez">
+            <div class="node-content">
+                <h3>PEREZ</h3>
+                <span class="lifespan">Son of Judah and Tamar</span>
+                <p class="node-detail">The twin who broke forth first. His line continued through the sojourn in Egypt.</p>
+                <div class="node-meta">GENESIS 38:27-30, RUTH 4:18</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node" id="node-hezron">
+            <div class="node-content">
+                <h3>HEZRON</h3>
+                <span class="lifespan">Son of Perez</span>
+                <p class="node-detail">His descendants formed the Hezronite clan of Judah.</p>
+                <div class="node-meta">RUTH 4:19</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node" id="node-ram">
+            <div class="node-content">
+                <h3>RAM</h3>
+                <span class="lifespan">Son of Hezron</span>
+                <p class="node-detail">An ancestor of David listed in the book of Ruth.</p>
+                <div class="node-meta">RUTH 4:19</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node" id="node-amminadab">
+            <div class="node-content">
+                <h3>AMMINADAB</h3>
+                <span class="lifespan">Son of Ram</span>
+                <p class="node-detail">Father of Nahshon, the prince of Judah during the Exodus.</p>
+                <div class="node-meta">RUTH 4:19-20</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node" id="node-nahshon">
+            <div class="node-content">
+                <h3>NAHSHON</h3>
+                <span class="lifespan">Prince of Judah</span>
+                <p class="node-detail">Led the tribe of Judah during the wilderness wandering. A leader at the threshold of the Promised Land.</p>
+                <div class="node-meta">NUMBERS 1:7, RUTH 4:20</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node" id="node-salmon">
+            <div class="node-content">
+                <h3>SALMON</h3>
+                <span class="lifespan">Father of Boaz</span>
+                <p class="node-detail">Married Rahab of Jericho. His generation entered the Promised Land.</p>
+                <div class="node-meta">RUTH 4:21, MATTHEW 1:5</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-boaz">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>BOAZ</h3>
+                <span class="lifespan">The Kinsman-Redeemer</span>
+                <p class="node-detail">The kinsman-redeemer who married Ruth the Moabitess. A type of Christ the Redeemer.</p>
+                <div class="node-meta">RUTH 2:1 — 4:22</div>
+                <div class="node-ref">NT References: Matthew 1:5, Luke 3:32</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-obed">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>OBED</h3>
+                <span class="lifespan">Son of Boaz and Ruth</span>
+                <p class="node-detail">The grandfather of David. His birth was celebrated by the women of Bethlehem.</p>
+                <div class="node-meta">RUTH 4:17-22</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-jesse">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>JESSE</h3>
+                <span class="lifespan">Father of David</span>
+                <p class="node-detail">The Bethlehemite from whose stump the Branch would grow. Father of the shepherd-king.</p>
+                <div class="node-meta">RUTH 4:22, ISAIAH 11:1</div>
+                <div class="node-ref">NT References: Matthew 1:5-6, Acts 13:22</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         ERA IV: THE UNITED MONARCHY
+    ════════════════════════════════ -->
+    <div class="era-section" data-era="monarchy">
+        <div class="era-header">THE UNITED MONARCHY</div>
+
+        <div class="genealogy-node messianic" id="node-david" data-linguistic="DAVID">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>DAVID</h3>
+                <span class="lifespan">70 Years — The Shepherd King</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">The man after God's own heart. The covenant of an eternal throne was established with him.</p>
+                <div class="node-meta">1 SAMUEL 16:1 — 1 KINGS 2:11</div>
+                <div class="node-ref">NT References: Matthew 1:1, 1:6, Acts 2:29-30, Romans 1:3</div>
+                <div class="arch-badge" onclick="alert('The Tel Dan Stele (9th c. BC) mentions the \"House of David\" — the earliest extra-biblical reference to King David and his dynasty.')"><span class="icon">&#128220;</span> Tel Dan Stele (c. 840 BC)</div>
+                <div class="arch-badge" onclick="alert('The Mesha Stele (Moabite Stone, c. 840 BC) also references the House of David.')"><span class="icon">&#128220;</span> Mesha Stele</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-solomon" data-linguistic="SOLOMON">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>SOLOMON</h3>
+                <span class="lifespan">40 Years — The Wisest King</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">Built the Temple. His wisdom was legendary, yet his heart turned away in the end.</p>
+                <div class="node-meta">1 KINGS 1:28 — 11:43</div>
+                <div class="node-ref">NT References: Matthew 1:6-7, 12:42</div>
+                <div class="arch-badge" onclick="alert('A seal bearing the name \"Solomon\" was discovered in Jerusalem, though its authenticity is debated.')"><span class="icon">&#128220;</span> Solomon's Seal (Bullae)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         ERA V: THE DIVIDED KINGDOM
+    ════════════════════════════════ -->
+    <div class="era-section" data-era="monarchy">
+        <div class="era-header">THE DIVIDED KINGDOM — KINGS OF JUDAH</div>
+
+        <div class="genealogy-node messianic" id="node-rehoboam">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>REHOBOAM</h3>
+                <span class="lifespan">58 Years — The Kingdom Divided</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">His harsh reply split the kingdom. Judah remained faithful to the Davidic line.</p>
+                <div class="node-meta">1 KINGS 12:1-24, 14:21-31</div>
+                <div class="node-ref">NT References: Matthew 1:7</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-abijah">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>ABIJAH</h3>
+                <span class="lifespan">King of Judah</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">Walked in the sins of his father. Yet the Davidic line continued for David's sake.</p>
+                <div class="node-meta">1 KINGS 15:1-8</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-asa">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>ASA</h3>
+                <span class="lifespan">King of Judah — Reformer</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">Did what was right in the eyes of the LORD. Removed the idols from the land.</p>
+                <div class="node-meta">1 KINGS 15:9-24</div>
+                <div class="node-ref">NT References: Matthew 1:7</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-jehoshaphat">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>JEHOSHAPHAT</h3>
+                <span class="lifespan">King of Judah</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">Walked in the ways of David. He sent teachers throughout Judah to instruct in the Law.</p>
+                <div class="node-meta">1 KINGS 22:41-50</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-jehoram">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>JEHORAM</h3>
+                <span class="lifespan">King of Judah</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">Married Athaliah of Ahab's house. His reign was marked by apostasy and tragedy.</p>
+                <div class="node-meta">2 KINGS 8:16-24</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-ahaziah">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>AHAZIAH</h3>
+                <span class="lifespan">King of Judah</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">Reigned one year. His death preserved the line from Athaliah's purge.</p>
+                <div class="node-meta">2 KINGS 8:25-29</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-joash">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>JOASH</h3>
+                <span class="lifespan">King of Judah</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">Hidden in the Temple for six years. Crowned at age seven. Repaired the Temple.</p>
+                <div class="node-meta">2 KINGS 11:1 — 12:21</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-amaziah">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>AMAZIAH</h3>
+                <span class="lifespan">King of Judah</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">Did what was right, but not with a whole heart. Defeated Edom but fell to idolatry.</p>
+                <div class="node-meta">2 KINGS 14:1-22</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-uzziah">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>UZZIAH (AZARIAH)</h3>
+                <span class="lifespan">King of Judah — The Leper King</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">A powerful king struck with leprosy for pride. Isaiah saw the Lord in the year he died.</p>
+                <div class="node-meta">2 KINGS 14:21-22, 15:1-7</div>
+                <div class="node-ref">NT References: Matthew 1:8-9</div>
+                <div class="arch-badge" onclick="alert('A seal impression (bullae) of Uzziah was found in Jerusalem, bearing the inscription \"Belonging to Uzziah son of Joram, King of Judah.\"')"><span class="icon">&#128220;</span> Uzziah Bullae</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-jotham">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>JOTHAM</h3>
+                <span class="lifespan">King of Judah</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">Did what was right. He built the Upper Gate of the Temple.</p>
+                <div class="node-meta">2 KINGS 15:32-38</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-ahaz">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>AHAZ</h3>
+                <span class="lifespan">King of Judah — The Idolater</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">An evil king who sacrificed his son to Molech. Yet through him the Messianic line continued.</p>
+                <div class="node-meta">2 KINGS 16:1-20</div>
+                <div class="node-ref">NT References: Matthew 1:9</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-hezekiah">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>HEZEKIAH</h3>
+                <span class="lifespan">King of Judah — The Reformer</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">Trusted in the LORD above all kings. Hezekiah's tunnel, the Passover restoration, and the defeat of Sennacherib.</p>
+                <div class="node-meta">2 KINGS 18:1 — 20:21</div>
+                <div class="node-ref">NT References: Matthew 1:9-10</div>
+                <div class="arch-badge" onclick="alert('The Bulla of Hezekiah (his personal seal) was discovered in Jerusalem, reading \"Belonging to Hezekiah, son of Ahaz, King of Judah.\"')"><span class="icon">&#128220;</span> Hezekiah's Bulla</div>
+                <div class="arch-badge" onclick="alert('The Siloam Tunnel Inscription commemorates the construction of Hezekiah\'s tunnel (2 Kings 20:20).')"><span class="icon">&#128220;</span> Siloam Inscription (c. 701 BC)</div>
+                <div class="arch-badge" onclick="alert('The Taylor Prism (Sennacherib\'s Annals) records the Assyrian siege of Jerusalem during Hezekiah\'s reign.')"><span class="icon">&#128220;</span> Taylor Prism (c. 691 BC)</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-manasseh">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>MANASSEH</h3>
+                <span class="lifespan">55 Years — The Wicked King</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">The most evil king of Judah. Yet he repented in exile and was restored to his throne.</p>
+                <div class="node-meta">2 KINGS 21:1-18</div>
+                <div class="node-ref">NT References: Matthew 1:10</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-amon">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>AMON</h3>
+                <span class="lifespan">King of Judah</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">Walked in the sins of Manasseh. His servants conspired against him and killed him.</p>
+                <div class="node-meta">2 KINGS 21:19-26</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-josiah">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>JOSIAH</h3>
+                <span class="lifespan">31 Years — The Last Good King</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">Found the Book of the Law. The greatest Passover in Israel's history. His reforms delayed judgment.</p>
+                <div class="node-meta">2 KINGS 22:1 — 23:30</div>
+                <div class="node-ref">NT References: Matthew 1:10-11</div>
+                <div class="arch-badge" onclick="alert('The Book of the Law discovered during Josiah\'s reign (2 Kings 22) is widely identified with the core of Deuteronomy.')"><span class="icon">&#128220;</span> The Temple Scroll Discovery</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         ERA VI: THE EXILE
+    ════════════════════════════════ -->
+    <div class="era-section" data-era="exile">
+        <div class="era-header">THE EXILE &amp; THE FALL</div>
+
+        <div class="genealogy-node messianic" id="node-jeconiah">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>JECONIAH (JEHOIACHIN)</h3>
+                <span class="lifespan">King of Judah — The Captive King</span>
+                <div class="lifespan-bar"><div class="fill king"></div></div>
+                <p class="node-detail">The king exiled to Babylon. The curse upon him (Jeremiah 22:30) was overcome through Joseph's legal lineage.</p>
+                <div class="node-meta">2 KINGS 24:8-17</div>
+                <div class="node-ref">NT References: Matthew 1:11-12</div>
+                <div class="arch-badge" onclick="alert('Babylonian ration tablets mention Jehoiachin by name, confirming his exile and provision in Babylon.')"><span class="icon">&#128220;</span> Jehoiachin's Ration Tablets (c. 592 BC)</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-shealtiel">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>SHEALTIEL</h3>
+                <span class="lifespan">Son of Jeconiah — Born in Exile</span>
+                <p class="node-detail">The line continued in Babylon, preserved through the exile.</p>
+                <div class="node-meta">1 CHRONICLES 3:17, MATTHEW 1:12</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-zerubbabel">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>ZERUBBABEL</h3>
+                <span class="lifespan">The Rebuilder</span>
+                <p class="node-detail">Led the first return from exile. Rebuilt the Temple. A type of the Messianic restorer.</p>
+                <div class="node-meta">EZRA 2:2, HAGGAI 2:23</div>
+                <div class="node-ref">NT References: Matthew 1:12-13, Luke 3:27</div>
+                <div class="arch-badge" onclick="alert('The Cyrus Cylinder (c. 539 BC) records the Persian decree allowing the exiles to return and rebuild the Temple.')"><span class="icon">&#128220;</span> Cyrus Cylinder</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         ERA VII: THE SILENT YEARS
+    ════════════════════════════════ -->
+    <div class="era-section" data-era="silent">
+        <div class="era-header">THE SILENT YEARS — BETWEEN THE TESTAMENTS</div>
+
+        <div class="genealogy-node messianic silent-node" id="node-abiud">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>ABIUD</h3>
+                <span class="lifespan">c. 5th–4th c. BC — The Hidden Line</span>
+                <p class="node-detail">Son of Zerubbabel. The line continues through the Persian period, undocumented in Scripture.</p>
+                <div class="node-meta">MATTHEW 1:13</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic silent-node" id="node-eliakim">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>ELIAKIM</h3>
+                <span class="lifespan">c. 4th–3rd c. BC</span>
+                <p class="node-detail">Son of Abiud. A silent link spanning the Greek conquest of Alexander.</p>
+                <div class="node-meta">MATTHEW 1:13</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic silent-node" id="node-azor">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>AZOR</h3>
+                <span class="lifespan">c. 3rd–2nd c. BC</span>
+                <p class="node-detail">Preserved through the Ptolemaic and Seleucid periods.</p>
+                <div class="node-meta">MATTHEW 1:13-14</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic silent-node" id="node-zadok">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>ZADOK</h3>
+                <span class="lifespan">c. 2nd c. BC</span>
+                <p class="node-detail">A name evoking the priestly line of Zadok. The Maccabean era.</p>
+                <div class="node-meta">MATTHEW 1:14</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic silent-node" id="node-achim">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>ACHIM</h3>
+                <span class="lifespan">c. 2nd–1st c. BC</span>
+                <p class="node-detail">The Hasmonean period. A name of unknown meaning.</p>
+                <div class="node-meta">MATTHEW 1:14</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic silent-node" id="node-eliud">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>ELIUD</h3>
+                <span class="lifespan">c. 1st c. BC</span>
+                <p class="node-detail">The generations approach the Roman period. The Herodian dynasty rises.</p>
+                <div class="node-meta">MATTHEW 1:14-15</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic silent-node" id="node-eleazar">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>ELEAZAR</h3>
+                <span class="lifespan">c. 1st c. BC</span>
+                <p class="node-detail">The silence continues. God preserves the line through obscurity.</p>
+                <div class="node-meta">MATTHEW 1:15</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic silent-node" id="node-matthan">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>MATTHAN</h3>
+                <span class="lifespan">c. 1st c. BC — Grandfather of Joseph</span>
+                <p class="node-detail">The line is about to break into the light of the New Testament.</p>
+                <div class="node-meta">MATTHEW 1:15</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic silent-node" id="node-jacob-father">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <h3>JACOB (father of Joseph)</h3>
+                <span class="lifespan">c. 1st c. BC — The Legal Father</span>
+                <p class="node-detail">Father of Joseph, husband of Mary. Through him the legal throne-right passes to Jesus, bypassing the Jeconiah curse via this line.</p>
+                <div class="node-meta">MATTHEW 1:16</div>
+                <div class="arch-badge" onclick="alert('The Jeconiah Curse (Jeremiah 22:30) barred any descendant of Jeconiah from sitting on David\'s throne. Joseph\'s legal lineage through Solomon faced this curse. The virgin birth through Mary (descended from Nathan, not Solomon) bypasses the curse while Joseph\'s legal paternity preserves the throne-right.')"><span class="icon">&#9878;</span> The Jeconiah Curse Bypass</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-joseph" style="border-color:rgba(212,175,55,0.3);background:rgba(16,14,8,0.95);">
+            <div class="messianic-thread"></div>
+            <div class="node-content">
+                <div class="name-container">
+                    <span class="modern-name">JOSEPH of NAZARETH</span>
+                    <div class="ancient-scripts">
+                        <span class="lang-heb">&#1497;&#1493;&#1465;&#1505;&#1461;&#1507;</span>
+                        <span class="lang-gez">&#4553;&#4653;&#4752;&#4635;&#4749;</span>
+                    </div>
+                </div>
+                <span class="lifespan">c. 1st c. BC/AD — The Guardian</span>
+                <p class="node-detail">The just man who took Mary as his wife. Though not the biological father, his legal paternity established Jesus' right to the throne of David.</p>
+                <div class="node-meta">MATTHEW 1:16, 1:18-25</div>
+                <div class="node-ref">NT References: Matthew 1:19-24, Luke 3:23</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <div class="genealogy-node messianic" id="node-yeshua" style="border-color:var(--museum-gold);background:rgba(20,16,8,0.95);box-shadow:0 0 30px rgba(212,175,55,0.15);">
+            <div class="messianic-thread" style="opacity:1;background:linear-gradient(to bottom, transparent, var(--museum-gold), transparent);"></div>
+            <div class="node-content">
+                <div class="name-container">
+                    <span class="modern-name" style="color:var(--museum-gold);text-shadow:0 0 20px rgba(212,175,55,0.85);">&#10013; YESHUA ha-MASHIACH</span>
+                    <div class="ancient-scripts">
+                        <span class="lang-heb">&#1497;&#1461;&#1513;&#1493;&#1468;&#1506;&#1463; &#1492;&#1463;&#1502;&#1468;&#1464;&#1513;&#1473;&#1460;&#1497;&#1495;&#1463;</span>
+                        <span class="lang-gez">&#4763;&#4752;&#4735;&#4621; &#4653;&#4654;&#4735;&#4663;&#4653;&#4749;</span>
+                    </div>
+                </div>
+                <span class="lifespan" style="color:var(--museum-gold);">THE MESSIAH — Son of David, Son of Abraham</span>
+                <div class="lifespan-bar"><div class="fill king" style="width:100%;background:linear-gradient(to right,var(--museum-gold),#d4af37,var(--museum-gold));"></div></div>
+                <p class="node-detail" style="color:rgba(212,175,55,0.4);">The culmination of the ancestral scroll. The promised Seed of the Woman, the Seed of Abraham, the Son of David. In Him all the genealogies find their meaning.</p>
+                <div class="node-meta">MATTHEW 1:1, 1:16-17</div>
+                <div class="node-ref" style="color:rgba(212,175,55,0.3);">GENEALOGICAL SUMMARY: 14 generations from Abraham to David, 14 from David to the Exile, 14 from the Exile to the Messiah</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         WOMEN OF MATTHEW 1
+    ════════════════════════════════ -->
+    <div class="era-section" data-era="silent">
+        <div class="era-header">THE WOMEN IN THE LINE — MATTHEW 1</div>
+        <div class="women-section">
+            <div class="women-card">
+                <h4>TAMAR</h4>
+                <div class="women-ref">Genesis 38 — Judah's daughter-in-law</div>
+                <div class="women-note">&#128214; Matthew 1:3</div>
+                <div class="women-significance">A Canaanite woman who preserved the line through Judah when justice failed. Her son Perez continued the Messianic line. A type of the outsider brought into the covenant.</div>
+            </div>
+            <div class="women-card">
+                <h4>RAHAB</h4>
+                <div class="women-ref">Joshua 2, 6 — The harlot of Jericho</div>
+                <div class="women-note">&#128214; Matthew 1:5</div>
+                <div class="women-significance">A Canaanite prostitute who hid the Israelite spies and became an ancestor of David. Her faith is celebrated in Hebrews 11:31 and James 2:25. A sign that grace transcends ethnic boundaries.</div>
+            </div>
+            <div class="women-card">
+                <h4>RUTH</h4>
+                <div class="women-ref">Book of Ruth — The Moabitess</div>
+                <div class="women-note">&#128214; Matthew 1:5</div>
+                <div class="women-significance">A Moabite widow whose loyalty to Naomi led her to Bethlehem. Her kinsman-redeemer Boaz married her. A Gentile grandmother of David, demonstrating God's love for the nations.</div>
+            </div>
+            <div class="women-card">
+                <h4>BATHSHEBA</h4>
+                <div class="women-ref">2 Samuel 11-12 — Wife of Uriah</div>
+                <div class="women-note">&#128214; Matthew 1:6 ("her who had been the wife of Uriah")</div>
+                <div class="women-significance">Taken by David in adultery, yet through her Solomon was born. Matthew deliberately avoids naming her, instead emphasizing Uriah — a perpetual reminder of David's sin and God's forgiveness.</div>
+            </div>
+            <div class="women-card" style="border-left-color:rgba(212,175,55,0.5);">
+                <h4 style="color:var(--museum-gold);">MARY (MIRIAM)</h4>
+                <div class="women-ref">The Theotokos — God-bearer</div>
+                <div class="women-note">&#128214; Matthew 1:16, Luke 1:26-38</div>
+                <div class="women-significance">The climax of the women in the line. A virgin of Nazareth who conceived by the Holy Spirit. Through her "yes," God became flesh. Her lineage through Nathan (Luke 3) provides the biological descent of Jesus, complementing Joseph's legal line through Solomon.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         LUKE 3 DIVERGENT LINE (Nathan → Heli → Mary)
+    ════════════════════════════════ -->
+    <div class="luke-line-toggle">
+        <button class="filter-btn" id="lukeLineToggle" onclick="toggleLukeLine()">&#128214; REVEAL LUKE 3 — BIOLOGICAL LINE</button>
+    </div>
+    <div class="luke-line-content" id="lukeLineContent">
+        <p style="text-align:center;font-family:'Montserrat',sans-serif;font-size: 0.54rem;letter-spacing:2px;color:rgba(100,140,200,0.3);margin: 0 auto 20px;max-width:500px;line-height:1.6;">
+            Matthew's genealogy traces the <strong style="color:rgba(212,175,55,0.4);">legal</strong> throne-right through Solomon.<br>
+            Luke's genealogy traces the <strong style="color:rgba(180,200,230,0.4);">biological</strong> descent through Nathan, son of David.
+        </p>
+
+        <div class="luke-node biological-line">
+            <h5>DAVID</h5>
+            <div class="luke-detail">The common root — both lines begin here</div>
+            <div class="luke-ref">2 Samuel 7, Matthew 1:1, Luke 3:31</div>
+        </div>
+        <div class="luke-node">
+            <h5>NATHAN</h5>
+            <div class="luke-detail">Son of David — younger brother of Solomon. The biological line runs through him.</div>
+            <div class="luke-ref">Luke 3:31, 1 Chronicles 3:5</div>
+        </div>
+        <div class="luke-node">
+            <h5>MATTATHA</h5>
+            <div class="luke-detail">Son of Nathan. Unknown outside Luke's genealogy.</div>
+            <div class="luke-ref">Luke 3:31</div>
+        </div>
+        <div class="luke-node">
+            <h5>MENNA</h5>
+            <div class="luke-detail">Son of Mattatha.</div>
+            <div class="luke-ref">Luke 3:31</div>
+        </div>
+        <div class="luke-node">
+            <h5>MELEA</h5>
+            <div class="luke-detail">Son of Menna.</div>
+            <div class="luke-ref">Luke 3:31</div>
+        </div>
+        <div class="luke-node">
+            <h5>ELIAKIM</h5>
+            <div class="luke-detail">Son of Melea. Not the same Eliakim as Matthew 1:13.</div>
+            <div class="luke-ref">Luke 3:30</div>
+        </div>
+        <div class="luke-node">
+            <h5>JONAM</h5>
+            <div class="luke-detail">Son of Eliakim.</div>
+            <div class="luke-ref">Luke 3:30</div>
+        </div>
+        <div class="luke-node">
+            <h5>JOSEPH</h5>
+            <div class="luke-detail">Son of Jonam. Not the same Joseph as Mary's husband.</div>
+            <div class="luke-ref">Luke 3:30</div>
+        </div>
+        <div class="luke-node">
+            <h5>JUDAH</h5>
+            <div class="luke-detail">Son of Joseph.</div>
+            <div class="luke-ref">Luke 3:30</div>
+        </div>
+        <div class="luke-node">
+            <h5>SIMEON</h5>
+            <div class="luke-detail">Son of Judah.</div>
+            <div class="luke-ref">Luke 3:30</div>
+        </div>
+        <div class="luke-node">
+            <h5>LEVI</h5>
+            <div class="luke-detail">Son of Simeon.</div>
+            <div class="luke-ref">Luke 3:29</div>
+        </div>
+        <div class="luke-node">
+            <h5>MATTHAT</h5>
+            <div class="luke-detail">Son of Levi.</div>
+            <div class="luke-ref">Luke 3:29</div>
+        </div>
+        <div class="luke-node">
+            <h5>JORIM</h5>
+            <div class="luke-detail">Son of Matthat.</div>
+            <div class="luke-ref">Luke 3:29</div>
+        </div>
+        <div class="luke-node">
+            <h5>ELIEZER</h5>
+            <div class="luke-detail">Son of Jorim.</div>
+            <div class="luke-ref">Luke 3:29</div>
+        </div>
+        <div class="luke-node">
+            <h5>JOSHUA (JOSE)</h5>
+            <div class="luke-detail">Son of Eliezer.</div>
+            <div class="luke-ref">Luke 3:29</div>
+        </div>
+        <div class="luke-node">
+            <h5>ER</h5>
+            <div class="luke-detail">Son of Joshua.</div>
+            <div class="luke-ref">Luke 3:28</div>
+        </div>
+        <div class="luke-node">
+            <h5>ELMADAM</h5>
+            <div class="luke-detail">Son of Er.</div>
+            <div class="luke-ref">Luke 3:28</div>
+        </div>
+        <div class="luke-node">
+            <h5>COSAM</h5>
+            <div class="luke-detail">Son of Elmadam.</div>
+            <div class="luke-ref">Luke 3:28</div>
+        </div>
+        <div class="luke-node">
+            <h5>ADDI</h5>
+            <div class="luke-detail">Son of Cosam.</div>
+            <div class="luke-ref">Luke 3:28</div>
+        </div>
+        <div class="luke-node">
+            <h5>MELCHI</h5>
+            <div class="luke-detail">Son of Addi.</div>
+            <div class="luke-ref">Luke 3:28</div>
+        </div>
+        <div class="luke-node">
+            <h5>NERI</h5>
+            <div class="luke-detail">Son of Melchi.</div>
+            <div class="luke-ref">Luke 3:27</div>
+        </div>
+        <div class="luke-node">
+            <h5>SHEALTIEL</h5>
+            <div class="luke-detail">Son of Neri. In Matthew, Shealtiel is son of Jeconiah (legal line). In Luke, through Neri (biological line). Different Shealtiels? Or a levirate marriage convergence.</div>
+            <div class="luke-ref">Luke 3:27</div>
+        </div>
+        <div class="luke-node">
+            <h5>ZERUBBABEL</h5>
+            <div class="luke-detail">Son of Shealtiel. Both lines converge here, then diverge again.</div>
+            <div class="luke-ref">Luke 3:27, Matthew 1:12</div>
+        </div>
+        <div class="luke-node">
+            <h5>RHESA</h5>
+            <div class="luke-detail">Son of Zerubbabel — the post-exilic divergence.</div>
+            <div class="luke-ref">Luke 3:27</div>
+        </div>
+        <div class="luke-node">
+            <h5>JOHANAN</h5>
+            <div class="luke-detail">Son of Rhesa.</div>
+            <div class="luke-ref">Luke 3:27</div>
+        </div>
+        <div class="luke-node">
+            <h5>JODA</h5>
+            <div class="luke-detail">Son of Johanan.</div>
+            <div class="luke-ref">Luke 3:26</div>
+        </div>
+        <div class="luke-node">
+            <h5>JOSECH</h5>
+            <div class="luke-detail">Son of Joda.</div>
+            <div class="luke-ref">Luke 3:26</div>
+        </div>
+        <div class="luke-node">
+            <h5>SIMEON</h5>
+            <div class="luke-detail">Son of Josech.</div>
+            <div class="luke-ref">Luke 3:26</div>
+        </div>
+        <div class="luke-node">
+            <h5>MATTATHIAS</h5>
+            <div class="luke-detail">Son of Simeon.</div>
+            <div class="luke-ref">Luke 3:26</div>
+        </div>
+        <div class="luke-node">
+            <h5>MAATH</h5>
+            <div class="luke-detail">Son of Mattathias.</div>
+            <div class="luke-ref">Luke 3:26</div>
+        </div>
+        <div class="luke-node">
+            <h5>NAGGAI</h5>
+            <div class="luke-detail">Son of Maath.</div>
+            <div class="luke-ref">Luke 3:25</div>
+        </div>
+        <div class="luke-node">
+            <h5>ESLI</h5>
+            <div class="luke-detail">Son of Naggai.</div>
+            <div class="luke-ref">Luke 3:25</div>
+        </div>
+        <div class="luke-node">
+            <h5>NAHUM</h5>
+            <div class="luke-detail">Son of Esli.</div>
+            <div class="luke-ref">Luke 3:25</div>
+        </div>
+        <div class="luke-node">
+            <h5>AMOS</h5>
+            <div class="luke-detail">Son of Nahum. Not the prophet.</div>
+            <div class="luke-ref">Luke 3:25</div>
+        </div>
+        <div class="luke-node">
+            <h5>MATTATHIAS</h5>
+            <div class="luke-detail">Son of Amos.</div>
+            <div class="luke-ref">Luke 3:25</div>
+        </div>
+        <div class="luke-node">
+            <h5>JOSEPH</h5>
+            <div class="luke-detail">Son of Mattathias.</div>
+            <div class="luke-ref">Luke 3:24</div>
+        </div>
+        <div class="luke-node">
+            <h5>HANNAH</h5>
+            <div class="luke-detail">Son of Joseph.</div>
+            <div class="luke-ref">Luke 3:24</div>
+        </div>
+        <div class="luke-node biological-line" style="border-left-color:rgba(200,180,100,0.5);">
+            <h5 style="color:var(--museum-gold-dim);">HELI (ELI)</h5>
+            <div class="luke-detail">Son of Hannah. According to tradition, Heli was the father of Mary. Thus Luke 3:23 says "Joseph, son of Heli" — meaning son-in-law. This is the biological line of Jesus through Mary.</div>
+            <div class="luke-ref">Luke 3:23-24</div>
+        </div>
+        <div class="luke-node biological-line" style="border-left-color:var(--museum-gold);">
+            <h5 style="color:var(--museum-gold);">&#10013; YESHUA ha-MASHIACH</h5>
+            <div class="luke-detail">Son of Mary, daughter of Heli. The biological Seed of the Woman, descended from David through Nathan, fulfilling the promise of Genesis 3:15.</div>
+            <div class="luke-ref">Luke 3:23</div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         70 GENERATIONS FROM LUKE 3 (Adam → Jesus)
+    ════════════════════════════════ -->
+    <div class="luke-line-toggle" style="margin-top:30px;">
+        <button class="filter-btn" id="seventyToggle" onclick="toggleSeventyGenerations()">&#128214; REVEAL 70 GENERATIONS — LUKE 3:23-38</button>
+    </div>
+    <div class="luke-line-content" id="seventyLineContent">
+        <p style="text-align:center;font-family:'Montserrat',sans-serif;font-size: 0.54rem;letter-spacing:2px;color:rgba(100,140,200,0.3);margin: 0 auto 20px;max-width:500px;line-height:1.6;">
+            Luke traces Jesus' lineage all the way back to Adam — 77 generations (11 × 7), the number of completion.<br>
+            Where Luke diverges from Matthew, the names are shown in <span style="color:rgba(100,140,200,0.4);">blue</span>.
+        </p>
+
+        <div class="luke-node">
+            <h5>GOD (CREATOR)</h5>
+            <div class="luke-detail">"Son of God" — the final ascription of Luke's genealogy</div>
+            <div class="luke-ref">Luke 3:38</div>
+        </div>
+        <div class="luke-node biological-line"><h5>ADAM</h5><div class="luke-detail">The first man, from God</div><div class="luke-ref">Luke 3:38</div></div>
+        <div class="luke-node"><h5>SETH</h5><div class="luke-detail">Appointed seed</div><div class="luke-ref">Luke 3:38</div></div>
+        <div class="luke-node"><h5>ENOSH</h5><div class="luke-detail">Men began to call on the LORD</div><div class="luke-ref">Luke 3:38</div></div>
+        <div class="luke-node"><h5>CAINAN</h5><div class="luke-detail">Possession</div><div class="luke-ref">Luke 3:37</div></div>
+        <div class="luke-node"><h5>MAHALALEL</h5><div class="luke-detail">Praise of God</div><div class="luke-ref">Luke 3:37</div></div>
+        <div class="luke-node"><h5>JARED</h5><div class="luke-detail">Descent</div><div class="luke-ref">Luke 3:37</div></div>
+        <div class="luke-node"><h5>ENOCH</h5><div class="luke-detail">Walked with God</div><div class="luke-ref">Luke 3:37</div></div>
+        <div class="luke-node"><h5>METHUSELAH</h5><div class="luke-detail">969 years</div><div class="luke-ref">Luke 3:37</div></div>
+        <div class="luke-node"><h5>LAMECH</h5><div class="luke-detail">Father of Noah</div><div class="luke-ref">Luke 3:36</div></div>
+        <div class="luke-node"><h5>NOAH</h5><div class="luke-detail">Preserver of the seed</div><div class="luke-ref">Luke 3:36</div></div>
+        <div class="luke-node"><h5>SHEM</h5><div class="luke-detail">Blessed line</div><div class="luke-ref">Luke 3:36</div></div>
+        <div class="luke-node"><h5>ARPACHSHAD</h5><div class="luke-detail">2 years after flood</div><div class="luke-ref">Luke 3:36</div></div>
+        <div class="luke-node"><h5>CAINAN</h5><div class="luke-detail">(Second Cainan — Luke adds this name not found in Genesis 11 or Matthew 1)</div><div class="luke-ref">Luke 3:35-36</div></div>
+        <div class="luke-node"><h5>SHELAH</h5><div class="luke-detail">Son of Arpachshad</div><div class="luke-ref">Luke 3:35</div></div>
+        <div class="luke-node"><h5>EBER</h5><div class="luke-detail">Namesake of the Hebrews</div><div class="luke-ref">Luke 3:35</div></div>
+        <div class="luke-node"><h5>PELEG</h5><div class="luke-detail">The earth divided</div><div class="luke-ref">Luke 3:35</div></div>
+        <div class="luke-node"><h5>REU</h5><div class="luke-detail">Son of Peleg</div><div class="luke-ref">Luke 3:35</div></div>
+        <div class="luke-node"><h5>SERUG</h5><div class="luke-detail">Father of Nahor</div><div class="luke-ref">Luke 3:35</div></div>
+        <div class="luke-node"><h5>NAHOR</h5><div class="luke-detail">Father of Terah</div><div class="luke-ref">Luke 3:34</div></div>
+        <div class="luke-node"><h5>TERAH</h5><div class="luke-detail">Father of Abraham</div><div class="luke-ref">Luke 3:34</div></div>
+        <div class="luke-node biological-line"><h5>ABRAHAM</h5><div class="luke-detail">The covenant bearer</div><div class="luke-ref">Luke 3:34</div></div>
+        <div class="luke-node"><h5>ISAAC</h5><div class="luke-detail">Promised son</div><div class="luke-ref">Luke 3:34</div></div>
+        <div class="luke-node"><h5>JACOB</h5><div class="luke-detail">Father of 12 tribes</div><div class="luke-ref">Luke 3:34</div></div>
+        <div class="luke-node"><h5>JUDAH</h5><div class="luke-detail">The lion's tribe</div><div class="luke-ref">Luke 3:33</div></div>
+        <div class="luke-node"><h5>PEREZ</h5><div class="luke-detail">Son of Judah and Tamar</div><div class="luke-ref">Luke 3:33</div></div>
+        <div class="luke-node"><h5>HEZRON</h5><div class="luke-detail">Son of Perez</div><div class="luke-ref">Luke 3:33</div></div>
+        <div class="luke-node"><h5>RAM</h5><div class="luke-detail">Son of Hezron</div><div class="luke-ref">Luke 3:33</div></div>
+        <div class="luke-node"><h5>AMMINADAB</h5><div class="luke-detail">Son of Ram</div><div class="luke-ref">Luke 3:33</div></div>
+        <div class="luke-node"><h5>NAHSHON</h5><div class="luke-detail">Prince of Judah</div><div class="luke-ref">Luke 3:32</div></div>
+        <div class="luke-node"><h5>SALMON</h5><div class="luke-detail">Father of Boaz</div><div class="luke-ref">Luke 3:32</div></div>
+        <div class="luke-node"><h5>BOAZ</h5><div class="luke-detail">Kinsman-redeemer</div><div class="luke-ref">Luke 3:32</div></div>
+        <div class="luke-node"><h5>OBED</h5><div class="luke-detail">Son of Boaz and Ruth</div><div class="luke-ref">Luke 3:32</div></div>
+        <div class="luke-node"><h5>JESSE</h5><div class="luke-detail">Father of David</div><div class="luke-ref">Luke 3:32</div></div>
+        <div class="luke-node biological-line"><h5>DAVID</h5><div class="luke-detail">The convergence point</div><div class="luke-ref">Luke 3:31</div></div>
+    </div>
+    <div style="text-align:center;padding:80px 20px 40px;position:relative;z-index:2;">
+        <div style="font-family:'Montserrat',sans-serif;font-size: 0.54rem;letter-spacing:6px;color:rgba(212,175,55,0.85);margin-bottom:20px;">THE THREAD CONTINUES</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size: 0.66rem;color:rgba(255,255,255,0.2);">
+            "The book of the genealogy of Jesus Christ, the son of David, the son of Abraham."
+        </div>
+        <div style="font-family:'Montserrat',sans-serif;font-size: 0.66rem;color:rgba(255,255,255,0.1);margin-top:12px;letter-spacing:3px;">MATTHEW 1:1</div>
+    </div>
+
+</main>
+
+<!-- TRIBAL SIDEBAR MAP -->
+<div id="tribalSidebar" class="tribal-sidebar">
+    <div class="tribe-mini-map">
+        <div class="mini-territory" data-territory="Reuben" style="background:#c0392b;"></div>
+        <div class="mini-territory" data-territory="Simeon" style="background:#27ae60;"></div>
+        <div class="mini-territory" data-territory="Levi" style="background:#8e44ad;"></div>
+        <div class="mini-territory" data-territory="Judah" style="background:#2980b9;"></div>
+        <div class="mini-territory" data-territory="Dan" style="background:#e67e22;"></div>
+        <div class="mini-territory" data-territory="Naphtali" style="background:#f1c40f;"></div>
+        <div class="mini-territory" data-territory="Gad" style="background:#2c3e50;"></div>
+        <div class="mini-territory" data-territory="Asher" style="background:#556b2f;"></div>
+        <div class="mini-territory" data-territory="Issachar" style="background:#d35400;"></div>
+        <div class="mini-territory" data-territory="Zebulun" style="background:#7f8c8d;"></div>
+        <div class="mini-territory" data-territory="Joseph" style="background:#b8860b;"></div>
+        <div class="mini-territory" data-territory="Benjamin" style="background:#5c4033;"></div>
+    </div>
+    <div class="tribe-id-card">
+        <div class="card-icon" id="cardIcon">&#129529;</div>
+        <div class="card-name" id="cardName">SCROLL TO EXPLORE</div>
+        <div class="card-blessing" id="cardBlessing">The tribes of Israel await.</div>
+        <div class="card-artifact" id="cardArtifact">&#128220; High Priest's Breastplate</div>
+    </div>
+</div>
+
+<!-- LINGUISTIC LAB -->
+<div id="linguisticLab" class="linguistic-lab">
+    <div class="mirror-side">
+        <span class="script-label">HEBREW</span>
+        <h2 class="script-text hebrew" id="hebName">אָדָם</h2>
+    </div>
+    <div class="mirror-divider"></div>
+    <div class="mirror-side">
+        <span class="script-label">GE'EZ</span>
+        <h2 class="script-text geez" id="gezName">አዳም</h2>
+    </div>
+    <div class="etymology-footer">
+        <strong>ROOT MEANING:</strong> <span id="rootMeaning">Of the ground</span>
+        &nbsp;&bull;&nbsp; <span id="nameLabel">ADAM</span>
+    </div>
+    <button class="linguistic-close" onclick="document.getElementById('linguisticLab').classList.remove('visible')">CLOSE</button>
+</div>
+
+<script>
+    (function() {
+        var saved = JSON.parse(localStorage.getItem('scribeData') || '{}');
+        var now = new Date();
+        var today = now.toDateString();
+        if (saved.lastVisit !== today) {
+            if (new Date(saved.lastVisit).getTime() === now.getTime() - 86400000 || !saved.lastVisit) {
+                saved.streak = (saved.streak || 0) + 1;
+            } else if (saved.lastVisit) {
+                saved.streak = 1;
+            }
+            saved.lastVisit = today;
+            localStorage.setItem('scribeData', JSON.stringify(saved));
+        }
+})();
+</script>
+
+<script>
+const TRIBAL_INTEL = {
+    'Reuben': { icon: '&#128014;', blessing: 'Unstable as water, you shall not excel.', artifact: 'Reuben\'s territory — Transjordan plateau', region: 'south' },
+    'Simeon': { icon: '&#9878;', blessing: 'I will scatter them in Jacob.', artifact: 'Simeon absorbed into Judah by 8th c. BC', region: 'south' },
+    'Levi': { icon: '&#10017;', blessing: 'They shall teach Jacob your rules.', artifact: 'High Priest\'s Breastplate — 12 stones', region: 'scattered' },
+    'Judah': { icon: '&#129529;', blessing: 'The scepter shall not depart from Judah.', artifact: 'Tel Dan Stele — House of David (c. 840 BC)', region: 'south' },
+    'Dan': { icon: '&#128018;', blessing: 'Dan shall judge his people.', artifact: 'Dan city gate — 18th c. BC', region: 'north' },
+    'Naphtali': { icon: '&#129420;', blessing: 'He gives beautiful words.', artifact: 'Galilee — ancient Via Maris', region: 'north' },
+    'Gad': { icon: '&#128056;', blessing: 'Raided by raiders, but he raids at their heels.', artifact: 'Mishor plateau — Gad\'s inheritance', region: 'east' },
+    'Asher': { icon: '&#127806;', blessing: 'His bread shall be rich.', artifact: 'Olive Presses of Galilee — 10th c. BC', region: 'north' },
+    'Issachar': { icon: '&#128024;', blessing: 'He bowed his shoulder to bear.', artifact: 'Jezreel Valley — chariot routes', region: 'north' },
+    'Zebulun': { icon: '&#128674;', blessing: 'He shall dwell at the shore of the sea.', artifact: 'Phoenician-style sea anchors — Haifa coast', region: 'north' },
+    'Joseph': { icon: '&#127855;', blessing: 'Joseph is a fruitful vine.', artifact: 'Ephraim & Manasseh — central highlands', region: 'central' },
+    'Benjamin': { icon: '&#128058;', blessing: 'Benjamin is a ravenous wolf.', artifact: 'Central Highlands — Gibeah', region: 'south' }
+};
+
+(function initTribalObserver() {
+    var sidebar = document.getElementById('tribalSidebar');
+    var cardIcon = document.getElementById('cardIcon');
+    var cardName = document.getElementById('cardName');
+    var cardBlessing = document.getElementById('cardBlessing');
+    var cardArtifact = document.getElementById('cardArtifact');
+
+    var nodes = document.querySelectorAll('[data-tribe]');
+    if (nodes.length === 0) return;
+
+    sidebar.classList.add('visible');
+
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (!entry.isIntersecting) return;
+            var tribe = entry.target.getAttribute('data-tribe');
+            var info = TRIBAL_INTEL[tribe];
+            if (!info) return;
+
+            cardIcon.innerHTML = info.icon;
+            cardName.textContent = tribe.toUpperCase();
+            cardBlessing.textContent = '"' + info.blessing + '"';
+            cardArtifact.textContent = '\uD83D\uDCDC ' + info.artifact;
+
+            document.querySelectorAll('.mini-territory').forEach(function(t) {
+                t.classList.remove('active');
+                if (t.getAttribute('data-territory') === tribe) {
+                    t.classList.add('active');
+                }
+            });
+
+            var exile = document.getElementById('node-jeconiah');
+            if (exile && entry.target.compareDocumentPosition(exile) & Node.DOCUMENT_POSITION_FOLLOWING) {
+                document.querySelectorAll('.mini-territory').forEach(function(t) {
+                    var reg = TRIBAL_INTEL[t.getAttribute('data-territory')];
+                    if (reg && reg.region === 'north') t.classList.add('shattered');
+                });
+            } else {
+                document.querySelectorAll('.mini-territory.shattered').forEach(function(t) {
+                    t.classList.remove('shattered');
+                });
+            }
+        });
+    }, { threshold: 0.4 });
+
+    nodes.forEach(function(n) { observer.observe(n); });
+})();
+
+const LEXICON = {
+    'ADAM': { heb: 'אָדָם', gez: 'አዳም', root: 'Of the ground / Mankind' },
+    'SETH': { heb: 'שֵׁת', gez: 'ሴት', root: 'Appointed / Placed' },
+    'ENOSH': { heb: 'אֱנוֹשׁ', gez: 'ሄኖስ', root: 'Mortal / Human' },
+    'CAINAN': { heb: 'קֵינָן', gez: 'ቃይናን', root: 'Possession' },
+    'MAHALALEL': { heb: 'מַהֲלַלְאֵל', gez: 'ማህላልኤል', root: 'Praise of God' },
+    'JARED': { heb: 'יֶרֶד', gez: 'ያሬድ', root: 'Descent' },
+    'ENOCH': { heb: 'חֲנוֹךְ', gez: 'ሄኖክ', root: 'Initiated / Dedicated' },
+    'METHUSELAH': { heb: 'מְתוּשֶׁלַח', gez: 'ማቱሳላ', root: 'Man of the dart' },
+    'LAMECH': { heb: 'לֶמֶךְ', gez: 'ላሜክ', root: 'Powerful / Wild man' },
+    'NOAH': { heb: 'נֹחַ', gez: 'ኖኅ', root: 'Rest / Comfort' },
+    'SHEM': { heb: 'שֵׁם', gez: 'ሴም', root: 'Name / Renown' },
+    'ABRAHAM': { heb: 'אַבְרָהָם', gez: 'አብርሃም', root: 'Father of a Multitude' },
+    'ISAAC': { heb: 'יִצְחָק', gez: 'ይስሐቅ', root: 'He Laughs' },
+    'JACOB': { heb: 'יַעֲקֹב', gez: 'ያዕቆብ', root: 'Supplanter / Heel-holder' },
+    'JUDAH': { heb: 'יְהוּדָה', gez: 'ይሁዳ', root: 'Praise' },
+    'DAVID': { heb: 'דָּוִד', gez: 'ዳዊት', root: 'Beloved One' },
+    'SOLOMON': { heb: 'שְׁלֹמֹה', gez: 'ሰሎሞን', root: 'Peaceful' },
+    'ZERUBBABEL': { heb: 'זְרֻבָּבֶל', gez: 'ዘሩባቤል', root: 'Seed of Babylon' }
+};
+
+(function initLinguisticLab() {
+    var lab = document.getElementById('linguisticLab');
+    var hebEl = document.getElementById('hebName');
+    var gezEl = document.getElementById('gezName');
+    var rootEl = document.getElementById('rootMeaning');
+    var labelEl = document.getElementById('nameLabel');
+
+    var nodes = document.querySelectorAll('[data-linguistic]');
+    if (nodes.length === 0) return;
+
+    setTimeout(function() { lab.classList.add('visible'); }, 2000);
+
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (!entry.isIntersecting) return;
+            var key = entry.target.getAttribute('data-linguistic');
+            var entry_lex = LEXICON[key];
+            if (!entry_lex) return;
+
+            hebEl.classList.add('morphing');
+            gezEl.classList.add('morphing');
+
+            clearTimeout(entry._morphTimer);
+            entry._morphTimer = setTimeout(function() {
+                hebEl.textContent = entry_lex.heb;
+                gezEl.textContent = entry_lex.gez;
+                rootEl.textContent = entry_lex.root;
+                labelEl.textContent = key;
+                hebEl.classList.remove('morphing');
+                gezEl.classList.remove('morphing');
+            }, 300);
+        });
+    }, { threshold: 0.3 });
+
+    nodes.forEach(function(n) { observer.observe(n); });
+})();
+
+window.openLinguisticLab = function(key) {
+    var entry = LEXICON[key];
+    if (!entry) return;
+    var lab = document.getElementById('linguisticLab');
+    var hebEl = document.getElementById('hebName');
+    var gezEl = document.getElementById('gezName');
+    var rootEl = document.getElementById('rootMeaning');
+    var labelEl = document.getElementById('nameLabel');
+    if (!lab || !hebEl) return;
+    hebEl.textContent = entry.heb;
+    gezEl.textContent = entry.gez;
+    rootEl.textContent = entry.root;
+    labelEl.textContent = key;
+    lab.classList.add('visible');
+    setTimeout(function() {
+        lab.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }, 200);
+};
+</script>
+
+<script>
+const GENEALOGY_DATA = [
+    { name: 'Adam', lifespan: 930, era: 'Antediluvian', messianic: true },
+    { name: 'Seth', lifespan: 912, era: 'Antediluvian', messianic: true },
+    { name: 'Enosh', lifespan: 905, era: 'Antediluvian', messianic: true },
+    { name: 'Cainan', lifespan: 910, era: 'Antediluvian', messianic: true },
+    { name: 'Mahalalel', lifespan: 895, era: 'Antediluvian', messianic: true },
+    { name: 'Jared', lifespan: 962, era: 'Antediluvian', messianic: true },
+    { name: 'Enoch', lifespan: 365, era: 'Antediluvian', messianic: true },
+    { name: 'Methuselah', lifespan: 969, era: 'Antediluvian', messianic: true },
+    { name: 'Lamech', lifespan: 777, era: 'Antediluvian', messianic: true },
+    { name: 'Noah', lifespan: 950, era: 'Antediluvian', messianic: true },
+    { name: 'Shem', lifespan: 600, era: 'Patriarch', messianic: true },
+    { name: 'Arpachshad', lifespan: 438, era: 'Patriarch', messianic: true },
+    { name: 'Shelah', lifespan: 433, era: 'Patriarch', messianic: false },
+    { name: 'Eber', lifespan: 464, era: 'Patriarch', messianic: false },
+    { name: 'Peleg', lifespan: 239, era: 'Patriarch', messianic: false },
+    { name: 'Reu', lifespan: 239, era: 'Patriarch', messianic: false },
+    { name: 'Serug', lifespan: 230, era: 'Patriarch', messianic: false },
+    { name: 'Nahor', lifespan: 148, era: 'Patriarch', messianic: false },
+    { name: 'Terah', lifespan: 205, era: 'Patriarch', messianic: false },
+    { name: 'Abraham', lifespan: 175, era: 'Patriarch', messianic: true },
+    { name: 'Isaac', lifespan: 180, era: 'Patriarch', messianic: true },
+    { name: 'Jacob', lifespan: 147, era: 'Patriarch', messianic: true },
+    { name: 'Judah', lifespan: null, era: 'Patriarch', messianic: true },
+    { name: 'Perez', lifespan: null, era: 'Egypt', messianic: false },
+    { name: 'Hezron', lifespan: null, era: 'Egypt', messianic: false },
+    { name: 'Ram', lifespan: null, era: 'Egypt', messianic: false },
+    { name: 'Amminadab', lifespan: null, era: 'Egypt', messianic: false },
+    { name: 'Nahshon', lifespan: null, era: 'Exodus', messianic: false },
+    { name: 'Salmon', lifespan: null, era: 'Conquest', messianic: false },
+    { name: 'Boaz', lifespan: null, era: 'Judges', messianic: true },
+    { name: 'Obed', lifespan: null, era: 'Judges', messianic: true },
+    { name: 'Jesse', lifespan: null, era: 'Judges', messianic: true },
+    { name: 'David', lifespan: 70, era: 'Monarchy', messianic: true },
+    { name: 'Solomon', lifespan: null, era: 'Monarchy', messianic: true }
+];
+
+(function buildLifespanChart() {
+    var container = document.getElementById('lifespanChart');
+    if (!container) return;
+    var max = 969;
+    GENEALOGY_DATA.forEach(function(d) {
+        if (d.lifespan === null) return;
+        var bar = document.createElement('div');
+        bar.className = 'chart-bar';
+        var pct = (d.lifespan / max) * 100;
+        bar.style.height = pct + '%';
+        bar.innerHTML = '<div class="bar-value">' + d.lifespan + '</div><div class="bar-label">' + d.name + '</div>';
+        container.appendChild(bar);
+    });
+})();
+</script>
+
+<script>
+var pathActive = false;
+
+function toggleMessianicPath() {
+    pathActive = !pathActive;
+    var btn = document.getElementById('messianicToggle');
+
+    if (pathActive) {
+        document.body.classList.add('messianic-view');
+        if (!localStorage.getItem('messianic_path_viewed')) {
+            localStorage.setItem('messianic_path_viewed', 'true');
+            if (window.checkAchievements) setTimeout(checkAchievements, 500);
+        }
+        btn.innerHTML = '&#9812; VIEW FULL TREE';
+        btn.classList.add('active');
+        if (window.ScriptoriumAudio) ScriptoriumAudio.transitionTo('nt');
+        drawMessianicSpine();
+    } else {
+        document.body.classList.remove('messianic-view');
+        btn.innerHTML = '&#9812; REVEAL THE SEED';
+        btn.classList.remove('active');
+        if (window.ScriptoriumAudio) ScriptoriumAudio.transitionTo('ot');
+        var spine = document.getElementById('messianicSpine');
+        if (spine) spine.innerHTML = '';
+    }
+}
+
+function drawMessianicSpine() {
+    var svg = document.getElementById('messianicSpine');
+    if (!svg) return;
+    var nodes = document.querySelectorAll('.genealogy-node.messianic');
+    if (nodes.length < 2) return;
+
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    var path = '';
+    nodes.forEach(function(node, i) {
+        var rect = node.getBoundingClientRect();
+        var x = rect.left + rect.width / 2;
+        var y = rect.top + rect.height / 2 + scrollTop;
+        path += (i === 0 ? 'M' : 'L') + x + ',' + y + ' ';
+    });
+
+    var w = Math.max(document.documentElement.scrollWidth, window.innerWidth);
+    var h = Math.max(document.documentElement.scrollHeight, window.innerHeight);
+    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+    svg.setAttribute('width', w);
+    svg.setAttribute('height', h);
+    svg.innerHTML = '<path d="' + path + '" stroke="rgba(212,175,55,0.85)" stroke-width="2" fill="none" stroke-dasharray="8,4" stroke-linejoin="round"/>' +
+                    '<path d="' + path + '" stroke="rgba(212,175,55,0.08)" stroke-width="6" fill="none" stroke-linejoin="round" filter="url(#glow)"/>';
+}
+
+window.addEventListener('scroll', function() {
+    if (document.body.classList.contains('messianic-view')) drawMessianicSpine();
+});
+window.addEventListener('resize', function() {
+    if (document.body.classList.contains('messianic-view')) drawMessianicSpine();
+});
+
+// Linguistic hover-to-reveal: transform <h3> into name-container
+(function() {
+    var LEX = {
+        'ADAM': { heb: '\u05D0\u05B8\u05D3\u05B8\u05DD', gez: '\u1220\u12F5\u12EB' },
+        'SETH': { heb: '\u05E9\u05B5\u05C1\u05EA', gez: '\u1234\u1275' },
+        'ENOSH': { heb: '\u05D0\u05B1\u05E0\u05D5\u05B9\u05E9\u05C1', gez: '\u1204\u1295\u12ED\u1235' },
+        'NOAH': { heb: '\u05E0\u05B9\u05D7\u05B7', gez: '\u1295\u122D' },
+        'ABRAHAM': { heb: '\u05D0\u05B7\u05D1\u05B0\u05E8\u05B8\u05D4\u05B8\u05DD', gez: '\u12A0\u1265\u122D\u1203\u121D' },
+        'ISAAC': { heb: '\u05D9\u05B4\u05E6\u05B0\u05D7\u05B8\u05E7', gez: '\u12E5\u1235\u1210\u1245' },
+        'JACOB': { heb: '\u05D9\u05B7\u05E2\u05B2\u05E7\u05B9\u05D1', gez: '\u12E8\u12E2\u1246\u1265' },
+        'JUDAH': { heb: '\u05D9\u05B0\u05D4\u05D5\u05BC\u05D3\u05B8\u05D4', gez: '\u12E8\u1203\u12F3' },
+        'DAVID': { heb: '\u05D3\u05B8\u05BC\u05D5\u05B4\u05D3', gez: '\u12F3\u12CB\u1275' },
+        'SOLOMON': { heb: '\u05E9\u05B0\u05C1\u05DC\u05B9\u05DE\u05B9\u05D4', gez: '\u1230\u1208\u121D\u1295' },
+        'ZERUBBABEL': { heb: '\u05D6\u05B0\u05E8\u05BB\u05D1\u05B8\u05D1\u05B6\u05DC', gez: '\u12D8\u1228\u1263\u1260\u1208' }
+    };
+
+    document.querySelectorAll('.genealogy-node').forEach(function(node) {
+        var h3 = node.querySelector('.node-content h3');
+        if (!h3) return;
+        var name = h3.textContent.trim().toUpperCase();
+        var entry = LEX[name];
+        if (!entry) return;
+        var container = document.createElement('div');
+        container.className = 'name-container';
+        var modern = document.createElement('span');
+        modern.className = 'modern-name';
+        modern.textContent = h3.textContent.trim();
+        var ancient = document.createElement('div');
+        ancient.className = 'ancient-scripts';
+        ancient.innerHTML = '<span class="lang-heb">' + entry.heb + '</span><span class="lang-gez">' + entry.gez + '</span>';
+        container.appendChild(modern);
+        container.appendChild(ancient);
+        h3.parentNode.replaceChild(container, h3);
+    });
+})();
+
+// ═══════════════════════════════════════
+// TYPOLOGY DATA & OVERLAY
+// ═══════════════════════════════════════
+const TYPOLOGY = {
+    'ADAM': { type: 'Christ as the Last Adam', ref: 'Romans 5:14, 1 Corinthians 15:45', desc: 'As Adam brought death through one act of disobedience, Christ brings life through one act of righteousness.' },
+    'SETH': { type: 'The Appointed Seed', ref: 'Genesis 4:25', desc: 'Seth replaces Abel as the promised seed — a type of Christ who replaces the old covenant with the new.' },
+    'NOAH': { type: 'Salvation Through Judgment', ref: '1 Peter 3:20-21', desc: 'As Noah passed through the waters of judgment into a new creation, baptism prefigures salvation through Christ.' },
+    'MELCHIZEDEK': { type: 'Priest-King', ref: 'Hebrews 7:1-17', desc: 'The priest-king of Salem who blessed Abraham. A type of Christ\'s eternal priesthood, not by lineage but by divine appointment.' },
+    'ABRAHAM': { type: 'Father of Faith', ref: 'Galatians 3:6-9, Romans 4:1-25', desc: 'Abraham believed God and it was credited as righteousness. He is the prototype of all who are justified by faith.' },
+    'ISAAC': { type: 'The Beloved Sacrifice', ref: 'Hebrews 11:17-19', desc: 'Isaac carried the wood for his own sacrifice, as Christ carried His cross. Abraham\'s willingness to sacrifice Isaac prefigures God the Father giving His Son.' },
+    'JACOB': { type: 'The Chosen Supplanter', ref: 'Romans 9:10-13', desc: 'Jacob was chosen before birth, not by works. A type of election by grace. His ladder vision prefigures Christ as the bridge between heaven and earth.' },
+    'JUDAH': { type: 'The Lion of the Tribe', ref: 'Revelation 5:5', desc: 'The scepter belongs to Judah. Christ is the Lion of Judah who alone is worthy to open the scroll.' },
+    'BOAZ': { type: 'The Kinsman-Redeemer', ref: 'Ruth 4:1-10', desc: 'Boaz redeems Ruth by paying the price and taking her as his bride. Christ redeems His Church as the greater Kinsman-Redeemer.' },
+    'DAVID': { type: 'The Shepherd King', ref: 'Ezekiel 34:23-24, John 10:11', desc: 'David the shepherd-king prefigures Christ the Good Shepherd who lays down His life for the sheep and reigns forever.' },
+    'SOLOMON': { type: 'The Prince of Peace', ref: 'Matthew 12:42, Isaiah 9:6', desc: 'Solomon built the Temple and ruled in wisdom. Christ builds the spiritual temple and is Wisdom incarnate. The Queen of Sheba prefigures the Gentiles seeking Christ.' },
+    'ZERUBBABEL': { type: 'The Restorer', ref: 'Haggai 2:23, Zechariah 4:6-10', desc: 'Zerubbabel rebuilt the Temple after exile. A type of Christ who restores the house of God and rebuilds what was broken.' },
+    'JOSEPH (guardian)': { type: 'The Righteous Guardian', ref: 'Matthew 1:19-20', desc: 'Joseph, a just man, protected and provided for the Messiah. A type of faithful stewardship and obedience to divine direction.' }
+};
+
+var typologyActive = false;
+
+function toggleTypology() {
+    typologyActive = !typologyActive;
+    var btn = document.getElementById('typologyToggle');
+    if (typologyActive) {
+        document.body.classList.add('typology-active');
+        btn.classList.add('active');
+        btn.innerHTML = '&#128214; TYPOLOGY ON';
+    } else {
+        document.body.classList.remove('typology-active');
+        btn.classList.remove('active');
+        btn.innerHTML = '&#128214; TYPOLOGY';
+    }
+    attachTypologyBadges();
+}
+
+function attachTypologyBadges() {
+    if (!typologyActive) return;
+    document.querySelectorAll('.genealogy-node').forEach(function(node) {
+        if (node.querySelector('.typology-badge')) return;
+        var h3 = node.querySelector('.node-content h3, .name-container .modern-name');
+        if (!h3) return;
+        var name = h3.textContent.trim().toUpperCase().replace(/^\u2713\s*/, '').replace(/\s*\(.*?\)\s*$/, '').trim();
+        var typ = TYPOLOGY[name];
+        if (!typ) return;
+        var badge = document.createElement('div');
+        badge.className = 'typology-badge';
+        badge.innerHTML = '<strong>TYPE & SHADOW:</strong> ' + typ.type + '<br><span style="font-size: 0.48rem;color:rgba(212,175,55,0.2);">' + typ.ref + '</span><br>' + typ.desc;
+        node.querySelector('.node-content').appendChild(badge);
+        node.classList.add('typology-node');
+    });
+}
+
+// ═══════════════════════════════════════
+// COLLAPSIBLE SECTIONS
+// ═══════════════════════════════════════
+(function initCollapsible() {
+    document.querySelectorAll('.era-section').forEach(function(section) {
+        var header = section.querySelector('.era-header');
+        if (!header) return;
+        var content = document.createElement('div');
+        content.className = 'era-content';
+        var childNodes = Array.from(section.childNodes);
+        var afterHeader = false;
+        childNodes.forEach(function(node) {
+            if (node === header) { afterHeader = true; return; }
+            if (afterHeader) content.appendChild(node);
+        });
+        section.innerHTML = '';
+        section.appendChild(header);
+        section.appendChild(content);
+        var toggle = document.createElement('button');
+        toggle.className = 'era-collapse-toggle';
+        toggle.textContent = '\u2014';
+        toggle.setAttribute('aria-label', 'Collapse section');
+        toggle.onclick = function() {
+            section.classList.toggle('collapsed');
+            toggle.textContent = section.classList.contains('collapsed') ? '+' : '\u2014';
+        };
+        header.appendChild(toggle);
+    });
+})();
+
+// ═══════════════════════════════════════
+// ERA JUMP NAV
+// ═══════════════════════════════════════
+(function initEraJumpNav() {
+    var nav = document.createElement('nav');
+    nav.className = 'era-jump-nav';
+    nav.id = 'eraJumpNav';
+    var eras = [
+        { label: 'ANTE-DILUVIAN', section: 0 },
+        { label: 'PATRIARCHS', section: 1 },
+        { label: 'TRIBES', section: 2 },
+        { label: 'EXODUS', section: 3 },
+        { label: 'MONARCHY', section: 4 },
+        { label: 'DIVIDED', section: 5 },
+        { label: 'EXILE', section: 6 },
+        { label: 'SILENT', section: 7 }
+    ];
+    var sections = document.querySelectorAll('.era-section');
+    eras.forEach(function(e, i) {
+        var btn = document.createElement('button');
+        btn.className = 'era-jump-btn';
+        btn.textContent = e.label;
+        btn.onclick = function() {
+            if (sections[e.section]) sections[e.section].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+        nav.appendChild(btn);
+    });
+    document.body.appendChild(nav);
+
+    // Scroll-spy
+    var btns = nav.querySelectorAll('.era-jump-btn');
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (!entry.isIntersecting) return;
+            var idx = Array.from(sections).indexOf(entry.target);
+            if (idx >= 0 && btns[idx]) {
+                btns.forEach(function(b) { b.classList.remove('active'); });
+                btns[idx].classList.add('active');
+            }
+        });
+    }, { threshold: 0.15 });
+    sections.forEach(function(s) { observer.observe(s); });
+})();
+
+// ═══════════════════════════════════════
+// LUKE 3 TOGGLE
+// ═══════════════════════════════════════
+function toggleLukeLine() {
+    var c = document.getElementById('lukeLineContent');
+    var btn = document.getElementById('lukeLineToggle');
+    if (!c || !btn) return;
+    var visible = c.classList.toggle('visible');
+    btn.classList.toggle('active', visible);
+    btn.innerHTML = visible ? '&#128214; HIDE LUKE 3 LINE' : '&#128214; REVEAL LUKE 3 — BIOLOGICAL LINE';
+}
+
+// ═══════════════════════════════════════
+// 70 GENERATIONS TOGGLE
+// ═══════════════════════════════════════
+function toggleSeventyGenerations() {
+    var c = document.getElementById('seventyLineContent');
+    var btn = document.getElementById('seventyToggle');
+    if (!c || !btn) return;
+    var visible = c.classList.toggle('visible');
+    btn.classList.toggle('active', visible);
+    btn.innerHTML = visible ? '&#128214; HIDE 70 GENERATIONS' : '&#128214; REVEAL 70 GENERATIONS — LUKE 3:23-38';
+}
+
+</body>
+</html>

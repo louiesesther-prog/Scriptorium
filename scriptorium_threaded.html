@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCRIPTORIUM | The Threshold</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+    <script src="assets/audio/scriptorium-audio.js"></script>
+    <style>
+        :root {
+            --obsidian: #050505;
+            --obsidian-2: #080808;
+            --obsidian-3: #0d0d0d;
+            --museum-gold: #d4af37;
+            --museum-gold-dim: rgba(212, 175, 55, 0.6);
+            --museum-gold-faint: rgba(212, 175, 55, 0.12);
+            --museum-bronze: #7a5f1a;
+            --museum-silver: rgba(255,255,255,0.08);
+            --text-primary: rgba(255,255,255,0.92);
+            --text-secondary: rgba(255,255,255,0.55);
+            --border-gold: rgba(212,175,55,0.2);
+            --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body, html {
+            margin: 0; padding: 0 !important;
+            background: var(--obsidian);
+            color: rgba(255,255,255,0.92);
+            font-family: 'Cinzel', serif;
+            overflow: hidden;
+            height: 100vh;
+            animation: none;
+        }
+
+        @keyframes fadeInPage {
+            from { opacity: 0; filter: blur(8px); }
+            to   { opacity: 1; filter: blur(0); }
+        }
+
+        /* ═══════════════════════════════════════
+           1. SIDEBAR — enhanced with logo & tooltips
+        ═══════════════════════════════════════ */
+        .museum-sidebar {
+            position: fixed;
+            left: 0; top: 0; bottom: 0;
+            width: 80px;
+            background: var(--obsidian-2);
+            border-right: 1px solid var(--border-gold);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .sidebar-logo {
+            width: 100%;
+            padding: 14px 0 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--border-gold);
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo svg {
+            width: 28px; height: 28px;
+            opacity: 0.85;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 0;
+            gap: 4px;
+            overflow: hidden;
+        }
+
+        .nav-link {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px; height: 50px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            font-size: 20px;
+            transition: all 0.25s var(--transition-smooth);
+        }
+        .nav-link:hover {
+            color: var(--museum-gold);
+            border-color: var(--border-gold);
+            background: var(--museum-gold-faint);
+        }
+        .nav-link.active {
+            color: var(--museum-gold);
+            border-color: rgba(212,175,55,0.4);
+            background: var(--museum-gold-faint);
+        }
+
+        /* Tooltip */
+        .nav-link::after {
+            content: attr(title);
+            position: absolute;
+            left: calc(100% + 12px);
+            top: 50%;
+            transform: translateY(-50%);
+            background: #111;
+            border: 1px solid var(--border-gold);
+            color: var(--museum-gold);
+            font-family: 'Cinzel', serif;
+            font-size: 0.5rem;
+            letter-spacing: 2px;
+            white-space: nowrap;
+            padding: 5px 10px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 9999;
+        }
+        .nav-link:hover::after { opacity: 1; }
+
+        .nav-divider {
+            width: 28px;
+            height: 1px;
+            background: var(--border-gold);
+            flex-shrink: 0;
+            margin: 4px 0;
+        }
+
+        .sidebar-rank {
+            width: 100%;
+            padding: 10px 0 12px;
+            font-size: 0.45rem;
+            letter-spacing: 1.5px;
+            color: var(--museum-gold);
+            text-align: center;
+            line-height: 1.5;
+            opacity: 0.75;
+            border-top: 1px solid var(--border-gold);
+            flex-shrink: 0;
+        }
+
+        /* ═══════════════════════════════════════
+           2. MAIN STAGE
+        ═══════════════════════════════════════ */
+        .main-stage {
+            margin-left: 80px;
+            height: 100vh;
+            position: relative;
+            display: flex;
+        }
+
+        .split-hero {
+            display: flex;
+            width: 100%;
+            flex: 1;
+        }
+
+        .split-hero::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, rgba(212,175,55,0.3), transparent);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .ot-side { background: transparent; }
+        .nt-side { background: transparent; }
+
+        /* Ambient grain overlay */
+
+        .testament {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            transition: flex 0.9s var(--transition-smooth);
+            cursor: pointer;
+        }
+        .bg-layer {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            opacity: 1;
+            background-size: cover;
+            background-position: center;
+        }
+        .ot-side .bg-layer { background-color: #1a0e00; }
+        .nt-side .bg-layer { background-color: #00121a; }
+
+        /* Ambient color wash behind each testament */
+
+        .testament:hover .bg-layer { opacity: 1; transform: scale(1.04); }
+        .ot-active .ot-side .bg-layer { opacity: 0.65; }
+        .nt-active .nt-side .bg-layer { opacity: 0.65; }
+        .scribe-active .bg-layer { opacity: 0.6; }
+
+        /* ═══════════════════════════════════════
+           13. LEADERBOARD OVERLAY — redesigned
+        ═══════════════════════════════════════ */
+        .leaderboard-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.88);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(12px);
+            animation: overlayIn 0.35s ease both;
+        }
+        .leaderboard-overlay.active { display: flex; }
+
+        @keyframes overlayIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        .leaderboard-card {
+            width: 520px;
+            background: var(--obsidian-3);
+            border: 1px solid rgba(212,175,55,0.3);
+            padding: 0;
+            text-align: center;
+            max-height: 85vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: cardSlideUp 0.4s var(--transition-smooth) both;
+        }
+
+        @keyframes cardSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .leaderboard-header {
+            padding: 28px 40px 24px;
+            border-bottom: 1px solid var(--border-gold);
+            flex-shrink: 0;
+        }
+
+        .leaderboard-header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 0;
+        }
+
+        .leaderboard-header h2 {
+            font-size: 0.75rem;
+            letter-spacing: 5px;
+            margin: 0;
+            color: var(--museum-gold);
+        }
+
+        .leaderboard-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 40px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(212,175,55,0.2) transparent;
+        }
+        .leaderboard-body::-webkit-scrollbar { width: 4px; }
+        .leaderboard-body::-webkit-scrollbar-track { background: transparent; }
+        .leaderboard-body::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.2); border-radius: 2px; }
+
+        .gold-accent { color: var(--museum-gold); font-size: 10px; }
+
+        .user-stats {
+            border: 1px solid rgba(212,175,55,0.2);
+            padding: 18px 20px;
+            margin-bottom: 22px;
+            font-size: 0.65rem;
+            letter-spacing: 2.5px;
+            background: var(--museum-gold-faint);
+        }
+        .user-stats p { margin: 7px 0; }
+
+        .rank-badge {
+            background: var(--museum-gold);
+            color: #000;
+            padding: 2px 10px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .gold-text { color: var(--museum-gold); }
+
+        .scribe-name-row { margin-bottom: 20px; }
+        .scribe-name-row label {
+            display: block;
+            font-size: 0.55rem;
+            letter-spacing: 2.5px;
+            color: rgba(212,175,55,0.5);
+            margin-bottom: 8px;
+        }
+        #scribeNameInput {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(212,175,55,0.25);
+            border-bottom-color: rgba(212,175,55,0.5);
+            color: var(--museum-gold);
+            padding: 9px 14px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            text-align: center;
+            width: 220px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        #scribeNameInput:focus {
+            border-color: var(--museum-gold);
+            background: rgba(212,175,55,0.04);
+        }
+        #scribeNameInput::placeholder { color: rgba(212,175,55,0.25); }
+
+        .scrollable-ledger {
+            margin: 16px 0 0;
+            border-top: 1px solid rgba(212,175,55,0.2);
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .ledger-row {
+            display: grid;
+            grid-template-columns: 32px 1fr auto;
+            gap: 8px;
+            align-items: center;
+            padding: 11px 6px;
+            border-bottom: 1px solid rgba(212,175,55,0.08);
+            font-size: 0.92rem;
+            transition: background 0.2s ease;
+        }
+        .ledger-row:hover { background: rgba(212,175,55,0.04); }
+
+        .ledger-row.legend {
+            font-family: 'Cinzel', serif;
+            font-size: 0.5rem;
+            color: rgba(212,175,55,0.5);
+            letter-spacing: 2.5px;
+            padding-bottom: 8px;
+        }
+
+        .ledger-row.user-row {
+            background: rgba(212,175,55,0.07);
+            border-color: rgba(212,175,55,0.22);
+        }
+        .ledger-row.user-row:hover { background: rgba(212,175,55,0.1); }
+
+        .leaderboard-footer {
+            padding: 16px 40px 24px;
+            border-top: 1px solid var(--border-gold);
+            flex-shrink: 0;
+        }
+        .close-btn { font-size: 0.6rem; padding: 10px 28px; margin-top: 0; }
+
+        /* ═══════════════════════════════════════
+           14. COVENANT THREAD
+        ═══════════════════════════════════════ */
+        #ropeLine {
+            position: fixed !important;
+            left: 50% !important;
+            top: 0 !important;
+            width: 3px !important;
+            height: 100vh !important;
+            transform: translateX(-50%) !important;
+            pointer-events: none !important;
+            z-index: 450 !important;
+        }
+        #ropeLine .rope-thread {
+            box-shadow: 0 0 4px rgba(212,175,55,0.15), 0 0 8px rgba(212,175,55,0.05) !important;
+            transition: box-shadow 0.6s ease !important;
+        }
+
+        @keyframes ropePulse {
+            0%   { box-shadow: 0 0 8px rgba(212,175,55,0.4), 0 0 20px rgba(212,175,55,0.2); opacity: 0.6; }
+            50%  { box-shadow: 0 0 30px rgba(212,175,55,0.9), 0 0 60px rgba(212,175,55,0.5), 0 0 100px rgba(212,175,55,0.15); opacity: 1; }
+            100% { box-shadow: 0 0 8px rgba(212,175,55,0.4), 0 0 20px rgba(212,175,55,0.2); opacity: 0.6; }
+        }
+        .rope-animating .rope-thread { animation: ropePulse 0.5s ease-in-out 6 !important; }
+
+        body.ot-active #ropeLine .rope-thread {
+            background: linear-gradient(to bottom, rgba(122,95,26,0.1), rgba(122,95,26,0.3), rgba(122,95,26,0.1)) !important;
+            box-shadow: 0 0 6px rgba(122,95,26,0.2), 0 0 12px rgba(122,95,26,0.08) !important;
+        }
+        body.nt-active #ropeLine .rope-thread {
+            background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.3), rgba(255,255,255,0.1)) !important;
+            box-shadow: 0 0 6px rgba(255,255,255,0.15), 0 0 12px rgba(255,255,255,0.06) !important;
+        }
+
+        /* ═══════════════════════════════════════
+           15. PARTICLE SYSTEM
+        ═══════════════════════════════════════ */
+        .particle-system {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 450;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--museum-gold);
+            border-radius: 50%;
+            opacity: 0;
+            filter: blur(0.5px);
+        }
+
+        .nt-particle {
+            background: rgba(220,230,255,0.9);
+            box-shadow: 0 0 8px rgba(212,175,55,0.6);
+        }
+
+        .ot-particle {
+            background: var(--museum-bronze);
+            box-shadow: 0 0 4px rgba(0,0,0,0.6);
+        }
+
+        @keyframes floatParticle {
+            0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+            15%  { opacity: 0.65; }
+            75%  { opacity: 0.3; }
+            100% { transform: translateY(-100vh) translateX(var(--drift, 40px)) scale(0.4); opacity: 0; }
+        }
+
+        /* ═══════════════════════════════════════
+           16. TOAST NOTIFICATION
+        ═══════════════════════════════════════ */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--obsidian-3);
+            border: 1px solid rgba(212,175,55,0.4);
+            color: var(--museum-gold);
+            font-family: 'Cinzel', serif;
+            font-size: 0.58rem;
+            letter-spacing: 3px;
+            padding: 12px 28px;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ═══════════════════════════════════════
+           17. SCROLL HINT (testament labels always visible on idle)
+        ═══════════════════════════════════════ */
+        .testament-idle-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.52rem;
+            letter-spacing: 5px;
+            color: rgba(212,175,55,0.22);
+            pointer-events: none;
+            z-index: 5;
+            white-space: nowrap;
+            transition: opacity 0.4s ease;
+        }
+        .testament:hover .testament-idle-label { opacity: 0; }
+        .testament-label {
+            position: absolute;
+            bottom: 36px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.45rem;
+            letter-spacing: 5px;
+            color: rgba(212,175,55,0.1);
+            pointer-events: none;
+            z-index: 5;
+            white-space: nowrap;
+            transition: opacity 0.4s ease;
+        }
+        .testament:hover .testament-label { opacity: 0.4; color: var(--museum-gold); }
+
+        /* ═══════════════════════════════════════
+           THREAD UNWRAP ANIMATION SYSTEM
+        ═══════════════════════════════════════ */
+
+        /* Full-screen canvas sits above everything during animation */
+        #threadCanvas {
+            position: fixed;
+            inset: 0;
+            z-index: 8000;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+        #threadCanvas.active { opacity: 1; }
+
+        /* Veil that fades the scene to black at peak */
+        #threadVeil {
+            position: fixed;
+            inset: 0;
+            z-index: 7999;
+            background: var(--obsidian);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        #threadVeil.fade-in  { opacity: 0.85; }
+        #threadVeil.fade-out { opacity: 0;    transition: opacity 0.8s ease; }
+
+        /* NT sparkle burst — DOM particles for GPU composite */
+        .nt-sparkle {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 8100;
+            background: radial-gradient(circle, #fff 0%, rgba(212,175,55,0.9) 40%, transparent 70%);
+            animation: sparklePop var(--dur, 0.7s) ease-out var(--delay, 0s) forwards;
+        }
+        @keyframes sparklePop {
+            0%   { transform: translate(0,0) scale(0);   opacity: 1; }
+            60%  { opacity: 0.9; }
+            100% { transform: translate(var(--tx),var(--ty)) scale(0.2); opacity: 0; }
+        }
+
+        /* OT dust mote */
+        .ot-dust {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 8100;
+            background: radial-gradient(circle, rgba(180,130,60,0.95) 0%, rgba(100,70,20,0.5) 60%, transparent 100%);
+            animation: dustDrift var(--dur, 1.4s) ease-out var(--delay, 0s) forwards;
+        }
+        @keyframes dustDrift {
+            0%   { transform: translate(0,0) scale(1);   opacity: 0.85; }
+            30%  { opacity: 0.7; }
+            100% { transform: translate(var(--tx),var(--ty)) scale(0.1); opacity: 0; }
+        }
+
+        /* Radial glow bloom at center when thread fully unwraps */
+        .thread-bloom {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 8050;
+            transform: translate(-50%, -50%);
+            animation: bloomExpand var(--bloom-dur, 0.9s) ease-out forwards;
+        }
+        @keyframes bloomExpand {
+            0%   { transform: translate(-50%,-50%) scale(0); opacity: 0.9; }
+            60%  { opacity: 0.6; }
+            100% { transform: translate(-50%,-50%) scale(1); opacity: 0; }
+        }
+
+    </style>
+</head>
+<body>
+<script src="assets/js/scriptorium-core.js"></script>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Thread unwrap animation system -->
+    <div id="threadVeil"></div>
+    <canvas id="threadCanvas"></canvas>
+
+    <aside class="museum-sidebar" id="sidebar">
+        <!-- Logo mark -->
+        <div class="sidebar-logo">
+            <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="3" width="22" height="22" stroke="#d4af37" stroke-width="1" opacity="0.6"/>
+                <rect x="6" y="6" width="16" height="16" stroke="#d4af37" stroke-width="0.5" opacity="0.3"/>
+                <line x1="14" y1="3" x2="14" y2="25" stroke="#d4af37" stroke-width="0.5" opacity="0.4"/>
+                <line x1="3" y1="14" x2="25" y2="14" stroke="#d4af37" stroke-width="0.5" opacity="0.4"/>
+                <circle cx="14" cy="14" r="3" stroke="#d4af37" stroke-width="1" opacity="0.7"/>
+                <circle cx="14" cy="14" r="1" fill="#d4af37" opacity="0.9"/>
+            </svg>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="scriptorium.html"    class="nav-link active" title="THE THRESHOLD">&#8984;</a>
+            <a href="covenant-map.html"   class="nav-link"        title="COVENANT MAP">&#128337;</a>
+            <a href="MAP.html"   class="nav-link"        title="BIBLICAL NAVIGATOR">&#127760;</a>
+            <a href="archive.html"        class="nav-link"        title="THE ARCHIVE">&#128214;</a>
+            <div class="nav-divider"></div>
+            <a href="genealogy.html" class="nav-link" title="GENEALOGY">&#9812;</a>
+            <a href="tabernacle.html" class="nav-link" title="TABERNACLE">&#9961;</a>
+            <a href="ethiopian-canon.html" class="nav-link" title="ETHIOPIAN CANON">&#10022;</a>
+            <a href="prophetic-mesh.html" class="nav-link" title="PROPHETIC MESH">&#10022;</a>
+            <a href="sanctum-3d.html" class="nav-link" title="3D SANCTUM">&#9961;</a>
+            <a href="scribes-chamber.html" class="nav-link"       title="SCRIBES CHAMBER">&#128218;</a>
+            <a href="comparison-mode.html" class="nav-link"       title="COMPARISON MODE">&#128100;</a>
+            <div class="nav-divider"></div>
+            <a href="settings.html"       class="nav-link"        title="RESTORATION ROOM">&#9881;</a>
+            <a href="register.html"       class="nav-link"        title="SCRIBE INDUCTION">&#128220;</a>
+            <a href="login.html"       class="nav-link"        title="SIGN IN">&#128273;</a>
+            <a href="#" onclick="Scriptorium.logout(true);return false;" class="nav-link" title="SIGN OUT">&#128682;</a>
+        </nav>
+        <div class="sidebar-rank" id="sidebarRank">INITIATE<br><span id="sidebarChars" style="opacity:0.5;font-size:0.75em;">0 chars</span></div>
+    </aside>
+
+<!-- SCRIBE'S SEAL -->
+<div class="seal-medallion" id="sealMedallion" onclick="toggleSealTooltip()">
+    <svg viewBox="0 0 200 200">
+        <circle class="seal-ring" id="sealRingAstronomy" cx="100" cy="100" r="90"/>
+        <circle class="seal-ring" id="sealRingProphetic" cx="100" cy="100" r="70"/>
+        <circle class="seal-ring" id="sealRingRestoration" cx="100" cy="100" r="50"/>
+        <circle class="seal-core" cx="100" cy="100" r="35"/>
+        <circle class="seal-inner" id="sealInner" cx="100" cy="100" r="30"/>
+        <text class="seal-letter" id="sealLetter" x="100" y="102">&#10022;</text>
+    </svg>
+</div>
+
+<div class="seal-tooltip" id="sealTooltip">
+    <div class="st-title">SCRIBE'S SEAL</div>
+    <div class="st-row" id="sealRowEpigraphy"><span>&#128220; Epigraphy</span><span class="st-check">&#10003;</span></div>
+    <div class="st-row" id="sealRowAstronomy"><span>&#10022; Astronomy</span><span class="st-check">&#10003;</span></div>
+    <div class="st-row" id="sealRowProphetic"><span>&#8773; Prophetic Mesh</span><span class="st-check">&#10003;</span></div>
+    <div class="st-row" id="sealRowRestoration"><span>&#128214; Restoration</span><span class="st-check">&#10003;</span></div>
+    <div class="st-rank" id="sealRank">INITIATE SCRIBE</div>
+</div>
+    <main class="main-stage" id="stage">
+        <div class="split-hero">
+            <section class="testament ot-side" onclick="switchTestament('OT')" aria-label="Old Testament">
+                <div class="bg-layer" style="background:#1a0e00 url('assets/images/OT_image.png') center/cover no-repeat;"></div>
+                <div class="testament-idle-label">OLD TESTAMENT</div>
+                <div class="testament-label">ENTER THE OLD ARCHIVE</div>
+            </section>
+            <section class="testament nt-side" onclick="switchTestament('NT')" aria-label="New Testament">
+                <div class="bg-layer" style="background:#00121a url('assets/images/NT_image.png') center/cover no-repeat;"></div>
+                <div class="testament-idle-label">NEW TESTAMENT</div>
+                <div class="testament-label">ENTER THE NEW ARCHIVE</div>
+            </section>
+        </div>
+
+        <!-- Dust & Embers -->
+        <div id="particleCanvas" class="particle-system"></div>
+
+        <!-- Covenant Thread -->
+        <div id="ropeLine" style="position:fixed;left:50%;top:0;width:6px;height:100vh;transform:translateX(-50%);pointer-events:none;z-index:450;">
+            <div class="rope-thread" style="width:100%;height:100%;background:linear-gradient(to bottom,rgba(212,175,55,0.1),rgba(212,175,55,0.4),rgba(212,175,55,0.1));transition:box-shadow 0.6s ease;"></div>
+        </div>
+
+        <!-- Central Exhibit Card -->
+        <div class="logia-overlay">
+            <div class="exhibit-card" id="exhibitCard">
+                <div class="card-inner-ornament"></div>
+
+                <div class="card-eyebrow">
+                    <div class="card-eyebrow-line"></div>
+                    <span class="card-label">DAILY LOGIA</span>
+                    <div class="card-eyebrow-line right"></div>
+                </div>
+
+                <h1 class="verse-ref" id="verseRef">JOHN 1:1</h1>
+                <div class="verse-divider"></div>
+
+                <p class="verse-text" id="verseDisplay">"In the beginning was the Word, and the Word was with God, and the Word was God."</p>
+
+                <div style="text-align:center;margin-top:8px;">
+                    <span class="flame-container" id="flameContainer">
+                        <span class="flame"></span>
+                    </span>
+                    <span class="streak-num" id="streakNum"></span>
+                    <span class="streak-label">DAY STREAK</span>
+                    <button class="claim-btn" id="claimBtn" onclick="claimLogia()">CLAIM LOGIA</button>
+                </div>
+
+                <div class="scribe-wrapper" id="scribeWrapper">
+                    <div id="ghostText" class="ghost-layer"></div>
+                    <div id="scribeLayer" class="scribe-layer"></div>
+                    <input type="text" id="scribeInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                </div>
+
+                <div class="restoration-bar" id="restorationBar">
+                    <div class="restoration-fill" id="restorationFill"></div>
+
+                </div>
+
+                <div class="card-metrics">
+                    <div class="metric-group">
+                        <span id="totalChars" style="color: var(--museum-gold);">0</span>
+                        <span class="metric-label">CHARS</span>
+                    </div>
+                    <div class="metric-group">
+                        <span id="currentRank">INITIATE</span>
+                        <span class="metric-label">RANK</span>
+                    </div>
+                    <div class="metric-group">
+                        <span id="streakDisplay" style="color: #ffd700;">0</span>
+                        <span class="metric-label">DAY STREAK</span>
+                    </div>
+                </div>
+                <div class="restoration-label" id="restorationLabel">RESTORATION: 0%</div>
+
+                <div class="stats-bar">
+                    <span onclick="toggleLeaderboard()">RANK: <strong id="rankDisplay">INITIATE</strong></span>
+                    <span onclick="toggleLeaderboard()">CHARS: <strong id="charsDisplay">0</strong></span>
+                </div>
+
+                <button class="gold-cta" id="ctaBtn" onclick="startScribe()">BEGIN TRANSCRIPTION</button>
+            </div>
+        </div>
+
+        <!-- Leaderboard Overlay -->
+        <div id="leaderboardOverlay" class="leaderboard-overlay">
+            <div class="leaderboard-card">
+                <div class="leaderboard-header">
+                    <div class="leaderboard-header-inner">
+                        <span class="gold-accent">&#10022;</span>
+                        <h2>HALL OF SCRIBES</h2>
+                        <span class="gold-accent">&#10022;</span>
+                    </div>
+                </div>
+
+                <div class="leaderboard-body">
+                    <div class="scribe-name-row">
+                        <label>SCRIBE NAME</label>
+                        <input type="text" id="scribeNameInput" placeholder="Enter your name…" maxlength="30">
+                    </div>
+
+                    <div class="user-stats">
+                        <p>YOUR RANK: <span id="currentRank" class="rank-badge">INITIATE</span></p>
+                        <p>TOTAL CHARACTERS: <span id="totalChars" class="gold-text">0</span></p>
+                    </div>
+
+                    <div class="scrollable-ledger">
+                        <div class="ledger-row legend"><span>#</span><span>SCRIBE</span><span>SCORE</span></div>
+                        <div id="ledgerBody"></div>
+                    </div>
+                </div>
+
+                <div class="leaderboard-footer">
+                    <button class="gold-cta close-btn" onclick="toggleLeaderboard()">CLOSE LEDGER</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        /* ─── DATA ─────────────────────────────────── */
+        const verses = {
+            NT: { ref: "JOHN 1:1",     text: "In the beginning was the Word, and the Word was with God, and the Word was God." },
+            OT: { ref: "GENESIS 1:1",  text: "In the beginning God created the heaven and the earth." }
+        };
+
+        const LEGENDS = [
+            { name: "Eusebius of Caesarea",  chars: 84200 },
+            { name: "St. Jerome",            chars: 72150 },
+            { name: "Origen of Alexandria",  chars: 58400 },
+            { name: "Athanasius the Great",  chars: 46100 },
+            { name: "John Chrysostom",       chars: 38900 },
+            { name: "Cyril of Jerusalem",    chars: 31200 },
+            { name: "Ephrem the Syrian",     chars: 27500 },
+            { name: "Augustine of Hippo",    chars: 24100 },
+            { name: "Basil the Great",       chars: 19800 },
+            { name: "Gregory of Nyssa",      chars: 15400 }
+        ];
+
+        /* ─── STATE ────────────────────────────────── */
+        let currentTarget = verses.NT.text;
+        let currentType   = 'NT';
+        let isCompleted   = false;  /* BUG FIX: prevent double-counting */
+
+        let scribeData = JSON.parse(localStorage.getItem('scribeData')) || {
+            totalCharacters: 0,
+            rank: "INITIATE",
+            name: "",
+            versesCompleted: 0,
+            ntVerses: 0
+        };
+        // Ensure all fields exist with defaults
+        scribeData.totalCharacters = scribeData.totalCharacters || 0;
+        scribeData.rank = scribeData.rank || "INITIATE";
+        scribeData.name = scribeData.name || "";
+        scribeData.versesCompleted = scribeData.versesCompleted || 0;
+        scribeData.ntVerses = scribeData.ntVerses || 0;
+
+        /* ─── DOM REFS ──────────────────────────────── */
+        const inputEl     = document.getElementById('scribeInput');
+        const scribeLayer = document.getElementById('scribeLayer');
+        const exhibitCard = document.getElementById('exhibitCard');
+        const stage       = document.getElementById('stage');
+        const sidebar     = document.getElementById('sidebar');
+        const toast       = document.getElementById('toast');
+
+        /* ─── RANK ──────────────────────────────────── */
+        function calculateRank(chars) {
+            if (chars > 5000)  return "ILLUMINATOR";
+            if (chars > 1000)  return "MASTER SCRIBE";
+            if (chars > 200)   return "SCRIBE";
+            return "INITIATE";
+        }
+
+        /* ─── LEADERBOARD ───────────────────────────── */
+        function getLeaderboard() {
+            const userEntry = {
+                name: scribeData.name || "Anonymous Scribe",
+                chars: scribeData.totalCharacters,
+                isUser: true
+            };
+            return [...LEGENDS, userEntry].sort((a, b) => b.chars - a.chars);
+        }
+
+        /* ─── UI UPDATE ─────────────────────────────── */
+        function updateUI() {
+            const rank  = scribeData.rank;
+            const chars = scribeData.totalCharacters;
+            document.getElementById('totalChars').innerText    = chars.toLocaleString();
+            document.getElementById('currentRank').innerText   = rank;
+            document.getElementById('rankDisplay').innerText   = rank;
+            document.getElementById('charsDisplay').innerText  = chars.toLocaleString();
+            document.getElementById('sidebarRank').innerHTML   =
+                rank + '<br><span id="sidebarChars" style="opacity:0.5;font-size:0.75em;">'
+                + chars.toLocaleString() + ' chars</span>';
+            const nameInput = document.getElementById('scribeNameInput');
+            if (nameInput) nameInput.value = scribeData.name || "";
+            renderLedger();
+        }
+
+        function renderLedger() {
+            const body = document.getElementById('ledgerBody');
+            const all  = getLeaderboard();
+            body.innerHTML = "";
+            all.slice(0, 10).forEach((entry, idx) => {
+                const row = document.createElement('div');
+                row.className = 'ledger-row' + (entry.isUser ? ' user-row' : '');
+                const pos = idx + 1;
+                const medal = pos === 1 ? '⊛' : pos === 2 ? '⊚' : pos === 3 ? '⊙' : pos;
+                row.innerHTML =
+                    '<span style="color:rgba(212,175,55,0.5);font-size:0.8rem;">' + medal + '</span>' +
+                    '<span>' + entry.name + (entry.isUser ? ' <span style="font-size:0.65rem;color:rgba(212,175,55,0.45);font-family:Cinzel,serif;letter-spacing:1px;">(YOU)</span>' : '') + '</span>' +
+                    '<span style="font-family:Cinzel,serif;font-size:0.7rem;letter-spacing:1px;color:rgba(212,175,55,0.75);">' + entry.chars.toLocaleString() + '</span>';
+                body.appendChild(row);
+            });
+
+            const userPos = all.findIndex(e => e.isUser) + 1;
+            if (userPos > 10) {
+                const row = document.createElement('div');
+                row.className = 'ledger-row user-row';
+                row.innerHTML =
+                    '<span style="color:rgba(212,175,55,0.5);">' + userPos + '</span>' +
+                    '<span>' + (scribeData.name || "Anonymous Scribe") + ' <span style="font-size:0.65rem;color:rgba(212,175,55,0.45);font-family:Cinzel,serif;">(YOU)</span></span>' +
+                    '<span style="font-family:Cinzel,serif;font-size:0.7rem;color:rgba(212,175,55,0.75);">' + scribeData.totalCharacters.toLocaleString() + '</span>';
+                body.appendChild(row);
+            }
+        }
+
+        /* ─── TOAST ─────────────────────────────────── */
+        function showToast(msg, duration = 2800) {
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), duration);
+        }
+
+/* ─── TESTAMENT SWITCH ──────────────────────── */
+        function transitionToNewTestament() {
+            var flash = document.createElement('div');
+            flash.style.cssText = 'position:fixed;inset:0;background:#fff;z-index:9999;opacity:0;transition:opacity 0.4s ease-in-out;pointer-events:none;';
+            document.body.appendChild(flash);
+            setTimeout(function() { flash.style.opacity = '1'; }, 10);
+            setTimeout(function() { window.location.href = 'nt-gallery.html?mode=reality'; }, 450);
+        }
+
+        function switchTestament(type) {
+            var ropeThread = document.querySelector('#ropeLine .rope-thread');
+            if (ropeThread) {
+                ropeThread.style.boxShadow = '0 0 20px rgba(212,175,55,0.6), 0 0 40px rgba(212,175,55,0.3)';
+            }
+
+            var verse = verses[type];
+            currentTarget = verse.text;
+            currentType   = type;
+            isCompleted   = false;
+
+            document.getElementById('verseRef').innerText     = verse.ref;
+            document.getElementById('verseDisplay').innerText = '\u201C' + verse.text + '\u201D';
+
+            stage.classList.remove('ot-active', 'nt-active', 'scribe-active');
+            stage.classList.add(type === 'OT' ? 'ot-active' : 'nt-active');
+            document.body.classList.remove('ot-active', 'nt-active');
+            document.body.classList.add(type === 'OT' ? 'ot-active' : 'nt-active');
+
+            if (window.ScriptoriumAudio && window.ScriptoriumAudio.init) {
+                window.ScriptoriumAudio.init();
+                window.ScriptoriumAudio.transitionTo(type === 'OT' ? 'ot' : 'nt');
+            }
+
+            /* Reset transcription state */
+            document.getElementById('scribeInput').value  = '';
+            document.getElementById('scribeLayer').textContent = '';
+            document.getElementById('restorationFill').style.width = '0%';
+            document.getElementById('restorationLabel').innerText  = 'RESTORATION: 0%';
+
+            var cta = document.getElementById('ctaBtn');
+            cta.innerHTML = 'ENTER ' + (type === 'OT' ? 'OLD' : 'NEW') + ' ARCHIVE';
+            cta.onclick = () => { window.location.href = 'archive.html?filter=' + type; };
+
+            var ropeLine = document.getElementById('ropeLine');
+            if (ropeLine) {
+                ropeLine.classList.remove('rope-animating');
+                void ropeLine.offsetWidth;
+                ropeLine.classList.add('rope-animating');
+                setTimeout(function() { ropeLine.classList.remove('rope-animating'); }, 3200);
+            }
+
+            sidebar.style.opacity      = '1';
+            sidebar.style.pointerEvents = 'auto';
+
+            createParticles(type);
+        }
+
+        /* ─── PARTICLES ─────────────────────────────── */
+        function createParticles(type) {
+            const canvas = document.getElementById('particleCanvas');
+            /* Clear old particles first — BUG FIX */
+            canvas.innerHTML = '';
+
+            for (let i = 0; i < 45; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle ' + (type === 'NT' ? 'nt-particle' : 'ot-particle');
+                const drift    = (Math.random() * 100 - 50);
+                const startX   = 45 + Math.random() * 10;
+                const startY   = Math.random() * 100;
+                const size     = Math.random() * 3.5 + 0.8;
+                const duration = Math.random() * 3.5 + 2;
+                const delay    = Math.random() * 2.5;
+                p.style.cssText =
+                    'left:' + startX + '%;' +
+                    'top:' + startY + '%;' +
+                    'width:' + size + 'px;' +
+                    'height:' + size + 'px;' +
+                    '--drift:' + drift + 'px;' +
+                    'animation:floatParticle ' + duration + 's linear ' + delay + 's forwards;';
+                canvas.appendChild(p);
+                setTimeout(() => { if (p.parentNode) p.remove(); }, (duration + delay + 0.5) * 1000);
+            }
+        }
+
+        /* ─── THREAD UNWRAP ENGINE ──────────────────── */
+        var ThreadUnwrap = (function() {
+
+            var canvas, ctx, veil, raf, done;
+            var W, H, cx, cy;
+
+            /* Shared state for one run */
+            var phase, t, config;
+
+            /* ── NT Config: light linen thread, gold/white sparkles ── */
+            var NT_CFG = {
+                threadColor:    'rgba(240,235,210,1)',     /* warm parchment-white */
+                threadGlow:     'rgba(255,255,230,0.55)',
+                threadWidth:    2.2,
+                glowWidth:      10,
+                coils:          4.5,
+                unwindSpeed:    0.018,                     /* per frame */
+                sparkColors:    ['#fff','#fffbe0','#d4af37','#f8e878','rgba(255,255,200,0.8)'],
+                bloomColor:     'rgba(255,245,180,',
+                bloomSize:      Math.min(window.innerWidth, window.innerHeight) * 1.2,
+                dustClass:      'nt-sparkle',
+                dustCount:      40,
+                dustRadius:     { min: 3, max: 8 },
+                dustBurst:      180,                       /* px max spread */
+                trailOpacity:   0.18,
+                label:          'NT'
+            };
+
+            /* ── OT Config: old flax thread, amber/brown dust ── */
+            var OT_CFG = {
+                threadColor:    'rgba(160,110,45,1)',       /* aged flax */
+                threadGlow:     'rgba(120,80,20,0.45)',
+                threadWidth:    2.8,
+                glowWidth:      14,
+                coils:          5.5,
+                unwindSpeed:    0.013,
+                sparkColors:    ['rgba(180,130,60,0.95)','rgba(140,95,30,0.9)','rgba(90,60,15,0.8)','rgba(200,150,70,0.7)'],
+                bloomColor:     'rgba(140,95,30,',
+                bloomSize:      Math.min(window.innerWidth, window.innerHeight) * 1.0,
+                dustClass:      'ot-dust',
+                dustCount:      55,
+                dustRadius:     { min: 2, max: 7 },
+                dustBurst:      220,
+                trailOpacity:   0.22,
+                label:          'OT'
+            };
+
+            function resize() {
+                W = canvas.width  = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+                cx = W / 2;
+                cy = H / 2;
+            }
+
+            /* Catmull-Rom spline: thread path from spool edge to card */
+            function buildPath(progress, cfg) {
+                /* Thread unspools from top-right of exhibit card area
+                   toward the center text input zone */
+                var startR  = Math.min(W, H) * 0.42;   /* spool outer radius */
+                var endR    = 60;                        /* tight center */
+                var r       = startR - (startR - endR) * progress;
+                var turns   = cfg.coils * (1 - progress * 0.7);
+                var angle   = -Math.PI / 2 + turns * Math.PI * 2 * (1 - progress);
+
+                return {
+                    x: cx + Math.cos(angle) * r,
+                    y: cy + Math.sin(angle) * r,
+                    angle: angle,
+                    r: r
+                };
+            }
+
+            /* Draw one frame */
+            function drawFrame() {
+                ctx.clearRect(0, 0, W, H);
+
+                var cfg = config;
+
+                /* ─── Draw accumulated thread trail ─── */
+                var steps = Math.ceil(t / 0.003);
+                if (steps > 1) {
+                    ctx.save();
+                    ctx.globalAlpha = cfg.trailOpacity;
+                    ctx.strokeStyle = cfg.threadColor;
+                    ctx.lineWidth   = cfg.threadWidth * 0.7;
+                    ctx.lineCap     = 'round';
+                    ctx.beginPath();
+                    for (var i = 0; i <= steps; i++) {
+                        var pFrac = (i / steps) * t;
+                        var pt    = buildPath(pFrac, cfg);
+                        if (i === 0) ctx.moveTo(pt.x, pt.y);
+                        else         ctx.lineTo(pt.x, pt.y);
+                    }
+                    ctx.stroke();
+                    ctx.restore();
+                }
+
+                /* ─── Draw leading thread tip with glow ─── */
+                var tip  = buildPath(t, cfg);
+                var prev = buildPath(Math.max(0, t - 0.008), cfg);
+
+                /* Outer glow */
+                ctx.save();
+                ctx.strokeStyle = cfg.threadGlow;
+                ctx.lineWidth   = cfg.glowWidth;
+                ctx.lineCap     = 'round';
+                ctx.globalAlpha = 0.5 - t * 0.3;
+                ctx.shadowColor = cfg.threadGlow;
+                ctx.shadowBlur  = 18;
+                ctx.beginPath();
+                ctx.moveTo(prev.x, prev.y);
+                ctx.lineTo(tip.x, tip.y);
+                ctx.stroke();
+                ctx.restore();
+
+                /* Core thread */
+                ctx.save();
+                ctx.strokeStyle = cfg.threadColor;
+                ctx.lineWidth   = cfg.threadWidth;
+                ctx.lineCap     = 'round';
+                ctx.globalAlpha = 0.95;
+                ctx.shadowColor = cfg.threadGlow;
+                ctx.shadowBlur  = 6;
+                ctx.beginPath();
+                ctx.moveTo(prev.x, prev.y);
+                ctx.lineTo(tip.x, tip.y);
+                ctx.stroke();
+                ctx.restore();
+
+                /* ─── NT: sparkle at tip ─── */
+                if (cfg.label === 'NT' && Math.random() < 0.55) {
+                    drawTipSparkle(tip.x, tip.y, cfg);
+                }
+
+                /* ─── OT: dust mote puff at tip ─── */
+                if (cfg.label === 'OT' && Math.random() < 0.40) {
+                    drawTipDust(tip.x, tip.y, cfg);
+                }
+            }
+
+            /* Canvas-drawn tip sparkle (fast, no DOM) */
+            function drawTipSparkle(x, y, cfg) {
+                var arms  = 6 + Math.floor(Math.random() * 4);
+                var outer = 4 + Math.random() * 6;
+                var inner = outer * 0.38;
+                var col   = cfg.sparkColors[Math.floor(Math.random() * cfg.sparkColors.length)];
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(Math.random() * Math.PI);
+                ctx.fillStyle   = col;
+                ctx.shadowColor = col;
+                ctx.shadowBlur  = 10;
+                ctx.globalAlpha = 0.7 + Math.random() * 0.3;
+                ctx.beginPath();
+                for (var i = 0; i < arms * 2; i++) {
+                    var r2  = i % 2 === 0 ? outer : inner;
+                    var ang = (i / (arms * 2)) * Math.PI * 2;
+                    i === 0 ? ctx.moveTo(Math.cos(ang)*r2, Math.sin(ang)*r2)
+                            : ctx.lineTo(Math.cos(ang)*r2, Math.sin(ang)*r2);
+                }
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            }
+
+            /* Canvas-drawn dust puff at tip */
+            function drawTipDust(x, y, cfg) {
+                var n = 3 + Math.floor(Math.random() * 4);
+                for (var i = 0; i < n; i++) {
+                    var angle = Math.random() * Math.PI * 2;
+                    var dist  = Math.random() * 12;
+                    var r2    = 1 + Math.random() * 3;
+                    var col   = cfg.sparkColors[Math.floor(Math.random() * cfg.sparkColors.length)];
+                    ctx.save();
+                    ctx.fillStyle   = col;
+                    ctx.globalAlpha = 0.4 + Math.random() * 0.4;
+                    ctx.beginPath();
+                    ctx.arc(x + Math.cos(angle)*dist, y + Math.sin(angle)*dist, r2, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+
+            /* DOM particle burst at completion */
+            function burstParticles(cfg) {
+                var n = cfg.dustCount;
+                for (var i = 0; i < n; i++) {
+                    (function(i) {
+                        var el = document.createElement('div');
+                        el.className = cfg.dustClass;
+                        var angle  = (i / n) * Math.PI * 2 + (Math.random() - 0.5) * 0.8;
+                        var dist   = cfg.dustBurst * (0.4 + Math.random() * 0.6);
+                        var tx     = Math.cos(angle) * dist;
+                        var ty     = Math.sin(angle) * dist;
+                        var size   = cfg.dustRadius.min + Math.random() * (cfg.dustRadius.max - cfg.dustRadius.min);
+                        var dur    = 0.5 + Math.random() * 0.9;
+                        var delay  = Math.random() * 0.35;
+                        el.style.cssText =
+                            'left:' + cx + 'px;top:' + cy + 'px;' +
+                            'width:' + size + 'px;height:' + size + 'px;' +
+                            '--tx:' + tx + 'px;--ty:' + ty + 'px;' +
+                            '--dur:' + dur + 's;--delay:' + delay + 's;';
+                        document.body.appendChild(el);
+                        setTimeout(function() { if (el.parentNode) el.remove(); }, (dur + delay + 0.2) * 1000);
+                    })(i);
+                }
+            }
+
+            /* Radial bloom at center */
+            function bloomExpand(cfg) {
+                var el = document.createElement('div');
+                el.className = 'thread-bloom';
+                var s = cfg.bloomSize;
+                el.style.cssText =
+                    'left:' + cx + 'px;top:' + cy + 'px;' +
+                    'width:' + s + 'px;height:' + s + 'px;' +
+                    'background:radial-gradient(circle,' + cfg.bloomColor + '0.35) 0%,' + cfg.bloomColor + '0.12) 35%,transparent 70%);' +
+                    '--bloom-dur:1.1s;';
+                document.body.appendChild(el);
+                setTimeout(function() { if (el.parentNode) el.remove(); }, 1300);
+            }
+
+            /* Main animation loop */
+            function loop() {
+                t += config.unwindSpeed;
+
+                if (t >= 1) {
+                    /* ─── COMPLETION ─── */
+                    t = 1;
+                    drawFrame();
+                    burstParticles(config);
+                    bloomExpand(config);
+
+                    /* Veil fade out */
+                    setTimeout(function() {
+                        veil.classList.remove('fade-in');
+                        veil.classList.add('fade-out');
+                    }, 180);
+
+                    /* Canvas fade out */
+                    setTimeout(function() {
+                        canvas.classList.remove('active');
+                    }, 400);
+
+                    /* Callback — actually start transcription */
+                    setTimeout(function() {
+                        if (done) done();
+                        /* Clean up veil class */
+                        setTimeout(function() { veil.classList.remove('fade-out'); }, 900);
+                    }, 520);
+
+                    cancelAnimationFrame(raf);
+                    return;
+                }
+
+                drawFrame();
+                raf = requestAnimationFrame(loop);
+            }
+
+            /* Public API */
+            return {
+                init: function() {
+                    canvas = document.getElementById('threadCanvas');
+                    ctx    = canvas.getContext('2d');
+                    veil   = document.getElementById('threadVeil');
+                    resize();
+                    window.addEventListener('resize', resize);
+                },
+
+                play: function(type, callback) {
+                    config = type === 'NT' ? NT_CFG : OT_CFG;
+                    done   = callback;
+                    t      = 0;
+                    phase  = 0;
+
+                    resize();
+
+                    /* Veil fade in */
+                    veil.classList.remove('fade-out');
+                    requestAnimationFrame(function() {
+                        veil.classList.add('fade-in');
+                    });
+
+                    /* Show canvas after brief veil delay */
+                    setTimeout(function() {
+                        canvas.classList.add('active');
+                        if (raf) cancelAnimationFrame(raf);
+                        raf = requestAnimationFrame(loop);
+                    }, 220);
+                }
+            };
+        })();
+
+        /* Init once DOM is ready */
+        ThreadUnwrap.init();
+
+        /* ─── START SCRIBE ──────────────────────────── */
+        function startScribe() {
+            /* Trigger thread animation for current testament, then enter scribe mode */
+            ThreadUnwrap.play(currentType, function() {
+                stage.classList.add('scribe-active');
+                sidebar.style.opacity       = '0';
+                sidebar.style.pointerEvents = 'none';
+
+                document.getElementById('ghostText').innerText        = currentTarget;
+                document.getElementById('scribeLayer').textContent    = '';
+                document.getElementById('scribeLayer').className      = 'scribe-layer';
+                document.getElementById('scribeInput').value          = '';
+                document.getElementById('restorationFill').style.width = '0%';
+                document.getElementById('restorationLabel').innerText  = 'RESTORATION: 0%';
+                exhibitCard.classList.remove('complete');
+                isCompleted = false;
+
+                setTimeout(function() { inputEl.focus(); }, 300);
+            });
+        }
+
+        function exitScribeMode() {
+            stage.classList.remove('scribe-active');
+            document.getElementById('ctaBtn').onclick = startScribe;
+            document.getElementById('ctaBtn').innerText = 'BEGIN TRANSCRIPTION';
+            document.getElementById('scribeInput').value = '';
+            document.getElementById('scribeInput').blur();
+            sidebar.style.opacity = '1';
+            sidebar.style.pointerEvents = 'auto';
+        }
+
+        /* ─── INPUT HANDLER ─────────────────────────── */
+        inputEl.addEventListener('keydown', function(e) {
+            if (isCompleted) return;
+            var key = e.key;
+            if (key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey && !e.repeat) {
+                if (window.ScriptoriumAudio && window.ScriptoriumAudio.init) {
+                    window.ScriptoriumAudio.init();
+                    window.ScriptoriumAudio.playEffect('quill');
+                }
+            }
+            if (key === 'Escape') {
+                exitScribeMode();
+            }
+        });
+
+        inputEl.addEventListener('input', function(e) {
+            if (isCompleted) return; /* BUG FIX: ignore input after completion */
+
+            const val = e.target.value;
+            let illuminatedText = '';
+
+            for (let i = 0; i < val.length; i++) {
+                if (val[i] === currentTarget[i]) {
+                    illuminatedText += val[i];
+                } else {
+                    break; /* BUG FIX: was missing break — 'lastCorrect' logic was wrong */
+                }
+            }
+
+            /* Ink bleed */
+            scribeLayer.textContent = illuminatedText;
+            const progress = illuminatedText.length / currentTarget.length;
+            scribeLayer.className = 'scribe-layer';
+            if (progress > 0.75)      scribeLayer.classList.add('bleed-4');
+            else if (progress > 0.5)  scribeLayer.classList.add('bleed-3');
+            else if (progress > 0.25) scribeLayer.classList.add('bleed-2');
+            else if (progress > 0)    scribeLayer.classList.add('bleed-1');
+
+            /* Scribe fatigue */
+            const scribeWrapper = document.getElementById('scribeWrapper');
+            if (val.length > illuminatedText.length) {
+                scribeWrapper.classList.add('error-blur', 'fatigue');
+                setTimeout(() => scribeWrapper.classList.remove('error-blur', 'fatigue'), 320);
+            }
+
+            /* Restoration bar */
+            const fill  = document.getElementById('restorationFill');
+            const label = document.getElementById('restorationLabel');
+            const pct   = Math.round(progress * 100);
+            fill.style.width    = pct + '%';
+            label.innerText     = 'RESTORATION: ' + pct + '%';
+            label.style.color   = pct > 75
+                ? 'rgba(212,175,55,0.75)'
+                : 'rgba(122,95,26,0.55)';
+
+            /* Verse complete */
+            if (illuminatedText === currentTarget && !isCompleted) {
+                isCompleted = true; /* BUG FIX: set flag immediately */
+                fill.style.width  = '100%';
+                label.innerText   = 'RESTORATION: 100% — VERSE RESTORED';
+                label.style.color = 'rgba(212,175,55,0.9)';
+
+                scribeData.totalCharacters += currentTarget.length;
+                const newRank = calculateRank(scribeData.totalCharacters);
+                const ranked  = newRank !== scribeData.rank;
+                if (ranked) {
+                    scribeData.rank = newRank;
+                    const badge = document.getElementById('currentRank');
+                    if (badge) {
+                        badge.classList.add('rank-up');
+                        setTimeout(() => badge.classList.remove('rank-up'), 1500);
+                    }
+                    showToast('RANK ASCENDED: ' + newRank);
+                } else {
+                    showToast('VERSE RESTORED — ' + currentTarget.length + ' CHARACTERS');
+                }
+                scribeData.versesCompleted = (scribeData.versesCompleted || 0) + 1;
+                if (currentType === 'NT') {
+                    scribeData.ntVerses = (scribeData.ntVerses || 0) + 1;
+                }
+                localStorage.setItem('scribeData', JSON.stringify(scribeData));
+                if (window.checkAchievements) setTimeout(checkAchievements, 500);
+                updateUI();
+
+                exhibitCard.classList.remove('complete');
+                void exhibitCard.offsetWidth; /* reflow to restart animation */
+                exhibitCard.classList.add('complete');
+
+                setTimeout(toggleLeaderboard, 1800);
+            }
+        });
+
+        /* ─── CLICK-TO-FOCUS ─────────────────────────── */
+        document.getElementById('scribeWrapper').addEventListener('click', () => inputEl.focus());
+
+        /* ─── SCRIBE NAME ────────────────────────────── */
+        document.getElementById('scribeNameInput').addEventListener('change', function(e) {
+            scribeData.name = e.target.value.trim();
+            localStorage.setItem('scribeData', JSON.stringify(scribeData));
+            updateUI();
+        });
+
+        /* ─── LEADERBOARD TOGGLE ─────────────────────── */
+        function toggleLeaderboard() {
+            const lb = document.getElementById('leaderboardOverlay');
+            if (lb.style.display === 'flex') {
+                lb.style.display = 'none';
+            } else {
+                updateUI();
+                lb.style.display = 'flex';
+            }
+        }
+
+        /* Close leaderboard on backdrop click */
+        document.getElementById('leaderboardOverlay').addEventListener('click', function(e) {
+            if (e.target === this) toggleLeaderboard();
+        });
+
+        /* Keyboard: Escape closes leaderboard */
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const lb = document.getElementById('leaderboardOverlay');
+                if (lb.style.display === 'flex') toggleLeaderboard();
+            }
+        });
+
+        /* ─── INIT ───────────────────────────────────── */
+        updateUI();
+        stage.classList.add('nt-active');
+
+        /* ─── SCRIBE'S SEAL TRACKING ─────────────────── */
+        function updateSeal() {
+            var prog = JSON.parse(localStorage.getItem('scribe_seal') || '{"epigraphy":0,"astronomy":0,"prophecy":0,"restoration":0}');
+            var rings = {
+                epigraphy: document.getElementById('sealRingAstronomy'),
+                astronomy: document.getElementById('sealRingProphetic'),
+                prophecy: document.getElementById('sealRingRestoration'),
+                restoration: document.getElementById('sealInner')
+            };
+            var rows = {
+                epigraphy: document.getElementById('sealRowEpigraphy'),
+                astronomy: document.getElementById('sealRowAstronomy'),
+                prophecy: document.getElementById('sealRowProphetic'),
+                restoration: document.getElementById('sealRowRestoration')
+            };
+            var total = 0, max = 4;
+            var moduleMap = { epigraphy: 'epigraphy', astronomy: 'astronomy', prophecy: 'prophecy', restoration: 'restoration' };
+            for (var key in moduleMap) {
+                var val = prog[moduleMap[key]] || 0;
+                if (val > 0) total++;
+                if (rings[key]) rings[key].classList.toggle('earned', val > 0);
+                if (rows[key]) rows[key].classList.toggle('earned', val > 0);
+            }
+            var letter = document.getElementById('sealLetter');
+            var rank = document.getElementById('sealRank');
+            if (total === 0) { letter.textContent = '\u2726'; rank.textContent = 'INITIATE SCRIBE'; }
+            else if (total === 1) { letter.textContent = '\u05D0'; rank.textContent = 'SCRIBE OF THE FIRST LETTER'; }
+            else if (total === 2) { letter.textContent = '\u05DE'; rank.textContent = 'SCRIBE OF THE COVENANT'; }
+            else if (total === 3) { letter.textContent = '\u05E9'; rank.textContent = 'SCRIBE OF THE THREADS'; }
+            else { letter.textContent = '\u05D0\u05DE\u05E9'; rank.textContent = 'MASTER SCRIBE OF THE ANCIENT PATHS';
+                letter.classList.add('earned');
+            }
+        }
+
+        window.toggleSealTooltip = function() {
+            var tip = document.getElementById('sealTooltip');
+            tip.classList.toggle('visible');
+        };
+
+        document.addEventListener('click', function(e) {
+            var tip = document.getElementById('sealTooltip');
+            if (tip && tip.classList.contains('visible') && !e.target.closest('.seal-medallion') && !e.target.closest('.seal-tooltip')) {
+                tip.classList.remove('visible');
+            }
+        });
+
+        updateSeal();
+        setInterval(updateSeal, 3000);
+
+        // ═══════════════════════════════════════
+        // DAILY LOGIA STREAK
+        // ═══════════════════════════════════════
+        (function initStreak() {
+            var now = new Date();
+            var today = now.toDateString();
+            var data = JSON.parse(localStorage.getItem('scribe_logia_streak')) || { count: 0, lastDate: null, claimedToday: false };
+
+            if (data.lastDate !== today) {
+                var yesterday = new Date(now);
+                yesterday.setDate(yesterday.getDate() - 1);
+                if (data.lastDate === yesterday.toDateString()) {
+                    data.count++;
+                } else {
+                    data.count = 1;
+                }
+                data.lastDate = today;
+                data.claimedToday = false;
+                localStorage.setItem('scribe_logia_streak', JSON.stringify(data));
+            }
+
+            applyStreakVisuals();
+            renderDailyLogia();
+
+            var sd = JSON.parse(localStorage.getItem('scribeData') || '{}');
+            if (sd.streak !== data.count) { sd.streak = data.count; localStorage.setItem('scribeData', JSON.stringify(sd)); }
+        })();
+
+        var LOGIA_DATABASE = [
+            { ref: 'Isaiah 60:3', text: 'Nations shall come to your light, and kings to the brightness of your rising.', theme: 'light' },
+            { ref: 'Psalm 119:105', text: 'Your word is a lamp to my feet and a light to my path.', theme: 'guidance' },
+            { ref: 'Job 28:11', text: 'He dams up the streams from trickling, and the thing that was hidden he brings to light.', theme: 'discovery' },
+            { ref: 'Jeremiah 33:3', text: 'Call to me and I will answer you, and will tell you great and hidden things that you have not known.', theme: 'revelation' },
+            { ref: 'Psalm 27:1', text: 'The LORD is my light and my salvation; whom shall I fear?', theme: 'courage' },
+            { ref: 'John 8:12', text: 'I am the light of the world. Whoever follows me will not walk in darkness.', theme: 'christ' },
+            { ref: 'Proverbs 4:18', text: 'The path of the righteous is like the light of dawn, which shines brighter and brighter until full day.', theme: 'righteousness' }
+        ];
+
+        function getDailyLogia() {
+            return window.getSynchronizedLogia ? window.getSynchronizedLogia() : { ref: 'John 1:1', text: 'In the beginning was the Word.' };
+        }
+
+        function renderDailyLogia() {
+            var logia = getDailyLogia();
+            document.getElementById('verseRef').textContent = logia.ref;
+            document.getElementById('verseDisplay').textContent = '\u201C' + logia.text + '\u201D';
+
+            var data = JSON.parse(localStorage.getItem('scribe_logia_streak')) || {};
+            var btn = document.getElementById('claimBtn');
+            if (data.claimedToday && btn) { btn.textContent = '\u2713 WITNESSED'; btn.style.opacity = '0.3'; btn.style.pointerEvents = 'none'; }
+        }
+
+        function applyStreakVisuals() {
+            var data = JSON.parse(localStorage.getItem('scribe_logia_streak')) || { count: 0 };
+            var container = document.getElementById('flameContainer');
+            var numEl = document.getElementById('streakNum');
+            if (numEl) numEl.textContent = data.count;
+            if (container) {
+                container.classList.toggle('streak-7', data.count >= 7);
+                container.classList.toggle('master-scribe', data.count >= 30);
+            }
+        }
+
+        window.claimLogia = function() {
+            var data = JSON.parse(localStorage.getItem('scribe_logia_streak')) || { count: 0, lastDate: null, claimedToday: false };
+            if (data.claimedToday) return;
+
+            // 1. Dissolve the verse text
+            var verse = document.getElementById('verseDisplay');
+            verse.classList.add('verse-melt');
+
+            // 2. Hide button
+            var btn = document.getElementById('claimBtn');
+            if (btn) { btn.style.display = 'none'; }
+
+            // 3. Create particles flying from verse to flame
+            var flame = document.getElementById('flameContainer');
+            var verseRect = verse.getBoundingClientRect();
+            var flameRect = flame.getBoundingClientRect();
+            var sx = verseRect.left + verseRect.width / 2;
+            var sy = verseRect.top;
+            var tx = flameRect.left + flameRect.width / 2;
+            var ty = flameRect.top + flameRect.height / 2;
+
+            for (var i = 0; i < 24; i++) {
+                createParticle(sx + (Math.random() - 0.5) * 80, sy + (Math.random() - 0.5) * 20, tx + (Math.random() - 0.5) * 20, ty + (Math.random() - 0.5) * 10);
+            }
+
+            // 4. Update streak data
+            data.claimedToday = true;
+            data.count++;
+            data.lastDate = new Date().toDateString();
+            localStorage.setItem('scribe_logia_streak', JSON.stringify(data));
+
+            // 5. Intensify flame after delay
+            setTimeout(function() {
+                flame.classList.add('ignited');
+                applyStreakVisuals();
+                renderDailyLogia();
+                if (window.ScriptoriumAudio) { try { window.ScriptoriumAudio.transitionTo('nt'); } catch(e) {} }
+                // Restore verse after animation completes
+                setTimeout(function() {
+                    verse.classList.remove('verse-melt');
+                }, 1200);
+            }, 1000);
+        };
+
+        function createParticle(sx, sy, tx, ty) {
+            var p = document.createElement('div');
+            p.className = 'ink-particle';
+            p.style.left = sx + 'px';
+            p.style.top = sy + 'px';
+            document.body.appendChild(p);
+            var dur = 800 + Math.random() * 600;
+            var start = performance.now();
+            function animate(time) {
+                var t = Math.min((time - start) / dur, 1);
+                var ease = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+                var x = sx + (tx - sx) * ease;
+                var y = sy + (ty - sy) * ease;
+                p.style.transform = 'translate(' + (x - sx) + 'px,' + (y - sy) + 'px)';
+                p.style.opacity = 1 - ease;
+                if (t < 1) requestAnimationFrame(animate);
+                else p.remove();
+            }
+            requestAnimationFrame(animate);
+        }
+    </script>
+</body>
+</html>

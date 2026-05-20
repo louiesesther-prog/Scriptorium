@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCRIPTORIUM | Scribe Induction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="assets/audio/scriptorium-audio.js" defer></script>
+    <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/scriptorium-core.js"></script>
+    <style>
+        :root {
+            --obsidian: #050505;
+            --museum-gold: #d4af37;
+            --museum-gold-dim: rgba(212,175,55,0.4);
+            --museum-gold-faint: rgba(212,175,55,0.08);
+        }
+        *,*::before,*::after{box-sizing:border-box;}
+        body {
+            margin:0;padding:0;
+            background:var(--obsidian);
+            color:#fff;
+            font-family:'Cinzel',serif;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+            animation:fadeInPage 2s ease both;
+            padding:40px 0 40px 80px;
+        }
+        @keyframes fadeInPage{from{opacity:0;filter:blur(12px)}to{opacity:1;filter:blur(0)}}
+        .glow-overlay {
+            position:fixed;inset:0;
+            background:radial-gradient(circle,rgba(212,175,55,0.04) 0%,transparent 70%);
+            pointer-events:none;
+        }
+        .scroll-frame {
+            width:560px;max-width:92vw;
+            padding:50px 48px;
+            background:rgba(10,10,10,0.88);
+            border:1px solid var(--museum-gold-dim);
+            backdrop-filter:blur(20px);
+            -webkit-backdrop-filter:blur(20px);
+            box-shadow:0 0 100px rgba(0,0,0,1);
+            position:relative;z-index:1;
+            border-radius:4px;
+            transition:opacity 0.8s ease, transform 0.8s ease;
+        }
+        .scroll-frame.fade-out{opacity:0;transform:translateY(-20px);}
+        .scroll-frame .label{
+            font-family:'Montserrat',sans-serif;
+            font-size: 0.48rem;letter-spacing:5px;
+            color:rgba(212,175,55,0.2);display:block;text-align:center;margin-bottom:8px;
+        }
+        .scroll-frame h1{
+            font-size: 1.56rem;letter-spacing:10px;
+            color:var(--museum-gold);text-align:center;
+            margin:0 0 36px;
+            text-shadow:0 0 30px rgba(212,175,55,0.06);
+        }
+        .form-section{margin-bottom:32px;text-align:left;}
+        .section-title{
+            font-family:'Montserrat',sans-serif;
+            font-size: 0.54rem;letter-spacing:4px;
+            color:var(--museum-gold-dim);
+            border-bottom:1px solid rgba(212,175,55,0.04);
+            padding-bottom:6px;margin-bottom:16px;opacity:0.6;
+        }
+        .input-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+        .input-group{margin-bottom:16px;position:relative;}
+        .input-group label{
+            display:block;
+            font-family:'Montserrat',sans-serif;
+            font-size: 0.72rem;letter-spacing:2px;
+            color:rgba(212,175,55,0.2);margin-bottom:4px;
+        }
+        .input-group input,.input-group select{
+            width:100%;
+            background:transparent;
+            border:none;
+            border-bottom:1px solid rgba(212,175,55,0.08);
+            color:rgba(255,255,255,0.4);
+            font-family:'Cormorant Garamond',serif;
+            font-size: 0.66rem;padding:6px 2px;
+            outline:none;transition:border-color 0.3s,color 0.3s;
+        }
+        .input-group input:focus,.input-group select:focus{border-bottom-color:rgba(212,175,55,0.3);color:#fff;}
+        .input-group input::placeholder{color:rgba(255,255,255,0.04);font-style:italic;}
+        .input-group select{appearance:none;cursor:pointer;}
+        .input-group select option{background:#111;color:#ccc;}
+
+        .level-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;}
+        .level-selector input{display:none;}
+        .level-selector label{
+            background:rgba(255,255,255,0.02);
+            border:1px solid rgba(212,175,55,0.06);
+            padding:12px 8px;text-align:center;cursor:pointer;
+            font-family:'Cinzel',serif;font-size: 0.66rem;letter-spacing:2px;
+            color:rgba(255,255,255,0.45);transition:all 0.3s;border-radius:3px;
+        }
+        .level-selector label:hover{border-color:rgba(212,175,55,0.85);color:var(--museum-gold-dim);}
+        .level-selector input:checked+label{
+            background:var(--museum-gold);color:#000;
+            box-shadow:0 0 15px rgba(212,175,55,0.2);
+        }
+        .level-selector label span{
+            display:block;font-family:'Cormorant Garamond',serif;
+            font-size: 0.66rem;opacity:0.5;margin-top:3px;
+        }
+        .level-selector input:checked+label span{opacity:0.7;}
+        .meter-bar{height:2px;width:0%;background:#555;transition:all 0.3s;margin-top:4px;border-radius:2px;}
+        .rule-met{color:var(--museum-gold)!important;}
+        .cipher-rules li{transition:color 0.3s;}
+        .seal-button{
+            display:block;margin:36px auto 0;
+            background:transparent;
+            border:1px solid rgba(212,175,55,0.85);
+            color:var(--museum-gold-dim);
+            padding:14px 36px;
+            font-family:'Cinzel',serif;
+            font-size: 0.66rem;letter-spacing:5px;
+            cursor:pointer;transition:all 0.5s ease;
+            border-radius:4px;
+        }
+        .seal-button:hover{
+            background:var(--museum-gold);
+            color:#000;
+            box-shadow:0 0 30px rgba(212,175,55,0.2);
+            transform:scale(1.02);
+        }
+        .guest-link{
+            display:block;margin-top:12px;text-align:center;
+            font-family:'Montserrat',sans-serif;
+            font-size: 0.72rem;letter-spacing:2px;
+            color:rgba(255,255,255,0.04);
+            text-decoration:none;transition:color 0.3s;
+        }
+        .guest-link:hover{color:rgba(212,175,55,0.1);}
+        .back-link{display:block;margin-top:4px;font-family:'Montserrat',sans-serif;font-size: 0.72rem;letter-spacing:2px;color:rgba(255,255,255,0.03);text-decoration:none;transition:color 0.3s;}
+        .back-link:hover{color:rgba(212,175,55,0.1);}
+        @media(max-width:600px){.input-row{grid-template-columns:1fr;}.scroll-frame{padding:30px 24px;}}
+
+        .modal-overlay{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);animation:fadeInPage 0.5s ease;}
+        .museum-modal{background:rgba(10,10,10,0.95);border:1px solid var(--museum-gold-dim);padding:40px;max-width:400px;text-align:center;border-radius:4px;}
+        .museum-modal h2{font-family:'Cinzel',serif;font-size: 0.66rem;letter-spacing:6px;color:var(--museum-gold);margin:0 0 10px;}
+        .museum-modal p{font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color:rgba(255,255,255,0.2);font-style:italic;margin:0 0 24px;}
+        .modal-actions{display:flex;gap:10px;justify-content:center;}
+        .modal-actions button{background:transparent;border:1px solid rgba(212,175,55,0.17);color:rgba(212,175,55,0.3);padding:8px 18px;font-family:'Cinzel',serif;font-size: 0.54rem;letter-spacing:3px;cursor:pointer;border-radius:3px;transition:0.3s;}
+        .modal-actions button:hover{border-color:var(--museum-gold);color:var(--museum-gold);}
+        .modal-actions .primary{background:var(--museum-gold);color:#000;border-color:var(--museum-gold);}
+        .modal-actions .primary:hover{box-shadow:0 0 20px rgba(212,175,55,0.2);}
+        .museum-sidebar { position:fixed;left:0;top:0;bottom:0;width:80px;background:#080808;border-right:1px solid rgba(212,175,55,0.2);z-index:2000;display:flex;flex-direction:column;align-items:center;padding:0; }
+        .sidebar-nav { flex:1;display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:4px; }
+        .nav-link { position:relative;display:flex;align-items:center;justify-content:center;width:50px;height:50px;color:rgba(255,255,255,0.98);text-decoration:none;border:1px solid transparent;border-radius:6px;font-size: 24px;transition:all 0.25s; }
+        .nav-link:hover { color:#d4af37;border-color:rgba(212,175,55,0.2);background:rgba(212,175,55,0.17); }
+        .nav-link::after { content: attr(title);position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%);background:#111;border:1px solid rgba(212,175,55,0.2);color:#d4af37;font-family:'Cinzel',serif;font-size: 0.66rem;letter-spacing:2px;white-space:nowrap;padding:5px 10px;pointer-events:none;opacity:0;transition:opacity 0.2s ease;z-index:9999; }
+        .nav-link:hover::after { opacity: 1; }
+        .nav-link.active { color:#d4af37;border-color:rgba(212,175,55,0.3);background:rgba(212,175,55,0.08); }
+        .sidebar-rank { width:100%;padding:10px 0 12px;font-size: 0.66rem;letter-spacing:1.5px;color:#d4af37;text-align:center;line-height:1.6;opacity:0.85;border-top:1px solid rgba(212,175,55,0.2);flex-shrink:0; }
+        .nav-divider { width:28px;height:1px;background:rgba(212,175,55,0.2);flex-shrink:0;margin:4px 0; }
+        .sidebar-logo { width:100%;padding:14px 0 12px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(212,175,55,0.2);flex-shrink:0; }
+        .sidebar-logo svg { width:28px;height:28px;opacity:0.85; }
+    </style>
+</head>
+<body>
+<div id="sidebarContainer"></div>
+<div class="glow-overlay"></div>
+<div class="scroll-frame" id="scrollFrame">
+    <span class="label">OFFICE OF THE ARCHIVE</span>
+    <h1>SCRIBE INDUCTION</h1>
+    <form id="inductionForm">
+        <section class="form-section">
+            <h3 class="section-title">I. THE VESSEL</h3>
+            <div class="input-row">
+                <div class="input-group">
+                    <label>NAME / TITLE</label>
+                    <input type="text" id="regName" placeholder="Scribe Eleazar" required>
+                </div>
+                <div class="input-group">
+                    <label>REGION OF WITNESS</label>
+                    <input type="text" id="regLocation" placeholder="e.g. Jerusalem, IL" required>
+                </div>
+            </div>
+            <div class="input-row">
+                <div class="input-group">
+                    <label>DAY OF ORIGIN</label>
+                    <input type="date" id="regDob" required>
+                </div>
+                <div class="input-group">
+                    <label>IDENTITY</label>
+                    <select id="regGender">
+                        <option value="male">Brother</option>
+                        <option value="female">Sister</option>
+                        <option value="seeker">Seeker</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <h3 class="section-title">II. THE CIPHER</h3>
+            <div class="input-group">
+                <label>CHOSEN USER ID</label>
+                <input type="text" id="regId" placeholder="Unique_ID_123" required>
+            </div>
+            <div class="input-group">
+                <label>PARCHMENT ADDRESS (EMAIL)</label>
+                <input type="email" id="regEmail" placeholder="scribe@scriptorium.org" required>
+            </div>
+            <div class="input-group">
+                <label>SECRET KEY (PASSWORD)</label>
+                <input type="password" id="regPassword" oninput="checkStrength(this.value)" required>
+                <div id="strengthMeter" class="meter-bar"></div>
+                <ul class="cipher-rules" id="cipherRules" style="list-style:none;padding:0;margin:4px 0 0;font-family:'Montserrat',sans-serif;font-size: 0.72rem;color:#444;">
+                    <li id="ruleLen">&#x25CF; 8+ characters</li>
+                    <li id="ruleNum">&#x25CF; Contains a number</li>
+                    <li id="ruleSpec">&#x25CF; Special character (!@#$%^&*)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <h3 class="section-title">III. THE SCHOLARSHIP</h3>
+            <div class="input-group">
+                <label>BIBLICAL KNOWLEDGE LEVEL</label>
+                <div class="level-selector">
+                    <input type="radio" name="kb" value="1" id="lv1" checked>
+                    <label for="lv1">Novice<span>New to the Word</span></label>
+                    <input type="radio" name="kb" value="2" id="lv2">
+                    <label for="lv2">Student<span>Familiar with Text</span></label>
+                    <input type="radio" name="kb" value="3" id="lv3">
+                    <label for="lv3">Scribe<span>Diligent Researcher</span></label>
+                    <input type="radio" name="kb" value="4" id="lv4">
+                    <label for="lv4">Sage<span>Theological Expert</span></label>
+                </div>
+            </div>
+        </section>
+
+        <button type="submit" class="seal-button">AFFIX SEAL &amp; ENTER</button>
+        <a href="scriptorium.html" class="guest-link">ENTER AS A GUEST</a>
+        <a href="login.html" class="guest-link" style="margin-top:4px;">ALREADY A SCRIBE? SIGN IN</a>
+        <a href="scriptorium.html" class="back-link">&#8592; RETURN TO THE THRESHOLD</a>
+    </form>
+</div>
+
+<script>
+    window.checkStrength = function(p) {
+        var strength = 0;
+        var len = p.length >= 8;
+        var num = /[0-9]/.test(p);
+        var spec = /[!@#$%^&*]/.test(p);
+        if (len) { strength += 33; document.getElementById('ruleLen').classList.add('rule-met'); } else { document.getElementById('ruleLen').classList.remove('rule-met'); }
+        if (num) { strength += 33; document.getElementById('ruleNum').classList.add('rule-met'); } else { document.getElementById('ruleNum').classList.remove('rule-met'); }
+        if (spec) { strength += 34; document.getElementById('ruleSpec').classList.add('rule-met'); } else { document.getElementById('ruleSpec').classList.remove('rule-met'); }
+        var meter = document.getElementById('strengthMeter');
+        if (meter) { meter.style.width = strength + '%'; meter.style.background = strength === 100 ? '#d4af37' : (strength > 33 ? '#b8860b' : '#8b0000'); }
+    };
+
+    function validateCipher(p) { return /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(p); }
+
+    async function hashPassword(pass) {
+        if (!crypto || !crypto.subtle || !crypto.subtle.digest) {
+            throw new Error('CRYPTO_UNAVAILABLE');
+        }
+        var enc = new TextEncoder();
+        var buf = await crypto.subtle.digest('SHA-256', enc.encode(pass));
+        var arr = Array.from(new Uint8Array(buf));
+        return arr.map(function(b) { return b.toString(16).padStart(2,'0'); }).join('');
+    }
+
+    document.getElementById('inductionForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        var pass = document.getElementById('regPassword').value;
+        if (!validateCipher(pass)) {
+            alert('Your Cipher Key must be at least 8 characters with at least one number and one special character (!@#$%^&*).');
+            return;
+        }
+        var hashed;
+        try { hashed = await hashPassword(pass); } catch (h) {
+            if (h.message === 'CRYPTO_UNAVAILABLE') { alert('Your browser does not support cryptographic functions on file://. Please use Chrome, Edge, or Firefox.'); return; }
+            alert('An unexpected error occurred during registration.'); return;
+        }
+        var kb = document.querySelector('input[name="kb"]:checked').value;
+        var rankTitles = { '1': 'Novice of the Outer Court', '2': 'Student of the Living Word', '3': 'Witness of the Covenant', '4': 'Scribe of the High Archive' };
+        var profile = {
+            name: document.getElementById('regName').value,
+            location: document.getElementById('regLocation').value,
+            userId: document.getElementById('regId').value,
+            email: document.getElementById('regEmail').value,
+            password: hashed,
+            dob: document.getElementById('regDob').value,
+            gender: document.getElementById('regGender').value,
+            knowledge: kb,
+            rank: rankTitles[kb] || 'Seeker',
+            joined: new Date().toISOString(),
+            lastActive: Date.now(),
+            totalCharacters: 0,
+            versesCompleted: 0,
+            ntVerses: 0,
+            _v: 2
+        };
+        localStorage.setItem('activeScribe', JSON.stringify(profile));
+        localStorage.setItem('scribeData', JSON.stringify({
+            name: profile.name,
+            totalCharacters: 0,
+            rank: profile.rank,
+            versesCompleted: 0,
+            ntVerses: 0,
+            _v: 2
+        }));
+        document.getElementById('scrollFrame').classList.add('fade-out');
+        if (window.ScriptoriumAudio) { try { window.ScriptoriumAudio.transitionTo('ot'); } catch(e) {} }
+        showInductionModal();
+    });
+
+    function showInductionModal() {
+        var modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = '<div class="museum-modal"><h2>INDUCTION COMPLETE</h2><p>Your seal has been affixed to the eternal record.</p><div class="modal-actions"><button onclick="this.closest(\'.modal-overlay\').remove();window.location.href=\'scriptorium.html\'" class="primary">ENTER THE ARCHIVE</button><button onclick="this.closest(\'.modal-overlay\').remove();setTimeout(function(){window.generateScribeCertificate()},100)">DOWNLOAD CREDENTIALS</button><button onclick="this.closest(\'.modal-overlay\').remove();setTimeout(function(){window.generateWelcomeLetter()},100)">&#128231; LETTER OF APPOINTMENT</button></div></div>';
+        document.body.appendChild(modal);
+    }
+
+    function openDocWindow(html) {
+        var blob = new Blob([html], {type: 'text/html'});
+        var url = URL.createObjectURL(blob);
+        var w = window.open(url, '_blank');
+        if (!w || w.closed) {
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'document.html';
+            a.click();
+        }
+    }
+
+    window.generateScribeCertificate = function() {
+        var scribe = JSON.parse(localStorage.getItem('activeScribe'));
+        if (!scribe) return;
+        var titles = { '1': 'Novice of the Outer Court', '2': 'Student of the Living Word', '3': 'Witness of the Covenant', '4': 'Scribe of the High Archive' };
+        var html = '<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"><style>body{background:#f4ece0;padding:50px;text-align:center;border:15px solid #d4af37;min-height:80vh;font-family:"Cormorant Garamond",serif;}.frame{border:2px solid #5d4037;padding:40px;position:relative;}h1{font-family:"Cinzel",serif;color:#5d4037;font-size: 3.6rem;margin-bottom:10px;}.subtitle{font-family:"Cinzel",serif;letter-spacing:5px;font-size: 0.66rem;color:#d4af37;margin-bottom:30px;}.content{font-size: 1.8rem;margin-top:40px;color:#333;}.sname{font-weight:700;font-size: 3rem;border-bottom:1px solid #5d4037;display:inline-block;margin:20px 0;}.rank{color:#d4af37;font-weight:bold;font-size: 2.16rem;}.seal{width:120px;height:120px;background:#b71c1c;border-radius:50%;margin:40px auto;box-shadow:3px 3px 10px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-family:"Cinzel";font-size: 3.6rem;color:#fff;}.seal::after{content:"S";}.meta{font-size: 0.66rem;margin-top:20px;color:#666;}@media print{.no-print{display:none;}}</style></head><body><div class="frame"><div class="subtitle">Official Credentials of the Order</div><h1>SCRIPTORIUM</h1><div class="content">This document certifies that the soul known as<br><span class="sname">' + scribe.name + '</span><br>hailing from <strong>' + (scribe.location || 'Unknown') + '</strong>,<br>has been formally inducted with the standing of:<br><span class="rank">' + (titles[scribe.knowledge] || 'Seeker') + '</span></div><div class="seal">S</div><div class="meta">Scribe ID: ' + (scribe.userId || '—') + ' | Joined: ' + new Date(scribe.joined).toLocaleDateString() + '</div><button class="no-print" onclick="window.print()" style="margin-top:30px;padding:10px 20px;cursor:pointer;font-family:Georgia,serif;">DOWNLOAD FOLIO</button></div></body></html>';
+        openDocWindow(html);
+    };
+
+    window.generateWelcomeLetter = function() {
+        var s = JSON.parse(localStorage.getItem('activeScribe'));
+        if (!s) return;
+        var gender = s.gender === 'female' ? 'Sister' : 'Brother';
+        var titles = { '1': 'Novice of the Outer Court', '2': 'Student of the Living Word', '3': 'Witness of the Covenant', '4': 'Scribe of the High Archive' };
+        var html = '<!DOCTYPE html><html><head><style>body{font-family:Georgia,serif;background:#0a0a0a;margin:0;padding:0;}.wrapper{width:100%;background:#0a0a0a;padding:40px 0;}.container{max-width:600px;margin:0 auto;background:#121212;border:1px solid #d4af37;color:#e0e0e0;overflow:hidden;}.header{padding:40px 20px;text-align:center;background:linear-gradient(to bottom,#1a1a1a,#121212);border-bottom:1px solid #d4af37;}.header h1{color:#d4af37;font-size: 33.6px;letter-spacing:4px;text-transform:uppercase;margin:0;}.content{padding:40px;line-height:1.6;font-size: 18px;}.scribe-title{color:#d4af37;font-weight:bold;font-size: 21.6px;}.details-box{background:rgba(212,175,55,0.05);border:1px solid rgba(212,175,55,0.3);padding:20px;margin:20px 0;border-radius:4px;}.stat-line{margin:5px 0;font-size: 16.8px;}.stat-label{color:#d4af37;text-transform:uppercase;font-size: 14.4px;margin-right:10px;}.cta-btn{display:inline-block;background:#d4af37;color:#000;padding:15px 30px;text-decoration:none;font-weight:bold;letter-spacing:2px;margin-top:20px;text-transform:uppercase;border-radius:3px;}.footer{padding:20px;text-align:center;font-size: 14.4px;color:#666;border-top:1px solid #1a1a1a;}@media print{.no-print{display:none;}}</style></head><body><div class="wrapper"><div class="container"><div class="header"><h1>SCRIPTORIUM</h1><p style="font-style:italic;color:#888;">The Eternal Record of the Word</p></div><div class="content"><p class="scribe-title">Greetings, ' + gender + ' ' + s.name + ',</p><p>Your petition for induction into the <strong>Order of Scribes</strong> has been reviewed and accepted. Your seal is now affixed to the global chronicle, marking your place among the witnesses of the Covenant.</p><p>Based on your scholarship, you have been granted the following standing within the Archive:</p><div class="details-box"><div class="stat-line"><span class="stat-label">Scribe ID:</span> ' + (s.userId || '—') + '</div><div class="stat-line"><span class="stat-label">Region:</span> ' + (s.location || 'Unknown') + '</div><div class="stat-line"><span class="stat-label">Standing:</span> ' + (titles[s.knowledge] || 'Seeker') + '</div></div><p>You may now enter the Scriptorium to read, compare, and chronicle. Your journey has been marked from this day forward.</p><p style="font-style:italic;">"Let the wise hear and increase in learning." — Proverbs 1:5</p><div style="text-align:center;"><a href="#" class="cta-btn" onclick="window.print()">DOWNLOAD LETTER</a></div></div><div class="footer">ESTABLISHED IN THE ETERNAL RECORD &bull; SCRIPTORIUM ARCHIVE</div></div></div></body></html>';
+        openDocWindow(html);
+    };
+
+    window.generateMilestone = function() {
+        var s = JSON.parse(localStorage.getItem('activeScribe')) || { name: 'Scribe' };
+        var streak = JSON.parse(localStorage.getItem('scribe_logia_streak')) || { count: 0 };
+        var html = '<!DOCTYPE html><html><head><style>body{background:#0a0a0a;font-family:Georgia,serif;color:#e0e0e0;margin:0;}.container{max-width:600px;margin:0 auto;background:#121212;border:1px solid #d4af37;}.header{background:linear-gradient(135deg,#1a1a1a 0%,#d4af37 300%);padding:50px 20px;text-align:center;border-bottom:2px solid #d4af37;}.header .flame{font-size: 60px;display:block;margin-bottom:10px;}.header .rank-title{color:#d4af37;font-family:\'Cinzel\',serif;font-size: 28.8px;letter-spacing:5px;}.header h1{color:#fff;margin:10px 0;}.content{padding:40px;line-height:1.6;text-align:center;font-size: 18px;}.details{border:1px solid rgba(212,175,55,0.3);padding:20px;margin:30px 0;background:rgba(212,175,55,0.05);text-align:left;}.details h3{color:#d4af37;margin-top:0;}.details ul{font-size: 16.8px;list-style-type:\'\\2727 \';}.footer{padding:20px;text-align:center;font-size: 14.4px;color:#666;border-top:1px solid #1a1a1a;}.cta{display:inline-block;background:#d4af37;color:#000;padding:15px 30px;text-decoration:none;font-weight:bold;margin-top:20px;}@media print{.no-print{display:none;}</style></head><body><div class="container"><div class="header"><span class="flame">&#x1F52E;</span><div class="rank-title">RANK ASCENDED</div><h1>The Guardian</h1></div><div class="content"><p style="font-size: 21.6px;">Peace be with you, <strong>' + s.name + '</strong>.</p><p>Thirty suns have risen and set since you began your vigil in the Scriptorium. Your consistency has not gone unnoticed by the Order.</p><p>Your current streak: <strong style="color:#d4af37;">' + streak.count + ' days</strong></p><div class="details"><h3>NEW POWERS UNLOCKED</h3><ul><li><strong>Celestial Aura:</strong> Your marker on the Map now pulses with blue-gold light.</li><li><strong>Guardian\'s Ink:</strong> Your messages in the Witness Wall carry the Guardian\'s shimmer.</li><li><strong>Deeper Access:</strong> Obscure archaeological dossiers are now visible to your eyes.</li></ul></div><p>Continue your toil, faithful scribe. The Word is eternal, and your name endures within it.</p><div style="text-align:center;"><a href="#" class="cta" onclick="window.print()">DOWNLOAD FOLIO</a></div></div><div class="footer">ESTABLISHED IN THE ETERNAL RECORD &bull; SCRIPTORIUM ARCHIVE</div></div></div></body></html>';
+        openDocWindow(html);
+    };
+
+    window.generatePasswordReset = function() {
+        var s = JSON.parse(localStorage.getItem('activeScribe')) || { name: 'Scribe', userId: '—' };
+        var html = '<!DOCTYPE html><html><head><style>body{background:#0a0a0a;color:#e0e0e0;font-family:Georgia,serif;margin:0;padding:40px;}table{max-width:600px;margin:0 auto;border:1px solid #d4af37;background:#121212;border-collapse:collapse;}.header{padding:40px 0;border-bottom:1px solid rgba(212,175,55,0.2);text-align:center;}.header h2{color:#d4af37;letter-spacing:6px;text-transform:uppercase;margin:0;font-size: 24px;}.body{padding:40px;line-height:1.6;font-size: 18px;}.cta{text-align:center;margin:40px 0;}.cta a{border:1px solid #d4af37;color:#d4af37;padding:15px 40px;text-decoration:none;font-variant:small-caps;letter-spacing:2px;display:inline-block;}.note{font-size: 15.6px;color:#888;font-style:italic;}.footer{padding:20px;text-align:center;font-size: 13.2px;color:#555;background:#0c0c0c;}</style></head><body><table><tr><td class="header"><h2>Restoring Access</h2></td></tr><tr><td class="body"><p>A request has been received to reset the <strong>Cipher Key</strong> associated with your identity <strong>' + s.userId + '</strong> in the Scriptorium.</p><p>To forge a new key and regain access to your scrolls and discoveries, please use the secure link below. This portal will remain open for only one hour.</p><div class="cta"><a href="#">REFORGE CIPHER KEY</a></div><p class="note">If you did not request this restoration, your current cipher remains secure. No action is required from your hand.</p></td></tr><tr><td class="footer">ESTABLISHED IN THE ETERNAL RECORD &bull; SCRIPTORIUM ARCHIVE</td></tr></table></body></html>';
+        openDocWindow(html);
+    };
+</script>
+</body>
+</html>

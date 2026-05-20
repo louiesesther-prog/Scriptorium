@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCRIPTORIUM | The Scribe's Chamber</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;1,600&display=swap" rel="stylesheet">
+    <script src="assets/audio/scriptorium-audio.js"></script>
+    <style>
+        :root {
+            --obsidian: #050505;
+            --museum-gold: #d4af37;
+            --museum-bronze: #7a5f1a;
+            --blood-red: #8b0000;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            background: var(--obsidian);
+            color: #fff;
+            font-family: 'Cinzel', serif;
+            animation: fadeInPage 1.5s ease-in-out;
+        }
+
+        @keyframes fadeInPage {
+            from { opacity: 0; filter: blur(10px); }
+            to { opacity: 1; filter: blur(0); }
+        }
+
+        /* 1. SIDEBAR */
+        .museum-sidebar {
+            position: fixed;
+            left: 0; top: 0; bottom: 0;
+            width: 80px;
+            background: #080808;
+            border-right: 1px solid rgba(212, 175, 55, 0.15);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 10px;
+            gap: 10px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            border: 1px solid rgba(197,160,89,0.15);
+            border-radius: 4px;
+            font-size: 24px;
+            transition: all 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--museum-gold);
+            border-color: var(--museum-gold);
+            background: rgba(197,160,89,0.08);
+        }
+
+        /* 2. CHAMBER LAYOUT */
+        .chamber-stage {
+            margin-left: 80px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 80px 60px;
+        }
+
+        /* User Identity Section */
+        .scribe-identity {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .lantern-glow {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 65%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .scribe-name {
+            font-size: 3rem;
+            letter-spacing: 10px;
+            margin: 0 0 10px;
+            color: #fff;
+        }
+
+        .scribe-rank-title {
+            color: var(--museum-gold);
+            font-size: 0.9rem;
+            letter-spacing: 5px;
+        }
+
+        /* 3. MEDAL CASE */
+        .medal-case {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 80px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .medal {
+            width: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            filter: grayscale(1) brightness(0.6);
+            opacity: 0.35;
+            transition: all 0.6s ease;
+            cursor: default;
+        }
+
+        .medal.earned {
+            filter: grayscale(0) brightness(1);
+            opacity: 1;
+        }
+
+        .medal.earned:hover {
+            transform: translateY(-8px);
+        }
+
+        .wax-seal {
+            width: 64px; height: 64px;
+            background: var(--blood-red);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.92rem;
+            color: rgba(0,0,0,0.4);
+            margin-bottom: 14px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6), inset 0 -3px 8px rgba(0,0,0,0.3);
+            transition: box-shadow 0.4s ease;
+        }
+
+        .medal.earned .wax-seal {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6), 0 0 20px rgba(139,0,0,0.4), inset 0 -3px 8px rgba(0,0,0,0.3);
+        }
+
+        .wax-seal::after {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            border: 2px dashed rgba(0,0,0,0.15);
+            border-radius: 50%;
+        }
+
+        .medal-label {
+            font-size: 0.66rem;
+            letter-spacing: 2px;
+            color: var(--museum-gold);
+            line-height: 1.4;
+        }
+
+        .medal-desc {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 0.84rem;
+            color: #555;
+            margin-top: 6px;
+        }
+
+        .medal.earned .medal-desc { color: #888; }
+
+        .medal.silver-medal {
+            border: 1px solid rgba(224,224,224,0.15);
+            background: rgba(15,15,15,0.6);
+        }
+
+        .medal.silver-medal .wax-seal {
+            background: rgba(224,224,224,0.05);
+            border: 1px solid rgba(224,224,224,0.2);
+            color: rgba(224,224,224,0.6);
+        }
+
+        .medal.silver-medal .medal-label {
+            color: rgba(224,224,224,0.6);
+        }
+
+        .medal.silver-medal.earned {
+            border: 1px solid rgba(224,224,224,0.25);
+        }
+
+        .medal.silver-medal.earned .wax-seal {
+            background: rgba(224,224,224,0.1);
+            border-color: rgba(224,224,224,0.4);
+            color: rgba(245,245,220,0.8);
+            box-shadow: 0 0 15px rgba(224,224,224,0.15);
+        }
+
+        .medal.silver-medal.earned .medal-label {
+            color: rgba(245,245,220,0.8);
+        }
+
+        .medal.silver-medal.earned .medal-desc {
+            color: rgba(224,224,224,0.5);
+        }
+
+        /* 4. SERVICE RECORD */
+        .service-record {
+            width: 100%;
+            max-width: 700px;
+            background: #080808;
+            border: 1px solid rgba(212, 175, 55, 0.12);
+            padding: 40px;
+        }
+
+        .service-record h2 {
+            font-size: 0.84rem;
+            letter-spacing: 4px;
+            color: var(--museum-gold);
+            margin: 0 0 30px;
+            text-align: center;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.32rem;
+            color: #ccc;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(212,175,55,0.08);
+        }
+
+        .stat-row:last-of-type { border-bottom: none; margin-bottom: 0; }
+
+        .gold-text { color: var(--museum-gold); }
+
+        .xp-section { margin-top: 30px; }
+
+        .xp-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            color: rgba(212,175,55,0.5);
+            margin-bottom: 10px;
+        }
+
+        .progress-bar-bg {
+            width: 100%; height: 4px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--museum-bronze), var(--museum-gold));
+            box-shadow: 0 0 10px rgba(212,175,55,0.4);
+            width: 0%;
+            transition: width 1.5s ease-out;
+        }
+
+        /* Rank tiers */
+        .rank-tiers {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 0.84rem;
+            color: #444;
+        }
+
+        .rank-tiers .active { color: var(--museum-gold); }
+
+        .perk-section {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+    </style>
+    <script src="assets/js/sidebar.js"></script>
+</head>
+<body>
+
+    <div id="sidebarContainer"></div>
+
+    <main class="chamber-stage">
+        <div class="scribe-identity">
+            <div class="lantern-glow"></div>
+            <h1 class="scribe-name" id="userName">ANONYMOUS SCRIBE</h1>
+            <div class="scribe-rank-title" id="userRank">INITIATE OF THE WORD</div>
+        </div>
+
+        <div class="medal-case">
+            <div class="medal" id="medal-1">
+                <div class="wax-seal">&#128396;</div>
+                <span class="medal-label">FIRST STROKE</span>
+                <span class="medal-desc">Begin transcription</span>
+            </div>
+            <div class="medal" id="medal-2">
+                <div class="wax-seal">&#128220;</div>
+                <span class="medal-label">VERSE MASTER</span>
+                <span class="medal-desc">5 verses transcribed</span>
+            </div>
+            <div class="medal" id="medal-3">
+                <div class="wax-seal">&#128293;</div>
+                <span class="medal-label">NIGHT WATCH</span>
+                <span class="medal-desc">7-day streak</span>
+            </div>
+            <div class="medal" id="medal-4">
+                <div class="wax-seal">&#9733;</div>
+                <span class="medal-label">ILLUMINATOR</span>
+                <span class="medal-desc">5,000 characters</span>
+            </div>
+            <div class="medal" id="medal-5">
+                <div class="wax-seal">&#9813;</div>
+                <span class="medal-label">ROYAL SCROLL</span>
+                <span class="medal-desc">10,000 characters</span>
+            </div>
+            <div class="medal silver-medal" id="medal-6">
+                <div class="wax-seal">&#9774;</div>
+                <span class="medal-label">RESTORER OF REALITY</span>
+                <span class="medal-desc">10 NT verses</span>
+            </div>
+        </div>
+
+        <div class="service-record">
+            <h2>&#9670; SERVICE RECORD &#9670;</h2>
+
+            <div class="stat-row">
+                <span>Total Characters Preserved</span>
+                <span class="gold-text" id="totalCharsDisplay">0</span>
+            </div>
+            <div class="stat-row">
+                <span>Scripture Rank</span>
+                <span class="gold-text" id="rankDisplay">INITIATE</span>
+            </div>
+            <div class="stat-row">
+                <span>Verses Completed</span>
+                <span class="gold-text" id="versesDisplay">0</span>
+            </div>
+            <div class="stat-row">
+                <span>Current Streak</span>
+                <span class="gold-text" id="streakDisplay">0 days</span>
+            </div>
+
+            <div class="xp-section">
+                <div class="xp-label">
+                    <span>PROGRESS TO NEXT RANK</span>
+                    <span id="xpPercent">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-fill" id="xpBar"></div>
+                </div>
+                <div class="rank-tiers">
+                    <span class="active" id="tier-1">INITIATE</span>
+                    <span id="tier-2">SCRIBE (200)</span>
+                    <span id="tier-3">MASTER SCRIBE (1K)</span>
+                    <span id="tier-4">ILLUMINATOR (5K)</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="perkList" class="perk-section" style="margin-top:24px;padding:16px;background:rgba(212,175,55,0.05);border:1px solid rgba(212,175,55,0.85);border-radius:8px;"></div>
+    </main>
+
+    <script>
+        var data = JSON.parse(localStorage.getItem('scribeData')) || {
+            totalCharacters: 0,
+            rank: "INITIATE",
+            name: "Anonymous Scribe",
+            versesCompleted: 0,
+            ntVerses: 0,
+            streak: 0
+        };
+
+        var verseLen = 89;
+
+        var unlocks = {
+            'INITIATE': {
+                threshold: 0,
+                perks: ['Access to OT/NT Galleries', 'Basic transcription tools', 'Daily Logia access']
+            },
+            'SCRIBE': {
+                threshold: 200,
+                perks: ['Chapter Map overlays', 'Exhibition viewing', 'Field Notes preview']
+            },
+            'MASTER SCRIBE': {
+                threshold: 1000,
+                perks: ['Digital Microscope access', 'Deep field notes', 'Cross-reference links']
+            },
+            'ILLUMINATOR': {
+                threshold: 5000,
+                perks: ['Restorer of Reality medal', 'Secret Vault access (MAP)', 'Patmos Easter Egg']
+            }
+        };
+
+        document.getElementById('userName').innerText = (data.name || 'Anonymous Scribe').toUpperCase();
+        document.getElementById('userRank').innerText = data.rank + ' OF THE WORD';
+        document.getElementById('totalCharsDisplay').innerText = data.totalCharacters.toLocaleString();
+        document.getElementById('rankDisplay').innerText = data.rank;
+        document.getElementById('versesDisplay').innerText = data.versesCompleted || Math.floor(data.totalCharacters / verseLen);
+        document.getElementById('streakDisplay').innerText = (data.streak || 0) + ' days';
+
+        var thresholds = [
+            { name: 'INITIATE', chars: 0 },
+            { name: 'SCRIBE', chars: 200 },
+            { name: 'MASTER SCRIBE', chars: 1000 },
+            { name: 'ILLUMINATOR', chars: 5000 }
+        ];
+
+        var currentRank = 'INITIATE';
+        var nextThreshold = thresholds[thresholds.length - 1];
+        for (var t = 0; t < thresholds.length - 1; t++) {
+            if (data.totalCharacters < thresholds[t + 1].chars) {
+                nextThreshold = thresholds[t + 1];
+                break;
+            } else {
+                currentRank = thresholds[t + 1].name;
+            }
+        }
+
+        var perkList = document.getElementById('perkList');
+        if (perkList) {
+            var rk = currentRank;
+            var ul = unlocks[rk] || unlocks['INITIATE'];
+            var thresholdIdx = thresholds.findIndex(function(th) { return th.name === rk; });
+            var earnedPerks = [];
+            for (var pi = 0; pi <= thresholdIdx; pi++) {
+                var pName = thresholds[pi].name;
+                if (unlocks[pName]) earnedPerks = earnedPerks.concat(unlocks[pName].perks);
+            }
+            perkList.innerHTML = '<div style="font-size: 13.2px;color:var(--museum-gold);letter-spacing:2px;margin-bottom:8px;">YOUR PERKS</div>' +
+                earnedPerks.map(function(p) {
+                    return '<div style="font-size: 13.2px;color:rgba(255,255,255,0.7);margin:4px 0;padding:4px 8px;background:rgba(212,175,55,0.05);border-radius:4px;border-left:2px solid var(--museum-bronze);">&#10003; ' + p + '</div>';
+                }).join('');
+        }
+
+        var currentChars = 0;
+        var prevChars = 0;
+        for (var t = 0; t < thresholds.length; t++) {
+            if (data.totalCharacters >= thresholds[t].chars) {
+                currentChars = data.totalCharacters - thresholds[t].chars;
+                prevChars = (t > 0) ? thresholds[t].chars - thresholds[t - 1].chars : thresholds[t].chars;
+                break;
+            }
+        }
+
+        var rangeChars = nextThreshold.chars - (prevChars > 0 ? (thresholds[thresholds.indexOf(nextThreshold) - 1] ? thresholds[thresholds.indexOf(nextThreshold) - 1].chars : 0) : 0);
+        var pct = Math.min((currentChars / (nextThreshold.chars - prevChars)) * 100, 100);
+        if (data.totalCharacters >= 5000) pct = 100;
+
+        document.getElementById('xpBar').style.width = pct + '%';
+        document.getElementById('xpPercent').innerText = Math.round(pct) + '%';
+
+        var tiers = ['tier-1','tier-2','tier-3','tier-4'];
+        var rankOrder = ['INITIATE','SCRIBE','MASTER SCRIBE','ILLUMINATOR'];
+        for (var t2 = 0; t2 < rankOrder.length; t2++) {
+            var el = document.getElementById(tiers[t2]);
+            if (el) {
+                if (data.totalCharacters >= thresholds[t2].chars) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            }
+        }
+
+        if (data.totalCharacters > 0) document.getElementById('medal-1').classList.add('earned');
+        if (data.versesCompleted >= 5 || Math.floor(data.totalCharacters / verseLen) >= 5) document.getElementById('medal-2').classList.add('earned');
+        if (data.streak >= 7) document.getElementById('medal-3').classList.add('earned');
+        if (data.totalCharacters >= 5000) document.getElementById('medal-4').classList.add('earned');
+        if (data.totalCharacters >= 10000) document.getElementById('medal-5').classList.add('earned');
+        if (data.ntVerses >= 10) document.getElementById('medal-6').classList.add('earned');
+    </script>
+
+    <!-- ═══════════════════════════════════════
+         SCRIBE'S SANDBOX — Restoration Lab
+    ═══════════════════════════════════════ -->
+    <div class="sandbox-section" style="margin-top:60px;padding:40px;border-top:1px solid rgba(212,175,55,0.08);">
+        <div style="text-align:center;margin-bottom:30px;">
+            <h2 style="font-size: 0.66rem;letter-spacing:8px;color:var(--museum-gold);margin:0 0 8px;">THE RESTORATION LAB</h2>
+            <p style="font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color:rgba(255,255,255,0.53);font-style:italic;">"Brush away the carbonization to reveal the ancient text beneath."</p>
+            <p style="font-family:'Montserrat',sans-serif;font-size: 0.66rem;color:rgba(255,255,255,0.1);letter-spacing:2px;">Click and drag to clean the damaged manuscript</p>
+        </div>
+
+        <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center;align-items:flex-start;">
+            <div style="position:relative;border:1px solid rgba(212,175,55,0.85);border-radius:4px;overflow:hidden;">
+                <canvas id="restoreCanvas" width="480" height="360" style="display:block;background:#1a1510;cursor:crosshair;"></canvas>
+                <div style="position:absolute;top:8px;left:10px;font-family:'Montserrat',sans-serif;font-size: 0.72rem;letter-spacing:2px;color:rgba(255,255,255,0.1);pointer-events:none;">EN-GEDI SCROLL — RESTORATION IN PROGRESS</div>
+                <div id="restoreProgress" style="position:absolute;bottom:0;left:0;height:3px;background:var(--museum-gold);width:0%;transition:width 0.3s;"></div>
+            </div>
+            <div style="max-width:240px;">
+                <div style="background:rgba(10,10,10,0.6);border:1px solid rgba(212,175,55,0.08);border-radius:4px;padding:16px;margin-bottom:12px;">
+                    <div style="font-family:'Montserrat',sans-serif;font-size: 0.48rem;letter-spacing:2px;color:rgba(255,255,255,0.2);margin-bottom:8px;">TOOLS</div>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                        <button id="restoreBrush" class="sandbox-tool active" onclick="setRestoreTool('brush')" style="padding:6px 12px;background:rgba(212,175,55,0.1);border:1px solid var(--museum-gold);color:var(--museum-gold);cursor:pointer;font-size: 0.54rem;border-radius:3px;font-family:'Montserrat',sans-serif;">BRUSH</button>
+                        <button id="restoreMSI" class="sandbox-tool" onclick="setRestoreTool('msi')" style="padding:6px 12px;background:rgba(0,0,0,0.3);border:1px solid rgba(212,175,55,0.85);color:rgba(212,175,55,0.4);cursor:pointer;font-size: 0.54rem;border-radius:3px;font-family:'Montserrat',sans-serif;">MSI VIEW</button>
+                        <button onclick="resetRestoration()" style="padding:6px 12px;background:rgba(139,0,0,0.15);border:1px solid rgba(139,0,0,0.3);color:#c77;cursor:pointer;font-size: 0.54rem;border-radius:3px;font-family:'Montserrat',sans-serif;">RESET</button>
+                    </div>
+                </div>
+                <div style="background:rgba(10,10,10,0.6);border:1px solid rgba(212,175,55,0.08);border-radius:4px;padding:16px;margin-bottom:12px;">
+                    <div style="font-family:'Montserrat',sans-serif;font-size: 0.48rem;letter-spacing:2px;color:rgba(255,255,255,0.2);margin-bottom:6px;">MULTI-SPECTRAL IMAGING</div>
+                    <label style="font-size: 0.48rem;color:rgba(255,255,255,0.45);display:block;margin-bottom:4px;">IR INTENSITY: <span id="irValue">0</span>%</label>
+                    <input type="range" id="irSlider" min="0" max="100" value="0" oninput="adjustIR(this.value)" style="width:100%;height:3px;-webkit-appearance:none;background:rgba(139,0,0,0.2);border-radius:2px;outline:none;">
+                    <div style="display:flex;justify-content:space-between;font-size: 0.6rem;color:rgba(255,255,255,0.05);margin-top:2px;">
+                        <span>VISIBLE</span>
+                        <span>INFRARED</span>
+                    </div>
+                </div>
+                <div style="background:rgba(10,10,10,0.6);border:1px solid rgba(212,175,55,0.08);border-radius:4px;padding:16px;">
+                    <div style="font-family:'Montserrat',sans-serif;font-size: 0.48rem;letter-spacing:2px;color:rgba(255,255,255,0.2);margin-bottom:6px;">RECOVERED TEXT</div>
+                    <div id="restoreText" style="font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color:rgba(255,255,255,0.45);font-style:italic;line-height:1.6;min-height:40px;">Clean the scroll to reveal the hidden words...</div>
+                    <div id="restoreComplete" style="display:none;margin-top:8px;font-family:'Cinzel',serif;font-size: 0.66rem;letter-spacing:3px;color:#4caf50;">&#9989; RESTORATION COMPLETE — TEXT RECOVERED</div>
+                    <div style="margin-top:8px;">
+                        <button id="aiInpaintBtn" onclick="applyAIPrediction()" style="width:100%;padding:6px;background:rgba(100,149,237,0.1);border:1px solid rgba(100,149,237,0.2);color:rgba(100,149,237,0.5);cursor:pointer;font-size: 0.48rem;border-radius:3px;font-family:'Montserrat',sans-serif;letter-spacing:2px;transition:0.3s;">&#9889; AI INPAINTING</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ═══════════════════════════════════════
+    // SCRIBE'S SANDBOX — Restoration Engine
+    // ═══════════════════════════════════════
+    (function() {
+        var canvas = document.getElementById('restoreCanvas');
+        if (!canvas) return;
+        var ctx = canvas.getContext('2d');
+        var W = 480, H = 360;
+        var isRestoring = false;
+        var restorePercent = 0;
+        var toolMode = 'brush';
+        var brushSize = 20;
+
+        // Layers: 0=background, 1=text, 2=damage, 3=cleaned
+        var damageData = [];
+        var textData = [];
+
+        // The hidden text
+        var hiddenText = 'Thus says the LORD, "I have blotted out your transgressions like a cloud and your sins like mist; return to me, for I have redeemed you." — Isaiah 44:22';
+        var textLines = [
+            'Thus says the LORD,',
+            '"I have blotted out your',
+            'transgressions like a cloud',
+            'and your sins like mist;',
+            'return to me, for I have',
+            'redeemed you."',
+            '— Isaiah 44:22'
+        ];
+        var textY = 100;
+
+        // Init canvas
+        function initCanvas() {
+            // Draw parchment background
+            var grad = ctx.createLinearGradient(0, 0, W, H);
+            grad.addColorStop(0, '#2a221a');
+            grad.addColorStop(0.3, '#1e1812');
+            grad.addColorStop(0.6, '#221a14');
+            grad.addColorStop(1, '#18120e');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+
+            // Draw text (barely visible)
+            ctx.font = '16px Cormorant Garamond';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = 'rgba(180,150,120,0.04)';
+            textLines.forEach(function(line, i) {
+                ctx.fillText(line, W / 2, textY + i * 28);
+            });
+
+            // Draw damage overlay (carbonization)
+            damageData = [];
+            for (var i = 0; i < 200; i++) {
+                var x = Math.random() * W;
+                var y = Math.random() * H;
+                var r = Math.random() * 40 + 10;
+                var alpha = Math.random() * 0.4 + 0.3;
+                damageData.push({ x: x, y: y, r: r, alpha: alpha });
+                var grad2 = ctx.createRadialGradient(x, y, 0, x, y, r);
+                grad2.addColorStop(0, 'rgba(10,8,6,' + alpha + ')');
+                grad2.addColorStop(0.6, 'rgba(20,15,10,' + (alpha * 0.7) + ')');
+                grad2.addColorStop(1, 'rgba(26,21,16,0)');
+                ctx.fillStyle = grad2;
+                ctx.beginPath();
+                ctx.arc(x, y, r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Draw some visible ink flecks
+            for (var i = 0; i < 50; i++) {
+                var x = Math.random() * W;
+                var y = Math.random() * H;
+                ctx.fillStyle = 'rgba(40,30,20,' + (Math.random() * 0.1) + ')';
+                ctx.beginPath();
+                ctx.arc(x, y, Math.random() * 2 + 0.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            restorePercent = 0;
+            document.getElementById('restoreProgress').style.width = '0%';
+            document.getElementById('restoreText').textContent = 'Clean the scroll to reveal the hidden words...';
+            document.getElementById('restoreComplete').style.display = 'none';
+        }
+
+        initCanvas();
+
+        window.setRestoreTool = function(mode) {
+            toolMode = mode;
+            document.querySelectorAll('.sandbox-tool').forEach(function(b) {
+                b.style.background = 'rgba(0,0,0,0.3)';
+                b.style.borderColor = 'rgba(212,175,55,0.85)';
+                b.style.color = 'rgba(212,175,55,0.4)';
+            });
+            var btn = document.getElementById(mode === 'brush' ? 'restoreBrush' : 'restoreMSI');
+            if (btn) {
+                btn.style.background = 'rgba(212,175,55,0.1)';
+                btn.style.borderColor = 'var(--museum-gold)';
+                btn.style.color = 'var(--museum-gold)';
+            }
+            if (mode === 'msi') {
+                // Multi-spectral view — show infrared-like
+                canvas.style.filter = 'sepia(0.8) contrast(1.5) brightness(1.2) hue-rotate(-20deg)';
+            } else {
+                canvas.style.filter = 'none';
+            }
+        };
+
+        function getMousePos(e) {
+            var rect = canvas.getBoundingClientRect();
+            var scaleX = W / rect.width;
+            var scaleY = H / rect.height;
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+
+        canvas.addEventListener('mousedown', function(e) {
+            isRestoring = true;
+            restoreAt(e);
+        });
+
+        window.addEventListener('mouseup', function() { isRestoring = false; });
+
+        canvas.addEventListener('mousemove', function(e) {
+            if (!isRestoring) return;
+            restoreAt(e);
+        });
+
+        function restoreAt(e) {
+            var pos = getMousePos(e);
+            if (pos.x < 0 || pos.x > W || pos.y < 0 || pos.y > H) return;
+
+            // Erase damage at this position (destination-out compositing)
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, brushSize, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            // Also reveal some text nearby
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.font = '16px Cormorant Garamond';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = 'rgba(0,0,0,1)';
+            var revealCount = 0;
+            textLines.forEach(function(line, i) {
+                var ly = textY + i * 28;
+                if (Math.abs(pos.y - ly) < 40) {
+                    ctx.fillText(line, W / 2, ly);
+                    revealCount++;
+                }
+            });
+            ctx.restore();
+
+            // Update progress
+            restorePercent = Math.min(100, restorePercent + 0.3);
+            document.getElementById('restoreProgress').style.width = restorePercent + '%';
+
+            // Show partial text as progress
+            var totalChars = hiddenText.length;
+            var revealed = Math.floor((restorePercent / 100) * totalChars);
+            var shown = hiddenText.substring(0, Math.max(10, revealed));
+            if (revealed > 10) {
+                document.getElementById('restoreText').textContent = shown + (revealed < totalChars ? '...' : '');
+            }
+
+            if (restorePercent >= 100) {
+                document.getElementById('restoreText').textContent = hiddenText;
+                document.getElementById('restoreComplete').style.display = 'block';
+            }
+        }
+
+        window.resetRestoration = function() {
+            initCanvas();
+            canvas.style.filter = 'none';
+            document.getElementById('irSlider').value = 0;
+            document.getElementById('irValue').textContent = '0';
+            document.querySelectorAll('.sandbox-tool').forEach(function(b) {
+                b.style.background = 'rgba(0,0,0,0.3)';
+                b.style.borderColor = 'rgba(212,175,55,0.85)';
+                b.style.color = 'rgba(212,175,55,0.4)';
+            });
+        };
+
+        // MSI — Infrared Slider
+        window.adjustIR = function(val) {
+            document.getElementById('irValue').textContent = val;
+            var sepia = val * 0.8 / 100;
+            var contrast = 1 + val * 0.5 / 100;
+            var brightness = 1 + val * 0.3 / 100;
+            var hue = -val * 0.4 / 100;
+            canvas.style.filter = 'sepia(' + sepia + ') contrast(' + contrast + ') brightness(' + brightness + ') hue-rotate(' + hue + 'deg)';
+        };
+
+        // AI Inpainting — uses Prophetic Mesh data to "predict" missing text
+        var aiUsed = false;
+        window.applyAIPrediction = function() {
+            if (aiUsed) return;
+            aiUsed = true;
+
+            var btn = document.getElementById('aiInpaintBtn');
+            btn.textContent = 'ANALYZING...';
+            btn.style.borderColor = 'rgba(100,149,237,0.4)';
+            btn.style.color = 'rgba(100,149,237,0.8)';
+
+            setTimeout(function() {
+                // Fill in the text using predictive reconstruction
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.fillStyle = 'rgba(0,0,0,1)';
+                ctx.font = '16px Cormorant Garamond';
+                ctx.textAlign = 'center';
+                textLines.forEach(function(line, i) {
+                    ctx.fillText(line, W / 2, textY + i * 28);
+                });
+                ctx.restore();
+
+                restorePercent = 100;
+                document.getElementById('restoreProgress').style.width = '100%';
+                document.getElementById('restoreText').textContent = hiddenText;
+                document.getElementById('restoreComplete').style.display = 'block';
+                btn.textContent = '✓ TEXT RECONSTRUCTED';
+                btn.style.borderColor = 'rgba(76,175,80,0.3)';
+                btn.style.color = '#4caf50';
+                canvas.style.cursor = 'default';
+                evolved = true;
+
+                if (window.ScriptoriumAudio) {
+                    try { window.ScriptoriumAudio.transitionTo('nt'); } catch(e) {}
+                }
+            }, 1500);
+        };
+    })();
+
+    // ═══════════════════════════════════════
+    // RESTORATION GALLERY ENGINE
+    // ═══════════════════════════════════════
+    (function() {
+        var FRAGMENTS_DB = [
+            { id: 'isaiah-44', ref: 'Isaiah 44:22', icon: '\uD83D\uDCD6', text: 'I have blotted out your transgressions like a cloud...' },
+            { id: 'isaiah-53', ref: 'Isaiah 53:5', icon: '\u2726', text: 'He was pierced for our transgressions...' },
+            { id: 'psalm-22', ref: 'Psalm 22:16', icon: '\uD83D\uDC51', text: 'They have pierced my hands and my feet...' },
+            { id: 'enos-gedi', ref: 'En-Gedi Scroll', icon: '\uD83D\uDCDC', text: 'The restoration of the sacred text...' }
+        ];
+
+        function renderGallery() {
+            var saved = JSON.parse(localStorage.getItem('restored_fragments') || '[]');
+            var grid = document.getElementById('galleryGrid');
+            var empty = document.getElementById('galleryEmpty');
+            var section = document.getElementById('restorationGallery');
+            if (!grid || !section) return;
+            if (saved.length === 0) { section.style.display = 'none'; return; }
+            section.style.display = 'block';
+            if (empty) empty.style.display = 'none';
+            grid.innerHTML = '';
+            saved.forEach(function(id) {
+                var frag = FRAGMENTS_DB.find(function(f) { return f.id === id; }) || { ref: id, icon: '\uD83D\uDCDC', text: 'Restored fragment' };
+                var card = document.createElement('div');
+                card.className = 'saved-fragment-card';
+                card.innerHTML = '<div class="frag-icon">' + frag.icon + '</div><div class="frag-ref">' + frag.ref + '</div><div class="frag-text">"' + frag.text + '"</div><div class="frag-date">\uD83D\uDCDC Preserved in the Scriptorium</div>';
+                grid.appendChild(card);
+            });
+        }
+
+        function completeRestoration(fragmentId) {
+            var saved = JSON.parse(localStorage.getItem('restored_fragments') || '[]');
+            if (saved.indexOf(fragmentId) === -1) {
+                saved.push(fragmentId);
+                localStorage.setItem('restored_fragments', JSON.stringify(saved));
+            }
+            // Update Scribe's Seal
+            try {
+                var seal = JSON.parse(localStorage.getItem('scribe_seal') || '{}');
+                seal.restoration = (seal.restoration || 0) + 1;
+                localStorage.setItem('scribe_seal', JSON.stringify(seal));
+            } catch(e) {}
+            renderGallery();
+            var note = document.createElement('div');
+            note.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.92);border:1px solid var(--museum-gold);padding:20px 30px;z-index:1000;text-align:center;border-radius:6px;animation:notifFade 3s ease forwards;pointer-events:none;';
+            note.innerHTML = '<div style="font-size: 2.4rem;margin-bottom:8px;">\uD83D\uDC8E</div><div style="font-family:\'Cinzel\',serif;font-size: 0.66rem;letter-spacing:4px;color:var(--museum-gold);margin-bottom:4px;">FRAGMENT ARCHIVED</div><div style="font-family:\'Cormorant Garamond\',serif;font-size: 0.66rem;color:rgba(255,255,255,0.3);font-style:italic;">Preserved in the Hall of the Preserved.</div>';
+            document.body.appendChild(note);
+            setTimeout(function() { note.remove(); }, 3500);
+            if (window.ScriptoriumAudio) { try { window.ScriptoriumAudio.transitionTo('nt'); } catch(e) {} }
+        }
+
+        setInterval(function() {
+            var el = document.getElementById('restoreComplete');
+            if (el && el.style.display === 'block' && !window._restoreSaved) {
+                window._restoreSaved = true;
+                completeRestoration('isaiah-44');
+            }
+        }, 1000);
+
+        window.completeRestoration = completeRestoration;
+        window.renderGallery = renderGallery;
+        setTimeout(renderGallery, 500);
+    })();
+</script>
+    <script src="assets/js/scriptorium-core.js"></script>
+</body>
+</html>
