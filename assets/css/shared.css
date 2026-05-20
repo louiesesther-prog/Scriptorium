@@ -1,0 +1,48 @@
+/* SCRIPTORIUM — SHARED STYLES */
+:root {
+    --obsidian: #050505; --obsidian-2: #080808; --museum-gold: #d4af37;
+    --museum-gold-dim: rgba(212,175,55,0.6); --museum-gold-faint: rgba(212,175,55,0.08);
+    --museum-bronze: #7a5f1a; --museum-bronze-dim: rgba(122,95,26,0.4);
+    --reality-silver: #e0e0e0; --text-primary: rgba(255,255,255,0.92);
+    --text-secondary: rgba(255,255,255,0.6); --text-tertiary: rgba(255,255,255,0.25);
+    --border-gold: rgba(212,175,55,0.15); --border-silver: rgba(255,255,255,0.08);
+    --sidebar-w: 80px; --transition-smooth: cubic-bezier(0.4,0,0.2,1);
+}
+[data-theme="nt"] { --text-primary: rgba(255,255,255,0.95); --text-secondary: rgba(255,255,255,0.7); --border-gold: rgba(255,255,255,0.1); }
+*, *::before, *::after { box-sizing: border-box; }
+body, html { margin:0;padding:0;background:var(--obsidian);color:var(--text-primary);font-family:'Cinzel',serif;overflow-x:hidden;animation:fadeInPage 1.8s var(--transition-smooth) both;cursor:url('../cursors/trowel-pointer.svg') 2 2,auto; }
+@keyframes fadeInPage { from { opacity:0;filter:blur(8px); } to { opacity:1;filter:blur(0); } }
+input,textarea,select,[contenteditable] { cursor:url('../cursors/quill-text.svg') 0 32,text; }
+a,button,.portal-card,.leaflet-interactive,[onclick],.nav-link,.sidebar-nav a,.timeline-era-marker { cursor:url('../cursors/seal-ring-hover.svg') 16 16,pointer; }
+.transition-overlay { position:fixed;top:0;left:0;width:100vw;height:100vh;background:#050505;z-index:99999;display:flex;justify-content:center;align-items:center;opacity:0;pointer-events:none;transition:opacity 0.8s cubic-bezier(0.4,0,0.2,1); }
+.transition-overlay.active { opacity:1;pointer-events:auto; }
+.transition-flame-container { text-align:center;position:relative; }
+.ink-glyph-reveal { font-family:'Cinzel',serif;color:var(--museum-gold,#d4af37);letter-spacing:6px;font-size:1.1rem;opacity:0;transform:translateY(10px);transition:all 0.6s ease-out 0.4s; }
+.transition-overlay.active .ink-glyph-reveal { opacity:1;transform:translateY(0); }
+.flickering-glow { width:150px;height:150px;background:radial-gradient(circle,rgba(212,175,55,0.08) 0%,transparent 70%);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);animation:pulseGlow 3s infinite alternate; }
+@keyframes pulseGlow { 0% { transform:translate(-50%,-50%) scale(0.9);opacity:0.5; } 100% { transform:translate(-50%,-50%) scale(1.1);opacity:1; } }
+.sidebar-logo { width:100%;padding:14px 0 12px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border-gold);flex-shrink:0;margin-bottom:8px; }
+.sidebar-logo svg { width:26px;height:26px; }
+.sidebar-nav { flex:1;display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:4px;overflow:hidden; }
+.nav-link { position:relative;display:flex;align-items:center;justify-content:center;width:50px;height:50px;color:var(--text-secondary);text-decoration:none;border:1px solid transparent;border-radius:6px;font-size:20px;transition:all 0.25s var(--transition-smooth); }
+.nav-link:hover { color:var(--museum-gold);border-color:rgba(212,175,55,0.25);background:var(--museum-gold-faint); }
+.nav-link.active { color:var(--museum-gold);border-color:rgba(212,175,55,0.3);background:var(--museum-gold-faint); }
+.nav-link::after { content:attr(title);position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%);background:#111;border:1px solid rgba(212,175,55,0.2);color:var(--museum-gold);font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:2px;white-space:nowrap;padding:5px 10px;pointer-events:none;opacity:0;transition:opacity 0.2s ease;z-index:9999; }
+.nav-link:hover::after { opacity:1; }
+.nav-divider { width:28px;height:1px;background:rgba(212,175,55,0.08);flex-shrink:0;margin:4px 0; }
+.sidebar-rank { width:100%;padding:10px 0 12px;font-size:0.45rem;letter-spacing:1.5px;color:rgba(212,175,55,0.4);text-align:center;line-height:1.5;border-top:1px solid var(--border-gold);flex-shrink:0; }
+.streak-flame { position:relative;width:28px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;margin-bottom:8px; }
+.streak-flame svg { width:18px;height:22px;fill:rgba(212,175,55,0.08);transition:fill 0.6s ease,filter 0.6s ease;filter:blur(0.5px); }
+.streak-flame.lit svg { fill:rgba(212,175,55,0.5);filter:drop-shadow(0 0 3px rgba(212,175,55,0.3)); }
+.streak-flame.warm svg { fill:rgba(212,175,55,0.7);filter:drop-shadow(0 0 6px rgba(212,175,55,0.5)); }
+.streak-flame.blazing svg { fill:#d4af37;filter:drop-shadow(0 0 10px rgba(212,175,55,0.8)) drop-shadow(0 0 20px rgba(255,100,0,0.3));animation:flamePulse 1.5s ease-in-out infinite; }
+.streak-flame.eternal svg { fill:#e8c44a;filter:drop-shadow(0 0 14px rgba(212,175,55,1)) drop-shadow(0 0 28px rgba(255,80,0,0.5));animation:flamePulse 1s ease-in-out infinite; }
+@keyframes flamePulse { 0%,100% { transform:scale(1) translateY(0); } 50% { transform:scale(1.1) translateY(-1px); } }
+.streak-counter { position:absolute;top:-4px;right:-6px;background:#0a0a0a;border:1px solid rgba(212,175,55,0.25);color:rgba(212,175,55,0.6);font-size:0.38rem;letter-spacing:0;width:16px;height:16px;display:flex;align-items:center;justify-content:center;border-radius:50%; }
+.streak-flame.eternal .streak-counter { border-color:rgba(212,175,55,0.5);color:var(--museum-gold); }
+.streak-tooltip { position:absolute;left:calc(100% + 14px);top:50%;transform:translateY(-50%);background:#0a0a0a;border:1px solid rgba(212,175,55,0.15);padding:10px 14px;min-width:160px;z-index:9999;pointer-events:none;opacity:0;transition:opacity 0.2s ease;white-space:nowrap; }
+.streak-flame:hover .streak-tooltip { opacity:1; }
+.streak-tooltip-title { font-size:0.42rem;letter-spacing:4px;color:rgba(212,175,55,0.4);margin-bottom:6px; }
+.streak-tooltip-days { font-family:'Cinzel',serif;font-size:1.2rem;letter-spacing:2px;color:var(--museum-gold);margin-bottom:4px; }
+.streak-tooltip-sub { font-family:'Cormorant Garamond',serif;font-size:0.8rem;color:rgba(255,255,255,0.3);font-style:italic; }
+::-webkit-scrollbar { width:4px; } ::-webkit-scrollbar-track { background:transparent; } ::-webkit-scrollbar-thumb { background:rgba(212,175,55,0.2);border-radius:2px; }
