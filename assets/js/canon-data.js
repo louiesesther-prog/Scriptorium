@@ -1,16 +1,11 @@
-var CANON_DATA = {
-  OT: { books: [] },
-  NT: { books: [] },
-  APOTCRYPHA: { books: [] }
-};
+/* SCRIPTORIUM — Canon Data Bridge */
+/* This file provides CANON_DATA and SCRIPTORIUM_CANON as globals.
+   Individual pages may override CANON_DATA with their own full arrays. */
 
-var SCRIPTORIUM_CANON = {
-  books: [],
-  version: '1.0'
-};
+if (typeof window.CANON_DATA === 'undefined') {
+    window.CANON_DATA = [];
+}
 
-(function() {
-  'use strict';
-  window.CANON_DATA = CANON_DATA;
-  window.SCRIPTORIUM_CANON = SCRIPTORIUM_CANON;
-})();
+if (typeof window.SCRIPTORIUM_CANON === 'undefined') {
+    window.SCRIPTORIUM_CANON = { books: [], pdfPageMap: {}, version: '1.0' };
+}
