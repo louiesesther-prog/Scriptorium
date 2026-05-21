@@ -152,9 +152,80 @@
             <h3 class="section-title">I. THE VESSEL</h3>
             <div class="input-row">
                 <div class="input-group">
-                    <label>NAME / TITLE</label>
-                    <input type="text" id="regName" placeholder="Scribe Eleazar" required>
+                    <label>COUNTRY</label>
+                    <select id="regCountry" required>
+                        <option value="">Select Country</option>
+                        <option value="US">United States</option>
+                        <option value="GB">United Kingdom</option>
+                        <option value="CA">Canada</option>
+                        <option value="AU">Australia</option>
+                        <option value="DE">Germany</option>
+                        <option value="FR">France</option>
+                        <option value="IT">Italy</option>
+                        <option value="ES">Spain</option>
+                        <option value="BR">Brazil</option>
+                        <option value="MX">Mexico</option>
+                        <option value="IN">India</option>
+                        <option value="CN">China</option>
+                        <option value="JP">Japan</option>
+                        <option value="KR">South Korea</option>
+                        <option value="PH">Philippines</option>
+                        <option value="NG">Nigeria</option>
+                        <option value="ZA">South Africa</option>
+                        <option value="KE">Kenya</option>
+                        <option value="EG">Egypt</option>
+                        <option value="ET">Ethiopia</option>
+                        <option value="GH">Ghana</option>
+                        <option value="IL">Israel</option>
+                        <option value="AE">UAE</option>
+                        <option value="SA">Saudi Arabia</option>
+                        <option value="TR">Turkey</option>
+                        <option value="RU">Russia</option>
+                        <option value="UA">Ukraine</option>
+                        <option value="PL">Poland</option>
+                        <option value="NL">Netherlands</option>
+                        <option value="SE">Sweden</option>
+                        <option value="NO">Norway</option>
+                        <option value="DK">Denmark</option>
+                        <option value="FI">Finland</option>
+                        <option value="CH">Switzerland</option>
+                        <option value="AT">Austria</option>
+                        <option value="BE">Belgium</option>
+                        <option value="PT">Portugal</option>
+                        <option value="GR">Greece</option>
+                        <option value="IE">Ireland</option>
+                        <option value="NZ">New Zealand</option>
+                        <option value="SG">Singapore</option>
+                        <option value="MY">Malaysia</option>
+                        <option value="ID">Indonesia</option>
+                        <option value="TH">Thailand</option>
+                        <option value="VN">Vietnam</option>
+                        <option value="AR">Argentina</option>
+                        <option value="CL">Chile</option>
+                        <option value="CO">Colombia</option>
+                        <option value="PE">Peru</option>
+                        <option value="OTHER">Other</option>
+                    </select>
                 </div>
+                <div class="input-group">
+                    <label>CITY</label>
+                    <input type="text" id="regCity" placeholder="e.g. Jerusalem" required>
+                </div>
+            </div>
+            <div class="input-row">
+                <div class="input-group">
+                    <label>DAY OF ORIGIN</label>
+                    <input type="date" id="regDob" required>
+                </div>
+                <div class="input-group">
+                    <label>IDENTITY</label>
+                    <select id="regGender">
+                        <option value="male">Brother</option>
+                        <option value="female">Sister</option>
+                        <option value="seeker">Seeker</option>
+                    </select>
+                </div>
+            </div>
                 <div class="input-group">
                     <label>REGION OF WITNESS</label>
                     <input type="text" id="regLocation" placeholder="e.g. Jerusalem, IL" required>
@@ -261,9 +332,14 @@
         }
         var kb = document.querySelector('input[name="kb"]:checked').value;
         var rankTitles = { '1': 'Novice of the Outer Court', '2': 'Student of the Living Word', '3': 'Witness of the Covenant', '4': 'Scribe of the High Archive' };
+        var countrySelect = document.getElementById('regCountry');
+        var countryText = countrySelect.options[countrySelect.selectedIndex].text;
         var profile = {
             name: document.getElementById('regName').value,
-            location: document.getElementById('regLocation').value,
+            country: document.getElementById('regCountry').value,
+            countryName: countryText,
+            city: document.getElementById('regCity').value,
+            location: countryText + ', ' + document.getElementById('regCity').value,
             userId: document.getElementById('regId').value,
             email: document.getElementById('regEmail').value,
             password: hashed,
@@ -315,7 +391,7 @@
         var scribe = JSON.parse(localStorage.getItem('activeScribe'));
         if (!scribe) return;
         var titles = { '1': 'Novice of the Outer Court', '2': 'Student of the Living Word', '3': 'Witness of the Covenant', '4': 'Scribe of the High Archive' };
-        var html = '<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"><style>body{background:#f4ece0;padding:50px;text-align:center;border:15px solid #d4af37;min-height:80vh;font-family:"Cormorant Garamond",serif;}.frame{border:2px solid #5d4037;padding:40px;position:relative;}h1{font-family:"Cinzel",serif;color:#5d4037;font-size: 3.6rem;margin-bottom:10px;}.subtitle{font-family:"Cinzel",serif;letter-spacing:5px;font-size: 0.66rem;color:#d4af37;margin-bottom:30px;}.content{font-size: 1.8rem;margin-top:40px;color:#333;}.sname{font-weight:700;font-size: 3rem;border-bottom:1px solid #5d4037;display:inline-block;margin:20px 0;}.rank{color:#d4af37;font-weight:bold;font-size: 2.16rem;}.seal{width:120px;height:120px;background:#b71c1c;border-radius:50%;margin:40px auto;box-shadow:3px 3px 10px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-family:"Cinzel";font-size: 3.6rem;color:#fff;}.seal::after{content:"S";}.meta{font-size: 0.66rem;margin-top:20px;color:#666;}@media print{.no-print{display:none;}}</style></head><body><div class="frame"><div class="subtitle">Official Credentials of the Order</div><h1>SCRIPTORIUM</h1><div class="content">This document certifies that the soul known as<br><span class="sname">' + scribe.name + '</span><br>hailing from <strong>' + (scribe.location || 'Unknown') + '</strong>,<br>has been formally inducted with the standing of:<br><span class="rank">' + (titles[scribe.knowledge] || 'Seeker') + '</span></div><div class="seal">S</div><div class="meta">Scribe ID: ' + (scribe.userId || '—') + ' | Joined: ' + new Date(scribe.joined).toLocaleDateString() + '</div><button class="no-print" onclick="window.print()" style="margin-top:30px;padding:10px 20px;cursor:pointer;font-family:Georgia,serif;">DOWNLOAD FOLIO</button></div></body></html>';
+        var html = '<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"><style>body{background:#f4ece0;padding:50px;text-align:center;border:15px solid #d4af37;min-height:80vh;font-family:"Cormorant Garamond",serif;}.frame{border:2px solid #5d4037;padding:40px;position:relative;}h1{font-family:"Cinzel",serif;color:#5d4037;font-size: 3.6rem;margin-bottom:10px;}.subtitle{font-family:"Cinzel",serif;letter-spacing:5px;font-size: 0.66rem;color:#d4af37;margin-bottom:30px;}.content{font-size: 1.8rem;margin-top:40px;color:#333;}.sname{font-weight:700;font-size: 3rem;border-bottom:1px solid #5d4037;display:inline-block;margin:20px 0;}.rank{color:#d4af37;font-weight:bold;font-size: 2.16rem;}.seal{width:120px;height:120px;background:#b71c1c;border-radius:50%;margin:40px auto;box-shadow:3px 3px 10px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-family:"Cinzel";font-size: 3.6rem;color:#fff;}.seal::after{content:"S";}.meta{font-size: 0.66rem;margin-top:20px;color:#666;}@media print{.no-print{display:none;}}</style></head><body><div class="frame"><div class="subtitle">Official Credentials of the Order</div><h1>SCRIPTORIUM</h1><div class="content">This document certifies that the soul known as<br><span class="sname">' + scribe.name + '</span><br>hailing from <strong>' + (scribe.city || '') + ', ' + (scribe.countryName || 'Unknown') + '</strong>,<br>has been formally inducted with the standing of:<br><span class="rank">' + (titles[scribe.knowledge] || 'Seeker') + '</span></div><div class="seal">S</div><div class="meta">Scribe ID: ' + (scribe.userId || '—') + ' | Joined: ' + new Date(scribe.joined).toLocaleDateString() + '</div><button class="no-print" onclick="window.print()" style="margin-top:30px;padding:10px 20px;cursor:pointer;font-family:Georgia,serif;">DOWNLOAD FOLIO</button></div></body></html>';
         openDocWindow(html);
     };
 
