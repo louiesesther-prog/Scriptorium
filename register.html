@@ -382,12 +382,62 @@
         }
     }
 
+    function buildDocTemplate(opts) {
+        var now = new Date();
+        var refNum = 'SCR-' + now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0') + '-' + Math.floor(Math.random()*9000+1000);
+        var dateStr = now.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+        return '<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"><style>' +
+            'body{margin:0;padding:0;background:#0a0a0a;font-family:"Cormorant Garamond",serif;color:#e0e0e0;min-height:100vh;}' +
+            '.doc-wrapper{max-width:700px;margin:0 auto;position:relative;}' +
+            '.doc-border{position:absolute;inset:12px;border:1px solid rgba(212,175,55,0.2);pointer-events:none;}' +
+            '.doc-border::before,.doc-border::after{content:"";position:absolute;width:20px;height:20px;border-color:rgba(212,175,55,0.5);border-style:solid;}' +
+            '.doc-border::before{top:-1px;left:-1px;border-width:2px 0 0 2px;}' +
+            '.doc-border::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0;}' +
+            '.doc-header{padding:40px 40px 30px;text-align:center;border-bottom:1px solid rgba(212,175,55,0.15);position:relative;}' +
+            '.doc-seal{width:60px;height:60px;margin:0 auto 15px;}' +
+            '.doc-seal svg{width:100%;height:100%;}' +
+            '.doc-title{font-family:"Cinzel",serif;font-size:1.8rem;letter-spacing:8px;color:#d4af37;margin:0 0 4px;}' +
+            '.doc-subtitle{font-family:"Cormorant Garamond",serif;font-size:0.9rem;font-style:italic;color:rgba(212,175,55,0.5);margin:0 0 15px;}' +
+            '.doc-type{font-family:"Cinzel",serif;font-size:0.6rem;letter-spacing:4px;color:rgba(212,175,55,0.3);text-transform:uppercase;}' +
+            '.doc-body{padding:35px 40px;}' +
+            '.doc-footer{padding:20px 40px;border-top:1px solid rgba(212,175,55,0.1);text-align:center;}' +
+            '.doc-footer-ref{font-family:"Cinzel",serif;font-size:0.5rem;letter-spacing:3px;color:rgba(212,175,55,0.25);}' +
+            '.doc-footer-date{font-family:"Cormorant Garamond",serif;font-size:0.75rem;font-style:italic;color:rgba(255,255,255,0.2);margin-top:4px;}' +
+            '.doc-watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-family:"Cinzel",serif;font-size:8rem;letter-spacing:20px;color:rgba(212,175,55,0.02);pointer-events:none;white-space:nowrap;z-index:0;}' +
+            '.doc-content{position:relative;z-index:1;}' +
+            '@media print{body{background:#fff;color:#333;}.doc-border{border-color:rgba(0,0,0,0.15);}.doc-border::before,.doc-border::after{border-color:rgba(0,0,0,0.3);}.doc-title{color:#333;}.doc-subtitle{color:#666;}.doc-type{color:#888;}.doc-footer-ref{color:#888;}.doc-footer-date{color:#666;}.doc-watermark{color:rgba(0,0,0,0.03);}}' +
+            '</style></head><body>' +
+            '<div class="doc-watermark">SCRIPTORIUM</div>' +
+            '<div class="doc-wrapper"><div class="doc-border"></div>' +
+            '<div class="doc-content">' +
+            '<div class="doc-header">' +
+            '<div class="doc-seal"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="28" fill="none" stroke="rgba(212,175,55,0.4)" stroke-width="1"/><circle cx="30" cy="30" r="24" fill="none" stroke="rgba(212,175,55,0.2)" stroke-width="0.5"/><path d="M30 8 L30 52 M8 30 L52 30" stroke="rgba(212,175,55,0.1)" stroke-width="0.3"/><text x="30" y="36" text-anchor="middle" font-family="Cinzel,serif" font-size="22" fill="rgba(212,175,55,0.5)">S</text></svg></div>' +
+            '<h1 class="doc-title">SCRIPTORIUM</h1>' +
+            '<p class="doc-subtitle">The Eternal Record of the Word</p>' +
+            '<div class="doc-type">' + (opts.docType || 'OFFICIAL DOCUMENT') + '</div>' +
+            '</div>' +
+            '<div class="doc-body">' + (opts.body || '') + '</div>' +
+            '<div class="doc-footer">' +
+            '<div class="doc-footer-ref">REF: ' + refNum + ' &bull; ESTABLISHED IN THE ETERNAL RECORD</div>' +
+            '<div class="doc-footer-date">Generated: ' + dateStr + '</div>' +
+            '</div></div></div></body></html>';
+    }
+
     window.generateScribeCertificate = function() {
         var scribe = JSON.parse(localStorage.getItem('activeScribe'));
         if (!scribe) return;
         var titles = { '1': 'Novice of the Outer Court', '2': 'Student of the Living Word', '3': 'Witness of the Covenant', '4': 'Scribe of the High Archive' };
-        var html = '<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"><style>body{background:#f4ece0;padding:50px;text-align:center;border:15px solid #d4af37;min-height:80vh;font-family:"Cormorant Garamond",serif;}.frame{border:2px solid #5d4037;padding:40px;position:relative;}h1{font-family:"Cinzel",serif;color:#5d4037;font-size: 3.6rem;margin-bottom:10px;}.subtitle{font-family:"Cinzel",serif;letter-spacing:5px;font-size: 0.66rem;color:#d4af37;margin-bottom:30px;}.content{font-size: 1.8rem;margin-top:40px;color:#333;}.sname{font-weight:700;font-size: 3rem;border-bottom:1px solid #5d4037;display:inline-block;margin:20px 0;}.rank{color:#d4af37;font-weight:bold;font-size: 2.16rem;}.seal{width:120px;height:120px;background:#b71c1c;border-radius:50%;margin:40px auto;box-shadow:3px 3px 10px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-family:"Cinzel";font-size: 3.6rem;color:#fff;}.seal::after{content:"S";}.meta{font-size: 0.66rem;margin-top:20px;color:#666;}@media print{.no-print{display:none;}}</style></head><body><div class="frame"><div class="subtitle">Official Credentials of the Order</div><h1>SCRIPTORIUM</h1><div class="content">This document certifies that the soul known as<br><span class="sname">' + scribe.name + '</span><br>hailing from <strong>' + (scribe.city || '') + ', ' + (scribe.countryName || 'Unknown') + '</strong>,<br>has been formally inducted with the standing of:<br><span class="rank">' + (titles[scribe.knowledge] || 'Seeker') + '</span></div><div class="seal">S</div><div class="meta">Scribe ID: ' + (scribe.userId || '—') + ' | Joined: ' + new Date(scribe.joined).toLocaleDateString() + '</div></div></body></html>';
-        openDocWindow(html);
+        var body = '<div style="text-align:center;padding:20px 0;">' +
+            '<p style="font-size:1.1rem;color:rgba(255,255,255,0.5);margin:0 0 30px;font-style:italic;">Official Credentials of the Order</p>' +
+            '<p style="font-size:1.3rem;line-height:1.8;margin:0 0 30px;">This document certifies that the soul known as<br>' +
+            '<span style="font-family:\'Cinzel\',serif;font-size:2rem;color:#d4af37;letter-spacing:4px;display:inline-block;margin:15px 0;border-bottom:1px solid rgba(212,175,55,0.3);padding-bottom:5px;">' + scribe.name + '</span><br>' +
+            'hailing from <strong style="color:#e6c667;">' + (scribe.city || '') + ', ' + (scribe.countryName || 'Unknown') + '</strong><br>' +
+            'has been formally inducted with the standing of:</p>' +
+            '<p style="font-family:\'Cinzel\',serif;font-size:1.4rem;color:#d4af37;letter-spacing:3px;margin:0 0 30px;">' + (titles[scribe.knowledge] || 'Seeker') + '</p>' +
+            '<div style="width:80px;height:80px;margin:0 auto 20px;background:rgba(183,28,28,0.8);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:\'Cinzel\',serif;font-size:2.5rem;color:#fff;box-shadow:3px 3px 15px rgba(0,0,0,0.4);">S</div>' +
+            '<p style="font-size:0.85rem;color:rgba(255,255,255,0.3);margin:0;">Scribe ID: ' + (scribe.userId || '\u2014') + ' &bull; Joined: ' + new Date(scribe.joined).toLocaleDateString() + '</p>' +
+            '</div>';
+        openDocWindow(buildDocTemplate({ docType: 'CERTIFICATE OF INDUCTION', body: body }));
     };
 
     window.generateWelcomeLetter = function() {
@@ -395,21 +445,48 @@
         if (!s) return;
         var gender = s.gender === 'female' ? 'Sister' : 'Brother';
         var titles = { '1': 'Novice of the Outer Court', '2': 'Student of the Living Word', '3': 'Witness of the Covenant', '4': 'Scribe of the High Archive' };
-        var html = '<!DOCTYPE html><html><head><style>body{font-family:Georgia,serif;background:#0a0a0a;margin:0;padding:0;}.wrapper{width:100%;background:#0a0a0a;padding:40px 0;}.container{max-width:600px;margin:0 auto;background:#121212;border:1px solid #d4af37;color:#e0e0e0;overflow:hidden;}.header{padding:40px 20px;text-align:center;background:linear-gradient(to bottom,#1a1a1a,#121212);border-bottom:1px solid #d4af37;}.header h1{color:#d4af37;font-size: 33.6px;letter-spacing:4px;text-transform:uppercase;margin:0;}.content{padding:40px;line-height:1.6;font-size: 18px;}.scribe-title{color:#d4af37;font-weight:bold;font-size: 21.6px;}.details-box{background:rgba(212,175,55,0.05);border:1px solid rgba(212,175,55,0.3);padding:20px;margin:20px 0;border-radius:4px;}.stat-line{margin:5px 0;font-size: 16.8px;}.stat-label{color:#d4af37;text-transform:uppercase;font-size: 14.4px;margin-right:10px;}.cta-btn{display:inline-block;background:#d4af37;color:#000;padding:15px 30px;text-decoration:none;font-weight:bold;letter-spacing:2px;margin-top:20px;text-transform:uppercase;border-radius:3px;}.footer{padding:20px;text-align:center;font-size: 14.4px;color:#666;border-top:1px solid #1a1a1a;}@media print{.no-print{display:none;}}</style></head><body><div class="wrapper"><div class="container"><div class="header"><h1>SCRIPTORIUM</h1><p style="font-style:italic;color:#888;">The Eternal Record of the Word</p></div><div class="content"><p class="scribe-title">Greetings, ' + gender + ' ' + s.name + ',</p><p>Your petition for induction into the <strong>Order of Scribes</strong> has been reviewed and accepted. Your seal is now affixed to the global chronicle, marking your place among the witnesses of the Covenant.</p><p>Based on your scholarship, you have been granted the following standing within the Archive:</p><div class="details-box"><div class="stat-line"><span class="stat-label">Scribe ID:</span> ' + (s.userId || '—') + '</div><div class="stat-line"><span class="stat-label">Region:</span> ' + ((s.city && s.countryName) ? (s.city + ', ' + s.countryName) : (s.location || 'Unknown')) + '</div><div class="stat-line"><span class="stat-label">Standing:</span> ' + (titles[s.knowledge] || 'Seeker') + '</div></div><p>You may now enter the Scriptorium to read, compare, and chronicle. Your journey has been marked from this day forward.</p><p style="font-style:italic;">"Let the wise hear and increase in learning." — Proverbs 1:5</p></div><div class="footer">ESTABLISHED IN THE ETERNAL RECORD &bull; SCRIPTORIUM ARCHIVE</div></div></div></body></html>';
-        openDocWindow(html);
+        var body = '<p style="font-family:\'Cinzel\',serif;font-size:1.2rem;color:#d4af37;margin:0 0 20px;">Greetings, ' + gender + ' ' + s.name + ',</p>' +
+            '<p style="font-size:1.05rem;line-height:1.8;margin:0 0 20px;">Your petition for induction into the <strong style="color:#e6c667;">Order of Scribes</strong> has been reviewed and accepted. Your seal is now affixed to the global chronicle, marking your place among the witnesses of the Covenant.</p>' +
+            '<p style="font-size:1.05rem;line-height:1.8;margin:0 0 20px;">Based on your scholarship, you have been granted the following standing within the Archive:</p>' +
+            '<div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.2);padding:20px;margin:20px 0;border-radius:3px;">' +
+            '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(212,175,55,0.08);"><span style="font-family:\'Cinzel\',serif;font-size:0.65rem;letter-spacing:2px;color:rgba(212,175,55,0.4);">SCRIBE ID</span><span style="font-size:0.95rem;color:#e0e0e0;">' + (s.userId || '\u2014') + '</span></div>' +
+            '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(212,175,55,0.08);"><span style="font-family:\'Cinzel\',serif;font-size:0.65rem;letter-spacing:2px;color:rgba(212,175,55,0.4);">REGION</span><span style="font-size:0.95rem;color:#e0e0e0;">' + ((s.city && s.countryName) ? (s.city + ', ' + s.countryName) : (s.location || 'Unknown')) + '</span></div>' +
+            '<div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="font-family:\'Cinzel\',serif;font-size:0.65rem;letter-spacing:2px;color:rgba(212,175,55,0.4);">STANDING</span><span style="font-family:\'Cinzel\',serif;font-size:0.95rem;color:#d4af37;">' + (titles[s.knowledge] || 'Seeker') + '</span></div>' +
+            '</div>' +
+            '<p style="font-size:1.05rem;line-height:1.8;margin:0 0 20px;">You may now enter the Scriptorium to read, compare, and chronicle. Your journey has been marked from this day forward.</p>' +
+            '<p style="font-style:italic;color:rgba(212,175,55,0.5);font-size:0.95rem;margin:0;text-align:center;">"Let the wise hear and increase in learning." \u2014 Proverbs 1:5</p>';
+        openDocWindow(buildDocTemplate({ docType: 'LETTER OF APPOINTMENT', body: body }));
     };
 
     window.generateMilestone = function() {
         var s = JSON.parse(localStorage.getItem('activeScribe')) || { name: 'Scribe' };
         var streak = JSON.parse(localStorage.getItem('scribe_logia_streak')) || { count: 0 };
-        var html = '<!DOCTYPE html><html><head><style>body{background:#0a0a0a;font-family:Georgia,serif;color:#e0e0e0;margin:0;}.container{max-width:600px;margin:0 auto;background:#121212;border:1px solid #d4af37;}.header{background:linear-gradient(135deg,#1a1a1a 0%,#d4af37 300%);padding:50px 20px;text-align:center;border-bottom:2px solid #d4af37;}.header .flame{font-size: 60px;display:block;margin-bottom:10px;}.header .rank-title{color:#d4af37;font-family:\'Cinzel\',serif;font-size: 28.8px;letter-spacing:5px;}.header h1{color:#fff;margin:10px 0;}.content{padding:40px;line-height:1.6;text-align:center;font-size: 18px;}.details{border:1px solid rgba(212,175,55,0.3);padding:20px;margin:30px 0;background:rgba(212,175,55,0.05);text-align:left;}.details h3{color:#d4af37;margin-top:0;}.details ul{font-size: 16.8px;list-style-type:\'\\2727 \';}.footer{padding:20px;text-align:center;font-size: 14.4px;color:#666;border-top:1px solid #1a1a1a;}.cta{display:inline-block;background:#d4af37;color:#000;padding:15px 30px;text-decoration:none;font-weight:bold;margin-top:20px;}@media print{.no-print{display:none;}</style></head><body><div class="container"><div class="header"><span class="flame">&#x1F52E;</span><div class="rank-title">RANK ASCENDED</div><h1>The Guardian</h1></div><div class="content"><p style="font-size: 21.6px;">Peace be with you, <strong>' + s.name + '</strong>.</p><p>Thirty suns have risen and set since you began your vigil in the Scriptorium. Your consistency has not gone unnoticed by the Order.</p><p>Your current streak: <strong style="color:#d4af37;">' + streak.count + ' days</strong></p><div class="details"><h3>NEW POWERS UNLOCKED</h3><ul><li><strong>Celestial Aura:</strong> Your marker on the Map now pulses with blue-gold light.</li><li><strong>Guardian\'s Ink:</strong> Your messages in the Witness Wall carry the Guardian\'s shimmer.</li><li><strong>Deeper Access:</strong> Obscure archaeological dossiers are now visible to your eyes.</li></ul></div><p>Continue your toil, faithful scribe. The Word is eternal, and your name endures within it.</p></div><div class="footer">ESTABLISHED IN THE ETERNAL RECORD &bull; SCRIPTORIUM ARCHIVE</div></div></div></body></html>';
-        openDocWindow(html);
+        var body = '<div style="text-align:center;padding:10px 0 25px;">' +
+            '<div style="font-size:2.5rem;margin-bottom:10px;">&#x1F52E;</div>' +
+            '<p style="font-family:\'Cinzel\',serif;font-size:0.65rem;letter-spacing:4px;color:rgba(212,175,55,0.4);margin:0 0 5px;">RANK ASCENDED</p>' +
+            '<p style="font-family:\'Cinzel\',serif;font-size:1.6rem;color:#d4af37;letter-spacing:4px;margin:0 0 20px;">The Guardian</p>' +
+            '</div>' +
+            '<p style="font-size:1.1rem;line-height:1.8;margin:0 0 20px;">Peace be with you, <strong style="color:#e6c667;">' + s.name + '</strong>.</p>' +
+            '<p style="font-size:1.05rem;line-height:1.8;margin:0 0 20px;">Thirty suns have risen and set since you began your vigil in the Scriptorium. Your consistency has not gone unnoticed by the Order.</p>' +
+            '<p style="font-size:1.05rem;margin:0 0 20px;">Your current streak: <strong style="color:#d4af37;">' + streak.count + ' days</strong></p>' +
+            '<div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.2);padding:20px;margin:20px 0;border-radius:3px;">' +
+            '<p style="font-family:\'Cinzel\',serif;font-size:0.65rem;letter-spacing:3px;color:rgba(212,175,55,0.5);margin:0 0 15px;">NEW POWERS UNLOCKED</p>' +
+            '<ul style="list-style:none;padding:0;margin:0;">' +
+            '<li style="padding:6px 0;border-bottom:1px solid rgba(212,175,55,0.06);font-size:0.95rem;line-height:1.5;"><strong style="color:#e6c667;">Celestial Aura:</strong> Your marker on the Map now pulses with blue-gold light.</li>' +
+            '<li style="padding:6px 0;border-bottom:1px solid rgba(212,175,55,0.06);font-size:0.95rem;line-height:1.5;"><strong style="color:#e6c667;">Guardian\'s Ink:</strong> Your messages in the Witness Wall carry the Guardian\'s shimmer.</li>' +
+            '<li style="padding:6px 0;font-size:0.95rem;line-height:1.5;"><strong style="color:#e6c667;">Deeper Access:</strong> Obscure archaeological dossiers are now visible to your eyes.</li>' +
+            '</ul></div>' +
+            '<p style="font-style:italic;color:rgba(212,175,55,0.5);font-size:0.95rem;margin:0;text-align:center;">Continue your toil, faithful scribe. The Word is eternal.</p>';
+        openDocWindow(buildDocTemplate({ docType: 'MILESTONE ACHIEVEMENT', body: body }));
     };
 
     window.generatePasswordReset = function() {
-        var s = JSON.parse(localStorage.getItem('activeScribe')) || { name: 'Scribe', userId: '—' };
-        var html = '<!DOCTYPE html><html><head><style>body{background:#0a0a0a;color:#e0e0e0;font-family:Georgia,serif;margin:0;padding:40px;}table{max-width:600px;margin:0 auto;border:1px solid #d4af37;background:#121212;border-collapse:collapse;}.header{padding:40px 0;border-bottom:1px solid rgba(212,175,55,0.2);text-align:center;}.header h2{color:#d4af37;letter-spacing:6px;text-transform:uppercase;margin:0;font-size: 24px;}.body{padding:40px;line-height:1.6;font-size: 18px;}.cta{text-align:center;margin:40px 0;}.cta a{border:1px solid #d4af37;color:#d4af37;padding:15px 40px;text-decoration:none;font-variant:small-caps;letter-spacing:2px;display:inline-block;}.note{font-size: 15.6px;color:#888;font-style:italic;}.footer{padding:20px;text-align:center;font-size: 13.2px;color:#555;background:#0c0c0c;}</style></head><body><table><tr><td class="header"><h2>Restoring Access</h2></td></tr><tr><td class="body"><p>A request has been received to reset the <strong>Cipher Key</strong> associated with your identity <strong>' + s.userId + '</strong> in the Scriptorium.</p><p>To forge a new key and regain access to your scrolls and discoveries, please use the secure link below. This portal will remain open for only one hour.</p><div class="cta"><a href="#">REFORGE CIPHER KEY</a></div><p class="note">If you did not request this restoration, your current cipher remains secure. No action is required from your hand.</p></td></tr><tr><td class="footer">ESTABLISHED IN THE ETERNAL RECORD &bull; SCRIPTORIUM ARCHIVE</td></tr></table></body></html>';
-        openDocWindow(html);
+        var s = JSON.parse(localStorage.getItem('activeScribe')) || { name: 'Scribe', userId: '\u2014' };
+        var body = '<p style="font-size:1.05rem;line-height:1.8;margin:0 0 20px;">A request has been received to reset the <strong style="color:#e6c667;">Cipher Key</strong> associated with your identity <strong style="color:#d4af37;">' + s.userId + '</strong> in the Scriptorium.</p>' +
+            '<p style="font-size:1.05rem;line-height:1.8;margin:0 0 20px;">To forge a new key and regain access to your scrolls and discoveries, please use the secure link below. This portal will remain open for only one hour.</p>' +
+            '<div style="text-align:center;margin:30px 0;"><a href="#" style="display:inline-block;border:1px solid rgba(212,175,55,0.4);color:#d4af37;padding:12px 30px;text-decoration:none;font-family:\'Cinzel\',serif;font-size:0.7rem;letter-spacing:3px;border-radius:3px;">REFORGE CIPHER KEY</a></div>' +
+            '<p style="font-style:italic;color:rgba(255,255,255,0.3);font-size:0.9rem;margin:0;text-align:center;">If you did not request this restoration, your current cipher remains secure. No action is required from your hand.</p>';
+        openDocWindow(buildDocTemplate({ docType: 'CIPHER KEY RESTORATION', body: body }));
     };
 </script>
 </body>
