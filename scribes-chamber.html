@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCRIPTORIUM | The Scribe's Chamber</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/shared.css">
     <script src="assets/audio/scriptorium-audio.js"></script>
     <style>
         :root {
@@ -14,46 +15,16 @@
             --blood-red: #8b0000;
         }
 
-        body, html {
-            margin: 0; padding: 0;
-            background: var(--obsidian);
-            color: #fff;
-            font-family: 'Cinzel', serif;
-            animation: fadeInPage 1.5s ease-in-out;
-        }
-
-        @keyframes fadeInPage {
-            from { opacity: 0; filter: blur(10px); }
-            to { opacity: 1; filter: blur(0); }
-        }
-
-        /* 1. SIDEBAR */
+        /* 1. SIDEBAR OVERRIDES */
         .museum-sidebar {
-            position: fixed;
-            left: 0; top: 0; bottom: 0;
-            width: 80px;
-            background: #080808;
-            border-right: 1px solid rgba(212, 175, 55, 0.15);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             padding: 20px 10px;
             gap: 10px;
         }
 
         .nav-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            color: rgba(255,255,255,0.4);
-            text-decoration: none;
             border: 1px solid rgba(197,160,89,0.15);
             border-radius: 4px;
-            font-size: 24px;
-            transition: all 0.3s;
+            color: rgba(255,255,255,0.4);
         }
         .nav-link:hover, .nav-link.active {
             color: var(--museum-gold);

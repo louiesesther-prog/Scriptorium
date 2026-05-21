@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCRIPTORIUM | The Threshold</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/shared.css">
     <script src="assets/audio/scriptorium-audio.js"></script>
     <style>
         :root {
@@ -22,75 +23,32 @@
             --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        *, *::before, *::after { box-sizing: border-box; }
-
         body, html {
-            margin: 0; padding: 0 !important;
-            background: var(--obsidian);
-            color: rgba(255,255,255,0.92);
-            font-family: 'Cinzel', serif;
+            padding: 0 !important;
             overflow: hidden;
             height: 100vh;
             animation: none;
         }
 
-        @keyframes fadeInPage {
-            from { opacity: 0; filter: blur(8px); }
-            to   { opacity: 1; filter: blur(0); }
-        }
-
         /* ═══════════════════════════════════════
-           1. SIDEBAR — enhanced with logo & tooltips
+           1. SIDEBAR OVERRIDES
         ═══════════════════════════════════════ */
         .museum-sidebar {
-            position: fixed;
-            left: 0; top: 0; bottom: 0;
-            width: 80px;
             background: var(--obsidian-2);
             border-right: 1px solid var(--border-gold);
-            z-index: 2000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 0;
             transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
         .sidebar-logo {
-            width: 100%;
-            padding: 14px 0 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             border-bottom: 1px solid var(--border-gold);
-            flex-shrink: 0;
-        }
-
-        .sidebar-logo svg {
-            width: 28px; height: 28px;
-            opacity: 0.85;
         }
 
         .sidebar-nav {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 12px 0;
-            gap: 4px;
             overflow: hidden;
         }
 
         .nav-link {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px; height: 50px;
             color: var(--text-secondary);
-            text-decoration: none;
-            border: 1px solid transparent;
-            border-radius: 6px;
             font-size: 20px;
             transition: all 0.25s var(--transition-smooth);
         }
@@ -107,17 +65,10 @@
 
         /* Tooltip */
         .nav-link::after {
-            content: attr(title);
-            position: absolute;
-            left: calc(100% + 12px);
-            top: 50%;
-            transform: translateY(-50%);
             background: #111;
             border: 1px solid var(--border-gold);
             color: var(--museum-gold);
-            font-family: 'Cinzel', serif;
             font-size: 0.5rem;
-            letter-spacing: 2px;
             white-space: nowrap;
             padding: 5px 10px;
             pointer-events: none;
