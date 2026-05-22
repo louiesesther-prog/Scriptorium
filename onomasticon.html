@@ -671,110 +671,88 @@
         window.filterRegistry();
     };
 
-    // Event delegation for filter badges
-    document.querySelector('.filter-badge-row').addEventListener('click', function(e) {
-        if (e.target.classList.contains('filter-badge')) {
-            const category = e.target.getAttribute('data-category');
-            window.setRegistryCategory(category);
-        }
-    });
+     // Event delegation for filter badges
+     document.querySelector('.filter-badge-row').addEventListener('click', function(e) {
+         if (e.target.classList.contains('filter-badge')) {
+             const category = e.target.getAttribute('data-category');
+             window.setRegistryCategory(category);
+         }
+     });
 
-    function renderRegistryList() {
-        var container = document.getElementById('nameListContainer');
-        if (!container) return;
+     function reveal(key, element) {
+         document.querySelectorAll('.name-row').forEach(function(r) { r.classList.remove('active'); });
+         if (element) element.classList.add('active');
 
-        Object.keys(SCRIPTORIUM_ONOMASTICON).forEach(function(key) {
-            var row = document.createElement('div');
-            row.className = 'name-row';
-            row.setAttribute('data-key', key);
-            row.innerText = key.toUpperCase().replace(/-/g, ' ');
-            row.onclick = function() { reveal(key, row); };
-            container.appendChild(row);
-        });
-    }
+         var record = SCRIPTORIUM_ONOMASTICON[key];
+         var sheet = document.getElementById('activeMeaningSheet');
+         sheet.style.opacity = '0';
 
-    renderRegistryList();
+         setTimeout(function() {
+             var imgKey = key.charAt(0).toUpperCase() + key.slice(1).replace(/\s+/g, '-');
+             var imgSrc = 'assets/images/onomasticon/' + imgKey + '.png';
 
-    var params = new URLSearchParams(window.location.search);
-    var focus = params.get('focus');
-    if (focus && SCRIPTORIUM_ONOMASTICON[focus]) {
-        var target = document.querySelector('.name-row[data-key="' + focus + '"]');
-        if (target) {
-            reveal(focus, target);
-            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-    }
+             sheet.innerHTML = 
+                 // 1. LEFT HALF BLOCK CONTAINER (Captured Image)
+                 '<div class="onom-image-frame">' +
+                     '<img src="' + imgSrc + '" alt="' + key + '" onerror="this.outerHTML=\\'<span class=&quot;onom-image-placeholder&quot;>✦</span>\\'\">' +
+                 '</div>' +
 
-    function renderRegistryList() {
-        var container = document.getElementById('nameListContainer');
-        if (!container) return;
+                 // 2. RIGHT HALF BLOCK CONTAINER (Scrolling Definitions)
+                 '<div class="onom-text-frame">' +
+                     '<div class="hebrew-glyph">' + record.hebrew + '</div>' +
+                     (record.geez ? '<div class="geez-glyph">' + record.geez + '</div>' : '') +
+                     
+                     '<h2 class="meaning-title">' + key.toUpperCase().replace(/-/g, ' ') + '</h2>' +
+                     '<div class="phonetic-sub">&lsqb;/' + record.phonetic + '/&rsqb;</div>' +
+                     
+                     '<div class="data-segment">' +
+                         '<h4>ROOT LITERAL MEANING</h4>' +
+                         '<p style="color:#fff; font-weight:600; letter-spacing: 0.5px;">' + record.meaning + '</p>' +
+                     '</div>' +
+                     
+                     '<div class="data-segment">' +
+                         '<h4>HISTORICAL WITNESS &amp; RECORD</h4>' +
+                         '<p>' + record.historicalContext + '</p>' +
+                     '</div>' +
+                     
+                     (record.alliance !== '—' ? '<div class="data-segment">' +
+                         '<h4>TRIBAL ALLIANCE COORDINATE</h4>' +
+                         '<p class="alliance-text" style="color: var(--gold); font-family:\'Cinzel\'; font-size:1rem;">' + record.alliance + '</p>' +
+                     '</div>' : '') +
+                 '</div>';
+             sheet.style.opacity = '1';
+         }, 200);
+     }
 
-        Object.keys(SCRIPTORIUM_ONOMASTICON).forEach(function(key) {
-            var row = document.createElement('div');
-            row.className = 'name-row';
-            row.setAttribute('data-key', key);
-            row.innerText = key.toUpperCase().replace(/-/g, ' ');
-            row.onclick = function() { reveal(key, row); };
-            container.appendChild(row);
-        });
-    }
+     function renderRegistryList() {
+         var container = document.getElementById('nameListContainer');
+         if (!container) return;
 
-    renderRegistryList();
+         Object.keys(SCRIPTORIUM_ONOMASTICON).forEach(function(key) {
+             var row = document.createElement('div');
+             row.className = 'name-row';
+             row.setAttribute('data-key', key);
+             row.innerText = key.toUpperCase().replace(/-/g, ' ');
+             row.onclick = function() { reveal(key, row); };
+             container.appendChild(row);
+         });
+     }
 
-    var params = new URLSearchParams(window.location.search);
-    var focus = params.get('focus');
-    if (focus && SCRIPTORIUM_ONOMASTICON[focus]) {
-        var target = document.querySelector('.name-row[data-key="' + focus + '"]');
-        if (target) {
-            reveal(focus, target);
-            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-    }
+     renderRegistryList();
 
-    function reveal(key, element) {
-        document.querySelectorAll('.name-row').forEach(function(r) { r.classList.remove('active'); });
-        if (element) element.classList.add('active');
+     var params = new URLSearchParams(window.location.search);
+     var focus = params.get('focus');
+     if (focus && SCRIPTORIUM_ONOMASTICON[focus]) {
+         var target = document.querySelector('.name-row[data-key="' + focus + '"]');
+         if (target) {
+             reveal(focus, target);
+             target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+         }
+     }
 
-        var record = SCRIPTORIUM_ONOMASTICON[key];
-        var sheet = document.getElementById('activeMeaningSheet');
-        sheet.style.opacity = '0';
 
-        setTimeout(function() {
-            var imgKey = key.charAt(0).toUpperCase() + key.slice(1).replace(/\s+/g, '-');
-            var imgSrc = 'assets/images/onomasticon/' + imgKey + '.png';
 
-            sheet.innerHTML = 
-                // 1. LEFT HALF BLOCK CONTAINER (Captured Image)
-                '<div class="onom-image-frame">' +
-                    '<img src="' + imgSrc + '" alt="' + key + '" onerror="this.outerHTML=\\'<span class=&quot;onom-image-placeholder&quot;>✦</span>\\'\">' +
-                '</div>' +
 
-                // 2. RIGHT HALF BLOCK CONTAINER (Scrolling Definitions)
-                '<div class="onom-text-frame">' +
-                    '<div class="hebrew-glyph">' + record.hebrew + '</div>' +
-                    (record.geez ? '<div class="geez-glyph">' + record.geez + '</div>' : '') +
-                    
-                    '<h2 class="meaning-title">' + key.toUpperCase().replace(/-/g, ' ') + '</h2>' +
-                    '<div class="phonetic-sub">&lsqb;/' + record.phonetic + '/&rsqb;</div>' +
-                    
-                    '<div class="data-segment">' +
-                        '<h4>ROOT LITERAL MEANING</h4>' +
-                        '<p style="color:#fff; font-weight:600; letter-spacing: 0.5px;">' + record.meaning + '</p>' +
-                    '</div>' +
-                    
-                    '<div class="data-segment">' +
-                        '<h4>HISTORICAL WITNESS &amp; RECORD</h4>' +
-                        '<p>' + record.historicalContext + '</p>' +
-                    '</div>' +
-                    
-                    (record.alliance !== '—' ? '<div class="data-segment">' +
-                        '<h4>TRIBAL ALLIANCE COORDINATE</h4>' +
-                        '<p class="alliance-text" style="color: var(--gold); font-family:\'Cinzel\'; font-size:1rem;">' + record.alliance + '</p>' +
-                    '</div>' : '') +
-                '</div>';
-            sheet.style.opacity = '1';
-        }, 200);
-    }
 </script>
 <script src="assets/js/scriptorium-core.js"></script>
 <div id="narthex-transition-curtain" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:99999;pointer-events:none;opacity:0;transition:opacity 0.6s ease;"></div>
