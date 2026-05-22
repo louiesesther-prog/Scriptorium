@@ -340,11 +340,11 @@
         <div class="registry-header">REGISTRY OF THE COVENANT</div>
         <input type="text" id="onomasticonSearch" placeholder="SEARCH CODENAME..." oninput="filterRegistry()" class="museum-search-input">
         <div class="filter-badge-row">
-            <button class="filter-badge active" onclick="setRegistryCategory('all')">ALL</button>
-            <button class="filter-badge" onclick="setRegistryCategory('tribes')">TRIBES</button>
-            <button class="filter-badge" onclick="setRegistryCategory('patriarchs')">PATRIARCHS</button>
-            <button class="filter-badge" onclick="setRegistryCategory('royalProphetic')">ROYAL &amp; PROPHETIC</button>
-            <button class="filter-badge" onclick="setRegistryCategory('apostolic')">APOSTOLIC</button>
+            <button class="filter-badge active" data-category="all">ALL</button>
+            <button class="filter-badge" data-category="tribes">TRIBES</button>
+            <button class="filter-badge" data-category="patriarchs">PATRIARCHS</button>
+            <button class="filter-badge" data-category="royalProphetic">ROYAL &amp; PROPHETIC</button>
+            <button class="filter-badge" data-category="apostolic">APOSTOLIC</button>
         </div>
         <div id="nameListContainer"></div>
     </aside>
@@ -670,6 +670,40 @@
         currentCategory = cat;
         window.filterRegistry();
     };
+
+    // Event delegation for filter badges
+    document.querySelector('.filter-badge-row').addEventListener('click', function(e) {
+        if (e.target.classList.contains('filter-badge')) {
+            const category = e.target.getAttribute('data-category');
+            window.setRegistryCategory(category);
+        }
+    });
+
+    function renderRegistryList() {
+        var container = document.getElementById('nameListContainer');
+        if (!container) return;
+
+        Object.keys(SCRIPTORIUM_ONOMASTICON).forEach(function(key) {
+            var row = document.createElement('div');
+            row.className = 'name-row';
+            row.setAttribute('data-key', key);
+            row.innerText = key.toUpperCase().replace(/-/g, ' ');
+            row.onclick = function() { reveal(key, row); };
+            container.appendChild(row);
+        });
+    }
+
+    renderRegistryList();
+
+    var params = new URLSearchParams(window.location.search);
+    var focus = params.get('focus');
+    if (focus && SCRIPTORIUM_ONOMASTICON[focus]) {
+        var target = document.querySelector('.name-row[data-key="' + focus + '"]');
+        if (target) {
+            reveal(focus, target);
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
 
     function renderRegistryList() {
         var container = document.getElementById('nameListContainer');
