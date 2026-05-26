@@ -66,16 +66,16 @@
       '</div>' +
       '<nav class="sidebar-nav" id="sidebarNav">' +
         '<a href="scriptorium.html" class="nav-link" title="THE THRESHOLD">&#8984;</a>' +
-        '<a href="covenant-map.html" class="nav-link" title="COVENANT MAP">&#128337;</a>' +
-        '<a href="MAP.html" class="nav-link" title="BIBLICAL NAVIGATOR">&#127760;</a>' +
+        '<a href="covenant-map.html" class="nav-link" title="COVENANT MAP">&#128506;</a>' +
+        '<a href="MAP.html" class="nav-link" title="BIBLICAL NAVIGATOR">&#129517;</a>' +
         '<a href="archive.html" class="nav-link" title="THE ARCHIVE">&#128214;</a>' +
         '<div class="nav-divider"></div>' +
         '<a href="genealogy.html" class="nav-link" title="GENEALOGY">&#9812;</a>' +
-        '<a href="tabernacle.html" class="nav-link" title="TABERNACLE">&#9961;</a>' +
-        '<a href="onomasticon.html" class="nav-link" title="ONOMASTICON">&#10022;</a>' +
-        '<a href="ethiopian-canon.html" class="nav-link" title="TEWAHEDO ARCHIVE">&#10022;</a>' +
-        '<a href="prophetic-mesh.html" class="nav-link" title="PROPHETIC MESH">&#10022;</a>' +
-        '<a href="sanctum-3d.html" class="nav-link" title="3D SANCTUM">&#9961;</a>' +
+        '<a href="tabernacle.html" class="nav-link" title="TABERNACLE">&#127963;</a>' +
+        '<a href="onomasticon.html" class="nav-link" title="ONOMASTICON">&#128209;</a>' +
+        '<a href="ethiopian-canon.html" class="nav-link" title="TEWAHEDO ARCHIVE">&#9766;</a>' +
+        '<a href="prophetic-mesh.html" class="nav-link" title="PROPHETIC MESH">&#9733;</a>' +
+        '<a href="sanctum-3d.html" class="nav-link" title="3D SANCTUM">&#128750;</a>' +
         '<a href="scribes-chamber.html" class="nav-link" title="SCRIBES CHAMBER">&#128218;</a>' +
         '<a href="comparison-mode.html" class="nav-link" title="COMPARISON MODE">&#128100;</a>' +
         '<div class="nav-divider"></div>' +

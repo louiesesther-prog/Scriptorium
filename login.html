@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCRIPTORIUM | Access the Archive</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500&display=optional" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/shared.css">
     <script src="assets/audio/scriptorium-audio.js" defer></script>
     <script src="assets/js/sidebar.js"></script>
@@ -40,6 +40,7 @@
         @keyframes shake{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-4px)}20%,40%,60%,80%{transform:translateX(4px)}}
         .shake{animation:shake 0.4s ease;}
     </style>
+    <script>document.fonts.ready.then(function(){document.documentElement.classList.add('fonts-loaded')});</script>
 </head>
 <body>
 <div id="sidebarContainer"></div>

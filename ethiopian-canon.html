@@ -910,6 +910,97 @@
             display: flex;
             opacity: 1;
         }
+
+        /* ═══ CARD ACTION BUTTONS ═══ */
+        .download-btn {
+            display: inline-block;
+            margin-top: 10px;
+            margin-right: 6px;
+            padding: 7px 14px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            background: transparent;
+            border: 1px solid rgba(212,175,55,0.2);
+            color: rgba(212,175,55,0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+            text-decoration: none;
+        }
+        .download-btn:hover {
+            background: rgba(212,175,55,0.12);
+            border-color: rgba(212,175,55,0.5);
+            color: #d4af37;
+            box-shadow: 0 0 12px rgba(212,175,55,0.08);
+        }
+
+        /* ═══ SCRIPTORIUM READER OVERLAY ═══ */
+        .reader-overlay {
+            position: fixed; inset: 0; z-index: 100000;
+            background: rgba(5,5,5,0.98); color: rgba(255,255,255,0.97);
+            overflow-y: auto;
+        }
+        .reader-content {
+            max-width: 900px; width: 95%;
+            border: 1px solid var(--museum-gold, #d4af37);
+            background: #0a0a0a; margin: 40px auto; padding: 30px;
+            position: relative;
+        }
+        .reader-close {
+            position: absolute; right: 15px; top: 15px;
+            background: none; border: 1px solid rgba(212,175,55,0.3);
+            color: #d4af37; cursor: pointer; padding: 5px 10px;
+            font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 1px;
+        }
+        .reader-close:hover { background: rgba(212,175,55,0.1); }
+        .reader-title {
+            font-family: 'Cinzel', serif; color: var(--museum-gold, #d4af37);
+            text-align: center; margin-bottom: 5px; letter-spacing: 4px;
+        }
+        .reader-subtext {
+            text-align: center; font-family: 'Cormorant Garamond', serif;
+            font-style: italic; color: rgba(255,255,255,0.4); margin-bottom: 25px;
+        }
+        .reader-tabs {
+            display: flex; justify-content: center; gap: 15px; margin-bottom: 20px;
+        }
+        .reader-tab {
+            padding: 8px 16px; border: 1px solid rgba(212,175,55,0.3);
+            color: #ccc; cursor: pointer; font-family: 'Cinzel', serif;
+            font-size: 0.72rem; letter-spacing: 1px;
+            background: transparent; transition: all 0.3s;
+        }
+        .reader-tab.active {
+            background: rgba(212,175,55,0.15); border-color: #d4af37; color: #fff;
+        }
+        .reader-tab:hover { background: rgba(212,175,55,0.08); }
+        .reader-text-display {
+            max-height: 55vh; overflow-y: auto;
+            font-family: 'Cormorant Garamond', serif; font-size: 1.25rem;
+            line-height: 1.8; text-align: justify; padding: 15px;
+            border-top: 1px solid rgba(212,175,55,0.15); color: rgba(255,255,255,0.9);
+        }
+        .reader-pdf-display { height: 55vh; }
+        .reader-frame {
+            width: 100%; height: 100%;
+            border: 1px solid rgba(212,175,55,0.2); background: #111;
+        }
+        .reader-footer {
+            margin-top: 25px; text-align: center;
+            border-top: 1px solid rgba(212,175,55,0.15); padding-top: 15px;
+        }
+        .reader-download-btn {
+            display: inline-block; padding: 10px 24px;
+            border: 1px solid #d4af37; color: #d4af37;
+            text-decoration: none; font-family: 'Cinzel', serif;
+            font-size: 0.85rem; letter-spacing: 2px;
+            background: rgba(212,175,55,0.05); transition: all 0.3s;
+        }
+        .reader-download-btn:hover {
+            background: rgba(212,175,55,0.15); box-shadow: 0 0 15px rgba(212,175,55,0.1);
+        }
         .artifact-parchment-modal {
             position: relative;
             width: 90%;
@@ -1648,8 +1739,6 @@
             }
         });
     }
-    console.log('CANON_DATA: before merge=' + beforeLen + ', after=' + CANON_DATA.length);
-    
     CANON_DATA.forEach(function(book, idx) {
         var card = document.createElement('div');
         card.className = 'book-card hidden'; // Fix #7: start hidden, shown by vault selection
@@ -1799,6 +1888,8 @@ var currentEra = 0;
     var overlayContent = document.getElementById('overlayContent');
 
     function openOverlay(book) {
+        // Map Ethiopian card id to canonical book name for the reader
+        var readerName = book.name;
         overlayContent.innerHTML =
             '<button class="close-btn" onclick="closeOverlay()">&#10005;</button>' +
             '<h2>' + book.name + '</h2>' +
@@ -1807,7 +1898,11 @@ var currentEra = 0;
             '<div class="field"><strong>Manuscript</strong><span>' + book.artifact + '</span></div>' +
             '<div class="field"><strong>Repository</strong><span>' + book.site + '</span></div>' +
             (book.discovery ? '<div class="field"><strong>Discovery</strong><span>' + book.discovery + '</span></div>' : '') +
-            '<div class="lore">' + book.note + '</div>';
+            '<div class="lore">' + book.note + '</div>' +
+            '<div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap;">' +
+              '<button class="scr-read-btn" onclick="ScrReader.open(\'' + readerName.replace(/'/g,"\\'") + '\');closeOverlay();" style="font-size:0.65rem;padding:10px 20px;">📖 READ FULL BOOK</button>' +
+              '<button class="scr-read-btn" onclick="ScrReader.open(\'' + readerName.replace(/'/g,"\\'") + '\');setTimeout(function(){ScrReader.downloadBook();},600);closeOverlay();" style="font-size:0.65rem;padding:10px 20px;border-color:rgba(212,175,55,0.2);color:rgba(212,175,55,0.55);">⬇ DOWNLOAD</button>' +
+            '</div>';
         overlay.classList.add('active');
     }
 
@@ -2111,7 +2206,6 @@ var currentEra = 0;
             return { name: b.name, date: assignBookDate(b), section: b.section, discovery: b.discovery };
         });
         var dates = books.map(function(b) { return parseTimelineDate(b.date); });
-        console.log('Timeline books count:', books.length, 'Date range:', Math.min.apply(null, dates), 'to', Math.max.apply(null, dates));
         var minDate = Math.min.apply(null, dates) - 20;
         var maxDate = Math.max.apply(null, dates) + 20;
         var range = maxDate - minDate;
@@ -2434,5 +2528,24 @@ document.getElementById('artifact-modal-overlay').addEventListener('click', func
 });
 </script>
 
+<!-- SCRIPTORIUM GLOBAL READER MODAL -->
+<div id="scriptoriumReaderModal" class="reader-overlay" style="display:none;">
+    <div class="reader-content">
+        <button class="reader-close" onclick="closeScriptoriumReader()">✕ CLOSE</button>
+        <h2 id="readerBookTitle" class="reader-title">BOOK TITLE</h2>
+        <div id="readerSubtext" class="reader-subtext">Sacred Record &amp; Textual Witness</div>
+        <div class="reader-tabs">
+            <button id="tabTextMode" onclick="setReaderDisplay('text')" class="reader-tab active">📜 DIGITAL TEXT</button>
+            <button id="tabPdfMode" onclick="setReaderDisplay('pdf')" class="reader-tab">📄 ARCHIVAL PRINT</button>
+        </div>
+        <div id="readerTextDisplay" class="reader-text-display"><p style="color:rgba(255,255,255,0.4);text-align:center;">Loading manuscript scrolls...</p></div>
+        <div id="readerPdfDisplay" class="reader-pdf-display" style="display:none;">
+            <iframe id="readerDocumentFrame" class="reader-frame" src=""></iframe>
+        </div>
+        <div class="reader-footer">
+            <a id="readerDownloadAction" href="#" download class="reader-download-btn">📥 DOWNLOAD FULL BOOK (.PDF)</a>
+        </div>
+    </div>
+</div>
 </body>
 </html>

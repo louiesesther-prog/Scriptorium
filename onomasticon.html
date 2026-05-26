@@ -14,7 +14,7 @@
             display: grid;
             grid-template-columns: 350px 1fr;
             height: 100vh;
-            padding-left: 0;
+            padding-left: 80px;
             gap: 0;
         }
 
@@ -22,11 +22,17 @@
         .registry-sidebar {
             background: #080808;
             border-right: 1px solid var(--gold-subtle);
-            padding: 20px 16px;
-            height: calc(100vh - 160px); /* Match the meaning canvas height */
-            overflow-y: auto;
+            padding: 20px 16px 0;
+            height: 100vh;
             display: flex;
             flex-direction: column;
+            box-sizing: border-box;
+        }
+        #nameListContainer {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+            padding-bottom: 20px;
         }
         .registry-header {
             font-family: 'Cinzel', serif;
@@ -55,7 +61,7 @@
             transition: 0.3s;
             font-family: 'Cinzel', serif;
             letter-spacing: 1px;
-            font-size: 1.14rem;
+            font-size: 0.9rem;
             color: rgba(255,255,255,0.98);
             border-radius: 3px;
         }
@@ -94,11 +100,11 @@
 
         /* LEFT HALF: Pinned Image Frame */
         .onom-image-frame {
-            flex: 1; /* Takes up exactly 45% to 50% of screen row space */
-            max-width: 45%;
+            flex: 1.2;
+            max-width: 55%;
             height: 100%;
             background: #000;
-            border-right: 1px solid rgba(212, 175, 55, 0.15);
+            border-right: none;
             position: relative;
             display: flex;
             align-items: center;
@@ -120,33 +126,26 @@
 
         /* RIGHT HALF: Independent Scrolling Text Context Panel */
         .onom-text-frame {
-            flex: 1.2;
+            flex: 0.9;
             height: 100%;
-            padding: 45px;
-            overflow-y: auto; /* CRITICAL: Creates a scrollbar ONLY inside this text tray! */
+            padding: 30px;
+            overflow-y: auto;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
         }
 
-        /* Adjust your glyph overlays to float neatly inside the layout */
+        /* Glyphs displayed inline inside the text frame */
         .hebrew-glyph {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 4rem;
-            color: rgba(212, 175, 55, 0.05); /* Ghost background aesthetic watermark */
+            font-size: 2.2rem;
+            color: #d4af37;
             font-family: 'Cinzel', serif;
-            pointer-events: none;
+            text-align: center;
+            margin-bottom: 28px;
+            text-shadow: 0 0 10px rgba(212,175,55,0.6), 0 0 30px rgba(212,175,55,0.3);
         }
-
         .geez-glyph {
-            position: absolute;
-            top: 80px;
-            right: 20px;
-            font-size: 3rem;
-            color: rgba(212, 175, 55, 0.03);
-            pointer-events: none;
+            display: none;
         }
 
         /* Clean styling spacing adjustments for data sections */
@@ -216,24 +215,10 @@
             color: var(--gold);
             line-height: 280px;
         }
-        .hebrew-glyph {
-            font-size: 5.4rem;
-            text-align: center;
-            color: rgba(255,255,255,0.45);
-            text-shadow: 0 0 30px rgba(212,175,55,0.04);
-            margin-bottom: 4px;
-        }
-        .geez-glyph {
-            font-size: 3.84rem;
-            text-align: center;
-            color: rgba(212,175,55,0.4);
-            margin-bottom: 2px;
-            letter-spacing: 2px;
-        }
         .meaning-title {
             font-family: 'Cinzel', serif;
             text-align: center;
-            font-size: 2.52rem;
+            font-size: 1.8rem;
             letter-spacing: 4px;
             color: #fff;
             margin: 0;
@@ -242,9 +227,9 @@
             text-align: center;
             font-style: italic;
             color: var(--gold);
-            font-size: 1.38rem;
+            font-size: 1rem;
             margin-top: 4px;
-            margin-bottom: 40px;
+            margin-bottom: 24px;
             opacity: 0.85;
         }
         .data-segment { margin-bottom: 24px; animation: segmentFadeIn 0.5s ease both; }
@@ -263,8 +248,8 @@
             border-bottom: 1px solid rgba(212,175,55,0.06);
         }
         .data-segment p {
-            font-size: 1.5rem;
-            line-height: 1.7;
+            font-size: 1.1rem;
+            line-height: 1.6;
             margin: 8px 0 0;
             color: rgba(255,255,255,0.95);
         }
@@ -308,14 +293,13 @@
             display: flex;
             gap: 6px;
             margin-bottom: 20px;
+            font-size: 0.55rem;
         }
-        .filter-badge {
-            flex: 1;
-            background: transparent;
-            border: 1px solid var(--gold-subtle);
-            color: rgba(255,255,255,0.4);
-            font-family: 'Cinzel', serif;
-            font-size: 0.9rem;
+        .filter-badge-row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+            font-size: 0.55rem;
             letter-spacing: 1px;
             padding: 8px 4px;
             cursor: pointer;
@@ -666,7 +650,6 @@
 
     window.setRegistryCategory = function(cat) {
         document.querySelectorAll('.filter-badge').forEach(function(b) { b.classList.remove('active'); });
-        event.target.classList.add('active');
         currentCategory = cat;
         window.filterRegistry();
     };
@@ -691,19 +674,19 @@
              var imgKey = key.charAt(0).toUpperCase() + key.slice(1).replace(/\s+/g, '-');
              var imgSrc = 'assets/images/onomasticon/' + imgKey + '.png';
 
-             sheet.innerHTML = 
-                 // 1. LEFT HALF BLOCK CONTAINER (Captured Image)
-                 '<div class="onom-image-frame">' +
-                     '<img src="' + imgSrc + '" alt="' + key + '" onerror="this.outerHTML=\\'<span class=&quot;onom-image-placeholder&quot;>✦</span>\\'\">' +
-                 '</div>' +
+                   sheet.innerHTML = 
+                    // 1. LEFT HALF BLOCK CONTAINER (Captured Image)
+                    '<div class="onom-image-frame">' +
+                        '<img src="' + imgSrc + '" alt="' + key + '" onerror="this.outerHTML=\'<span class=\\\"onom-image-placeholder\\\">✦</span>\'">' +
+                    '</div>' +
 
                  // 2. RIGHT HALF BLOCK CONTAINER (Scrolling Definitions)
                  '<div class="onom-text-frame">' +
-                     '<div class="hebrew-glyph">' + record.hebrew + '</div>' +
-                     (record.geez ? '<div class="geez-glyph">' + record.geez + '</div>' : '') +
-                     
                      '<h2 class="meaning-title">' + key.toUpperCase().replace(/-/g, ' ') + '</h2>' +
                      '<div class="phonetic-sub">&lsqb;/' + record.phonetic + '/&rsqb;</div>' +
+                     
+                     '<div class="hebrew-glyph">' + record.hebrew + '</div>' +
+                     (record.geez ? '<div class="geez-glyph">' + record.geez + '</div>' : '') +
                      
                      '<div class="data-segment">' +
                          '<h4>ROOT LITERAL MEANING</h4>' +
@@ -738,22 +721,19 @@
          });
      }
 
-     renderRegistryList();
 
-     var params = new URLSearchParams(window.location.search);
-     var focus = params.get('focus');
-     if (focus && SCRIPTORIUM_ONOMASTICON[focus]) {
-         var target = document.querySelector('.name-row[data-key="' + focus + '"]');
-         if (target) {
-             reveal(focus, target);
-             target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-         }
-     }
+    renderRegistryList();
 
-
-
-
-</script>
+    var params = new URLSearchParams(window.location.search);
+    var focus = params.get('focus');
+    if (focus && SCRIPTORIUM_ONOMASTICON[focus]) {
+        var target = document.querySelector('.name-row[data-key="' + focus + '"]');
+        if (target) {
+            reveal(focus, target);
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+ </script>
 <script src="assets/js/scriptorium-core.js"></script>
 <div id="narthex-transition-curtain" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:99999;pointer-events:none;opacity:0;transition:opacity 0.6s ease;"></div>
 </body>

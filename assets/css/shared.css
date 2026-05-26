@@ -10,7 +10,7 @@
 }
 [data-theme="nt"] { --text-primary: rgba(255,255,255,0.95); --text-secondary: rgba(255,255,255,0.7); --border-gold: rgba(255,255,255,0.1); }
 *, *::before, *::after { box-sizing: border-box; }
-body, html { margin:0;padding:0;background:var(--obsidian);color:var(--text-primary);font-family:'Cinzel',serif;overflow-x:hidden;animation:fadeInPage 1.8s var(--transition-smooth) both;cursor:url('../cursors/trowel-pointer.svg') 2 2,auto; }
+body, html { margin:0;padding:0;background:var(--obsidian);color:var(--text-primary);font-family:'Cinzel',serif;overflow-x:hidden;cursor:url('../cursors/trowel-pointer.svg') 2 2,auto; }
 @keyframes fadeInPage { from { opacity:0;filter:blur(8px); } to { opacity:1;filter:blur(0); } }
 input,textarea,select,[contenteditable] { cursor:url('../cursors/quill-text.svg') 0 32,text; }
 a,button,.portal-card,.leaflet-interactive,[onclick],.nav-link,.sidebar-nav a,.timeline-era-marker { cursor:url('../cursors/seal-ring-hover.svg') 16 16,pointer; }
@@ -29,9 +29,9 @@ a,button,.portal-card,.leaflet-interactive,[onclick],.nav-link,.sidebar-nav a,.t
 /* ── SIDEBAR LOGO ── */
 .sidebar-logo svg { width:26px;height:26px; }
 .sidebar-nav { flex:1;display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:4px;overflow:hidden; }
-.nav-link { position:relative;display:flex;align-items:center;justify-content:center;width:50px;height:50px;color:var(--text-secondary);text-decoration:none;border:1px solid transparent;border-radius:6px;font-size:20px;transition:all 0.25s var(--transition-smooth); }
-.nav-link:hover { color:var(--museum-gold);border-color:rgba(212,175,55,0.25);background:var(--museum-gold-faint); }
-.nav-link.active { color:var(--museum-gold);border-color:rgba(212,175,55,0.3);background:var(--museum-gold-faint); }
+.nav-link { position:relative;display:flex;align-items:center;justify-content:center;width:50px;height:50px;color:var(--museum-gold);text-decoration:none;border:1px solid transparent;border-radius:6px;font-size:20px;transition:all 0.25s var(--transition-smooth); }
+.nav-link:hover { color:#ffffff;border-color:rgba(212,175,55,0.25);background:var(--museum-gold-faint); }
+.nav-link.active { color:#ffffff;border-color:rgba(212,175,55,0.3);background:var(--museum-gold-faint); }
 .nav-link::after { content:attr(title);position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%);background:#111;border:1px solid rgba(212,175,55,0.2);color:var(--museum-gold);font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:2px;white-space:nowrap;padding:5px 10px;pointer-events:none;opacity:0;transition:opacity 0.2s ease;z-index:9999; }
 .nav-link:hover::after { opacity:1; }
 .nav-divider { width:28px;height:1px;background:rgba(212,175,55,0.08);flex-shrink:0;margin:4px 0; }
@@ -51,3 +51,11 @@ a,button,.portal-card,.leaflet-interactive,[onclick],.nav-link,.sidebar-nav a,.t
 .streak-tooltip-days { font-family:'Cinzel',serif;font-size:1.2rem;letter-spacing:2px;color:var(--museum-gold);margin-bottom:4px; }
 .streak-tooltip-sub { font-family:'Cormorant Garamond',serif;font-size:0.8rem;color:rgba(255,255,255,0.3);font-style:italic; }
 ::-webkit-scrollbar { width:4px; } ::-webkit-scrollbar-track { background:transparent; } ::-webkit-scrollbar-thumb { background:rgba(212,175,55,0.2);border-radius:2px; }
+
+/* ── MOBILE SIDEBAR COLLAPSE ── */
+@media (max-width: 768px) {
+    .vault-header, .filter-nav, #canonGallery, .gallery, .vault-grid, .hall-grid,
+    .section-divider, .timeline-rail, .canon-search, .retrieval-status,
+    .compendium-gateway, .hall-header, .sort-controls { margin-left: 0 !important; }
+    .vault-header h1, .hall-header h1 { letter-spacing: 4px !important; overflow-wrap: break-word; }
+}

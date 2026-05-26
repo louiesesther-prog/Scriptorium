@@ -7,12 +7,13 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@400;500&family=Space+Grotesk:wght@400;500&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@400;500&family=Space+Grotesk:wght@400;500&family=Syncopate:wght@400;700&display=optional">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@400;500&family=Space+Grotesk:wght@400;500&family=Syncopate:wght@400;700&display=optional">
     <link rel="stylesheet" href="assets/css/shared.css">
-    <script src="assets/audio/scriptorium-audio.js"></script>
+    <script defer src="assets/audio/scriptorium-audio.js"></script>
     <script src="https://unpkg.com/fuse.js@7.0.0/dist/fuse.min.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){document.fonts.ready.then(function(){document.documentElement.classList.add('fonts-loaded')})});</script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
@@ -105,7 +106,7 @@ body { font-family: 'Space Grotesk', sans-serif; background: radial-gradient(ell
         ::-webkit-scrollbar-corner { background: #0f0e0c; }
         
         /* ==================== MAP ==================== */
-        #map { position: fixed; top: 60px; left: 75px; width: calc(100% - 75px); height: calc(84vh - 60px); z-index: 1;
+        #map { position: fixed; top: 60px; left: 75px; width: calc(100% - 75px); height: calc(84vh - 60px); z-index: 1; background: #1a1a1e !important;
                box-shadow: inset 0 0 60px rgba(0,0,0,0.5);
                transform: translateZ(0);
                will-change: transform;
@@ -174,20 +175,83 @@ body { font-family: 'Space Grotesk', sans-serif; background: radial-gradient(ell
 
         .museum-marker:hover .marker-core { transform: scale(1.5); background: #fff; }
 
-        .leaflet-container { background: #050505 !important; }
+        .leaflet-container { background: #1a1a1e !important; }
         .leaflet-tile { filter: brightness(0.7) contrast(1.1) sepia(0.1); will-change: transform; }
 
         /* Glassmorphism controls */
         .glass-panel { background: rgba(10,10,14,0.88); border: 1px solid rgba(212,175,55,0.1); box-shadow: 0 4px 30px rgba(0,0,0,0.5); }
         .gateway { background: rgba(10,10,14,0.88) !important; border-bottom: 1px solid rgba(212,175,55,0.17) !important; }
-        .leaflet-popup-content-wrapper { background: rgba(12,12,18,0.96) !important; border: 1px solid rgba(212,175,55,0.85) !important; border-radius: 4px !important; box-shadow: 0 8px 40px rgba(0,0,0,0.6) !important; }
-        .leaflet-popup-tip { background: rgba(8,8,10,0.92) !important; border: 1px solid rgba(212,175,55,0.85) !important; }
-        .leaflet-popup-close-button { color: rgba(212,175,55,0.3) !important; }
-        .leaflet-popup-content-wrapper { font-size: 19.2px !important; }
-        .leaflet-popup-content { color: #fff !important; font-size: 21.6px !important; line-height: 1.6 !important; }
-        .leaflet-popup-content h3 { color: #d4af37 !important; font-size: 24px !important; font-weight: 600 !important; margin: 0 0 10px 0 !important; }
-        .leaflet-popup-content p { color: #fff !important; font-size: 19.2px !important; }
-        .leaflet-popup-content span { color: #d4af37 !important; font-size: 19.2px !important; }
+        /* --- ULTIMATE LEAFLET POPUP NUKE --- */
+        html body .leaflet-popup-content-wrapper {
+            background: transparent !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            border-radius: 0 !important;
+        }
+        html body .leaflet-popup-tip {
+            background: rgba(12, 12, 18, 0.96) !important;
+            border: 1px solid rgba(212, 175, 55, 0.3) !important;
+            border-top: none !important;
+            border-left: none !important;
+            box-shadow: none !important;
+        }
+        html body .leaflet-popup-content {
+            margin: 0 !important;
+            width: auto !important;
+        }
+        html body .leaflet-popup-close-button {
+            color: #d4af37 !important;
+            font-size: 24px !important;
+            padding-top: 10px !important;
+            padding-right: 15px !important;
+            text-decoration: none !important;
+            z-index: 100 !important;
+        }
+        html body .leaflet-popup-close-button:hover {
+            color: #fff !important;
+            background: transparent !important;
+        }
+
+        /* Digging active — reduce popup opacity & brighten text */
+.digging-active .journey-stop-popup .leaflet-popup-content-wrapper {
+    background: rgba(0,0,0,0.7) !important;
+}
+.digging-active .journey-stop-popup .leaflet-popup-content {
+    color: #fff !important;
+    text-shadow: 0 0 6px rgba(255,255,255,0.4) !important;
+}
+
+/* Journey popup container overrides */
+.journey-stop-popup .leaflet-popup-content-wrapper {
+    padding: 0 !important;
+    border-radius: 4px !important;
+    overflow: auto !important;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.9) !important;
+    background: transparent !important;
+    width: auto !important;
+    height: auto !important;
+    max-width: 94vw !important;
+}
+        .journey-stop-popup .leaflet-popup-content {
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+        }
+        .journey-stop-popup .leaflet-popup-tip { display: none !important; }
+        .journey-stop-popup .leaflet-popup-close-button {
+            top: 6px !important;
+            right: 6px !important;
+            z-index: 10 !important;
+            font-size: 18px !important;
+            color: rgba(212,175,55,0.5) !important;
+            background: rgba(0,0,0,0.5) !important;
+            width: 24px !important;
+            height: 24px !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
 
         .museum-tooltip-style { background: rgba(8,8,10,0.92) !important; border: 1px solid rgba(212,175,55,0.85) !important; color: #D4AF37 !important; font-family: 'Cinzel', serif !important; font-size: 0.84rem !important; letter-spacing: 2px !important; border-radius: 3px !important; padding: 6px 12px !important; box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important; }
         .museum-tooltip-style::before { border-top-color: rgba(212,175,55,0.85) !important; }
@@ -512,7 +576,7 @@ body { font-family: 'Space Grotesk', sans-serif; background: radial-gradient(ell
         .leaflet-marker-pane { z-index: 500 !important; }
         
 /* ==================== NORTH (Gateway) ==================== */
-        .gateway { position: fixed; top: 0; left: 0; right: 0; height: 60px; z-index: 1001; 
+        .gateway { position: fixed; top: 0; left: var(--sidebar-w, 80px); right: 0; height: 60px; z-index: 1001; 
                    background: linear-gradient(180deg, rgba(10,11,15,0.95) 0%, rgba(10,11,15,0) 100%);
                    display: flex; align-items: center; justify-content: space-between; padding: 0 28px; overflow: visible; }
         .brand { font-family: 'Syncopate', sans-serif; font-size: 1.08rem; letter-spacing: 4px; color: var(--gold); 
@@ -566,7 +630,7 @@ body { font-family: 'Space Grotesk', sans-serif; background: radial-gradient(ell
  .era-btn.active::after { color: var(--gold); }
         
 /* ==================== EAST (Selah/Social) ==================== */
-        .stop-tooltip { background: rgba(10,10,15,0.92) !important; border: 1px solid rgba(212,175,55,0.3) !important; border-radius: 4px !important; padding: 6px 10px !important; box-shadow: 0 0 20px rgba(0,0,0,0.8) !important; max-width: 220px !important; }
+        .stop-tooltip { background: rgba(10,10,15,0) !important; border: 1px solid rgba(212,175,55,0.3) !important; border-radius: 4px !important; padding: 6px 10px !important; box-shadow: 0 0 20px rgba(0,0,0,0.8) !important; max-width: 340px !important; color: #000 !important; }
         .stop-tooltip .leaflet-tooltip-tip { border-top-color: rgba(212,175,55,0.3) !important; }
         .selah-panel { position: fixed; right: 20px; top: 80px; width: 300px; bottom: 16%; z-index: 1003;
                       background: rgba(26,21,16,0.98);
@@ -1284,7 +1348,7 @@ body { font-family: 'Space Grotesk', sans-serif; background: radial-gradient(ell
             .dossier-panel { width: 85vw; right: -85vw; }
         }
     </style>
-    <script src="assets/js/sidebar.js"></script>
+    <script defer src="assets/js/sidebar.js"></script>
 </head>
 <body>
     <div id="sidebarContainer"></div>
@@ -1334,12 +1398,16 @@ body { font-family: 'Space Grotesk', sans-serif; background: radial-gradient(ell
             document.head.appendChild(weatherCSS);
             
             // Weather sounds
-            window.weatherAudioRain = new Audio('assets/audio/rain.mp3');
-            window.weatherAudioRain.loop = true;
-            window.weatherAudioRain.volume = 0.4;
-            window.weatherAudioSand = new Audio('assets/audio/sandstorm.mp3');
-            window.weatherAudioSand.loop = true;
-            window.weatherAudioSand.volume = 0.3;
+            try {
+                window.weatherAudioRain = new Audio('assets/audio/rain.mp3');
+                window.weatherAudioRain.loop = true;
+                window.weatherAudioRain.volume = 0.4;
+            } catch(e) { window.weatherAudioRain = null; }
+            try {
+                window.weatherAudioSand = new Audio('assets/audio/sandstorm.mp3');
+                window.weatherAudioSand.loop = true;
+                window.weatherAudioSand.volume = 0.3;
+            } catch(e) { window.weatherAudioSand = null; }
             
             // Weather Engine
             (function ScriptoriumWeatherEngine() {
@@ -1359,30 +1427,30 @@ body { font-family: 'Space Grotesk', sans-serif; background: radial-gradient(ell
                 let particles = [];
                 const maxParticles = 120;
                 
-                class WeatherParticle {
-                    constructor() {}
-                    reset() {}
-                    update() {}
-                    draw() {}
-                }
-                
-                function initWeather() {
-                    particles = [];
-                }
-                
-                function transitionWeather() {
-                    particles = [];
-                    currentState = "clear";
-                    skyTint.className = "";
-                    container.style.background = 'transparent';
-                    if (window.weatherAudioRain) { window.weatherAudioRain.pause(); window.weatherAudioRain.currentTime = 0; }
-                }
-                
                 function render() {
                     ctx.clearRect(0, 0, w, h);
                     requestAnimationFrame(render);
                 }
                 
+                function weatherOracleLoop() {
+                    var states = ['clear', 'rain', 'sandstorm'];
+                    var next = states[Math.floor(Math.random() * states.length)];
+                    if (next === 'rain') {
+                        currentState = 'rain';
+                        skyTint.className = 'sky-rain';
+                        if (window.weatherAudioRain) { window.weatherAudioRain.play().catch(function(){}); }
+                    } else if (next === 'sandstorm') {
+                        currentState = 'sandstorm';
+                        skyTint.className = 'sky-sandstorm';
+                        if (window.weatherAudioSand) { window.weatherAudioSand.play().catch(function(){}); }
+                    } else {
+                        currentState = 'clear';
+                        skyTint.className = '';
+                        if (window.weatherAudioRain) { window.weatherAudioRain.pause(); window.weatherAudioRain.currentTime = 0; }
+                        if (window.weatherAudioSand) { window.weatherAudioSand.pause(); window.weatherAudioSand.currentTime = 0; }
+                    }
+                    setTimeout(weatherOracleLoop, 30000 + Math.random() * 60000);
+                }
                 requestAnimationFrame(render);
                 setTimeout(weatherOracleLoop, 10000);
             })();
@@ -1562,8 +1630,8 @@ body { font-family: 'Space Grotesk', sans-serif; background: radial-gradient(ell
                 <button id="measure-btn" class="tool-btn" onclick="toggleMeasureMode()">📏 RULER</button>
                 <button onclick="window.map && window.map.zoomIn ? window.map.zoomIn() : alert('Loading map...')" class="tool-btn">⊕</button>
                 <button onclick="window.map && window.map.zoomOut ? window.map.zoomOut() : alert('Loading map...')" class="tool-btn">⊖</button>
-                <button id="layer-toggle" class="tool-btn" onclick="toggleLayer()">📜 VELLUM</button>
-                <button id="terrain-toggle" class="tool-btn" onclick="setLayerMode('terrain')">🏔️ TERRAIN</button>
+<button id="layer-toggle" class="tool-btn" onclick="toggleLayer()">📜 VELLUM</button>
+<button id="terrain-toggle" class="tool-btn" onclick="toggleTerrain()">🏔️ TERRAIN</button>
                 <button id="heat-toggle" class="tool-btn" onclick="toggleHeatMap()">🔥 HEAT</button>
                 <button class="tool-btn" onclick="Scriptorium.logout(true)" style="color:rgba(255,255,255,0.1);">&#128682;</button>
             </div>
@@ -1692,10 +1760,12 @@ body { font-family: 'Space Grotesk', sans-serif; background: radial-gradient(ell
         
      
 <script>
-    console.log('Scriptorium loading...');
     
     // ==================== GLOBAL FUNCTIONS ====================
     // These are early stubs — full implementations are defined below once the map loads.
+    window.setLayerMode = window.setLayerMode || function(mode) {
+
+    };
     function toggleSelah() {
         var panel = document.getElementById('selah-panel');
         var btn = document.getElementById('selah-toggle');
@@ -1710,7 +1780,8 @@ body { font-family: 'Space Grotesk', sans-serif; background: radial-gradient(ell
         }
     }
     function togglePlay() { var btn = document.getElementById('play-btn'); if (btn) btn.click(); }
-    function toggleLayer() { var btn = document.getElementById('layer-toggle'); if (btn) btn.click(); }
+    function toggleLayer() { window.setLayerMode('vellum'); }
+    function toggleTerrain() { window.setLayerMode('terrain'); }
     function toggleCovenant() { var btn = document.getElementById('covenant-toggle'); if (btn) btn.click(); }
     function filterEra(era) { if (typeof updateMarkers === 'function') updateMarkers(); }
     
@@ -1732,562 +1803,10 @@ body { font-family: 'Space Grotesk', sans-serif; background: radial-gradient(ell
     }
     
     // ==================== DATA ====================
-        const ARCHAEOLOGY_VAULT = {
-            "Jerusalem": { artifact: "Pilate Stone (AE 1961.1)", year: "1961", id: "AE 1961.1", note: "First physical evidence of Pontius Pilate outside the Bible. Found in Caesarea Maritima.", stratigraphy: ["Iron Age II (1000-586 BC)", "Persian (539-332 BC)", "Hellenistic (332-63 BC)", "Roman (63 BC-324 AD)"], c14: { target: 74, sample: "Burnt olive pits from Ophel excavation" } },
-            "Qumran": { artifact: "Great Isaiah Scroll — 1QIsa", year: "1947", id: "1QIsa", note: "A 24-foot near-perfect scroll of Isaiah, dating 1,000 years older than any previously known manuscript.", stratigraphy: ["Hellenistic (100 BC)", "Roman (68 AD destruction)"], c14: { target: 78, sample: "Papyrus fibers from 1QIsa scroll" } },
-            "Babylon": { artifact: "Cyrus Cylinder — BM 90920", year: "1879", id: "BM 90920", note: "Confirms the decree of Cyrus the Great allowing Jews to return to Jerusalem after the exile.", stratigraphy: ["Neo-Babylonian (626-539 BC)", "Achaemenid Persian (539-332 BC)"], c14: null },
-            "Nineveh": { artifact: "Lachish Reliefs — BM 124901", year: "1847", id: "BM 124901", note: "Stone carvings from Sennacherib's palace depicting the siege mentioned in 2 Kings 18.", stratigraphy: ["Neo-Assyrian (911-612 BC)"], c14: null },
-            "Ephesus": { artifact: "Artemis Cult Inscription", year: "1954", id: "Inv. 1954.1", note: "Confirms the existence of the Artemis temple's 'great goddess' worship addressed in Acts 19.", stratigraphy: ["Hellenistic (3rd c. BC)", "Roman (1st-4th c. AD)"], c14: null },
-            "Bethlehem": { artifact: "Byzantine Church Mosaics", year: "1922", id: "BETH-1922", note: "Byzantine church over traditional birthplace confirmed by Helena's 4th-century discovery.", stratigraphy: ["Iron Age (1200-586 BC)", "Roman (63 BC-324 AD)", "Byzantine (324-638 AD)"], c14: { target: 82, sample: "Charred grain from Iron Age silo" } },
-            "Capernaum": { artifact: "Peter's House Church", year: "1968", id: "CAP-68", note: "Octagonal 4th-century church built directly over a 1st-century dwelling identified as Peter's home.", stratigraphy: ["Early Roman (1st c. AD)", "Byzantine (4th c. AD)"], c14: { target: 85, sample: "Wood from 1st-century fishing boat" } },
-            "Bethany": { artifact: "Lazarus Tomb Ossuary", year: "1968", id: "BETHANY-68", note: "Ancient tomb with ossuaries near Lazarus cave, confirming 1st-century burial customs.", stratigraphy: ["Roman (1st c. AD)", "Byzantine (4th-6th c. AD)"], c14: { target: 86, sample: "Bone collagen from ossuary" } },
-            "Galilee": { artifact: "Moses-in-Egypt Synagogue Fresco", year: "1890", id: "GAL-1890", note: "Jewish wall paintings in ancient synagogues depicting biblical scenes.", stratigraphy: ["Roman (3rd-4th c. AD)"], c14: null },
-            "Jericho": { artifact: "Joshua's Destruction Layer", year: "1930", id: "JERICHO-30", note: "Famous 'Joshua's walls fell' site shows multiple destruction layers matching the biblical account.", stratigraphy: ["Early Bronze (3000-2000 BC)", "Middle Bronze (2000-1550 BC)", "Late Bronze (1550-1200 BC)"], c14: { target: 62, sample: "Burnt grain from Middle Bronze destruction layer" } },
-            "Tel Dan": { artifact: "Tel Dan Stele — B.8969", year: "1993", id: "B.8969", note: "The only extra-biblical inscription mentioning the 'House of David'. Discovered in three fragments at Tel Dan.", stratigraphy: ["Iron Age II (9th c. BC)", "Hellenistic (4th c. BC)"], c14: null },
-            "Megiddo": { artifact: "Egyptian Pottery of Necho", year: "2023", id: "MEG-2023", note: "Recently discovered Egyptian pottery at Megiddo provides the first physical evidence of Pharaoh Necho's presence during King Josiah's death (2 Kings 23:29).", stratigraphy: ["Late Bronze (1550-1200 BC)", "Iron Age I (1200-1000 BC)", "Iron Age II (1000-586 BC)", "Persian (539-332 BC)"], c14: { target: 72, sample: "Carbonized seeds from Iron Age II stratum" } },
-            "Caesarea": { artifact: "Pilate Stone — AE 1961.1", year: "1961", id: "AE 1961.1", note: "A dedicatory inscription by Pontius Pilate discovered in the Caesarea theater, proving his historical governorship of Judaea.", stratigraphy: ["Herodian (1st c. BC-1st c. AD)", "Roman (1st-4th c. AD)", "Byzantine (4th-7th c. AD)"], c14: { target: 84, sample: "Wood from Herodian harbor structure" } },
-            "Hazor": { artifact: "Joshua's Destruction Layer", year: "1990", id: "HAZOR-90", note: "A one-meter thick layer of ash and cracked stones confirms a massive burn dating to the conquest of Hazor (Joshua 11).", stratigraphy: ["Late Bronze II (1400-1200 BC)", "Iron Age I (1200-1000 BC)"], c14: { target: 67, sample: "Charred timber from Late Bronze palace" } },
-            "Shechem": { artifact: "The Great Massebah", year: "1910", id: "SHEC-1910", note: "The largest standing stone found in Israel, likely the 'witness stone' mentioned in Joshua 24:26.", stratigraphy: ["Middle Bronze (2000-1550 BC)", "Late Bronze (1550-1200 BC)", "Iron Age (1200-586 BC)"], c14: { target: 57, sample: "Organic residue from Canaanite altar" } }
-        };
+</script>
+    <script src="assets/js/map-data.js"></script>
+<script>
 
-        const PLACES = [
-            // MAJOR BIBLICAL CITIES
-            { name: "Jerusalem", lat: 31.768, lng: 35.214, era: "kingdom", year: -1000, importance: "major", region: "Judea", pop: "80,000", refs: "2 Samuel 5:6 | 1 Kings 8:1", events: "David's capital | Temple built | Jesus crucified",
-                archaeology: { status: "Continuously Excavated", excavated: "1860s–ongoing (Warren, etc.)", finds: "City of David water system, Hezekiah's Tunnel, Sennacherib's siege ramp, Temple Mount Ophel, Wilson's Arch, Pool of Siloam, DSS caves, Bar Kokhba letters", controversy: "Temple location disputed (Dome of Rock vs Ophel); Warren's Shaft dating debated; 70 AD destruction layers confirmed" } },
-            { name: "Babylon", lat: 32.537, lng: 44.421, era: "kingdom", year: -586, importance: "major", region: "Mesopotamia", pop: "200,000", refs: "2 Kings 25", events: "Exile begins | Daniel's court",
-                archaeology: { status: "Extensively Excavated", excavated: "1899–1917 (Koldewey), 1960s–70s (Sass), 1978–80s (Reade), 2000s (IBNA)", finds: "Ishtar Gate glazed bricks, Processional Way lion statues, Nebuchadnezzar inscriptions, Cyrus Cylinder, Hammurabi Stele, blue-glazed palace bricks", controversy: "Nebuchadnezzar's palace confirmed; Hanging Gardens unproven (no archaeological evidence); Cyrus Cylinder confirms edict" } },
-            { name: "Bethlehem", lat: 31.904, lng: 35.202, era: "patriarchal", year: -2000, importance: "major", region: "Judea", pop: "3,000", refs: "Genesis 35:19 | Luke 2:4", events: "Rachel buried | Jesus born | Ruth gleaning",
-                archaeology: { status: "Limited Excavation", excavated: "1922–39 (Albright), 1949–50 (Kafar), 1990s (Broshi)", finds: "Rachel's tomb marker, Iron Age tomb complex, Byzantine church foundations, monastic settlement, Ottoman-period houses", controversy: "Most excavation restricted beneath modern town; Byzantine church over traditional birthplace confirmed by Helena; Iron Age necropolis validates biblical scale" } },
-            { name: "Calvary/Golgotha", lat: 31.778, lng: 35.227, era: "new_testament", year: 30, importance: "major", region: "Judea", pop: "0", refs: "Luke 23:33", events: "Crucifixion of Jesus",
-                archaeology: { status: "Fully Excavated", excavated: "1883–84 (Conrad Schick), 1961–78 (Gibson/Ball), 1970s–80s (Kollmann/Barker)", finds: "Gordon's Golgotha skull-shaped hill, Garden Tomb, 1st-century tombs in Quarry, 'Nailing' inscription (Talpiot tomb), ossuaries", controversy: "Garden Tomb rejected; Church of Holy Sepulchre location contested but accepted by most scholars; Talpiot tomb = Jesus family debated" } },
-            { name: "Capernaum", lat: 32.876, lng: 35.542, era: "new_testament", year: 28, importance: "major", region: "Galilee", pop: "1,500", refs: "Mark 2:1 | John 2:12", events: "Jesus' ministry base | Peter's house",
-                archaeology: { status: "Fully Excavated", excavated: "1898–1905 (Schneider), 1905–21 (Vendelmann), 1968–72 (Corbo/Loffreda), 1980s–2000s (Frogelli)", finds: "Octagonal 4th-century church over Peter's house, Synagogue white limestone, Jesus boat (1st-century fishing boat from Galilee), marketplace, mosaic floors", controversy: "Peter's house church confirmed; Octagonal church built 4th century over 'house'; Jesus boat carbon-dated to 1st century" } },
-{ name: "Sinai", lat: 28.539, lng: 33.978, era: "exodus", year: -1446, importance: "major", region: "Sinai", pop: "0", refs: "Exodus 19", events: "Law given | Moses received Torah",
-                archaeology: { status: "Limited Excavation", excavated: "2000s (G. W. and Israeli park service)", finds: "Reed water (Ex 15:13), Saudi border marker, Arabian trade route, Bedouin oral tradition", controversy: "Traditional Jebel Musa location contested by alternative sites (Jebel el-Lawz — claimed but disputed); Reed Sea crossing route debated (Nuweiba vs bitter lakes); Egyptian Merneptah Stele references 'Israel' — oldest extra-biblical mention" } },
-            { name: "Mount Carmel", lat: 32.700, lng: 35.033, era: "kingdom", year: -900, importance: "major", region: "Israel", pop: "0", refs: "1 Kings 18:20", events: "Elijah vs Baal prophets",
-                archaeology: { status: "Excavated", excavated: "1911–14 (Karge), 1960–70 (B. &)", finds: "Cave of Elijah, Israelite shrine, Phoenician cultic objects, Iron Age burial caves, Prehistoric cave", controversy: "Elijah's cave confirmed by tradition; Muhraqa site = location of contest; Cave inhabited from prehistoric through Byzantine era" } },
-            { name: "Mount of Beatitudes", lat: 32.833, lng: 35.533, era: "new_testament", year: 28, importance: "major", region: "Galilee", pop: "0", refs: "Matthew 5:1", events: "Sermon on the Mount",
-                archaeology: { status: "Excavated", excavated: "1936 (Baldi), 1984–86", finds: "Byzantine octagonal church (4th century), ornate mosaic floors, Pilgrims' inscriptions, olive press", controversy: "Church built 4th century by Helena; location matches Mt 5:1 'when He saw the crowds, He went up'; octagonal shape symbolic; olive trees around are medieval" } },
-            { name: "Emmaus", lat: 31.783, lng: 35.050, era: "new_testament", year: 30, importance: "minor", region: "Judea", pop: "2,000", refs: "Luke 24:13", events: "Jesus appears",
-                archaeology: { status: "Excavated", excavated: "1873 (Schick), 1920s (Vincent), 1945–48 (Benoit)", finds: "Byzantine church, Crusader church, necropolis with 1st-century tombs, oil press", controversy: "Three candidate sites (Abu Ghosh=12 km, Imwas=20 km, Nabi Samwil=8 km); Abu Ghosh preferred by Franciscans; Emmaus = 'village of the friends'" } },
-            { name: "Abrahams Oak", lat: 31.767, lng: 35.250, era: "patriarchal", year: -2000, importance: "minor", region: "Judea", pop: "0", refs: "Genesis 18:1", events: "Three visitors",
-                archaeology: { status: "Not Excavated", excavated: "None (site under religious restriction)", finds: "Ancient oak tree (400–500 years old), Crusader/Mamluk shrine, pilgrim inscriptions", controversy: "Tree dates only 15th–17th century; not OT-era oak; site established in Crusader period; Genesis 18:1 location traditional only" } },
-            { name: "Tel Dan", lat: 33.249, lng: 35.652, era: "kingdom", year: -900, importance: "major", region: "Galilee", pop: "2,000", refs: "Judges 18:29 | 1 Kings 12:29", events: "Jeroboam's golden calf | House of David inscription",
-                archaeology: { status: "Extensively Excavated", excavated: "1966–2010 (Biran, Ilan), 2010s–ongoing (Gregg)", finds: "Tel Dan Stele (House of David), Bronze Age gate complex, Iron Age high place, Mycenaean tomb, Roman fountain house", controversy: "Stele fragments found 1993–94: three pieces; BYTDWD (House of David) reading debated by minimalists but widely accepted" } },
-            { name: "Megiddo", lat: 32.585, lng: 35.185, era: "kingdom", year: -609, importance: "major", region: "Israel", pop: "5,000", refs: "Judges 5:19 | 2 Kings 23:29 | Revelation 16:16", events: "Battle of Deborah | Josiah killed | Armageddon",
-                archaeology: { status: "Continuously Excavated", excavated: "1903–05 (Schumacher), 1925–39 (Chicago), 1964–74 (Yadin), 1994–ongoing (Megiddo Expedition)", finds: "Solomon's stables (disputed), 20+ strata, Egyptian pottery (Necho era, 609 BC), ivory collection, water system, Canaanite temples", controversy: "Egyptian pottery (609 BC) first evidence of Necho's presence at Megiddo; 'Solomon's stables' now dated to Ahab; 20+ continuous settlement layers" } },
-            { name: "Caesarea Maritima", lat: 32.500, lng: 34.892, era: "new_testament", year: 30, importance: "major", region: "Judea", pop: "40,000", refs: "Acts 10:1 | Acts 25:1-13", events: "Peter & Cornelius | Paul before Festus | Pilate inscription",
-                archaeology: { status: "Fully Excavated", excavated: "1950–60s (Frova), 1970s–80s (Bull), 1990s–ongoing (Porath, Patrick)", finds: "Pilate Stone, Herodian theater, underwater harbor structures, Crusader cathedral, hippodrome, aqueduct system", controversy: "Pilate Stone found 1961 in theater reused as step; 'Tiberieum' reconstruction uncertain; harbor concrete (Roman) still intact after 2,000 years" } },
-            
-            // ADDITIONAL BIBLICAL SITES — journey waypoints
-            { name: "Ur", lat: 30.963, lng: 46.103, era: "patriarchal", year: -2100, importance: "major", region: "Mesopotamia", pop: "65,000", refs: "Genesis 11:28-31", events: "Abraham called by God | Journey begins",
-                archaeology: { status: "Extensively Excavated", excavated: "1922–34 (Woolley), 1980s (Safar), 1990s (Wright)", finds: "Royal Cemetery, Ziggurat of Ur, Standard of Ur, Royal Tombs with treasures, cuneiform tablets", controversy: "Woolley's 'Great Flood' layer (Ur III) debated; Abraham's Ur = Tell el-Muqayyar widely accepted; Ur III empire confirmed by texts" } },
-            { name: "Haran", lat: 36.864, lng: 40.866, era: "patriarchal", year: -2000, importance: "major", region: "Mesopotamia", pop: "10,000", refs: "Genesis 12:1-5", events: "Terah dies | Abraham called | Jacob flees here",
-                archaeology: { status: "Excavated", excavated: "1950s (Lloyd), 1980s (Wilhelm)", finds: "Sin temple complex, Assyrian palace, cuneiform tablets, mudbrick houses, city gate", controversy: "Major trading center on Balikh River; moon god Sin cult center; destruction layer from Assyrian conquest" } },
-            { name: "Shechem", lat: 32.233, lng: 35.167, era: "patriarchal", year: -1900, importance: "major", region: "Israel", pop: "5,000", refs: "Genesis 12:6 | Joshua 24:1", events: "Abraham's first altar | Covenant renewed | Joseph's bones buried",
-                archaeology: { status: "Extensively Excavated", excavated: "1913–14 (Sellin), 1956–73 (Dever, Wright), 1980s (Campbell)", finds: "Temple of Baal-berith, city gate with standing stones, massive fortification walls, Middle Bronze Age tower temple", controversy: "Temple of El-berith identified with Abimelech's temple; destruction layers match Joshua conquest; Great Massebah (standing stone) = covenant witness" } },
-            { name: "Hebron", lat: 31.533, lng: 35.098, era: "patriarchal", year: -2000, importance: "major", region: "Judea", pop: "20,000", refs: "Genesis 13:18 | 2 Samuel 2:1", events: "Abraham settles | David crowned king of Judah",
-                archaeology: { status: "Continuously Inhabited", excavated: "1920s (Mader), 1960s (Ofer), 1980s (Munro)", finds: "Herodian enclosure over Cave of Machpelah, Iron Age houses, Roman-Byzantine remains, Mamluk mosque complex", controversy: "Cave of Machpelah verified as ancient burial site; Patriarchs tradition accepted; Herodian construction confirmed by masonry style" } },
-            { name: "Beersheba", lat: 31.400, lng: 34.900, era: "patriarchal", year: -1900, importance: "major", region: "Israel", pop: "4,000", refs: "Genesis 21:31 | 1 Samuel 8:2", events: "Well of oath | Abraham & Abimelech covenant | Judges' seat",
-                archaeology: { status: "Fully Excavated", excavated: "1969–76 (Aharoni), 1990s (Herzog), 2000s (Singer-Avitz)", finds: "Horned altar reused as building stone, well system, city gate complex, storehouse buildings, Iron Age houses", controversy: "Horned altar dismantled by Hezekiah's reform; Iron Age city confirmed as administrative center; well identified with Abraham's well" } },
-            { name: "Jericho", lat: 31.858, lng: 35.463, era: "exodus", year: -1400, importance: "major", region: "Canaan", pop: "2,000", refs: "Joshua 6:1-20 | Luke 19:1", events: "Walls fall | Jericho taxed by Zacchaeus",
-                archaeology: { status: "Continuously Excavated", excavated: "1907–09 (Sellin), 1930–36 (Garstang), 1952–58 (Kenyon), 1990s (Bienkowski)", finds: "Round Neolithic tower (8000 BC), collapsed mudbrick walls, burnt grain storage, Jericho skulls, Hasmonean palace", controversy: "Kenyon's carbon dates vs Garstang's wall fall date; Late Bronze destruction layer (Kenyon: none; others: limited remains); collapsed walls date debated" } },
-            { name: "Jordan River", lat: 31.947, lng: 35.571, era: "exodus", year: -1400, importance: "major", region: "Canaan", pop: "0", refs: "Joshua 3:14-17 | Matthew 3:13", events: "Israel crosses | Elijah ascends | Jesus baptized",
-                archaeology: { status: "Limited Excavation", excavated: "1930s (Glueck), 1990s (Wahlin), 2000s (Kafafi)", finds: "Byzantine baptismal pools, pilgrim pilgrim inscriptions, Qasr el-Yahud monasteries, Neolithic settlements along banks", controversy: "Yardenit vs Bethany Beyond the Jordan (Al-Maghtas) as baptism site; UN recognizes Al-Maghtas; Joshua crossing at Adam site (Damiya) debated" } },
-            { name: "Nazareth", lat: 32.707, lng: 35.298, era: "new_testament", year: -6, importance: "major", region: "Galilee", pop: "500", refs: "Matthew 2:23 | Luke 4:16", events: "Jesus' childhood | Rejected at synagogue",
-                archaeology: { status: "Limited Excavation", excavated: "1955–60 (Bagatti), 1997–2004 (Alexandre), 2006 (Dark)", finds: "1st-century houses, terraced fields (vineyards), 'Jesus Boat' near Galilee, Jewish ritual bath (miqveh), limestone vessels", controversy: "Dark's terracing evidence confirms 1st-century agricultural settlement; Church of Annunciation site debated; No evidence of population >500 — contradicting tradition" } },
-            { name: "Cana", lat: 32.739, lng: 35.477, era: "new_testament", year: 28, importance: "minor", region: "Galilee", pop: "1,000", refs: "John 2:1-11", events: "Water to wine — first miracle",
-                archaeology: { status: "Excavated", excavated: "1960s (Clermont-Ganneau), 1990s (Richardson), 2000s (Batey)", finds: "1st-century stone water jars, Byzantine church remains, Jewish village houses, synagogue lintel with Hebrew inscription", controversy: "Two candidate sites (Khirbet Qana vs Kafr Kanna); Khirbet Qana preferred; stone jars typical of Jewish purification; miracle location debated" } },
-            { name: "Gethsemane", lat: 31.778, lng: 35.243, era: "new_testament", year: 30, importance: "major", region: "Judea", pop: "0", refs: "Matthew 26:36 | Mark 14:32", events: "Agony in the garden | Judas' betrayal | Jesus arrested",
-                archaeology: { status: "Partially Excavated", excavated: "1909–10 (P. Savignac), 1950s (B. Bagatti), 1990s (J. Murphy-O'Connor)", finds: "Ancient olive tree root system (confirmed dendrochronologically to 1st century), Byzantine church foundations (4th century), rock-cut Grotto of Gethsemane, 1st-century wine press and oil press", controversy: "Olive trees are regrowth (16th century) but root system ancient; cave identified as Jesus' prayer site; Garden location traditional but accepted; Franciscan ownership since 1681" } },
-            { name: "Berea", lat: 40.570, lng: 22.470, era: "new_testament", year: 50, importance: "minor", region: "Macedonia", pop: "5,000", refs: "Acts 17:10-14", events: "Noble Bereans | Paul preaches",
-                archaeology: { status: "Excavated", excavated: "1920s (Petros), 1970s (Edwards), 2000s (Kourempanas)", finds: "Roman agora, synagogue remains (1st century AD), Byzantine basilica, city walls, mosaic floors with Christian symbols", controversy: "Synagogue site confirmed by inscriptions; Bereans' 'noble' character recorded in Acts matches reputation" } },
-            { name: "Ephesus", lat: 37.942, lng: 27.342, era: "new_testament", year: 30, importance: "major", region: "Asia Minor", pop: "250,000", refs: "Acts 19:1-41 | Revelation 2:1-7", events: "Paul's ministry | Temple of Artemis | John lives here",
-                archaeology: { status: "Extensively Excavated", excavated: "1869–74 (Wood), 1895–1907 (Benndorf), 1926–33 (Keil), 1954–ongoing (Austrian Institute)", finds: "Temple of Artemis (one of Seven Wonders), Library of Celsus, Great Theatre (capacity 25,000), Terrace Houses, Church of Mary (Council of Ephesus 431 AD)", controversy: "Temple of Artemis: one column remains; Great Theatre where Demetrius started riot (Acts 19) — seating confirms account; 'Artemis of the Ephesians' statue found" } },
-            { name: "Athens", lat: 37.967, lng: 23.717, era: "new_testament", year: 50, importance: "major", region: "Greece", pop: "100,000", refs: "Acts 17:16-34", events: "Paul's Mars Hill sermon | Areopagus address",
-                archaeology: { status: "Continuously Excavated", excavated: "1830s (Ross), 1850s (Hansen), 1930s (Dörpfeld), 1990s–ongoing (Camp)", finds: "Parthenon, Areopagus (Mars Hill), Acropolis complex, Agora marketplace (Stoa of Attalos), Temple of Olympian Zeus, Apostle Paul's steps (inscribed)", controversy: "Paul's speech location at Areopagus (Mars Hill) confirmed; 'Unknown God' altar inscription found at Pergamum; Areopagus council's jurisdiction over religious matters confirmed" } }
-        ];
-        
-        // ==================== JOURNEY HELPER FUNCTIONS ====================
-        function calcDistance(lat1, lng1, lat2, lng2) {
-            var R = 3959; // Earth's radius in miles
-            var dLat = (lat2 - lat1) * Math.PI / 180;
-            var dLng = (lng2 - lng1) * Math.PI / 180;
-            var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                     Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                     Math.sin(dLng/2) * Math.sin(dLng/2);
-            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            return R * c;
-        }
-        
-        window.calcDistance = calcDistance;
-        
-        const peopleWhoLivedDb = {
-            "Ur": "Terah, Abraham's family",
-            "Haran": "Abraham, Nahor, Lot",
-            "Shechem": "Jacob's family, Joseph buried here",
-            "Hebron": "Abraham, Isaac, Jacob, David",
-            "Moriah": "Abraham, Isaac (temple location)",
-            "Gerar": "Abraham, Isaac",
-            "Beersheba": "Abraham, Isaac, David",
-            "Bethel": "Jacob, Samuel born here",
-            "Penuel": "Jacob wrestled here",
-            "Egypt": "Joseph, Jacob's family",
-            "Dothan": "Joseph sold here",
-            "Potiphar": "Joseph as slave",
-            "Pharaoh's Court": "Joseph, Moses born",
-            "Egypt/Goshen": "Israelites in bondage",
-            "Red Sea": "Exodus crossing",
-            "Sinai": "Moses, Law given",
-            "Kadesh": "Israelites wander",
-            "Jordan": "Joshua, Elijah taken",
-            "Jericho": "Joshua, walls fall",
-            "Mount Ebal": "Joshua, altar built",
-            "Ophrah": "Gideon",
-            "Midianite Camp": "Gideon's victory",
-            "Zorah": "Samson's birth",
-            "Gaza": "Samson captured",
-            "Moab": "Ruth, Naomi",
-            "Bethlehem": "Ruth, David, Jesus born",
-            "Boaz's Field": "Ruth gleaning",
-            "Jerusalem": "David, Solomon, Jesus",
-            "Mount Zion": "David's altar",
-            "Temple Mount": "Solomon's temple",
-            "Gibeon": "Solomon's vision",
-            "Gilead": "Elijah",
-            "Mount Carmel": "Elijah's contest",
-            "Horeb": "Elijah's cave",
-            "Babylon": "Daniel, Nebuchadnezzar",
-            "Lion's Den": "Daniel preserved",
-            "Susa": "Esther, Mordecai",
-            "Susa Gate": "Esther's plea",
-            "Sheep Gate": "Nehemiah's repair",
-            "Nazareth": "Jesus grew up",
-            "Bethlehem": "Jesus born",
-            "Jordan River": "Jesus baptized",
-            "Wilderness": "Jesus tempted",
-            "Cana": "Jesus' first miracle",
-            "Capernaum": "Jesus' ministry base",
-            "Samaritan Well": "Jesus & Samaritan woman",
-            "Peter's House": "Peter's mother-in-law",
-            "Nain": "Widow's son raised",
-            "Bethany": "Lazarus, Mary, Martha",
-            "Bethphage": "Triumphant entry",
-            "Gethsemane": "Jesus' arrest",
-            "Calvary/Golgotha": "Jesus crucified",
-            "Emmaus": "Resurrection appearance",
-            "Galilee": "Disciples ministry"
-        };
-        
-        const keyEventsDb = {
-            "Ur": "God calls Abraham to leave",
-            "Haran": "Family settles, Terah dies",
-            "Shechem": "First altar to LORD",
-            "Moriah": "Binding of Isaac",
-            "Egypt": "Famine drives south",
-            "Beersheba": "Covenant with Abimelech",
-            "Bethel": "Jacob's ladder dream",
-            "Dothan": "Joseph betrayed",
-            "Potiphar": "Rise to prominence",
-            "Pharaoh's Court": "Interprets dreams",
-            "Egypt/Goshen": "Ten plagues begin",
-            "Red Sea": "Miraculous crossing",
-            "Sinai": "Ten Commandments given",
-            "Jordan": "River parts",
-            "Jericho": "Walls collapse",
-            "Mount Ebal": "Covenant renewed",
-            "Ophrah": "Angel announces victory",
-            "Gaza": "Delilah betrayal",
-            "Bethlehem": "Ruth redeems",
-            "Temple Mount": "Temple dedication",
-            "Mount Carmel": "Fire from heaven",
-            "Samaritan Well": "Living water talk",
-            "Capernaum": "Many miracles",
-            "Gethsemane": "Prayer & arrest"
-        };
-        
-        function getPeopleWhoLived(locationName) {
-            var loc;
-            var keys = Object.keys(peopleWhoLivedDb).sort(function(a, b) { return b.length - a.length; });
-            for (var i = 0; i < keys.length; i++) {
-                loc = keys[i];
-                if (locationName.toLowerCase().indexOf(loc.toLowerCase()) > -1 || loc.toLowerCase().indexOf(locationName.toLowerCase()) > -1) {
-                    return peopleWhoLivedDb[loc];
-                }
-            }
-            return '';
-        }
-        
-        function getKeyEvents(locationName, ref) {
-            var loc;
-            var keys = Object.keys(keyEventsDb).sort(function(a, b) { return b.length - a.length; });
-            for (var i = 0; i < keys.length; i++) {
-                loc = keys[i];
-                if (locationName.toLowerCase().indexOf(loc.toLowerCase()) > -1 || loc.toLowerCase().indexOf(locationName.toLowerCase()) > -1) {
-                    return keyEventsDb[loc];
-                }
-            }
-            return '';
-        }
-        
-        function getBibleRefs(locationName) {
-            return 'See biblical references in step details.';
-        }
-        
-        // Expose to window for global access
-        window.getPeopleWhoLived = getPeopleWhoLived;
-        window.getKeyEvents = getKeyEvents;
-        window.getBibleRefs = getBibleRefs;
-        
-const JOURNEYS = {
-            // PATRIARCHS
-            "abraham": { name: "Abraham", desc: "Father of Faith", category: "Patriarchs", color: "#D4AF37", year: -2100, era: "PATRIARCHS",
-                path: [
-                    { name: "Ur", lat: 30.963, lng: 46.103, ref: "Genesis 11:31", desc: "God calls Abraham from Ur of the Chaldees.", notes: ["Archaeological remains discovered in 1922"] },
-                    { name: "Haran", lat: 36.864, lng: 40.866, ref: "Genesis 12:1", desc: "Father Terah dies in Haran.", notes: ["Major crossroads of ancient trade routes"] },
-                    { name: "Shechem", lat: 32.233, lng: 35.167, ref: "Genesis 12:6", desc: "First altar built at Shechem.", notes: ["Ancient oak tree still grows at site"] },
-                    { name: "Hebron", lat: 31.533, lng: 35.098, ref: "Genesis 13:18", desc: "Covenant with Abimelech.", notes: ["One of world's oldest continuously inhabited cities"] },
-                    { name: "Moriah", lat: 31.778, lng: 35.235, ref: "Genesis 22:2", desc: "Isaac tested on mountain.", notes: ["Temple Mount location"] }
-                ] },
-            "isaac": { name: "Isaac", desc: "Son of Promise", category: "Patriarchs", color: "#D4AF37", year: -2000, era: "PATRIARCHS",
-                path: [
-                    { name: "Gerar", lat: 31.383, lng: 34.617, ref: "Genesis 26:1", desc: "Philistine territory treaty.", notes: ["Ancient Philistine city excavated"] },
-                    { name: "Beersheba", lat: 31.400, lng: 34.900, ref: "Genesis 26:23", desc: "Well of oath dug.", notes: ["Southernmost biblical city"] }
-                ] },
-            "jacob": { name: "Jacob", desc: "Father of 12 Tribes", category: "Patriarchs", color: "#D4AF37", year: -1900, era: "PATRIARCHS",
-                path: [
-                    { name: "Bethel", lat: 31.936, lng: 35.243, ref: "Genesis 28:19", desc: "Ladder vision in dream.", notes: ["Ancient altar stones recovered"] },
-                    { name: "Penuel", lat: 32.117, lng: 35.417, ref: "Genesis 32:24", desc: "Wrestled angel all night.", notes: ["Jordan River crossing point"] },
-                    { name: "Egypt", lat: 30.044, lng: 31.236, ref: "Genesis 46:1", desc: "Goes to Egypt during famine.", notes: ["Land of Goshen excavated"] }
-                ] },
-            "moses": { name: "Moses", desc: "Deliverer", category: "Judges", color: "#CD853F", year: -1446, era: "EXODUS",
-                path: [
-                    { name: "Egypt", lat: 30.044, lng: 32.000, ref: "Exodus 3:1", desc: "Burning bush at Horeb.", notes: ["Nile Delta region"] },
-                    { name: "Red Sea", lat: 30.500, lng: 33.500, ref: "Exodus 14:1", desc: "Waters part for Israel's escape.", notes: ["Possible crossing at Nuweiba"] },
-                    { name: "Sinai", lat: 28.539, lng: 33.978, ref: "Exodus 19:1", desc: "Law given to Moses.", notes: ["Horeb monastery founded"] },
-                    { name: "Kadesh", lat: 30.850, lng: 35.450, ref: "Numbers 20:1", desc: "Water from rock at Meribah.", notes: ["Ancient cisterns at Ain Qudeis"] }
-                ] },
-            "joshua": { name: "Joshua", desc: "Conquest Leader", category: "Judges", color: "#CD853F", year: -1400, era: "CONQUEST",
-                path: [
-                    { name: "Jordan", lat: 31.947, lng: 35.571, ref: "Joshua 3:1", desc: "River crosses east of Jericho.", notes: ["12 stones stacked at Gilgal"] },
-                    { name: "Jericho", lat: 31.858, lng: 35.463, ref: "Joshua 6:1", desc: "Walls collapse after trumpet blast.", notes: ["Canaanite palace excavated"] },
-                    { name: "Mount Ebal", lat: 32.150, lng: 35.083, ref: "Joshua 8:30", desc: "Covenant renewed.", notes: ["Curse altar archaeological"] }
-                ] },
-            "gideon": { name: "Gideon", desc: "Judge", category: "Judges", color: "#CD853F", year: -1200, era: "JUDGES",
-                path: [
-                    { name: "Ophrah", lat: 32.800, lng: 35.300, ref: "Judges 6:11", desc: "Angel visits", notes: ["Gideon's city"] },
-                    { name: "Midianite Camp", lat: 32.800, lng: 35.300, ref: "Judges 7:1", desc: "300 men chosen", notes: ["God's test"] }
-                ] },
-            "samson": { name: "Samson", desc: "Judge of Strength", category: "Judges", color: "#CD853F", year: -1100, era: "JUDGES",
-                path: [
-                    { name: "Zorah", lat: 32.250, lng: 35.000, ref: "Judges 13:2", desc: "Birth foretold", notes: ["Nazirite vow"] },
-                    { name: "Gaza", lat: 31.450, lng: 34.450, ref: "Judges 16:1", desc: "Captured", notes: ["Philistine city"] },
-                    { name: "Gaza Prison", lat: 31.450, lng: 34.450, ref: "Judges 16:21", desc: "Blinded", notes: ["Dreadlocks cut"] }
-                ] },
-            "ruth": { name: "Ruth", desc: "Moabite Convert", category: "Judges", color: "#DAA520", year: -1100, era: "JUDGES",
-                path: [
-                    { name: "Moab", lat: 31.750, lng: 35.500, ref: "Ruth 1:1", desc: "Family moves", notes: ["Naomi's journey"] },
-                    { name: "Bethlehem", lat: 31.904, lng: 35.202, ref: "Ruth 1:22", desc: "Returns with Naomi", notes: ["Harvest field"] },
-                    { name: "Boaz's Field", lat: 31.904, lng: 35.202, ref: "Ruth 2:2", desc: "Gleaning", notes: ["Redemption"] }
-                ] },
-            
-            // KINGS
-            "david": { name: "David", desc: "King of Israel", category: "Kings", color: "#DAA520", year: -1010, era: "KINGDOM",
-                path: [
-                    { name: "Bethlehem", lat: 31.904, lng: 35.202, ref: "1 Samuel 16:11", desc: "Anointed by Samuel", notes: ["Shepherd boy"] },
-                    { name: "Hebron", lat: 31.533, lng: 35.098, ref: "2 Samuel 2:2", desc: "King of Judah", notes: ["7 years"] },
-                    { name: "Jerusalem", lat: 31.774, lng: 35.236, ref: "2 Samuel 5:7", desc: "Conquers Jebusites", notes: ["Capital"] },
-                    { name: "Mount Zion", lat: 31.778, lng: 35.235, ref: "2 Samuel 24:18", desc: "Altar built", notes: ["Temple site"] }
-                ] },
-            "solomon": { name: "Solomon", desc: "King of Wisdom", category: "Kings", color: "#DAA520", year: -970, era: "KINGDOM",
-                path: [
-                    { name: "Gibeon", lat: 31.800, lng: 35.150, ref: "1 Kings 3:4-15", desc: "God appears — asks for wisdom in dream", notes: ["First appearance"] },
-                    { name: "Jerusalem", lat: 31.778, lng: 35.235, ref: "1 Kings 6:1", desc: "Temple built in 7 years", notes: ["Ark placed"] },
-                    { name: "Temple Mount", lat: 31.778, lng: 35.235, ref: "1 Kings 9:2", desc: "God appears a second time", notes: ["Second appearance"] }
-                ] },
-            
-            // PROPHETS
-            "elijah": { name: "Elijah", desc: "Prophet of Fire", category: "Prophets", color: "#DAA520", year: -860, era: "PROPHETS",
-                path: [
-                    { name: "Gilead", lat: 32.500, lng: 36.000, ref: "1 Kings 17:1", desc: "Announces drought", notes: ["Brooks dries"] },
-                    { name: "Mount Carmel", lat: 32.700, lng: 34.950, ref: "1 Kings 18:20", desc: "Baal vs Yahweh", notes: ["Fire from heaven"] },
-                    { name: "Horeb", lat: 28.539, lng: 33.978, ref: "1 Kings 19:8", desc: "Voice of God", notes: ["Cave"] }
-                ]
-            },
-            "elijah_journey": { name: "Elijah's Lowest to Highest Journey", desc: "1 Kings 18–19 · Carmel → Jezreel → Beersheba → Horeb · Despair to Revelation", category: "Prophets", color: "#CD853F", year: -860, era: "PROPHETS",
-                path: [
-                    { name: "Mount Carmel", lat: 32.700, lng: 34.950, ref: "1 Kings 18:20", desc: "\"Elijah went to show himself to Ahab.\" Victory over Baal prophets. Fire falls from heaven. Drought broken. Jezebel vows revenge — Elijah flees." },
-                    { name: "Jezreel", lat: 32.633, lng: 35.300, ref: "1 Kings 19:1", desc: "Ahab tells Jezebel about Elijah's victory. She sends a messenger: 'May the gods deal with me... by tomorrow.' Elijah runs for his life — already 40 days of despair beginning." },
-                    { name: "Beersheba", lat: 31.400, lng: 34.900, ref: "1 Kings 19:3", desc: "Elijah leaves Judah and goes into the wilderness. Sits under a broom tree and prays to die. 'It is enough, O LORD.' Angel feeds him bread and water — first strengthening." },
-                    { name: "Wilderness of Sinai", lat: 29.500, lng: 34.500, ref: "1 Kings 19:8", desc: "Strengthened by the bread, Elijah travels 40 days and 40 nights to Horeb, the mountain of God. Enters a cave and spends the night. 'What are you doing here?'" },
-                    { name: "Horeb (Mount Sinai)", lat: 28.539, lng: 33.978, ref: "1 Kings 19:9-18", desc: "\"Go out and stand on the mount before the LORD.\" — A great and powerful wind, then an earthquake, then fire. But the LORD was not in any of them. 'A still small voice.' God tells Elijah: 'I reserve 7,000 who have not bowed to Baal.'" }
-                ]
-            },
-            "elisha": { name: "Elisha", desc: "Prophet of Power", category: "Prophets", color: "#DAA520", year: -850, era: "PROPHETS",
-                path: [
-                    { name: "Jericho", lat: 31.858, lng: 35.463, ref: "2 Kings 2:5", desc: "Heals the waters after Elijah's ascension", notes: ["Healing"] },
-                    { name: "Shunem", lat: 32.500, lng: 35.383, ref: "2 Kings 4:8", desc: "Shunammite woman — son restored to life", notes: ["Son resurrection"] },
-                    { name: "Dothan", lat: 32.450, lng: 35.250, ref: "2 Kings 6:13", desc: "Army surrounded; chariots of fire", notes: ["Chariots of fire"] }
-                ] },
-            "daniel": { name: "Daniel", desc: "Exile Prophet", category: "Prophets", color: "#DAA520", year: -605, era: "EXILE",
-                path: [
-                    { name: "Babylon", lat: 32.537, lng: 44.421, ref: "Daniel 1:3", desc: "In king's court", notes: ["Wisdom test"] },
-                    { name: "Lion's Den", lat: 32.537, lng: 44.421, ref: "Daniel 6:1", desc: "Survives lions", notes: ["Saved by God"] },
-                    { name: "Susa", lat: 32.189, lng: 48.267, ref: "Daniel 8:2", desc: "Vision", notes: ["Citadel"] }
-                ]
-            },
-            "daniel_journey": { name: "Daniel in Babylon & Beyond", desc: "Daniel 1–10 · Jerusalem → Babylon → Susa · Throne, Lions & Prophecy", category: "Prophets", color: "#9B59B6", year: -605, era: "EXILE",
-                path: [
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "Daniel 1:1-2", desc: "In the third year of Jehoiakim, Nebuchadnezzar king of Babylon comes to Jerusalem and lays it under tribute. He takes vessels from the house of God to the land of Shinar, to the house of his god — placing them in his treasure house. Daniel, Hananiah, Mishael, Azariah are taken." },
-                    { name: "Babylon — King's Palace", lat: 32.537, lng: 44.421, ref: "Daniel 1:3-4", desc: "Ashpenaz, the chief of the court officials, takes Daniel and his friends into the royal palace. They are to be taught the language and literature of the Chaldeans. Daniel resolves not to defile himself with the king's food — tested for 10 days. Found 10 times better in all matters of wisdom." },
-                    { name: "Babylon — Nebuchadnezzar's Dream", lat: 32.537, lng: 44.421, ref: "Daniel 2:1-49", desc: "The king dreams a great statue — gold head, silver chest, bronze belly, iron legs, feet of iron and clay. Daniel reveals the dream and its interpretation: 'You are the head of gold.' Kingdom will be divided. Stone cut without hands destroys the statue. Daniel is made ruler over the province of Babylon and chief administrator over all the wise men." },
-                    { name: "Babylon — Fiery Furnace", lat: 32.537, lng: 44.421, ref: "Daniel 3:1-30", desc: "Nebuchadnezzar erects a golden statue 90 feet tall. Shadrach, Meshach, Abednego must bow or be cast into the burning furnace. They refuse: 'Our God whom we serve is able to deliver us... But if not, be it known to you.' The furnace is heated 7 times hotter — and a fourth figure like a son of God walks with them. The king promotes them." },
-                    { name: "Babylon — King's Pride & Humbling", lat: 32.537, lng: 44.421, ref: "Daniel 4:1-37", desc: "Nebuchadnezzar walks in the palace and says: 'Is not this great Babylon, which I have built?' That very hour the word is fulfilled — he is driven from people, eats grass like an ox, and his hair grows like eagle's feathers. Seven times pass over him. At the end, he lifts his eyes to heaven and his reason returns. 'The Most High rules the kingdom of men.'" },
-                    { name: "Babylon — Writing on the Wall", lat: 32.537, lng: 44.421, ref: "Daniel 5:1-31", desc: "Belshazzar holds a great feast. When the fingers of a hand appear and write on the plaster, the king calls for the wise men — but none can read it. Daniel is summoned: 'You have not honored the god whose control is in your hand.' Mene, Mene, Tekel, Upharsin — 'God has numbered your kingdom and finished it.' That night Belshazzar is slain, Darius the Mede takes the kingdom." },
-                    { name: "Babylon — Lion's Den", lat: 32.537, lng: 44.421, ref: "Daniel 6:1-28", desc: "Darius appoints 120 satraps and Daniel is made one of the three governors. Daniel excels — an exceptional spirit. The satraps scheme: no one may petition any god for 30 days except the king. Daniel continues praying toward Jerusalem. Cast into the lions' den. An angel shuts their mouths. 'My God sent His angel and shut the lions' mouths.' Darius decrees: 'Every people, nation, and language... tremble before and fear the God of Daniel.'" },
-                    { name: "Babylon — Vision of Four Beasts", lat: 32.537, lng: 44.421, ref: "Daniel 7:1-28", desc: "In the first year of Belshazzar, Daniel sees four great beasts coming up from the sea: lion (Babylon), bear (Medo-Persia), leopard (Greece), and a fourth beast with iron teeth and 10 horns (Rome). One like a son of man comes with the clouds of heaven — given dominion, glory, and a kingdom. The holy ones of the Most High receive the kingdom forever." },
-                    { name: "Babylon — Seventy Weeks Commissioned", lat: 32.537, lng: 44.421, ref: "Daniel 9:1-27", desc: "In the first year of Darius, Daniel understands from Jeremiah that Jerusalem must lie desolate for 70 years. He confesses Israel's sin, intercedes. Gabriel comes: 'Seventy weeks are determined upon your people and upon your holy city... to finish transgression, make an end of sins, make reconciliation for righteousness, bring in everlasting righteousness.' Messiah will be cut off. The city and sanctuary will be destroyed." },
-                    { name: "Susa (Shushan) — Ulai Canal Vision", lat: 32.189, lng: 48.267, ref: "Daniel 8:1-27", desc: "In the third year of Belshazzar's reign, in Susa the citadel (which is in the province of Elam), Daniel has a vision of a ram with two horns (Medo-Persia) pushed westward and northward by a he-goat (Greece). The great horn between its eyes is the first king. A little horn grows and faces south, east, and toward the Beautiful Land — and it stands against the host of heaven. Gabriel explains: the vision concerns the latter time of the indignation. (Daniel 8 directly connects to the 70-weeks prophecy of Daniel 9.)" }
-                ]
-            },
-            "esther": { name: "Esther", desc: "Queen of Persia", category: "Prophets", color: "#DAA520", year: -473, era: "EXILE",
-                path: [
-                    { name: "Susa", lat: 32.189, lng: 48.267, ref: "Esther 2:8", desc: "Chosen queen", notes: ["Beauty contest"] },
-                    { name: "Susa Gate", lat: 32.189, lng: 48.267, ref: "Esther 7:1", desc: "Haman exposed", notes: ["Poison plot"] }
-                ] },
-            "ezra": { name: "Ezra", desc: "Return & Reform", category: "Prophets", color: "#27ae60", year: -458, era: "RESTORATION",
-                path: [
-                    { name: "Babylon", lat: 32.537, lng: 44.421, ref: "Ezra 7:1", desc: "Leaves Babylon", notes: ["King's decree"] },
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "Ezra 7:9", desc: "Arrives", notes: ["Temple restored"] },
-                    { name: "Temple", lat: 31.778, lng: 35.235, ref: "Ezra 9:9", desc: "Worship restored", notes: ["Sacrifice"] }
-                ] },
-            "nehemiah": { name: "Nehemiah", desc: "Rebuilds Walls", category: "Prophets", color: "#27ae60", year: -445, era: "RESTORATION",
-                path: [
-                    { name: "Susa", lat: 32.189, lng: 48.267, ref: "Nehemiah 1:1", desc: "Cupbearer to king", notes: ["Bad news"] },
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "Nehemiah 2:12", desc: "Night inspection", notes: ["Survey"] },
-                    { name: "Sheep Gate", lat: 31.776, lng: 35.229, ref: "Nehemiah 3:1", desc: "Rebuilding", notes: ["First gate"] }
-                ]
-            },
-            "nehemiah_rebuild": { name: "Nehemiah's Wall Rebuilding Circuit", desc: "Nehemiah 2–3 · Susa → Jerusalem · Every gate named and assigned", category: "Prophets", color: "#DAA520", year: -445, era: "RESTORATION",
-                path: [
-                    { name: "Susa (Shushan)", lat: 32.189, lng: 48.267, ref: "Nehemiah 1:1", desc: "In the month Kislev, 20th year. Nehemiah hears the wall of Jerusalem is broken down and gates burned with fire. He sits and weeps, fasts, and prays: 'I confess the sins we have committed against You.'" },
-                    { name: "Jerusalem — Night Inspection", lat: 31.768, lng: 35.213, ref: "Nehemiah 2:11-15", desc: "Nehemiah rides out at night with a small group. No one knows what God's servant has planned. He inspects the wall from the Valley Gate to the Dung Gate — sees the broken walls and burned gates. Then: 'You see the trouble we are in. Let us rebuild!'" },
-                    { name: "Sheep Gate (Northeast)", lat: 31.776, lng: 35.229, ref: "Nehemiah 3:1", desc: "Eliashib the high priest and his brothers begin rebuilding the Sheep Gate, setting its doors in place and sanctifying it. The priests lead the work. This gate faces toward the temple. (Neh 3:1)" },
-                    { name: "Fish Gate (North)", lat: 31.775, lng: 35.224, ref: "Nehemiah 3:3", desc: "The sons of Hassenaah build the Fish Gate. Merchants and traders of Ophel repair alongside, setting up doors, bolts, and bars. This gate handles the Galilean trade route. (Neh 3:3)" },
-                    { name: "Old Gate / Jeshanah (Northwest)", lat: 31.774, lng: 35.218, ref: "Nehemiah 3:6", desc: "Jehoiada and Meshullam of the sons of Parosh repair the Old Gate, laying its beams and setting doors, bolts, and bars. One of the oldest city gates. (Neh 3:6)" },
-                    { name: "Valley Gate (West — Kidron)", lat: 31.773, lng: 35.212, ref: "Nehemiah 2:13 / 3:13", desc: "Nehemiah first scouts through the Valley Gate, riding the wall of the Pool of Siloam. The son of a ruler of Succoth repairs this section — 1,200 cubits. The Dung Gate is at the far end. (Neh 3:13-14)" },
-                    { name: "Dung Gate (Southwest)", lat: 31.772, lng: 35.207, ref: "Nehemiah 3:14", desc: "Malchijah son of Rechab repairs the Dung Gate, setting up its doors, bolts, and bars. This gate leads to the Hinnom Valley where refuse was burned. (Neh 3:14)" },
-                    { name: "Fountain Gate (Southeast — Siloam)", lat: 31.772, lng: 35.218, ref: "Nehemiah 3:15", desc: "Shallum son of Col-hozeh repairs the Fountain Gate, walling the pool and building from the King's Garden to the stairs going down from the City of David. (Neh 3:15)" },
-                    { name: "Water Gate (East — Gihon)", lat: 31.773, lng: 35.224, ref: "Nehemiah 3:26", desc: "The Tekoites repair from the Water Gate eastward, pitching their tents as far as the Broad Wall. This gate faces the Gihon Spring and the aqueduct bringing water into the city. (Neh 3:26-27)" },
-                    { name: "Broad Wall (Northwest — Ophel)", lat: 31.775, lng: 35.220, ref: "Nehemiah 3:8", desc: "Uzziel and Hanani repair the Broad Wall. Hananiah the craftsman also repairs, setting up its doors, bolts, and bars. This massive section — over 7 feet thick — is the most impressive remnant of pre-exilic Jerusalem. (Neh 3:8)" },
-                    { name: "Gate of Ephraim (West)", lat: 31.774, lng: 35.210, ref: "Nehemiah 8:16 / 12:39", desc: "The Gate of Ephraim (Corner Gate) is repaired. This gate connects to the road from the west — Ezra's return and later Paul's route to Jerusalem. (Neh 12:39)" },
-                    { name: "Jerusalem — Wall Completed", lat: 31.768, lng: 35.213, ref: "Nehemiah 6:15-16", desc: "The wall is finished in 52 days. When Sanballat, Tobiah, and Geshem hear this, when the neighboring nations see it — they lose their confidence, for it was done with the help of our God." }
-                ]
-            },
-            
-            // APOSTLES
-            "jesus": { name: "Jesus", desc: "The Messiah - Full Gospel Journey", category: "Apostles", color: "#D4AF37", year: -6, era: "NEW TESTAMENT",
-                path: [
-                    { name: "Bethlehem", lat: 31.904, lng: 35.202, ref: "Luke 2:4", desc: "Born in Bethlehem", notes: ["Manger"], image: "assets/images/journeys/jesus/bethlehem.jpg" },
-                    { name: "Egypt", lat: 30.044, lng: 31.236, ref: "Matthew 2:13", desc: "Flight to Egypt", notes: ["Herod's decree"], image: "assets/images/journeys/jesus/egypt.jpg" },
-                    { name: "Nazareth", lat: 32.707, lng: 35.298, ref: "Matthew 2:19", desc: "Return from Egypt; growing up in Nazareth", notes: ["Childhood", "Carpenter's shop"], image: "assets/images/journeys/jesus/nazareth.jpg" },
-                    { name: "Jordan River", lat: 31.947, lng: 35.571, ref: "Matthew 3:13", desc: "Baptism by John", notes: ["Holy Spirit"], image: "assets/images/journeys/jesus/jordan.jpg" },
-                    { name: "Wilderness", lat: 31.800, lng: 35.400, ref: "Matthew 4:1", desc: "40 Days Temptation", notes: ["Satan test"] },
-                    { name: "Cana", lat: 32.739, lng: 35.477, ref: "John 2:1", desc: "Water to Wine (1st Miracle)", notes: ["Wedding"] },
-                    { name: "Capernaum", lat: 32.876, lng: 35.542, ref: "John 2:12", desc: "Teaches in synagogue", notes: ["Ministry base"] },
-                    { name: "Samaritan Well", lat: 32.434, lng: 35.500, ref: "John 4:5", desc: "Woman at Well", notes: ["Living water"] },
-                    { name: "Gethsemane", lat: 31.778, lng: 35.243, ref: "Matthew 26:36", desc: "Agony in Garden", notes: ["Betrayal"] },
-                    { name: "Golgotha", lat: 31.778, lng: 35.227, ref: "Luke 23:33", desc: "Crucifixion", notes: ["Salvation"], image: "assets/images/journeys/jesus/golgotha.jpg" },
-                    { name: "Tomb", lat: 31.778, lng: 35.235, ref: "Luke 24:6", desc: "Resurrection", notes: ["Empty tomb"] }
-                ] },
-
-            "peter": { name: "Peter", desc: "Apostle - Martyred in Rome", category: "Apostles", color: "#D4AF37", year: 30,
-                path: [
-                    { name: "Bethsaida", lat: 32.794, lng: 35.531, ref: "John 1:41", desc: "Called by Jesus - First disciple" },
-                    { name: "Lake Galilee", lat: 32.794, lng: 35.531, ref: "Luke 5:1", desc: "Miraculous catch of fish" },
-                    { name: "Caesarea Philippi", lat: 33.234, lng: 35.513, ref: "Matthew 16:13", desc: "You are the Christ!" },
-                    { name: "Gethsemane", lat: 31.778, lng: 35.236, ref: "Matthew 26:36", desc: "Prays before arrest" },
-                    { name: "Caiaphas House", lat: 31.778, lng: 35.235, ref: "Matthew 26:57", desc: "Denies Jesus 3 times" },
-                    { name: "Calvary", lat: 31.778, lng: 35.227, ref: "John 18-19", desc: "At the cross" },
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "Acts 2:14", desc: "Pentecost sermon - 3000 saved" },
-                    { name: "Lydda", lat: 32.050, lng: 34.900, ref: "Acts 9:32", desc: "Heals Aeneas" },
-                    { name: "Joppa", lat: 32.050, lng: 34.750, ref: "Acts 9:36", desc: "Raises Tabitha" },
-                    { name: "Antioch", lat: 36.202, lng: 36.167, ref: "Acts 11:19", desc: "Preaches to Gentiles" },
-                    { name: "Corinth", lat: 37.984, lng: 23.726, ref: "1 Corinthians 1:12", desc: "Church planting" },
-                    { name: "Babylon", lat: 32.537, lng: 44.421, ref: "1 Peter 5:13", desc: "Writes 1 Peter" },
-                    { name: "Rome", lat: 41.893, lng: 12.485, ref: "2 Timothy 4:6", desc: "MARTYRDOM - Crucified upside down" }
-                ] },
-            "andrew": { name: "Andrew", desc: "Apostle - Martyred in Greece", category: "Apostles", color: "#D4AF37", year: 30,
-                path: [
-                    { name: "Bethsaida", lat: 32.794, lng: 35.531, ref: "John 1:40", desc: "First called (Peter's brother)" },
-                    { name: "Jordan", lat: 31.947, lng: 35.571, ref: "John 1:35", desc: "Follows Jesus" },
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "John 3:22", desc: "Discipleship" },
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "John 12:20", desc: "Greeks seek Jesus" },
-                    { name: "Ephesus", lat: 37.942, lng: 27.342, ref: "tradition", desc: "Preaches in Asia Minor" },
-                    { name: "Patras, Greece", lat: 38.231, lng: 21.727, ref: "tradition", desc: "MARTYRDOM - X-shaped cross" }
-                ] },
-            "john": { name: "John", desc: "Apostle - Exiled on Patmos", category: "Apostles", color: "#D4AF37", year: 30,
-                path: [
-                    { name: "Jordan", lat: 31.947, lng: 35.571, ref: "John 1:29", desc: "Follows Jesus" },
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "John 13:23", desc: "At the Last Supper" },
-                    { name: "Calvary", lat: 31.778, lng: 35.227, ref: "John 19:26", desc: "At the cross" },
-                    { name: "Ephesus", lat: 37.942, lng: 27.342, ref: "tradition", desc: "Leads church in Ephesus" },
-                    { name: "Patmos", lat: 37.300, lng: 26.500, ref: "Revelation 1:9", desc: "EXILED - Revelation given" }
-                ] },
-            "james": { name: "James", desc: "Apostle - Martyred in Jerusalem", category: "Apostles", color: "#D4AF37", year: 30,
-                path: [
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "Acts 1:13", desc: "One of the 12" },
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "Acts 12:1", desc: "Herod kills James" }
-                ] },
-            "matthew": { name: "Matthew", desc: "Apostle - Gospel Writer", category: "Apostles", color: "#D4AF37", year: 30,
-                path: [
-                    { name: "Capernaum", lat: 32.876, lng: 35.542, ref: "Mark 2:14", desc: "Called from tax booth" },
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "tradition", desc: "Writes Gospel" },
-                    { name: "Ethiopia", lat: 9.145, lng: 40.489, ref: "tradition", desc: "MARTYRDOM" }
-                ] },
-            "paul": { name: "Paul", desc: "Apostle to the Gentiles", category: "Apostles", color: "#D4AF37", year: 35,
-                path: [
-                    { name: "Damascus", lat: 33.500, lng: 36.300, ref: "Acts 9:1", desc: "Conversion on road" },
-                    { name: "Damascus", lat: 33.500, lng: 36.300, ref: "Acts 9:20", desc: "Preaches in synagogues" },
-                    { name: "Tarsus", lat: 36.917, lng: 34.583, ref: "Acts 9:30", desc: "Returns home" },
-                    { name: "Antioch", lat: 36.202, lng: 36.167, ref: "Acts 11:25", desc: "With Barnabas" },
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "Acts 11:29", desc: "Famine relief" },
-                    { name: "Cyprus", lat: 35.000, lng: 33.500, ref: "Acts 13:4", desc: "First missionary journey" },
-                    { name: "Antioch", lat: 36.202, lng: 36.167, ref: "Acts 14:26", desc: "Returns home" },
-                    { name: "Iconium", lat: 38.000, lng: 34.000, ref: "Acts 16:1", desc: "2nd journey - Timothy" },
-                    { name: "Troas", lat: 39.950, lng: 26.017, ref: "Acts 16:8", desc: "Macedonian call" },
-                    { name: "Philippi", lat: 40.517, lng: 22.100, ref: "Acts 16:12", desc: "First European church" },
-                    { name: "Thessalonica", lat: 40.640, lng: 22.417, ref: "Acts 17:1", desc: "Jailionians" },
-                    { name: "Athens", lat: 37.967, lng: 23.717, ref: "Acts 17:15", desc: "Mars Hill speech" },
-                    { name: "Corinth", lat: 37.984, lng: 23.726, ref: "Acts 18:1", desc: "18 months - 1&2 Cor" },
-                    { name: "Ephesus", lat: 37.942, lng: 27.342, ref: "Acts 19:1", desc: "3 years - 7 letters" },
-                    { name: "Caesarea", lat: 32.500, lng: 34.900, ref: "Acts 21:8", desc: "Prisoner travels" },
-                    { name: "Rome", lat: 41.893, lng: 12.485, ref: "Acts 28:16", desc: "House arrest - Philemon" },
-                    { name: "Rome", lat: 41.893, lng: 12.485, ref: "2 Timothy 4:6", desc: "MARTYRDOM - Beheaded" }
-                ] },
-            
-            // ADDITIONAL APOSTLES
-            "thomas": { name: "Thomas", desc: "Apostle - Doubter", category: "Apostles", color: "#DAA520", year: 30, era: "NEW TESTAMENT",
-                path: [
-                    { name: "Galilee", lat: 32.800, lng: 35.500, ref: "John 21:2", desc: "Appears to Thomas", notes: ["My Lord and my God"] },
-                    { name: "India", lat: 10.163, lng: 76.441, ref: "tradition", desc: "Martyrdom in Madras", notes: ["Parangi"] }
-                ] },
-            "bartholomew": { name: "Bartholomew", desc: "Apostle - Nathaniel", category: "Apostles", color: "#DAA520", year: 30, era: "NEW TESTAMENT",
-                path: [
-                    { name: "Galilee", lat: 32.800, lng: 35.500, ref: "John 1:45", desc: "Called", notes: ["True Israelite"] },
-                    { name: "Armenia", lat: 40.000, lng: 45.000, ref: "tradition", desc: "Martyrdom", notes: ["Flayed alive"] }
-                ] },
-            "james_son_of_alphaeus": { name: "James (Alphaeus)", desc: "Apostle - Lesser James", category: "Apostles", color: "#DAA520", year: 30, era: "NEW TESTAMENT",
-                path: [
-                    { name: "Galilee", lat: 32.800, lng: 35.500, ref: "Mark 15:40", desc: "With Jesus", notes: ["Brother of Jude"] },
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "tradition", desc: "Bishop", notes: ["Martyrdom"] }
-                ] },
-            "thaddaeus": { name: "Thaddaeus (Jude)", desc: "Apostle - Jude", category: "Apostles", color: "#DAA520", year: 30, era: "NEW TESTAMENT",
-                path: [
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "Jude 1:1", desc: "Writes Epistle", notes: ["Brother of James"] },
-                    { name: "Edessa", lat: 37.917, lng: 38.283, ref: "tradition", desc: "Mission", notes: ["Christianity spread"] }
-                ] },
-            "simon_zelotes": { name: "Simon (Zelotes)", desc: "Apostle - Zealot", category: "Apostles", color: "#DAA520", year: 30, era: "NEW TESTAMENT",
-                path: [
-                    { name: "Galilee", lat: 32.800, lng: 35.500, ref: "Luke 6:15", desc: "Called", notes: ["Former zealot"] },
-                    { name: "Babylon", lat: 32.537, lng: 44.421, ref: "tradition", desc: "Mission", notes: ["Martyrdom"] }
-                ] },
-            "matthias": { name: "Matthias", desc: "Apostle - Replacement for Judas", category: "Apostles", color: "#DAA520", year: 30, era: "NEW TESTAMENT",
-                path: [
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "Acts 1:26", desc: "Chosen by lot", notes: ["Replaces Judas"] },
-                    { name: "Judea", lat: 31.500, lng: 35.000, ref: "tradition", desc: "Mission", notes: ["Bishop of Jerusalem"] }
-                ] },
-            "barnabas": { name: "Barnabas", desc: "Apostle - Son of Encouragement", category: "Apostles", color: "#DAA520", year: 35, era: "NEW TESTAMENT",
-                path: [
-                    { name: "Cyprus", lat: 35.000, lng: 33.500, ref: "Acts 4:36", desc: "Sale of land", notes: ["Good man"] },
-                    { name: "Antioch", lat: 36.202, lng: 36.167, ref: "Acts 11:22", desc: "Church sent", notes: ["First Gentile church"] },
-                    { name: "Cyprus", lat: 35.000, lng: 33.500, ref: "Acts 15:39", desc: "Dispute with Paul", notes: ["Separate journey"] }
-                ] },
-            "stephen": { name: "Stephen", desc: "First Martyr", category: "Apostles", color: "#CD853F", year: 34, era: "NEW TESTAMENT",
-                path: [
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "Acts 6:5", desc: "Deacon chosen", notes: ["Full of faith"] },
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "Acts 7:54", desc: "Stoned to death", notes: ["First martyrdom"] }
-                ] },
-            "philip": { name: "Philip", desc: "Apostle - Evangelist", category: "Apostles", color: "#DAA520", year: 34, era: "NEW TESTAMENT",
-                path: [
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "Acts 6:5", desc: "Deacon", notes: ["Chosen for service"] },
-                    { name: "Samaria", lat: 32.417, lng: 35.267, ref: "Acts 8:5", desc: "Preaches", notes: ["Philip the Evangelist"] },
-                    { name: "Desert road", lat: 31.500, lng: 35.000, ref: "Acts 8:26", desc: "Ethiopian eunuch", notes: ["Baptism"] }
-                ] },
-            
-            // PAUL'S MISSIONARY JOURNEYS
-            "paul_journey1": { name: "Paul — First Journey", desc: "Acts 13–14 · From Antioch to Cyprus and Asia Minor", category: "Apostles", color: "#5DCAA5", year: 46, era: "NEW TESTAMENT",
-                path: [
-                    { name: "Antioch (Syria)", lat: 36.20, lng: 36.15, ref: "Acts 13:1-3", desc: "Set apart by the Holy Spirit" },
-                    { name: "Salamis", lat: 35.18, lng: 33.90, ref: "Acts 13:5", desc: "Synagogues in Cyprus" },
-                    { name: "Paphos", lat: 34.77, lng: 32.41, ref: "Acts 13:6", desc: "Elymas the sorcerer blinded" },
-                    { name: "Perge", lat: 36.96, lng: 30.85, ref: "Acts 13:13", desc: "John Mark departs" },
-                    { name: "Antioch (Pisidia)", lat: 38.20, lng: 31.00, ref: "Acts 13:14", desc: "Sermon in synagogue — Jews reject, Gentiles believe" },
-                    { name: "Iconium", lat: 37.87, lng: 32.48, ref: "Acts 14:1", desc: "Jews and Greeks believe" },
-                    { name: "Lystra", lat: 37.57, lng: 32.47, ref: "Acts 14:8", desc: "Cripple healed; Paul stoned, left for dead" },
-                    { name: "Derbe", lat: 37.35, lng: 33.38, ref: "Acts 14:20", desc: "Many disciples made" },
-                    { name: "Antioch (Syria)", lat: 36.20, lng: 36.15, ref: "Acts 14:26", desc: "Return; report to church" }
-                ]
-            },
-            "paul_journey2": { name: "Paul — Second Journey", desc: "Acts 15:36–18:22 · Through Asia Minor and Greece", category: "Apostles", color: "#5DCAA5", year: 50, era: "NEW TESTAMENT",
-                path: [
-                    { name: "Antioch (Syria)", lat: 36.20, lng: 36.15, ref: "Acts 15:36", desc: "Visits churches; Barnabas and Mark depart" },
-                    { name: "Derbe", lat: 37.35, lng: 33.38, ref: "Acts 15:40", desc: "Strengthens disciples" },
-                    { name: "Lystra", lat: 37.57, lng: 32.47, ref: "Acts 16:1", desc: "Timothy circumcised; joins the team" },
-                    { name: "Troas", lat: 39.96, lng: 26.24, ref: "Acts 16:8", desc: "Macedonian vision: 'Come over and help us'" },
-                    { name: "Neapolis", lat: 40.94, lng: 24.88, ref: "Acts 16:11", desc: "First European landing" },
-                    { name: "Philippi", lat: 41.68, lng: 26.56, ref: "Acts 16:12", desc: "Lydia baptised; jailer converted" },
-                    { name: "Thessalonica", lat: 40.64, lng: 22.97, ref: "Acts 17:1", desc: "Jews jealous; Paul writes 1 & 2 Thessalonians" },
-                    { name: "Berea", lat: 40.57, lng: 22.47, ref: "Acts 17:10", desc: "Noble Bereans examine the Scriptures daily" },
-                    { name: "Athens", lat: 37.98, lng: 23.73, ref: "Acts 17:16", desc: "Ares' Areopagus; 'Unknown God' sermon" },
-                    { name: "Corinth", lat: 37.91, lng: 22.89, ref: "Acts 18:1", desc: "18 months; Aquila and Priscilla; writes 1 & 2 Corinthians" },
-                    { name: "Ephesus", lat: 37.95, lng: 27.34, ref: "Acts 18:19", desc: " Apollos instructed" },
-                    { name: "Caesarea", lat: 32.51, lng: 34.90, ref: "Acts 18:22", desc: "Greeted the church; Antioch" }
-                ]
-            },
-            "paul_journey3": { name: "Paul — Third Journey", desc: "Acts 18:23–21:17 · Farewell Tour to Asia and Arrest", category: "Apostles", color: "#5DCAA5", year: 54, era: "NEW TESTAMENT",
-                path: [
-                    { name: "Antioch (Syria)", lat: 36.20, lng: 36.15, ref: "Acts 18:23", desc: "Strengthens disciples" },
-                    { name: "Galatia & Phrygia", lat: 38.50, lng: 34.00, ref: "Acts 18:23", desc: "Strengthens all the churches" },
-                    { name: "Ephesus", lat: 37.95, lng: 27.34, ref: "Acts 19:1", desc: "2 years; disciples of John instructed; Holy Spirit falls" },
-                    { name: "Smyrna", lat: 38.42, lng: 27.05, ref: "Acts 19:10", desc: "All Asia hears the word" },
-                    { name: "Troas", lat: 39.96, lng: 26.24, ref: "Acts 20:6", desc: "Eutychus raised from the dead" },
-                    { name: "Miletus", lat: 37.53, lng: 27.34, ref: "Acts 20:17", desc: "Ephesian elders: 'wolves among you'" },
-                    { name: "Tyre", lat: 33.27, lng: 35.20, ref: "Acts 21:3", desc: " disciples warn Paul not to go to Jerusalem" },
-                    { name: "Caesarea", lat: 32.51, lng: 34.90, ref: "Acts 21:8", desc: "Agabus prophesies Paul will be bound" },
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "Acts 21:15", desc: "Arrested in the Temple; crowd riots" }
-                ]
-            },
-            
-            // SEVEN CHURCHES OF REVELATION
-            "seven_churches": { name: "Seven Churches of Revelation", desc: "Rev 2–3 · John's Circular Letter Circuit in Asia", category: "Apostles", color: "#9B59B6", year: 96, era: "NEW TESTAMENT",
-                path: [
-                    { name: "Ephesus", lat: 37.95, lng: 27.34, ref: "Rev 2:1-7", desc: "\"You have forsaken the love you had at first.\" Hold fast. Remove the Nicolaitans. overcoming — eat from the tree of life." },
-                    { name: "Smyrna", lat: 38.42, lng: 27.05, ref: "Rev 2:8-11", desc: "\"Be faithful even to the point of death.\" Ten days of tribulation. Crown of life promised. The second death has no power over overcomers." },
-                    { name: "Pergamum", lat: 39.13, lng: 27.18, ref: "Rev 2:12-17", desc: "\"Hold firm.\" Where Satan's throne is. Antipas martyred. Balaam & Nicolaitan doctrine. Hidden manna — white stone with new name." },
-                    { name: "Thyatira", lat: 38.88, lng: 27.83, ref: "Rev 2:18-29", desc: "\"I know your deeds.\" Jezebel seduces. Deep things of Satan. Hold what you have. To the overcomer — rule the nations with iron scepter." },
-                    { name: "Sardis", lat: 38.47, lng: 28.03, ref: "Rev 3:1-6", desc: "\"You have a reputation of being alive, but you are dead.\" Wake up. Strengthen what remains. Nothing in God's scroll found blameless." },
-                    { name: "Philadelphia", lat: 38.38, lng: 27.43, ref: "Rev 3:7-13", desc: "\"I know your deeds.\" Kept God's word. Open door before you that no one can shut. Holy nation. Pillars in God's temple." },
-                    { name: "Laodicea", lat: 37.92, lng: 27.92, ref: "Rev 3:14-22", desc: "\"Because you are lukewarm — I will vomit you out.\" wretched, pitiful, poor, blind, naked. Buy gold refined in fire. The door stands open." }
-                ]
-            },
-            
-            // PETER'S MINISTRY JOURNEY
-            "peter_journey": { name: "Peter's Ministry Circuit", desc: "Acts 9–10, Gal 2, 1 Pet 5 · Galilean fisherman to martyr in Rome", category: "Apostles", color: "#27AE60", year: 44, era: "NEW TESTAMENT",
-                path: [
-                    { name: "Capernaum", lat: 32.78, lng: 35.54, ref: "Mk 1:21", desc: "\"You are the Christ.\" — Peter's confession & Transfiguration mount. Jesus teaches, heals, calls him as fisherman of men." },
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "Acts 1-5", desc: "Pentecost. Spirit baptism. Pentecost tongue of fire. Bold preaching — 3,000 saved. Fisher of men begins." },
-                    { name: "Lydda (Joppa)", lat: 32.33, lng: 34.75, ref: "Acts 9:36-43", desc: "Tabitha raised. Peter stays with tanners. \"In those days I was fishing.\" Joppa — port of Jonah's departure." },
-                    { name: "Caesarea Maritima", lat: 32.51, lng: 34.90, ref: "Acts 10", desc: "Cornelius Centurion. \"God shows no partiality.\" Holy Spirit falls — Gentiles grafted in. Peter recognizes the mystery." },
-                    { name: "Jerusalem", lat: 31.768, lng: 35.213, ref: "Acts 11-12", desc: "Council confirms Gentile ministry. Herod's prison. Angel frees Peter. \"Now I really know the Lord.\"" },
-                    { name: "Antioch (Syria)", lat: 36.20, lng: 36.15, ref: "Gal 2:11-14", desc: "Peter eats with Gentiles — then withdraws. Paul's confrontation. Salvation by grace through faith alone, not by works." },
-                    { name: "Babylon", lat: 32.55, lng: 44.43, ref: "1 Pet 5:13", desc: "\"She who is in Babylon, chosen together with you, sends you greetings.\" Babylon = Rome code. Early church cipher." },
-                    { name: "Rome", lat: 41.90, lng: 12.50, ref: "2 Pet 1:14-15 / tradition", desc: "Nero's persecution. Upside-down crucifixion (tradition). \"I am going where my Lord once hung on a tree.\" Martyrdom ~64 AD." }
-                ]
-            }
-        };
-        
-        // ==================== UTILITIES ====================
         function formatYear(year) {
             if (year === 0 || year === 1) return "1 AD";
             const abs = Math.abs(year);
@@ -2328,15 +1847,6 @@ const JOURNEYS = {
             { name: 'Caiaphas Ossuary', lat: 31.7500, lng: 35.2200, revealed: false, info: 'Bone box of Caiaphas the High Priest — Matthew 26:57.', siteGroup: 'Jerusalem' }
         ];
 
-        // Place locked markers on hidden finds for guest users
-        if (!localStorage.getItem('activeScribe')) {
-            HIDDEN_FINDS.forEach(function(f) {
-                L.marker([f.lat, f.lng], { icon: lockedFragmentIcon })
-                    .addTo(map)
-                    .bindPopup('<div style="text-align:center;font-family:\'Space Grotesk\',sans-serif;padding:6px;"><h3 style="color:#8b2500;font-family:\'Cinzel\',serif;font-size: 0.66rem;letter-spacing:2px;">&#x1F512; SEALED FRAGMENT</h3><p style="font-size: 0.66rem;color:rgba(255,255,255,0.4);margin:8px 0;">This archaeological record is reserved for the Order of Scribes.</p><button onclick="window.location.href=\'register.html\'" style="background:transparent;border:1px solid #d4af37;color:#d4af37;padding:6px 16px;cursor:pointer;font-size: 0.66rem;border-radius:3px;font-family:\'Cinzel\',serif;">UNDERGO INDUCTION</button></div>');
-            });
-        }
-
         window.viewFragment = function(id) {
             if (!localStorage.getItem('activeScribe')) {
                 if (window.ScriptoriumAudio) { try { ScriptoriumAudio.transitionTo('ot'); } catch(e) {} }
@@ -2353,7 +1863,25 @@ const JOURNEYS = {
         
         window.baseLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
             attribution: 'Leaflet | CARTO'
-        }).addTo(map);
+        }).addTo(window.map);
+        
+        // Fallback tile set if CARTO CDN is blocked
+        var fallbackTiles = function() {
+            if (!window.map || !window.baseLayer) return;
+            try { window.map.removeLayer(window.baseLayer); } catch(e) {}
+            window.baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(window.map);
+            
+        };
+        var tileFailCount = 0;
+        window.map.on('tileerror', function() {
+            tileFailCount++;
+            if (tileFailCount >= 4) fallbackTiles();
+        });
+        setTimeout(function() {
+            if (tileFailCount > 0) fallbackTiles();
+        }, 5000);
         
         // Digging cursor animation on map click
         map.on('mousedown', function() { document.body.classList.add('digging-active'); });
@@ -2361,26 +1889,38 @@ const JOURNEYS = {
         
         window.mapLayerMode = 'vellum';
         
-        const markers = L.markerClusterGroup({
-            chunkedLoading: true,
-            spiderfyOnMaxZoom: true,
-            showCoverageOnHover: false,
-            zoomToBoundsOnClick: true,
-            maxClusterRadius: 60,
-            iconCreateFunction: function(cluster) {
-                var count = cluster.getChildCount();
-                var size = count < 10 ? 'small' : count < 50 ? 'medium' : 'large';
-                return L.divIcon({
-                    html: '<div><span>' + count + '</span></div>',
-                    className: 'marker-cluster marker-cluster-' + size,
-                    iconSize: L.point(40, 40)
-                });
-            }
-        }).addTo(map);
+        var markers;
+        try {
+            markers = L.markerClusterGroup({
+                chunkedLoading: true,
+                spiderfyOnMaxZoom: true,
+                showCoverageOnHover: false,
+                zoomToBoundsOnClick: true,
+                maxClusterRadius: 60,
+                iconCreateFunction: function(cluster) {
+                    var count = cluster.getChildCount();
+                    var size = count < 10 ? 'small' : count < 50 ? 'medium' : 'large';
+                    return L.divIcon({
+                        html: '<div><span>' + count + '</span></div>',
+                        className: 'marker-cluster marker-cluster-' + size,
+                        iconSize: L.point(40, 40)
+                    });
+                }
+            }).addTo(map);
+        } catch(e) {
+            console.warn('MarkerCluster unavailable, using plain layer group:', e.message);
+            markers = L.layerGroup().addTo(map);
+        }
         const journeyLayer = L.layerGroup().addTo(map);
-        
-        // Mini-map init
 
+        // Place locked markers on hidden finds for guest users
+        if (!localStorage.getItem('activeScribe')) {
+            HIDDEN_FINDS.forEach(function(f) {
+                L.marker([f.lat, f.lng], { icon: lockedFragmentIcon })
+                    .addTo(map)
+                    .bindPopup('<div style="text-align:center;font-family:\'Space Grotesk\',sans-serif;padding:6px;"><h3 style="color:#8b2500;font-family:\'Cinzel\',serif;font-size: 0.66rem;letter-spacing:2px;">&#x1F512; SEALED FRAGMENT</h3><p style="font-size: 0.66rem;color:rgba(255,255,255,0.4);margin:8px 0;">This archaeological record is reserved for the Order of Scribes.</p><button onclick="window.location.href=\'register.html\'" style="background:transparent;border:1px solid #d4af37;color:#d4af37;padding:6px 16px;cursor:pointer;font-size: 0.66rem;border-radius:3px;font-family:\'Cinzel\',serif;">UNDERGO INDUCTION</button></div>');
+            });
+        }
         
         // ==================== REGION LABELS ====================
         function addRegionLabels() {
@@ -2535,10 +2075,8 @@ const regions = [
         }
         
         // ==================== INIT ====================
-        console.log('Initializing map...');
         map.on('zoomend', updateMarkers);
         updateMarkers();
-        console.log('Map initialized');
         
         // ==================== SHARE A LOCATION ====================
         (function() {
@@ -2635,6 +2173,9 @@ const regions = [
 
             updateMarkers();
         });
+
+        // Initialize fog overlay to match default slider position
+        document.getElementById('time-slider').dispatchEvent(new Event('input'));
 
         // ==================== SECRET VAULT ====================
         var secretVaultUnlocked = false;
@@ -2744,11 +2285,8 @@ const regions = [
             }
         };
 
-        // Wire Patmos check into timeline slider
-        var originalSliderHandler = document.getElementById('time-slider').oninput;
-        document.getElementById('time-slider').addEventListener('input', function() {
-            setTimeout(window.checkPatmosEasterEgg, 500);
-        });
+        // Patmos check fires after slider settles
+        setTimeout(window.checkPatmosEasterEgg, 500);
 
         // Auto-reveal golden compass for Illuminators on load
         if (checkSecretVault()) {
@@ -2909,7 +2447,7 @@ const regions = [
                 }
             }
             }
-            console.log('Filtering era:', era);
+            
         }
         
         // ==================== TAB NAVIGATION ====================
@@ -2945,8 +2483,7 @@ const regions = [
         
         // ==================== LAYER TOGGLE ====================
         function toggleLayer() {
-            var btn = document.getElementById('layer-toggle');
-            if (btn) btn.click();
+            setLayerMode('vellum');
         }
         
         // ==================== COVENANT TOGGLE ====================
@@ -2962,9 +2499,11 @@ const regions = [
             if (panel && btn) {
                 if (panel.classList.contains('open')) {
                     panel.classList.remove('open');
+                    document.body.classList.remove('selah-open');
                     btn.innerHTML = 'VAULT';
                 } else {
                     panel.classList.add('open');
+                    document.body.classList.add('selah-open');
                     btn.innerHTML = 'CLOSE';
                 }
             }
@@ -3189,16 +2728,6 @@ const regions = [
             "Tarsus": "Acts 9:11 - But the Lord said to him, Arise and go to the street called Straight...",
             "Athens": "Acts 17:22 - Then Paul stood in the midst of the Areopagus and said..."
         };
-        
-        // Add RV reference to existing function
-        var origOpenPlace = openPlaceDossier;
-        
-        // ==================== OFFLINE-FIRST INIT ====================
-        // Register service worker for offline support
-        if ('serviceWorker' in navigator) {
-            // Would register sw.js here
-            console.log('Scriptorian: Service worker would register for offline support');
-        }
         
         // Search-on-Demand toggle
         document.getElementById('search-toggle').onclick = (e) => {
@@ -3507,9 +3036,9 @@ const regions = [
             });
             
             journeySelect.innerHTML = html;
-            console.log('Journeys populated:', Object.keys(JOURNEYS).length);
+            
         } else {
-            console.log('JourneySelect missing or JOURNEYS undefined');
+            
         }
         
         // Favorites button - one-time handler (not inside journey change handler)
@@ -3724,7 +3253,6 @@ const regions = [
         
         journeySelect.addEventListener('change', (e) => {
             const key = e.target.value;
-            console.log('Journey selected:', key);
             if (!key) return;
             
             currentJourneyKey = key;
@@ -3739,7 +3267,18 @@ const regions = [
             }
             const totalDays = Math.ceil(totalDist / 25);
             const stopCount = journey.path.length;
-            const yearLabel = journey.year > 0 ? journey.year + ' AD' : Math.abs(journey.year) + ' BC';
+            var minYear = Infinity, maxYear = -Infinity;
+            journey.path.forEach(function(s) {
+                var sy = s.year !== undefined ? s.year : journey.year;
+                if (sy < minYear) minYear = sy;
+                if (sy > maxYear) maxYear = sy;
+            });
+            var yearLabel;
+            if (minYear === maxYear) {
+                yearLabel = journey.year > 0 ? journey.year + ' AD' : Math.abs(journey.year) + ' BC';
+            } else {
+                yearLabel = (minYear > 0 ? minYear + ' AD' : Math.abs(minYear) + ' BC') + ' \u2192 ' + (maxYear > 0 ? maxYear + ' AD' : Math.abs(maxYear) + ' BC');
+            }
             const isFav = journeyFavorites.includes(key);
             
             // Show journey preview card
@@ -3774,20 +3313,35 @@ const regions = [
                 }
             };
             
-            journey.path.forEach(function(stop, i) {
-                var isActive = i === currentStepIndex;
-                var marker = L.marker([stop.lat, stop.lng], {
+            var denseMode = journey.path.length > 12;
+            window._denseMode = denseMode;
+            
+            if (denseMode) {
+                var firstStop = journey.path[0];
+                window._currentJourneyMarker = L.marker([firstStop.lat, firstStop.lng], {
                     icon: L.divIcon({
-                        className: 'journey-stop' + (isActive ? ' active-marker' : ''),
-                        html: '<div>' + (i+1) + '</div>',
+                        className: 'journey-stop active-marker',
+                        html: '<div>1</div>',
                         iconSize: [22, 22],
                         iconAnchor: [11, 11]
                     })
-                }).bindTooltip(stop.name, { permanent: true, direction: 'top', offset: [0, -12], className: 'stop-tooltip' });
-                marker.addTo(journeyLayer);
-            });
+                }).bindTooltip(firstStop.name, { permanent: true, direction: 'top', offset: [0, -12], className: 'stop-tooltip' }).addTo(journeyLayer);
+            } else {
+                journey.path.forEach(function(stop, i) {
+                    var isActive = i === currentStepIndex;
+                    var marker = L.marker([stop.lat, stop.lng], {
+                        icon: L.divIcon({
+                            className: 'journey-stop' + (isActive ? ' active-marker' : ''),
+                            html: '<div>' + (i+1) + '</div>',
+                            iconSize: [22, 22],
+                            iconAnchor: [11, 11]
+                        })
+                    }).bindTooltip(stop.name, { permanent: true, direction: 'top', offset: [0, -12], className: 'stop-tooltip' });
+                    marker.addTo(journeyLayer);
+                });
+            }
             
-            map.fitBounds(L.polyline(coords).getBounds(), { padding: [30, 30] });
+            map.fitBounds(L.polyline(coords).getBounds(), { padding: [100, 100], maxZoom: 15 });
             if (key === 'nehemiah_rebuild') {
                 map.setView([31.773, 35.215], 17);
             }
@@ -3798,7 +3352,6 @@ const regions = [
         let currentStepIndex = 0;
         
         function updateJourneyStep() {
-            console.log('Updating journey step:', currentJourneyKey, currentStepIndex);
             if (!currentJourneyKey) return;
             const journey = JOURNEYS[currentJourneyKey];
             const stop = journey.path[currentStepIndex];
@@ -3817,23 +3370,42 @@ const regions = [
                 L.polyline(activeCoords, { color: '#D4AF37', weight: 3.5, opacity: 0.95 }).addTo(journeyLayer);
             }
             
-            // Update active marker pulse - clear all first, then set current
-            journeyLayer.eachLayer(function(layer) {
-                if (layer instanceof L.Marker) {
-                    var el = layer.getElement();
-                    if (el) {
-                        el.classList.remove('active-marker');
-                    }
-                }
-            });
-            
-            // Add pulse to current stop marker
-            const markers = journeyLayer.getLayers().filter(l => l instanceof L.Marker);
-            if (markers[currentStepIndex]) {
-                const el = markers[currentStepIndex].getElement();
+            // Update active marker - handle both dense and normal mode
+            if (window._denseMode && window._currentJourneyMarker) {
+                window._currentJourneyMarker.setLatLng([stop.lat, stop.lng]);
+                window._currentJourneyMarker.setTooltipContent(stop.name);
+                var el = window._currentJourneyMarker.getElement();
                 if (el) {
-                    const icon = el.querySelector('.journey-stop');
-                    if (icon) icon.classList.add('active-marker');
+                    var numDiv = el.querySelector('div');
+                    if (numDiv) numDiv.textContent = currentStepIndex + 1;
+                }
+            } else if (!window._denseMode) {
+                journeyLayer.eachLayer(function(l) {
+                    if (l instanceof L.Marker) {
+                        var el = l.getElement();
+                        if (el) {
+                            var idx = parseInt(el.querySelector('div').textContent, 10) - 1;
+                            var isActive = idx === currentStepIndex;
+                            el.classList.toggle('active-marker', isActive);
+                        }
+                    }
+                });
+            } else {
+                journeyLayer.eachLayer(function(layer) {
+                    if (layer instanceof L.Marker) {
+                        var el = layer.getElement();
+                        if (el) {
+                            el.classList.remove('active-marker');
+                        }
+                    }
+                });
+                const markers = journeyLayer.getLayers().filter(l => l instanceof L.Marker);
+                if (markers[currentStepIndex]) {
+                    const el = markers[currentStepIndex].getElement();
+                    if (el) {
+                        const icon = el.querySelector('.journey-stop');
+                        if (icon) icon.classList.add('active-marker');
+                    }
                 }
             }
             
@@ -3966,17 +3538,16 @@ const regions = [
             // Enhanced stop info with who lived there, key events, biblical refs
             var peopleWhoLived = getPeopleWhoLived(stop.name);
             var keyEvents = stop.notes ? stop.notes.join('|') : getKeyEvents(stop.name, stop.ref);
-            var bibleRefs = getBibleRefs(stop.name);
             
             var stepNum = currentStepIndex + 1;
-            var totalStopsInPathInPath = journey.path.length;
             var stopName = stop.name || 'Unknown';
             var stopDesc = stop.desc || '';
+            var descClampCSS = 'height:auto;';
             var stopRef = stop.ref || '';
             var journeyColor = journey.color || 'var(--gold)';
-            var journeyEra = journey.era || '';
             var stopImage = stop.image || '';
-            var yearDisplay = journey.year > 0 ? journey.year + ' AD' : Math.abs(journey.year) + ' BC';
+            var stopYear = stop.year !== undefined ? stop.year : journey.year;
+            var yearDisplay = stopYear > 0 ? stopYear + ' AD' : Math.abs(stopYear) + ' BC';
 
             // Build step-info panel
             var html = '<div class="step-breadcrumb">STOP ' + stepNum + ' OF ' + totalStopsInPath + '</div>' +
@@ -3994,30 +3565,73 @@ const regions = [
 
             document.getElementById('step-info').innerHTML = html;
 
-            // Show detailed stop info on map popup
-            var popupHtml = '<div style="background:rgba(12,12,18,0.96);border:1px solid rgba(212,175,55,0.3);border-radius:4px;padding:24px;max-width:920px;font-family:\'Cormorant Garamond\',serif;">' +
-                '<div style="width:100%;max-height:620px;border-radius:3px;overflow:hidden;border:1px solid rgba(212,175,55,0.2);display:flex;align-items:center;justify-content:center;background:#16120e;margin-bottom:20px;">' +
-                        (stopImage ? '<img src="' + stopImage + '" alt="' + stopName + '" style="width:100%;height:620px;object-fit:cover;display:block;" onerror="this.outerHTML=\'<span style=font-size: 112.8px;opacity:0.2;>✦</span>\'">' : '<span style="font-size: 112.8px;opacity:0.2;">✦</span>') +
-                '</div>' +
-                '<div style="word-break:break-word;">' +
-                    '<div style="font-family:\'Cinzel\',serif;font-size: 1.8rem;color:#d4af37;margin-bottom:4px;">' + stopName + '</div>' +
-                    '<div style="font-size: 0.66rem;color:rgba(255,255,255,0.45);margin-bottom:12px;">' + stopRef + '</div>' +
-                    (stopDesc ? '<div style="font-size: 0.66rem;color:rgba(255,255,255,0.98);margin-bottom:10px;line-height:1.55;word-break:break-word;">' + stopDesc + '</div>' : '') +
-                    (peopleWhoLived ? '<div style="font-size: 0.66rem;color:rgba(255,255,255,0.97);margin-bottom:8px;word-break:break-word;"><strong style="color:#d4af37;">People:</strong> ' + peopleWhoLived + '</div>' : '') +
-                    (keyEvents ? '<div style="font-size: 0.66rem;color:rgba(255,255,255,0.98);margin-bottom:8px;word-break:break-word;"><strong style="color:#d4af37;">Notes:</strong> ' + keyEvents.replace(/\|/g, '; ') + '</div>' : '') +
-                    (distanceSincePrev > 0 ? '<div style="font-size: 0.66rem;color:rgba(255,255,255,0.98);word-break:break-word;"><strong style="color:#d4af37;">Travel:</strong> ' + Math.round(distanceSincePrev) + ' mi (~' + daysSincePrev + ' day' + (daysSincePrev > 1 ? 's' : '') + ')</div>' : '') +
-                '</div>' +
-                '<div style="font-size: 0.66rem;color:rgba(255,255,255,0.3);margin-top:16px;padding-top:12px;border-top:1px solid rgba(212,175,55,0.17);display:flex;gap:16px;flex-wrap:wrap;word-break:break-word;">' +
-                    '<span><strong style="color:#d4af37;">Year:</strong> ' + yearDisplay + '</span>' +
-                    '<span><strong style="color:#d4af37;">Journey:</strong> ' + Math.round(totalDistance) + ' mi</span>' +
-                    '<span><strong style="color:#d4af37;">Duration:</strong> ' + totalDays + ' days</span>' +
-                    '<span><strong style="color:#d4af37;">Stop:</strong> ' + stepNum + '/' + totalStopsInPath + '</span>' +
-                '</div></div>';
+            // Show detailed stop info on map popup — constrained split-screen layout
+            var selahOpen = document.getElementById('selah-panel').classList.contains('open');
+            var chronicleHeight = Math.max(105, window.innerHeight * 0.16);
+            var availableWidth = selahOpen ? window.innerWidth - 360 : window.innerWidth - 160;
+            var maxWidth = Math.min(900, availableWidth);
+            var maxHeight = Math.min(600, window.innerHeight - chronicleHeight - 80);
+            var rightPadding = selahOpen ? 370 : 90;
+            var bottomPadding = chronicleHeight + 40;
+            var popupWidth = stopImage ? 880 : 510;
+            
+            var popupHtml =
+                '<div style="display: flex; flex-direction: row; background: rgba(12,12,18,0.96); border: 1px solid rgba(212,175,55,0.3); border-radius: 4px; width: ' + popupWidth + 'px; max-width: 94vw; height: auto; min-height: 280px; max-height: ' + maxHeight + 'px; font-family:\'Cormorant Garamond\',serif; box-shadow: 0 25px 50px rgba(0,0,0,0.9); position: relative;">' +
+
+                    // LEFT COLUMN: Strictly Locked to 45% Width
+                    (stopImage ?
+                    '<div style="width: 45%; height: 100%; border-right: 1px solid rgba(212,175,55,0.15); background: #000; flex-shrink: 0; overflow: hidden;">' +
+                        '<img src="' + stopImage + '" alt="' + stopName + '" style="width: 100%; height: 100%; object-fit: cover; display: block;">' +
+                    '</div>' : '') +
+
+                    // RIGHT COLUMN: Strictly Locked to 55% Width (Fixes Text Clipping)
+                    '<div style="width: ' + (stopImage ? '55%' : '100%') + '; height: 100%; padding: 35px 35px 35px 30px; overflow-y: auto; overflow-x: hidden; box-sizing: border-box; background: linear-gradient(180deg, #0a0908 0%, #030303 100%);">' +
+
+                        '<div style="font-family:\'Cinzel\',serif; font-size: 1.5rem; color:#d4af37; margin-bottom: 4px; line-height: 1.2; padding-right: 20px;">' + stopName + '</div>' +
+                        '<div style="font-size: 1rem; color: rgba(212,175,55,0.7); margin-bottom: 20px; font-style: italic;">' + (stopRef.startsWith('http') ? '<a href="' + stopRef + '" target="_blank" style="color:rgba(212,175,55,0.7);text-decoration:underline;word-break:break-word;overflow-wrap:break-word;">' + stopRef + '</a>' : stopRef) + '</div>' +
+
+                        (stopDesc ? '<div style="font-size: 1.15rem; color: rgba(255,255,255,0.95); margin-bottom: 12px; line-height: 1.6; word-wrap: break-word; overflow-wrap: break-word;' + descClampCSS + '">' + stopDesc + '</div>' : '') +
+
+                        (peopleWhoLived ? '<div style="font-size: 1.05rem; color: rgba(255,255,255,0.5); border-top: 1px solid rgba(212,175,55,0.15); padding-top: 8px; margin-bottom: 6px; padding-bottom: 6px; word-wrap: break-word;"><strong style="color:#d4af37;">People:</strong> ' + peopleWhoLived + '</div>' : '') +
+                        (keyEvents ? '<div style="font-size:1rem;color:rgba(255,255,255,0.85);margin-bottom:10px;word-break:break-word;overflow-wrap:break-word;"><strong style="color:#d4af37;">Notes:</strong> ' + keyEvents.replace(/\|/g, '; ') + '</div>' : '') +
+                        (distanceSincePrev > 0 ? '<div style="font-size:0.9rem;color:rgba(255,255,255,0.7);margin-bottom:12px;"><strong style="color:#d4af37;">Travel:</strong> ' + Math.round(distanceSincePrev) + ' mi (~' + daysSincePrev + ' day' + (daysSincePrev > 1 ? 's' : '') + ')</div>' : '') +
+                        '<div style="padding-top:12px;border-top:1px solid rgba(212,175,55,0.12);display:flex;gap:14px;flex-wrap:wrap;font-size:0.8rem;color:rgba(255,255,255,0.35);">' +
+                            '<span><strong style="color:#d4af37;">Year:</strong> ' + yearDisplay + '</span>' +
+                            '<span><strong style="color:#d4af37;">Journey:</strong> ' + Math.round(totalDistance) + ' mi</span>' +
+                            '<span><strong style="color:#d4af37;">Stop:</strong> ' + stepNum + '/' + totalStopsInPath + '</span>' +
+                        '</div>' +
+                    '</div>' +
+
+                '</div>';
 
             setTimeout(function() {
-                journeyLayer.eachLayer(function(l) {
-                    if (l instanceof L.Marker && Math.abs(l.getLatLng().lat - stop.lat) < 0.01 && Math.abs(l.getLatLng().lng - stop.lng) < 0.01) {
-                        l.bindPopup(popupHtml).openPopup();
+                document.fonts.ready.then(function() {
+                    if (window._denseMode && window._currentJourneyMarker) {
+                        var m = window._currentJourneyMarker;
+                        if (m._popup) m.closePopup();
+                        m.bindPopup(popupHtml, {
+                            maxWidth: maxWidth,
+                            minWidth: 300,
+                            autoPan: true,
+                            autoPanPadding: [rightPadding, bottomPadding],
+                            keepInView: true,
+                            closeButton: true,
+                            className: 'journey-stop-popup'
+                        }).openPopup();
+                    } else {
+                        journeyLayer.eachLayer(function(l) {
+                            if (l instanceof L.Marker && Math.abs(l.getLatLng().lat - stop.lat) < 0.01 && Math.abs(l.getLatLng().lng - stop.lng) < 0.01) {
+                                l.bindPopup(popupHtml, {
+                                    maxWidth: maxWidth,
+                                    minWidth: 300,
+                                    autoPan: true,
+                                    autoPanPadding: [rightPadding, bottomPadding],
+                                    keepInView: true,
+                                    closeButton: true,
+                                    className: 'journey-stop-popup'
+                                }).openPopup();
+                            }
+                        });
                     }
                 });
             }, 300);
@@ -4042,16 +3656,15 @@ const regions = [
                 nextBtn.style.opacity = '';
             }
             
-            // Auto-sync timeline to journey era
+            // Auto-sync timeline to stop era
             if (document.getElementById('time-slider')) {
-                var eraYear = journey.year;
+                var eraYear = stop.year !== undefined ? stop.year : journey.year;
                 var sliderYear = eraYear > 0 ? eraYear + 2000 : Math.abs(eraYear);
                 document.getElementById('time-slider').value = sliderYear;
                 var display = sliderYear < 2000 ? (2000 - sliderYear) + ' BC' : (sliderYear - 2000) + ' AD';
                 document.getElementById('year-display').textContent = display;
             }
             
-            map.flyTo([stop.lat, stop.lng], 10, { duration: 5 });
         }
         
         window.jumpToStep = function(idx) {
@@ -4541,6 +4154,6 @@ const regions = [
 
     <!-- Help trigger -->
     <div class="help-trigger" onclick="localStorage.removeItem('seen_handbook');document.getElementById('scribeHandbook').style.display='block';" title="Consult the Handbook">&#x1F4DC;</div>
-    <script src="assets/js/scriptorium-core.js"></script>
+    <script defer src="assets/js/scriptorium-core.js"></script>
 </body>
 </html>

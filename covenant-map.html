@@ -5,9 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCRIPTORIUM | Covenant Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;1,600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://*.basemaps.cartocdn.com">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;1,600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;1,600&display=swap">
     <link rel="stylesheet" href="assets/css/shared.css">
     <script src="assets/audio/scriptorium-audio.js"></script>
+    <script defer src="assets/js/sidebar.js"></script>
+    <script defer src="assets/js/scriptorium-core.js"></script>
     <style>
         :root {
             --obsidian: #050505;
@@ -417,11 +424,9 @@
         }
 
     </style>
-    <script src="assets/js/sidebar.js"></script>
 </head>
 <body>
 <div id="covenantMap"></div>
-<script src="assets/js/scriptorium-core.js"></script>
 
     <div id="sidebarContainer"></div>
         <div class="scribe-roster">
@@ -434,8 +439,9 @@
             </div>
             <div class="scribe-stats">
                 <small>GLOBAL SYNCHRONIZATION: <span id="syncPercent">5%</span></small>
-                <div class="progress-bar"><div id="syncFill" class="fill" style="width:5%"></div></div>
+                    <div class="progress-bar"><div id="syncFill" class="fill" style="width:5%"></div></div>
     </div>
+</div>
 
 <!-- UNIFIED LEDGER -->
 <div class="ledger-wrapper">
