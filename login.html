@@ -1,13 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; style-src-elem 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' unpkg.com cdn.jsdelivr.net; img-src 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; img-src-elem 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; connect-src 'self' *.tile.openstreetmap.org *.basemaps.cartocdn.com; frame-src 'none';">
     <meta charset="UTF-8">
+    <meta property="og:title" content="SCRIPTORIUM | Login">
+    <meta name="description" content="Scriptorium — a digital archive of biblical texts, maps, genealogies, and manuscript studies.">
+    <meta property="og:description" content="Scriptorium — a digital archive of biblical texts, maps, genealogies, and manuscript studies.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://scriptorium-sandy.vercel.app/login.html">
+    <meta property="og:image" content="https://scriptorium-sandy.vercel.app/og-image.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCRIPTORIUM | Access the Archive</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500&display=optional" rel="stylesheet">
+    <link href="assets/fonts/fonts.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/shared.css">
+    <link rel="stylesheet" href="assets/css/features.css">
+    <link rel="manifest" href="/manifest.json">
     <script src="assets/audio/scriptorium-audio.js" defer></script>
-    <script src="assets/js/sidebar.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/sidebar.js"></script>
     <style>
         :root{--obsidian:#050505;--museum-gold:#d4af37;--museum-gold-dim:rgba(212,175,55,0.4);--museum-gold-faint:rgba(212,175,55,0.08);}
         body{padding-left:80px;}
@@ -20,30 +31,37 @@
         .input-group label{display:block;font-family:'Montserrat',sans-serif;font-size: 0.66rem;letter-spacing:2px;color:rgba(212,175,55,0.85);margin-bottom:4px;}
         .input-group input{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(212,175,55,0.17);color:rgba(255,255,255,0.98);font-family:'Cormorant Garamond',serif;font-size: 0.66rem;padding:8px 2px;outline:none;transition:border-color 0.3s,color 0.3s;}
         .input-group input:focus{border-bottom-color:rgba(212,175,55,0.5);color:#fff;}
-        .input-group input::placeholder{color:rgba(255,255,255,0.15);font-style:italic;}
+        .input-group input::placeholder{color: var(--text-secondary);font-style:italic;}
         .seal-btn{background:transparent;border:1px solid rgba(212,175,55,0.2);color:rgba(212,175,55,0.7);padding:14px 40px;font-family:'Cinzel',serif;font-size: 0.66rem;letter-spacing:4px;cursor:pointer;border-radius:4px;transition:all 0.5s ease;margin-top:12px;}
         .seal-btn:hover{background:var(--museum-gold);color:#000;box-shadow:0 0 30px rgba(212,175,55,0.2);}
         .seal-btn:disabled{opacity:0.3;cursor:not-allowed;}
         .seal-btn:disabled:hover{background:transparent;color:var(--museum-gold-dim);box-shadow:none;}
         .error-msg{font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color:#e53935;margin-top:12px;min-height:20px;font-style:italic;}
         .links{margin-top:16px;}
-        .links a{font-family:'Montserrat',sans-serif;font-size: 0.66rem;letter-spacing:2px;color:rgba(255,255,255,0.2);text-decoration:none;transition:color 0.3s;display:block;margin:8px 0;}
+        .links a{font-family:'Montserrat',sans-serif;font-size: 0.66rem;letter-spacing:2px;color: var(--text-secondary);text-decoration:none;transition:color 0.3s;display:block;margin:8px 0;}
         .links a:hover{color:rgba(212,175,55,0.85);}
-        .back-link{display:block;margin-top:16px;font-family:'Montserrat',sans-serif;font-size: 0.66rem;letter-spacing:2px;color:rgba(255,255,255,0.15);text-decoration:none;transition:color 0.3s;}
+        .back-link{display:block;margin-top:16px;font-family:'Montserrat',sans-serif;font-size: 0.66rem;letter-spacing:2px;color: var(--text-secondary);text-decoration:none;transition:color 0.3s;}
         .back-link:hover{color:rgba(212,175,55,0.85);}
         .forgot-panel{display:none;margin-top:16px;padding-top:16px;border-top:1px solid rgba(212,175,55,0.04);}
         .forgot-panel h3{font-family:'Cinzel',serif;font-size: 0.66rem;letter-spacing:3px;color:var(--museum-gold-dim);margin:0 0 8px;}
-        .forgot-panel p{font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color:rgba(255,255,255,0.25);margin:0 0 12px;}
+        .forgot-panel p{font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color: var(--text-secondary);margin:0 0 12px;}
         .forgot-panel input{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(212,175,55,0.08);color:rgba(255,255,255,0.98);font-family:'Cormorant Garamond',serif;font-size: 0.66rem;padding:6px 2px;outline:none;margin-bottom:12px;}
         .forgot-panel button{background:transparent;border:1px solid rgba(212,175,55,0.1);color:rgba(212,175,55,0.3);padding:8px 20px;font-family:'Cinzel',serif;font-size: 0.66rem;letter-spacing:2px;cursor:pointer;border-radius:3px;transition:0.3s;margin-bottom:8px;}
         .forgot-panel button:hover{border-color:var(--museum-gold);color:var(--museum-gold);}
         @keyframes shake{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-4px)}20%,40%,60%,80%{transform:translateX(4px)}}
         .shake{animation:shake 0.4s ease;}
+        .toast-container{position:fixed;top:20px;right:20px;z-index:20000;display:flex;flex-direction:column;gap:10px;pointer-events:none;}
+        .toast{pointer-events:auto;padding:12px 20px;border-radius:3px;font-family:'Cinzel',serif;font-size:var(--text-micro);letter-spacing:2px;background:rgba(10,10,10,0.95);border:1px solid rgba(212,175,55,0.15);color:rgba(255,255,255,0.6);backdrop-filter:blur(12px);box-shadow:0 4px 30px rgba(0,0,0,0.5);max-width:340px;animation:toastIn 0.4s ease;transition:opacity 0.4s ease,transform 0.4s ease;}
+        .toast.toast-out{opacity:0;transform:translateX(40px);}
+        .toast.toast-error{border-color:#b84a4a;color:#d48a8a;}
+        .toast.toast-success{border-color:rgba(100,200,100,0.4);color:rgba(200,255,200,0.7);}
+        @keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
     </style>
     <script>document.fonts.ready.then(function(){document.documentElement.classList.add('fonts-loaded')});</script>
 </head>
 <body>
 <div id="sidebarContainer"></div>
+<div class="toast-container" id="toastContainer" aria-live="polite"></div>
 <div class="glow-overlay"></div>
 <div class="login-box" id="loginBox">
     <span class="label">OFFICE OF THE ARCHIVE</span>
@@ -59,26 +77,55 @@
             <input type="checkbox" id="rememberMe" style="accent-color:#d4af37;width:14px;height:14px;margin:0;cursor:pointer;">
             <label for="rememberMe" style="font-family:'Montserrat',sans-serif;font-size: 0.66rem;letter-spacing:2px;color:rgba(212,175,55,0.5);cursor:pointer;">REMEMBER ME</label>
         </div>
-        <div style="text-align:right;margin-top:4px;"><a href="#" onclick="event.preventDefault();toggleForgotPanel()" style="font-family:'Montserrat',sans-serif;font-size: 0.66rem;letter-spacing:1px;color:rgba(212,175,55,0.2);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='rgba(212,175,55,0.4)'" onmouseout="this.style.color='rgba(212,175,55,0.2)'">RESTORE ACCESS</a></div>
+        <div style="text-align:right;margin-top:4px;"><a href="#" data-action="event.preventDefault();toggleForgotPanel()" style="font-family:'Montserrat',sans-serif;font-size: 0.66rem;letter-spacing:1px;color:rgba(212,175,55,0.2);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='rgba(212,175,55,0.4)'" onmouseout="this.style.color='rgba(212,175,55,0.2)'">RESTORE ACCESS</a></div>
     </div>
-    <button class="seal-btn" id="loginBtn" onclick="attemptLogin()">ENTER THE VAULT</button>
+    <button class="seal-btn" id="loginBtn" data-action="attemptLogin()">ENTER THE VAULT</button>
     <div class="error-msg" id="loginError"></div>
     <div class="links">
             <a href="register.html">UNDERGO INDUCTION</a>
             <a href="scriptorium.html">ENTER AS GUEST</a>
             <a href="scriptorium.html" class="back-link">&#8592; RETURN TO THE THRESHOLD</a>
         </div>
+        <div style="border-top:1px solid rgba(212,175,55,0.04);margin-top:18px;padding-top:14px;">
+            <div style="font-family:'Montserrat',sans-serif;font-size: var(--text-micro);letter-spacing:3px;color:rgba(212,175,55,0.08);margin-bottom:8px;">RECEIVE ARCHIVE DISPATCHES</div>
+            <form id="loginNewsletterForm" style="display:flex;gap:6px;">
+                <input type="email" placeholder="your@vessel.com" required
+                    style="flex:1;min-width:0;background:transparent;border:1px solid rgba(212,175,55,0.08);padding:6px 10px;color: var(--text-secondary);font-family:'Cormorant Garamond',serif;font-size:0.65rem;border-radius:2px;outline:none;">
+                <button type="submit"
+                    style="background:transparent;border:1px solid rgba(212,175,55,0.1);color:rgba(212,175,55,0.15);padding:6px 12px;font-family:'Cinzel',serif;font-size: var(--text-micro);letter-spacing:1px;cursor:pointer;border-radius:2px;white-space:nowrap;transition:all 0.3s;">JOIN</button>
+            </form>
+            <div id="loginNewsletterMsg" style="font-family:'Cormorant Garamond',serif;font-size: var(--text-micro);color:rgba(212,175,55,0.08);margin-top:4px;font-style:italic;"></div>
+        </div>
         <div class="forgot-panel" id="forgotPanel">
         <h3>RESTORE ACCESS</h3>
         <p>Verify your identity to reforge your Cipher Key.</p>
         <input type="email" id="resetEmail" placeholder="Email Parchment">
-        <input type="date" id="resetDob" placeholder="Day of Origin">
-        <button onclick="reforgeCipher()">REFORGE CIPHER KEY</button>
-        <button onclick="document.getElementById('forgotPanel').style.display='none'" style="font-size: 0.48rem;color:rgba(255,255,255,0.1);border:none;">CANCEL</button>
+        <button data-action="reforgeCipher()">SEND RESET LINK</button>
+        <button data-action="document.getElementById('forgotPanel').style.display='none'" style="font-size: var(--text-micro);color: var(--text-secondary);border:none;">CANCEL</button>
     </div>
 </div>
 
 <script>
+    // Ensure ScriptoriumAPI exists even if auth.js fails to load
+    if (!window.ScriptoriumAPI) {
+        var API = window.SCRIPTORIUM_API || '/api';
+        function _api(path,opts){
+            opts=opts||{};
+            return fetch(API+path,{
+                method:opts.method||'GET',
+                headers:Object.assign({'Content-Type':'application/json'},opts.headers||{}),
+                body:opts.body?JSON.stringify(opts.body):undefined
+            }).then(function(r){
+                if(!r.ok)return r.json().then(function(e){throw e}).catch(function(e){if(e&&e.error)throw e;throw{error:r.statusText}});
+                return r.json();
+            });
+        }
+        window.ScriptoriumAPI={
+            login:function(userId,password){return _api('/auth/login',{method:'POST',body:{userId:userId,password:password}})},
+            forgotPassword:function(email){return _api('/auth/forgot-password',{method:'POST',body:{email:email}})}
+        };
+    }
+
     var MAX_ATTEMPTS = 3;
     var LOCKOUT_MINUTES = 5;
 
@@ -93,56 +140,61 @@
     }
 
     async function attemptLogin() {
-        var now = Date.now();
-        var lockoutUntil = localStorage.getItem('lockout_until');
-
-        if (lockoutUntil && now < parseInt(lockoutUntil)) {
-            var remaining = Math.ceil((parseInt(lockoutUntil) - now) / 60000);
-            showLoginError('The Archive is sealed. Try again in ' + remaining + ' minute(s).');
-            return;
-        }
-
         var id = document.getElementById('loginId').value.trim();
         var pass = document.getElementById('loginPass').value;
-        var stored = JSON.parse(localStorage.getItem('activeScribe'));
-
         if (!id || !pass) { showLoginError('Both Scribe ID and Cipher Key are required.'); return; }
 
-        var hashed;
-        try { hashed = await hashPassword(pass); } catch (h) {
-            if (h.message === 'CRYPTO_UNAVAILABLE') { showLoginError('Your browser does not support cryptographic functions on file://. Please use Chrome, Edge, or Firefox.'); return; }
-            showLoginError('An unexpected error occurred during authentication.'); return;
-        }
-        if (stored && stored.userId === id && stored.password === hashed) {
-            stored.lastActive = Date.now();
-            var remember = document.getElementById('rememberMe').checked;
-            var storage = remember ? localStorage : sessionStorage;
-            storage.setItem('activeScribe', JSON.stringify(stored));
-            storage.setItem('scriptorium_session', Date.now().toString());
-            if (!remember) {
-                localStorage.removeItem('activeScribe');
-                localStorage.removeItem('scriptorium_session');
-            }
-            localStorage.removeItem('failed_attempts');
-            localStorage.removeItem('lockout_until');
-            if (window.ScriptoriumAudio) { try { ScriptoriumAudio.transitionTo('ot'); } catch(e) {} }
-            document.getElementById('loginBox').classList.add('authenticating');
-            setTimeout(function() { window.location.href = 'MAP.html'; }, 1200);
-        } else {
-            var attempts = parseInt(localStorage.getItem('failed_attempts') || '0') + 1;
-            localStorage.setItem('failed_attempts', attempts);
+        var loginBtn = document.getElementById('loginBtn');
+        loginBtn.disabled = true;
+        loginBtn.textContent = 'AUTHENTICATING...';
 
-            if (attempts >= MAX_ATTEMPTS) {
-                localStorage.setItem('lockout_until', Date.now() + LOCKOUT_MINUTES * 60 * 1000);
-                showLoginError('Too many failed attempts. Please wait before trying again.');
-                document.getElementById('loginBtn').disabled = true;
-                setTimeout(function() { document.getElementById('loginBtn').disabled = false; }, LOCKOUT_MINUTES * 60 * 1000);
+        try {
+            var result = await window.ScriptoriumAPI.login(id, pass);
+            if (result.token) {
+                var remember = document.getElementById('rememberMe').checked;
+                var storage = remember ? localStorage : sessionStorage;
+                try {
+                    storage.setItem('scriptorium_token', result.token);
+                    storage.setItem('scriptorium_session', Date.now().toString());
+                    if (!remember) {
+                        localStorage.removeItem('scriptorium_token');
+                        localStorage.removeItem('scriptorium_session');
+                    }
+                    // Sync sidebar user data
+                    if (result.scribe) {
+                        if (window.__setUnifiedUser) {
+                            window.__setUnifiedUser({
+                                _v: 2,
+                                profile: { userId: result.scribe.userId, name: result.scribe.name, gender: 'male', location: '—', tradition: result.scribe.tradition || '' },
+                                progress: { totalCharacters: 0, dailyChars: 0, dailyDate: '', versesCompleted: 0, ntVerses: 0 },
+                                rank: { title: result.scribe.rank || 'INITIATE', knowledgeLevel: '1', lastActive: Date.now() },
+                                streak: { current: 0, lastVisit: '' },
+                                seal: { epigraphy: 0, astronomy: 0, prophecy: 0, restoration: 0 },
+                                meta: { migratedAt: Date.now() }
+                            });
+                        } else {
+                            localStorage.setItem('scriptorium_user', JSON.stringify({
+                                _v: 1, name: result.scribe.name,
+                                rank: result.scribe.rank || 'INITIATE',
+                                totalCharacters: 0, dailyChars: 0, dailyDate: '',
+                                streak: 0, knowledgeLevel: '1',
+                                userId: result.scribe.userId,
+                                lastActive: Date.now(), versesCompleted: 0, ntVerses: 0
+                            }));
+                        }
+                    }
+                } catch(e) {}
+                if (window.ScriptoriumAudio) { try { ScriptoriumAudio.transitionTo('ot'); } catch(e) {} }
+                document.getElementById('loginBox').classList.add('authenticating');
+                setTimeout(function() { window.location.href = 'MAP.html'; }, 1200);
             } else {
-                showLoginError('Incorrect Cipher. ' + (MAX_ATTEMPTS - attempts) + ' attempt(s) remaining.');
-                document.getElementById('loginBox').classList.add('shake');
-                setTimeout(function() { document.getElementById('loginBox').classList.remove('shake'); }, 500);
+                showLoginError(result.error || 'Authentication failed.');
             }
-            if (window.ScriptoriumAudio) { try { ScriptoriumAudio.transitionTo('nt'); } catch(e) {} }
+        } catch(e) {
+            showLoginError(e.error || 'Connection to the Archive failed. Please ensure the server is running.');
+        } finally {
+            loginBtn.disabled = false;
+            loginBtn.textContent = 'ENTER THE VAULT';
         }
     }
 
@@ -153,32 +205,62 @@
         p.style.display = p.style.display === 'none' ? 'block' : 'none';
     }
 
+    function showToast(msg, type) {
+        if (window.Scr && window.Scr.toast) { window.Scr.toast(msg, type); return; }
+        var c = document.getElementById('toastContainer');
+        if (!c) return;
+        var t = document.createElement('div');
+        t.className = 'toast' + (type === 'error' ? ' toast-error' : type === 'success' ? ' toast-success' : '');
+        t.textContent = msg;
+        c.appendChild(t);
+        setTimeout(function() { t.classList.add('toast-out'); setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 400); }, 5000);
+    }
+
     async function reforgeCipher() {
         var email = document.getElementById('resetEmail').value.trim();
-        var dob = document.getElementById('resetDob').value;
-        var stored = JSON.parse(localStorage.getItem('activeScribe'));
-        if (stored && stored.email === email && stored.dob === dob) {
-            var newPass = prompt('Enter your new Cipher Key (8+ chars, 1 number, 1 special char):');
-            if (newPass && /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(newPass)) {
-                stored.password = await hashPassword(newPass);
-                stored.lastActive = Date.now();
-                localStorage.setItem('activeScribe', JSON.stringify(stored));
-                alert('Your Cipher has been reforged. You may now enter.');
-                window.location.reload();
-            } else {
-                alert('The new Cipher Key does not meet the strength requirements.');
-            }
-        } else {
-            alert('The details provided do not match the Eternal Record.');
+        if (!email) { showToast('Enter your email address.', 'error'); return; }
+        try {
+            var result = await window.ScriptoriumAPI.forgotPassword(email);
+            showToast(result.message || 'If a matching account is found, a reset link will be sent to your email.', 'success');
+            document.getElementById('forgotPanel').style.display = 'none';
+        } catch(e) {
+            showToast(e.error || 'Connection to the Archive failed.', 'error');
         }
     }
 
-    var s = JSON.parse(localStorage.getItem('activeScribe')) || JSON.parse(sessionStorage.getItem('activeScribe'));
+    // Check for existing valid session
+    var token = Scriptorium.getToken();
     var sess = localStorage.getItem('scriptorium_session') || sessionStorage.getItem('scriptorium_session');
-    if (s && s.password && sess && Date.now() - parseInt(sess) < 7200000) {
+    if (token && sess && Date.now() - parseInt(sess) < 86400000) {
         window.location.href = 'MAP.html';
     }
+
+    (function() {
+        var form = document.getElementById('loginNewsletterForm');
+        var msg = document.getElementById('loginNewsletterMsg');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var input = form.querySelector('input[type="email"]');
+                if (!input || !input.value) return;
+                msg.textContent = 'Dispatching...';
+                fetch((window.SCRIPTORIUM_API || '/api') + '/newsletter/subscribe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: input.value })
+                })
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    if (data.error) { msg.textContent = data.error; return; }
+                    msg.textContent = data.message || 'A missive is on its way.';
+                    input.value = '';
+                })
+                .catch(function() { msg.textContent = 'The Archive is unreachable.'; });
+            });
+        }
+    })();
 </script>
     <script src="assets/js/scriptorium-core.js" defer></script>
+<script>(function(){document.body.addEventListener("click",function(e){var t=e.target.closest("[data-action]");if(!t)return;var c=t.getAttribute("data-action");try{(new Function("event",c)).call(t,e)}catch(ex){console.warn("[action]",ex)}})})();</script>
 </body>
 </html>

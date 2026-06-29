@@ -4,1140 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCRIPTORIUM | The Hall of Light</title>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&display=optional">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&display=optional" rel="stylesheet">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; style-src-elem 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' unpkg.com cdn.jsdelivr.net; img-src 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; img-src-elem 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; connect-src 'self' *.tile.openstreetmap.org *.basemaps.cartocdn.com bible-api.com api.scripture.api.bible">
+    <link rel="canonical" href="https://scriptorium-sandy.vercel.app/nt-gallery.html">
+    <meta property="og:title" content="SCRIPTORIUM | The Hall of Light">
+    <meta property="og:description" content="Explore the New Testament gallery — each book of the NT with full text, PDF downloads, and excavation notes.">
+    <meta property="og:image" content="https://scriptorium-sandy.vercel.app/og-image.svg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://scriptorium-sandy.vercel.app/nt-gallery.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="description" content="Explore the New Testament gallery — each book of the NT with full text, PDF downloads, and excavation notes.">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23050505'/%3E%3Ctext x='16' y='24' font-size='22' text-anchor='middle' fill='%23d4af37' font-family='serif'%3ES%3C/text%3E%3C/svg%3E">
+    <link href="assets/fonts/fonts.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/features.css">
     <script>document.fonts.ready.then(function(){document.documentElement.classList.add('fonts-loaded')});</script>
-    <script src="assets/audio/scriptorium-audio.js"></script>
-    <script src="assets/js/sidebar.js"></script>
+    <script>(function(){if(!window.__getUnifiedUser){window.__getUnifiedUser=function(){try{var v2=JSON.parse(localStorage.getItem('scribeData_v2'));if(v2&&v2._v===2)return v2}catch(e){}try{var u=JSON.parse(localStorage.getItem('scriptorium_user'));var s=JSON.parse(localStorage.getItem('scribeData'));if(u||s)return{_v:2,profile:{userId:(u&&u.userId)||'',name:(u&&u.name)||(s&&s.name)||''},progress:{totalCharacters:(s&&s.totalCharacters)||(u&&u.totalCharacters)||0,dailyChars:(s&&s.dailyChars)||0,dailyDate:(s&&s.dailyDate)||'',versesCompleted:(s&&s.versesCompleted)||0,ntVerses:(s&&s.ntVerses)||0},rank:{title:(s&&s.rank)||(u&&u.rank)||'INITIATE',knowledgeLevel:(u&&u.knowledgeLevel)||'1',lastActive:(u&&u.lastActive)||0},streak:{current:(s&&s.streak)||(u&&u.streak)||0,lastVisit:(s&&s.lastVisit)||''},seal:{epigraphy:0,astronomy:0,prophecy:0,restoration:0},meta:{migratedAt:0}}}catch(e){}return null};window.__setUnifiedUser=function(d){if(!d)return;try{d._v=2;localStorage.setItem('scribeData_v2',JSON.stringify(d))}catch(e){}}};if(!window.ScrReader){var q=[];window.ScrReader={open:function(b){q.push({m:'open',a:[b]});return this},close:function(){q.push({m:'close',a:[]});return this},goToChapter:function(c){q.push({m:'goToChapter',a:[c]});return this},nextChapter:function(){q.push({m:'nextChapter',a:[]});return this},prevChapter:function(){q.push({m:'prevChapter',a:[]});return this},_queue:q};Object.defineProperty(window.ScrReader,'_real',{set:function(v){Object.keys(v).forEach(function(k){if(k!=='_queue'&&k!=='_real')window.ScrReader[k]=v[k]});var q2=q.slice();q.length=0;q2.forEach(function(c){if(typeof v[c.m]==='function')v[c.m].apply(v,c.a)})}})}})();</script>
+    <script defer src="assets/audio/scriptorium-audio.js"></script>
+    <script defer src="assets/js/auth.js"></script>
+    <script defer src="assets/js/sidebar.js"></script>
+    <script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script defer src="assets/js/scriptorium-pdf.js"></script>
+    <script defer src="assets/js/scriptorium-reader.js"></script>
     <script>
         window.addEventListener('load', function() {
             window.ScriptoriumAudio.transitionTo('nt');
         });
     </script>
     <link rel="stylesheet" href="assets/css/shared.css">
-    <style>
-        :root {
-            --reality-silver: #e0e0e0;
-            --silver-light: #e8e8e8;
-            --silver-mid: #c8c8c8;
-            --white-gold: #f5f5dc;
-            --white-gold-bright: #faf5e8;
-            --aura-glow: rgba(224, 224, 224, 0.15);
-            --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        body, html {
-            color: rgba(255,255,255,0.97);
-        }
-
-        .sidebar-logo {
-            border-bottom: 1px solid rgba(255,255,255,0.45);
-        }
-
-        .sidebar-logo svg {
-            opacity: 0.8;
-        }
-
-        .sidebar-rank {
-            color: rgba(255,255,255,0.3);
-            border-top: 1px solid rgba(255,255,255,0.45);
-        }
-
-        .nav-link:hover {
-            color: var(--reality-silver);
-            border-color: rgba(255,255,255,0.45);
-            background: rgba(255,255,255,0.03);
-        }
-
-        .nav-link.active {
-            color: var(--reality-silver);
-            border-color: rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.04);
-        }
-
-        .nav-divider {
-            background: rgba(255,255,255,0.45);
-        }
-
-        .nav-link::after {
-            color: var(--reality-silver);
-            border-color: rgba(255,255,255,0.1);
-        }
-
-        /* ═══════════════════════════════════════
-           2. HALL HEADER — open, light-filled
-        ═══════════════════════════════════════ */
-        .hall-header {
-            margin-left: var(--sidebar-w);
-            min-height: 420px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-            background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(224,224,224,0.08) 0%, transparent 70%);
-        }
-
-        .hall-header::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 2px;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.45), transparent);
-        }
-
-        .hall-header .hall-label {
-            font-size: 0.72rem;
-            letter-spacing: 8px;
-            color: rgba(255,255,255,0.53);
-            margin-bottom: 20px;
-        }
-
-        .hall-header h1 {
-            font-size: 3.36rem;
-            letter-spacing: 20px;
-            color: var(--reality-silver);
-            margin: 0 0 16px;
-            text-shadow: 0 0 60px rgba(255,255,255,0.45), 0 0 120px rgba(255,255,255,0.03);
-        }
-
-        .hall-header .subtitle {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: 1.32rem;
-            color: rgba(255,255,255,0.2);
-            letter-spacing: 5px;
-            margin-bottom: 40px;
-        }
-
-        /* Light beam dividers */
-        .beam-divider {
-            width: 1px;
-            height: 60px;
-            background: linear-gradient(to bottom, rgba(224,224,224,0.15), transparent);
-            margin: 30px auto;
-        }
-
-        /* Stats row */
-        .hall-stats {
-            display: flex;
-            gap: 80px;
-            margin-top: 20px;
-        }
-
-        .hall-stat {
-            text-align: center;
-        }
-
-        .hall-stat .stat-num {
-            font-size: 1.68rem;
-            letter-spacing: 4px;
-            color: var(--reality-silver);
-        }
-
-        .hall-stat .stat-label {
-            font-size: 0.6rem;
-            letter-spacing: 3px;
-            color: rgba(255,255,255,0.2);
-            margin-top: 4px;
-        }
-
-        /* ═══════════════════════════════════════
-           3. FILTER NAV — silver line tabs
-        ═══════════════════════════════════════ */
-        .filter-nav {
-            margin-left: var(--sidebar-w);
-            display: flex;
-            justify-content: center;
-            gap: 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding: 0 40px;
-        }
-
-        .filter-btn {
-            background: none;
-            border: none;
-            border-bottom: 2px solid transparent;
-            color: rgba(255,255,255,0.2);
-            font-family: 'Cinzel', serif;
-            font-size: 0.72rem;
-            letter-spacing: 4px;
-            cursor: pointer;
-            transition: all 0.3s;
-            padding: 20px 30px;
-            position: relative;
-        }
-
-        .filter-btn:hover { color: rgba(255,255,255,0.5); }
-
-        .filter-btn.active {
-            color: var(--reality-silver);
-            border-bottom-color: rgba(255,255,255,0.4);
-            text-shadow: 0 0 20px rgba(255,255,255,0.1);
-        }
-
-        /* ═══════════════════════════════════════
-           4. SECTION DIVIDERS — light reveals
-        ═══════════════════════════════════════ */
-        .section-divider {
-            padding: 60px 60px 20px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .section-divider h2 {
-            font-size: 0.66rem;
-            letter-spacing: 6px;
-            color: rgba(255,255,255,0.45);
-            white-space: nowrap;
-        }
-
-        .section-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(to right, rgba(224,224,224,0.05), transparent);
-        }
-
-        /* ═══════════════════════════════════════
-           5. GALLERY GRID — the illuminated hall
-        ═══════════════════════════════════════ */
-        .hall-grid {
-            margin-left: var(--sidebar-w);
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            padding: 20px 40px 100px;
-            max-width: 1600px;
-        }
-
-        .book-card {
-            position: relative;
-            background: rgba(15, 15, 15, 0.9);
-            border: 1px solid rgba(224, 224, 224, 0.2);
-            padding: 28px;
-            cursor: pointer;
-            transition: all 0.6s var(--transition-smooth);
-            overflow: hidden;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.03);
-        }
-
-        .book-card:hover {
-            border-color: var(--reality-silver);
-            box-shadow: 0 0 40px var(--aura-glow);
-            transform: translateY(-5px) scale(1.02);
-            background: rgba(18, 18, 18, 0.95);
-        }
-
-        /* Glowing aura emanating from center */
-        .book-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.5) 0%, transparent 60%);
-            opacity: 0;
-            transition: opacity 0.6s ease;
-            pointer-events: none;
-        }
-
-        /* Ambient edge glow */
-        .book-card::after {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            background: radial-gradient(circle at 50% 50%, rgba(224,224,224,0.3) 0%, transparent 50%);
-            opacity: 0;
-            transition: opacity 0.6s ease;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .book-card:hover::before {
-            opacity: 1;
-        }
-
-        .book-card:hover::after {
-            opacity: 1;
-        }
-
-        /* Card inner glow zone */
-        .book-card .card-glow {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.03) 0%, transparent 60%);
-            pointer-events: none;
-        }
-
-        /* Corner ornaments — top-left, bottom-right */
-        .book-card .corner {
-            position: absolute;
-            width: 10px; height: 10px;
-            border-color: rgba(255,255,255,0.45);
-            border-style: solid;
-            transition: border-color 0.3s;
-            z-index: 1;
-        }
-
-        .book-card .corner-tl {
-            top: 8px; left: 8px;
-            border-width: 1px 0 0 1px;
-        }
-
-        .book-card .corner-br {
-            bottom: 8px; right: 8px;
-            border-width: 0 1px 1px 0;
-        }
-
-        .book-card:hover .corner {
-            border-color: rgba(255,255,255,0.3);
-        }
-
-        /* Card number */
-        .book-card .card-num {
-            font-size: 0.72rem;
-            letter-spacing: 3px;
-            color: rgba(255,255,255,0.45);
-            margin-bottom: 12px;
-        }
-
-        /* Card title */
-        .book-card .card-title {
-            font-size: 1.86rem;
-            letter-spacing: 5px;
-            color: rgba(255,255,255,0.98);
-            margin: 0 0 8px;
-            transition: all 0.4s;
-            position: relative;
-            z-index: 1;
-        }
-
-        .book-card:hover .card-title {
-            color: var(--reality-silver);
-            text-shadow: 0 0 25px rgba(255,255,255,0.45), 0 0 60px rgba(255,255,255,0.05);
-        }
-
-        /* Card subtitle / section tag */
-        .book-card .card-section {
-            font-size: 0.72rem;
-            letter-spacing: 3px;
-            color: rgba(255,255,255,0.45);
-            margin-bottom: 14px;
-            transition: color 0.3s;
-        }
-
-        /* Card description */
-        .book-card .card-desc {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: 1.38rem;
-            color: rgba(255,255,255,0.2);
-            line-height: 1.6;
-            position: relative;
-            z-index: 1;
-            transition: color 0.3s;
-        }
-
-        .book-card:hover .card-desc {
-            color: rgba(255,255,255,0.3);
-        }
-
-        /* Icon top-right */
-        .book-card .card-icon {
-            position: absolute;
-            top: 18px; right: 18px;
-            width: 32px; height: 32px;
-            opacity: 0.06;
-            transition: all 0.4s;
-            z-index: 1;
-        }
-
-        .book-card:hover .card-icon {
-            opacity: 0.25;
-        }
-
-        .book-card .discovery-badge {
-            font-size: 0.6rem;
-            letter-spacing: 1.5px;
-            color: rgba(224,224,224,0.25);
-            margin-top: 8px;
-            text-align: right;
-            position: relative;
-            z-index: 1;
-            opacity: 0;
-            transform: translateY(4px);
-            transition: opacity 0.3s, transform 0.3s;
-        }
-
-        .book-card:hover .discovery-badge {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Hidden for filtering */
-        .book-card.hidden {
-            display: none;
-        }
-
-        /* ═══════════════════════════════════════
-           6. GOSPEL CARDS — brightest glow
-        ═══════════════════════════════════════ */
-        .book-card.gospel {
-            border-color: rgba(255,255,255,0.45);
-        }
-
-        .book-card.gospel::before {
-            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.5) 0%, transparent 65%);
-        }
-
-        /* ═══════════════════════════════════════
-           7. APOCALYPSE CARD — crown of light
-        ═══════════════════════════════════════ */
-        .book-card.apocalypse {
-            border-color: rgba(255,255,255,0.1);
-        }
-
-        .book-card.apocalypse .card-title {
-            color: var(--white-gold);
-            font-size: 1.98rem;
-        }
-
-        .book-card.apocalypse:hover .card-title {
-            color: var(--white-gold-bright);
-            text-shadow: 0 0 25px rgba(245,245,220,0.3), 0 0 60px rgba(245,245,220,0.1);
-        }
-
-        .book-card.apocalypse::before {
-            background: radial-gradient(circle at 50% 50%, rgba(245,245,220,0.6) 0%, transparent 65%);
-        }
-
-        .book-card.apocalypse:hover {
-            border-color: rgba(245,245,220,0.3);
-            box-shadow: 0 0 50px rgba(245,245,220,0.15);
-        }
-
-        .book-card.apocalypse .corner {
-            border-color: rgba(245,245,220,0.2);
-        }
-
-        .book-card.apocalypse:hover .corner {
-            border-color: rgba(240,230,200,0.4);
-        }
-
-        /* ═══════════════════════════════════════
-            CARD ACTION BUTTONS
-        ═══════════════════════════════════════ */
-        .excavate-btn, .examine-btn, .download-btn {
-            display: inline-block;
-            margin-top: 10px;
-            margin-right: 6px;
-            padding: 7px 14px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.62rem;
-            letter-spacing: 2px;
-            background: transparent;
-            border: 1px solid rgba(212,175,55,0.2);
-            color: rgba(212,175,55,0.7);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 2;
-            text-decoration: none;
-        }
-        .excavate-btn:hover, .examine-btn:hover, .download-btn:hover {
-            background: rgba(212,175,55,0.12);
-            border-color: rgba(212,175,55,0.5);
-            color: #d4af37;
-            box-shadow: 0 0 12px rgba(212,175,55,0.08);
-        }
-
-        /* ═══ SCRIPTORIUM READER OVERLAY ═══ */
-        .reader-overlay {
-            position: fixed; inset: 0; z-index: 100000;
-            background: rgba(5,5,5,0.98); color: rgba(255,255,255,0.97);
-            overflow-y: auto;
-        }
-        .reader-content {
-            max-width: 900px; width: 95%;
-            border: 1px solid var(--museum-gold, #d4af37);
-            background: #0a0a0a; margin: 40px auto; padding: 30px;
-            position: relative;
-        }
-        .reader-close {
-            position: absolute; right: 15px; top: 15px;
-            background: none; border: 1px solid rgba(212,175,55,0.3);
-            color: #d4af37; cursor: pointer; padding: 5px 10px;
-            font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 1px;
-        }
-        .reader-close:hover { background: rgba(212,175,55,0.1); }
-        .reader-title {
-            font-family: 'Cinzel', serif; color: var(--museum-gold, #d4af37);
-            text-align: center; margin-bottom: 5px; letter-spacing: 4px;
-        }
-        .reader-subtext {
-            text-align: center; font-family: 'Cormorant Garamond', serif;
-            font-style: italic; color: rgba(255,255,255,0.4); margin-bottom: 25px;
-        }
-        .reader-tabs {
-            display: flex; justify-content: center; gap: 15px; margin-bottom: 20px;
-        }
-        .reader-tab {
-            padding: 8px 16px; border: 1px solid rgba(212,175,55,0.3);
-            color: #ccc; cursor: pointer; font-family: 'Cinzel', serif;
-            font-size: 0.72rem; letter-spacing: 1px;
-            background: transparent; transition: all 0.3s;
-        }
-        .reader-tab.active {
-            background: rgba(212,175,55,0.15); border-color: #d4af37; color: #fff;
-        }
-        .reader-tab:hover { background: rgba(212,175,55,0.08); }
-        .reader-text-display {
-            max-height: 55vh; overflow-y: auto;
-            font-family: 'Cormorant Garamond', serif; font-size: 1.25rem;
-            line-height: 1.8; text-align: justify; padding: 15px;
-            border-top: 1px solid rgba(212,175,55,0.15); color: rgba(255,255,255,0.9);
-        }
-        .reader-pdf-display { height: 55vh; }
-        .reader-frame {
-            width: 100%; height: 100%;
-            border: 1px solid rgba(212,175,55,0.2); background: #111;
-        }
-        .reader-footer {
-            margin-top: 25px; text-align: center;
-            border-top: 1px solid rgba(212,175,55,0.15); padding-top: 15px;
-        }
-        .reader-download-btn {
-            display: inline-block; padding: 10px 24px;
-            border: 1px solid #d4af37; color: #d4af37;
-            text-decoration: none; font-family: 'Cinzel', serif;
-            font-size: 0.85rem; letter-spacing: 2px;
-            background: rgba(212,175,55,0.05); transition: all 0.3s;
-        }
-        .reader-download-btn:hover {
-            background: rgba(212,175,55,0.15); box-shadow: 0 0 15px rgba(212,175,55,0.1);
-        }
-
-/* ═══════════════════════════════════════
-            8. UNIFIED MAP OVERLAY
-        ═══════════════════════════════════════ */
-        .map-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.97);
-            z-index: 5000;
-            display: none;
-            justify-content: center;
-            align-items: flex-start;
-            padding-top: 80px;
-            overflow-y: auto;
-            backdrop-filter: blur(12px);
-            animation: fadeInPage 0.4s ease;
-        }
-
-        .map-overlay.active { display: flex; }
-
-        .overlay-content {
-            width: 90%;
-            max-width: 750px;
-            background: rgba(8,8,8,0.96);
-            border: 1px solid rgba(224,224,224,0.12);
-            backdrop-filter: blur(15px);
-            padding: 50px 60px 60px;
-            position: relative;
-            margin-bottom: 80px;
-        }
-
-        .overlay-content::before {
-            content: '';
-            position: absolute;
-            top: -1px; left: -1px;
-            width: 22px; height: 22px;
-            border-top: 2px solid rgba(224,224,224,0.35);
-            border-left: 2px solid rgba(224,224,224,0.35);
-        }
-
-        .overlay-content::after {
-            content: '';
-            position: absolute;
-            bottom: -1px; right: -1px;
-            width: 22px; height: 22px;
-            border-bottom: 2px solid rgba(224,224,224,0.35);
-            border-right: 2px solid rgba(224,224,224,0.35);
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 18px; right: 18px;
-            background: none;
-            border: 1px solid rgba(224,224,224,0.08);
-            color: rgba(224,224,224,0.25);
-            font-family: 'Cinzel', serif;
-            font-size: 0.62rem;
-            letter-spacing: 3px;
-            padding: 6px 12px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .close-btn:hover {
-            border-color: rgba(224,224,224,0.3);
-            color: rgba(224,224,224,0.7);
-        }
-
-        .overlay-nav {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 30px;
-            justify-content: center;
-        }
-
-        .toggle-btn {
-            background: none;
-            border: 1px solid rgba(224,224,224,0.12);
-            color: rgba(224,224,224,0.35);
-            padding: 10px 22px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.78rem;
-            letter-spacing: 4px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .toggle-btn.active {
-            background: rgba(224,224,224,0.04);
-            border-color: rgba(224,224,224,0.35);
-            color: var(--reality-silver);
-            box-shadow: 0 0 20px rgba(224,224,224,0.04);
-        }
-
-        .toggle-btn:hover:not(.active) {
-            border-color: rgba(224,224,224,0.25);
-            color: rgba(224,224,224,0.55);
-        }
-
-        .overlay-header { text-align: center; margin-bottom: 35px; }
-
-        .map-title {
-            font-size: 2.28rem;
-            letter-spacing: 6px;
-            color: var(--reality-silver);
-            text-shadow: 0 0 20px rgba(224,224,224,0.15);
-            margin: 0 0 8px;
-        }
-
-        .map-label {
-            font-size: 0.6rem;
-            letter-spacing: 5px;
-            color: rgba(224,224,224,0.15);
-        }
-
-        .view-panel { position: relative; }
-
-        .audio-btn {
-            position: absolute;
-            top: -52px; right: 0;
-            background: none;
-            border: 1px solid rgba(224,224,224,0.08);
-            color: rgba(224,224,224,0.3);
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: 0.3s;
-            z-index: 2;
-        }
-
-        .audio-btn:hover {
-            border-color: rgba(224,224,224,0.25);
-            color: rgba(224,224,224,0.6);
-            box-shadow: 0 0 15px rgba(224,224,224,0.04);
-        }
-
-        .audio-btn.playing {
-            border-color: rgba(224,224,224,0.35);
-            color: rgba(224,224,224,0.65);
-            animation: pulseSilver 2s infinite;
-        }
-
-        @keyframes pulseSilver {
-            0% { box-shadow: 0 0 0px rgba(224,224,224,0); }
-            50% { box-shadow: 0 0 18px rgba(224,224,224,0.08); }
-            100% { box-shadow: 0 0 0px rgba(224,224,224,0); }
-        }
-
-        .map-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
-            gap: 8px;
-        }
-
-        .chapter-btn {
-            background: none;
-            border: 1px solid rgba(224,224,224,0.05);
-            color: rgba(224,224,224,0.2);
-            font-family: 'Cinzel', serif;
-            font-size: 0.74rem;
-            padding: 8px 4px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-align: center;
-        }
-
-        .chapter-btn:hover {
-            border-color: rgba(224,224,224,0.2);
-            color: rgba(224,224,224,0.6);
-            background: rgba(224,224,224,0.02);
-        }
-
-        .chapter-btn:active {
-            background: rgba(224,224,224,0.03);
-        }
-
-        .field-notes-box {
-            text-align: left;
-            border-left: 2px solid rgba(224,224,224,0.25);
-            padding-left: 30px;
-            margin-top: 10px;
-            line-height: 1.9;
-        }
-
-        .note-item {
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            margin-bottom: 12px;
-            color: rgba(224,224,224,0.45);
-        }
-
-        .note-item strong { color: var(--reality-silver); }
-
-        .note-divider {
-            border: none;
-            border-top: 1px solid rgba(224,224,224,0.08);
-            margin: 20px 0;
-        }
-
-        .note-text {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: 1.32rem;
-            color: rgba(255,255,255,0.98);
-            line-height: 1.7;
-            margin: 0;
-        }
-
-        .field-notes-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: center;
-        }
-
-        .microscope-container {
-            position: relative;
-            border: 1px solid rgba(224,224,224,0.15);
-            overflow: hidden;
-            cursor: none;
-            background: #030303;
-            min-height: 280px;
-        }
-
-        .microscope-container img {
-            width: 100%;
-            display: block;
-            opacity: 0.6;
-        }
-
-        .zoom-lens {
-            position: absolute;
-            border: 1px solid var(--reality-silver);
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
-            background: rgba(224,224,224,0.03);
-            box-shadow: 0 0 30px rgba(0,0,0,0.6), inset 0 0 15px rgba(224,224,224,0.03);
-            pointer-events: none;
-            z-index: 10;
-            display: none;
-        }
-
-        .zoom-result {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-repeat: no-repeat;
-            z-index: 5;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
-
-        .microscope-container:hover .zoom-result {
-            opacity: 1;
-        }
-
-        .map-overlay.active { display: flex; }
-
-        .map-container {
-            max-width: 700px;
-            margin: 80px auto 40px;
-            padding: 40px;
-            background: rgba(8,8,8,0.95);
-            border: 1px solid rgba(224,224,224,0.12);
-            backdrop-filter: blur(15px);
-            position: relative;
-        }
-
-        .map-container::before,
-        .map-container::after {
-            content: '';
-            position: absolute;
-            width: 20px; height: 20px;
-        }
-
-        .map-container::before {
-            top: -1px; left: -1px;
-            border-top: 2px solid rgba(224,224,224,0.4);
-            border-left: 2px solid rgba(224,224,224,0.4);
-        }
-
-        .map-container::after {
-            bottom: -1px; right: -1px;
-            border-bottom: 2px solid rgba(224,224,224,0.4);
-            border-right: 2px solid rgba(224,224,224,0.4);
-        }
-
-        .map-title {
-            color: rgba(224,224,224,0.9);
-            text-shadow: 0 0 20px rgba(224,224,224,0.3);
-        }
-
-        .chapter-btn {
-            background: rgba(224,224,224,0.02);
-            border: 1px solid rgba(224,224,224,0.08);
-            color: rgba(224,224,224,0.3);
-            font-family: 'Cinzel', serif;
-            font-size: 0.78rem;
-            padding: 8px 4px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-align: center;
-        }
-
-        .chapter-btn:hover {
-            border-color: rgba(224,224,224,0.35);
-            color: rgba(224,224,224,0.8);
-            background: rgba(224,224,224,0.04);
-            box-shadow: 0 0 20px rgba(224,224,224,0.08);
-        }
-
-        .chapter-btn:active {
-            background: rgba(224,224,224,0.06);
-        }
-
-        .map-container::before,
-        .map-container::after {
-            content: '';
-            position: absolute;
-            width: 20px; height: 20px;
-        }
-
-        .map-container::before {
-            top: -1px; left: -1px;
-            border-top: 2px solid rgba(255,255,255,0.3);
-            border-left: 2px solid rgba(255,255,255,0.3);
-        }
-
-        .map-container::after {
-            bottom: -1px; right: -1px;
-            border-bottom: 2px solid rgba(255,255,255,0.3);
-            border-right: 2px solid rgba(255,255,255,0.3);
-        }
-
-        .map-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            gap: 20px;
-        }
-
-        .map-title {
-            font-size: 2.16rem;
-            letter-spacing: 6px;
-            color: var(--reality-silver);
-            margin: 0;
-        }
-
-        .map-label {
-            font-size: 0.66rem;
-            letter-spacing: 5px;
-            color: rgba(255,255,255,0.45);
-            margin-bottom: 6px;
-        }
-
-        .close-map {
-            position: absolute;
-            top: 20px; right: 20px;
-            background: none;
-            border: 1px solid rgba(255,255,255,0.45);
-            color: rgba(255,255,255,0.53);
-            font-family: 'Cinzel', serif;
-            font-size: 0.66rem;
-            letter-spacing: 3px;
-            padding: 6px 12px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .close-map:hover {
-            border-color: rgba(255,255,255,0.3);
-            color: rgba(255,255,255,0.7);
-        }
-
-        .audio-btn {
-            background: none;
-            border: 1px solid rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.3);
-            width: 38px; height: 38px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: 0.3s;
-            flex-shrink: 0;
-        }
-
-        .audio-btn:hover {
-            border-color: rgba(255,255,255,0.3);
-            color: rgba(255,255,255,0.6);
-            box-shadow: 0 0 15px rgba(255,255,255,0.05);
-        }
-
-        .audio-btn.playing {
-            border-color: rgba(255,255,255,0.4);
-            color: rgba(255,255,255,0.7);
-            animation: pulseAudio 2s infinite;
-        }
-
-        @keyframes pulseAudio {
-            0% { box-shadow: 0 0 0px rgba(255,255,255,0); }
-            50% { box-shadow: 0 0 18px rgba(255,255,255,0.45); }
-            100% { box-shadow: 0 0 0px rgba(255,255,255,0); }
-        }
-
-        .map-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
-            gap: 8px;
-            margin-top: 20px;
-        }
-
-        .chapter-btn {
-            background: none;
-            border: 1px solid rgba(255,255,255,0.05);
-            color: rgba(255,255,255,0.53);
-            font-family: 'Cinzel', serif;
-            font-size: 0.78rem;
-            padding: 8px 4px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-align: center;
-        }
-
-        .chapter-btn:hover {
-            border-color: rgba(255,255,255,0.3);
-            color: rgba(255,255,255,0.7);
-            background: rgba(255,255,255,0.03);
-        }
-
-        .chapter-btn:active {
-            background: rgba(255,255,255,0.05);
-        }
-
-        .timeline-rail {
-            position: fixed;
-            bottom: 0;
-            left: var(--sidebar-w);
-            right: 0;
-            height: 64px;
-            background: rgba(5,5,5,0.92);
-            border-top: 1px solid rgba(212,175,55,0.25);
-            backdrop-filter: blur(10px);
-            display: none;
-            align-items: center;
-            z-index: 500;
-            overflow: visible;
-            box-shadow: 0 -4px 30px rgba(212,175,55,0.04);
-        }
-        .timeline-track {
-            flex: 1;
-            height: 4px;
-            background: rgba(212,175,55,0.35);
-            position: relative;
-            margin: 0 24px;
-            box-shadow: 0 0 20px rgba(212,175,55,0.08);
-        }
-        .timeline-era-marker {
-            position: absolute;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        .timeline-era-marker:hover { transform: translate(-50%, -50%) scale(1.2); }
-        .timeline-tick {
-            width: 1px;
-            height: 12px;
-            background: rgba(212,175,55,0.4);
-        }
-        .timeline-book-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--gold);
-            border: 1px solid rgba(212,175,55,0.5);
-            box-shadow: 0 0 10px rgba(212,175,55,0.3);
-        }
-        .timeline-book-dot.active {
-            box-shadow: 0 0 0 4px rgba(212,175,55,0.3);
-        }
-        .timeline-era-marker.nt .timeline-book-dot {
-            background: rgba(200,200,200,0.9);
-            border-color: rgba(200,200,200,0.3);
-            box-shadow: 0 0 6px rgba(200,200,200,0.15);
-        }
-        .timeline-book-label {
-            position: absolute;
-            top: 20px;
-            font-size: 0.72rem;
-            letter-spacing: 1.5px;
-            color: rgba(255,215,120,0.85);
-            white-space: nowrap;
-            text-align: center;
-            text-shadow: 0 0 8px rgba(212,175,55,0.2);
-            display: none;
-        }
-        .timeline-era-marker:hover .timeline-book-label {
-            display: block;
-        }
-        .timeline-era-marker.nt .timeline-book-label {
-            color: rgba(200,200,200,0.6);
-            text-shadow: 0 0 8px rgba(200,200,200,0.15);
-        }
-        .timeline-era-marker.apocalypse .timeline-book-dot {
-            background: #6b1414;
-            border-color: rgba(139,26,26,0.4);
-            box-shadow: 0 0 8px rgba(139,26,26,0.25);
-        }
-        .timeline-era-marker.apocalypse.nt .timeline-book-dot {
-            background: #5a1010;
-            border-color: rgba(180,80,80,0.35);
-            box-shadow: 0 0 6px rgba(180,80,80,0.2);
-        }
-        .timeline-scroll-hint {
-            font-size: 0.72rem;
-            letter-spacing: 2px;
-            color: rgba(255,215,120,0.65);
-            padding: 0 16px;
-            white-space: nowrap;
-            text-shadow: 0 0 6px rgba(212,175,55,0.15);
-        }
-        .timeline-tick-major {
-            height: 20px;
-            width: 1px;
-            background: rgba(212,175,55,0.55);
-        }
-        .timeline-tooltip {
-            position: fixed;
-            bottom: 80px;
-            background: #0a0a0a;
-            border: 1px solid rgba(212,175,55,0.2);
-            padding: 12px 18px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            z-index: 600;
-            white-space: normal;
-            max-width: 380px;
-            text-shadow: 0 0 20px rgba(212,175,55,0.5), 0 0 40px rgba(212,175,55,0.1);
-        }
-        .timeline-tooltip.active { opacity: 1; }
-        .tooltip-main {
-            font-family: 'Cinzel', serif;
-            font-size: 1.2rem;
-            letter-spacing: 3px;
-            color: var(--gold);
-        }
-        .tooltip-artifact {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.78rem;
-            font-style: italic;
-            color: rgba(255,215,120,0.55);
-            margin-top: 5px;
-            letter-spacing: 1px;
-            line-height: 1.4;
-        }
-
-        @media(max-width:820px) {
-            .sidebar-nav { gap: 2px; }
-            .nav-link { font-size: 0.72rem; }
-            .hall-header { margin-left: 60px; padding: 20px 16px; }
-            .hall-header h1 { font-size: 1.44rem; letter-spacing: 4px; }
-            .hall-grid { grid-template-columns: 1fr; padding: 0 10px; margin-left: 60px; }
-            .filter-nav { margin-left: 60px; flex-wrap: wrap; gap: 4px; padding: 12px 10px; }
-            .filter-btn { font-size: 0.48rem; padding: 6px 12px; }
-            .section-divider { margin-left: 60px; padding: 16px 10px; }
-            .section-divider h2 { font-size: 0.72rem; }
-            .overlay-content { width: 90vw; margin: 5vh auto; }
-            .excavation-overlay.active .excavation-case { width: 90vw; }
-            .artifact-panel { left: 0; width: 100%; }
-            .timeline-rail { margin-left: 60px; }
-            .sidebar-rank { font-size: 0.6rem; padding: 8px 2px; }
-        }
-
-        /* ═══ EXCAVATION OVERLAY ═══ */
-        .excavation-overlay {
-            position: fixed; inset: 0; z-index: 5000;
-            background: rgba(0,0,0,0.92); backdrop-filter: blur(8px);
-            display: none; justify-content: center; align-items: flex-start;
-            padding: 5vh 5vw; overflow-y: auto;
-        }
-        .excavation-overlay.active { display: flex; }
-        .excavation-case {
-            width: 100%; max-width: 640px;
-            background: rgba(10,10,10,0.97);
-            border: 1px solid rgba(224,224,224,0.12);
-            padding: 40px 48px 50px;
-            position: relative; margin: auto;
-        }
-        .close-case {
-            position: absolute; top: 14px; right: 14px;
-            background: none; border: 1px solid rgba(224,224,224,0.08);
-            color: rgba(224,224,224,0.25);
-            font-family: 'Cinzel', serif; font-size: 0.6rem;
-            letter-spacing: 3px; padding: 5px 10px; cursor: pointer;
-        }
-        .close-case:hover { border-color: rgba(224,224,224,0.3); color: rgba(224,224,224,0.7); }
-        .case-label { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 4px; color: rgba(212,175,55,0.5); margin-bottom: 14px; }
-        .case-title { font-family: 'Cinzel', serif; font-size: 1.4rem; color: #d4af37; margin: 0 0 24px; font-weight: 700; line-height: 1.3; }
-        .case-section { font-family: 'Montserrat', sans-serif; font-size: 0.65rem; letter-spacing: 3px; color: rgba(224,224,224,0.3); margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid rgba(224,224,224,0.06); }
-        .provenance-grid { display: flex; flex-direction: column; gap: 0; }
-        .prov-row { display: flex; padding: 14px 0; border-bottom: 1px solid rgba(224,224,224,0.04); gap: 20px; }
-        .prov-key { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; letter-spacing: 3px; color: rgba(212,175,55,0.5); min-width: 130px; flex-shrink: 0; }
-        .prov-val { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: rgba(255,255,255,0.85); line-height: 1.4; }
-        .condition-row { align-items: flex-start; }
-        .condition-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-        .condition-tag { padding: 4px 12px; border: 1px solid rgba(224,224,224,0.1); font-family: 'Montserrat', sans-serif; font-size: 0.55rem; letter-spacing: 2px; color: rgba(224,224,224,0.5); }
-    </style>
+    <link rel="stylesheet" href="assets/css/features.css">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="assets/css/gallery.css">
+    <style>.rv-header{text-align:center;padding:20px;font-size:1.02rem;letter-spacing:4px;color:var(--museum-gold);border-bottom:1px solid rgba(212,175,55,0.08)}.rv-header-icon{font-size:1.5rem;margin-right:8px}.rv-chapter{margin:16px 20px;padding:12px 16px;background:rgba(212,175,55,0.03);border:1px solid rgba(212,175,55,0.06);border-radius:4px}.rv-ch-title{font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:3px;color:var(--museum-gold);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(212,175,55,0.06)}.rv-note-item{display:flex;flex-wrap:wrap;gap:4px 8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03)}.rv-note-item:last-child{border-bottom:none}.rv-verse-ref{font-family:'Cinzel',serif;font-size:0.7rem;color:var(--museum-gold);letter-spacing:1px;min-width:50px}.rv-cat-tag{font-family:'Montserrat',sans-serif;font-size:0.55rem;letter-spacing:2px;color:rgba(212,175,55,0.6);background:rgba(212,175,55,0.08);padding:1px 8px;border-radius:2px;text-transform:uppercase}.rv-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;line-height:1.6;color:rgba(255,255,255,0.92);width:100%;margin-top:4px}.pat-header{text-align:center;padding:20px;font-size:1.02rem;letter-spacing:4px;color:#b48cc8;border-bottom:1px solid rgba(180,140,200,0.08)}.pat-header-icon{font-size:1.5rem;margin-right:8px}.pat-entry{margin:16px 20px;padding:16px;background:rgba(180,140,200,0.03);border:1px solid rgba(180,140,200,0.06);border-radius:4px}.pat-father{font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:2px;color:#b48cc8;margin-bottom:4px}.pat-source-icon{color:#b48cc8;margin-right:4px}.pat-source{font-family:'Montserrat',sans-serif;font-size:0.55rem;letter-spacing:1px;color:rgba(180,140,200,0.5);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(180,140,200,0.06)}.pat-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;line-height:1.6;color:rgba(255,255,255,0.92)}</style>
+    
 </head>
 <body data-testament="nt">
 
@@ -1178,11 +75,11 @@
          FILTER NAV
     ═══════════════════════════════════════ -->
     <nav class="filter-nav">
-        <button class="filter-btn active" onclick="filterNT('all', this)">ALL</button>
-        <button class="filter-btn" onclick="filterNT('gospels', this)">THE GOSPELS</button>
-        <button class="filter-btn" onclick="filterNT('acts', this)">ACTS</button>
-        <button class="filter-btn" onclick="filterNT('epistles', this)">EPISTLES</button>
-        <button class="filter-btn" onclick="filterNT('apocalypse', this)">APOCALYPSE</button>
+        <button class="filter-btn active" data-filter="all">ALL</button>
+        <button class="filter-btn" data-filter="gospels">THE GOSPELS</button>
+        <button class="filter-btn" data-filter="acts">ACTS</button>
+        <button class="filter-btn" data-filter="epistles">EPISTLES</button>
+        <button class="filter-btn" data-filter="apocalypse">APOCALYPSE</button>
     </nav>
 
     <!-- ═══════════════════════════════════════
@@ -1200,8 +97,8 @@
             <div class="card-section">THE GOSPEL OF FULFILLMENT</div>
             <div class="card-desc">"The kingdom of heaven is at hand." Jesus the Messiah, the new Moses, and the Son of David — every prophecy illuminated.</div>
             <div class="discovery-badge">SITE: Vatican Library (4th cent. AD)</div>
-            <button class="excavate-btn" onclick="openExcavation('Matthew')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('Matthew')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="Matthew">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="Matthew">EXAMINE</button>
         </div>
         <div class="book-card gospel" data-category="gospels" data-book="Mark|16">
             <div class="card-glow"></div>
@@ -1212,8 +109,8 @@
             <div class="card-title">MARK</div>
             <div class="card-section">THE GOSPEL OF THE SERVANT</div>
             <div class="card-desc">"The Son of Man came not to be served but to serve." Swift and urgent — the suffering of the Servant-Messiah revealed.</div>
-            <button class="excavate-btn" onclick="openExcavation('Mark')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('Mark')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="Mark">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="Mark">EXAMINE</button>
         </div>
         <div class="book-card gospel" data-category="gospels" data-book="Luke|24">
             <div class="card-glow"></div>
@@ -1225,8 +122,8 @@
             <div class="card-section">THE GOSPEL OF COMPASSION</div>
             <div class="card-desc">"The Son of Man came to seek and to save the lost." Jesus among the marginalized, the poor, and the outcast — light for all.</div>
             <div class="discovery-badge">SITE: St. Catherine's Monastery, Sinai (1844)</div>
-            <button class="excavate-btn" onclick="openExcavation('Luke')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('Luke')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="Luke">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="Luke">EXAMINE</button>
         </div>
         <div class="book-card gospel" data-category="gospels" data-book="John|21">
             <div class="card-glow"></div>
@@ -1238,8 +135,8 @@
             <div class="card-section">THE GOSPEL OF THE WORD</div>
             <div class="card-desc">"In the beginning was the Word." Eternal life through belief — the Logos made flesh, I AM declarations, and the Upper Room.</div>
             <div class="discovery-badge">SITE: Oxyrhynchus, Egypt (1920)</div>
-            <button class="excavate-btn" onclick="openExcavation('John')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('John')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="John">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="John">EXAMINE</button>
         </div>
     </section>
 
@@ -1257,8 +154,8 @@
             <div class="card-title">ACTS</div>
             <div class="card-section">THE BIRTH OF THE CHURCH</div>
             <div class="card-desc">"You will receive power when the Holy Spirit has come upon you." Pentecost, the apostles' missions, and the Word spreading to the ends of the earth.</div>
-            <button class="excavate-btn" onclick="openExcavation('Acts')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('Acts')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="Acts">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="Acts">EXAMINE</button>
         </div>
     </section>
 
@@ -1276,8 +173,8 @@
             <div class="card-title">ROMANS</div>
             <div class="card-section">THE DEFINITIVE TREATISE</div>
             <div class="card-desc">"The righteous shall live by faith." Sin, grace, justification, and the sovereignty of God in salvation — the righteousness of God unveiled.</div>
-            <button class="excavate-btn" onclick="openExcavation('Romans')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('Romans')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="Romans">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="Romans">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="1 Corinthians|16">
             <div class="card-glow"></div>
@@ -1288,8 +185,8 @@
             <div class="card-title">1 CORINTHIANS</div>
             <div class="card-section">THE BODY OF CHRIST</div>
             <div class="card-desc">"Though I speak with the tongues of men and of angels..." Spiritual gifts, the cross, and the resurrection of the body revealed.</div>
-            <button class="excavate-btn" onclick="openExcavation('1 Corinthians')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('1 Corinthians')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="1 Corinthians">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="1 Corinthians">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="2 Corinthians|13">
             <div class="card-glow"></div>
@@ -1300,8 +197,8 @@
             <div class="card-title">2 CORINTHIANS</div>
             <div class="card-section">THE GOD OF ALL COMFORT</div>
             <div class="card-desc">"We have this treasure in jars of clay." The glory of the new covenant, Paul's authority, and grace sufficient for every weakness.</div>
-            <button class="excavate-btn" onclick="openExcavation('2 Corinthians')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('2 Corinthians')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="2 Corinthians">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="2 Corinthians">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="Galatians|6">
             <div class="card-glow"></div>
@@ -1312,8 +209,8 @@
             <div class="card-title">GALATIANS</div>
             <div class="card-section">FREEDOM IN CHRIST</div>
             <div class="card-desc">"It is for freedom that Christ has set us free." Justification by faith apart from the law, the fruit of the Spirit, and the allegory of Hagar and Sarah.</div>
-            <button class="excavate-btn" onclick="openExcavation('Galatians')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('Galatians')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="Galatians">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="Galatians">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="Ephesians|6">
             <div class="card-glow"></div>
@@ -1324,8 +221,8 @@
             <div class="card-title">EPHESIANS</div>
             <div class="card-section">THE CHURCH AS HIS BODY</div>
             <div class="card-desc">"Blessed be the God and Father of our Lord Jesus Christ." Election, grace, the one new man, and the armor of God illuminated.</div>
-            <button class="excavate-btn" onclick="openExcavation('Ephesians')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('Ephesians')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="Ephesians">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="Ephesians">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="Philippians|4">
             <div class="card-glow"></div>
@@ -1336,8 +233,8 @@
             <div class="card-title">PHILIPPIANS</div>
             <div class="card-section">JOY IN ALL THINGS</div>
             <div class="card-desc">"Rejoice in the Lord always." The kenosis hymn, pressing on toward the goal, and the peace that surpasses all understanding.</div>
-            <button class="excavate-btn" onclick="openExcavation('Philippians')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('Philippians')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="Philippians">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="Philippians">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="Colossians|4">
             <div class="card-glow"></div>
@@ -1348,8 +245,8 @@
             <div class="card-title">COLOSSIANS</div>
             <div class="card-section">THE SUPREMACY OF CHRIST</div>
             <div class="card-desc">"He is the image of the invisible God." Christ preeminent in all things, the fullness of deity in bodily form, and the new self.</div>
-            <button class="excavate-btn" onclick="openExcavation('Colossians')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('Colossians')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="Colossians">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="Colossians">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="1 Thessalonians|5">
             <div class="card-glow"></div>
@@ -1360,8 +257,8 @@
             <div class="card-title">1 THESSALONIANS</div>
             <div class="card-section">THE RETURN OF THE LORD</div>
             <div class="card-desc">"For the Lord himself will descend from heaven." Encouragement in suffering, holy living, and the manner of the return of Christ.</div>
-            <button class="excavate-btn" onclick="openExcavation('1 Thessalonians')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('1 Thessalonians')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="1 Thessalonians">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="1 Thessalonians">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="2 Thessalonians|3">
             <div class="card-glow"></div>
@@ -1372,8 +269,8 @@
             <div class="card-title">2 THESSALONIANS</div>
             <div class="card-section">STAND FIRM</div>
             <div class="card-desc">"Let no one deceive you in any way." The man of lawlessness, the apostasy, and working while it is day — truths revealed.</div>
-            <button class="excavate-btn" onclick="openExcavation('2 Thessalonians')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('2 Thessalonians')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="2 Thessalonians">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="2 Thessalonians">EXAMINE</button>
         </div>
     </section>
 
@@ -1391,8 +288,8 @@
             <div class="card-title">1 TIMOTHY</div>
             <div class="card-section">INSTRUCTIONS FOR THE CHURCH</div>
             <div class="card-desc">"God our Savior... desires all people to be saved." Church order, qualifications for elders and deacons, and sound doctrine.</div>
-            <button class="excavate-btn" onclick="openExcavation('1 Timothy')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('1 Timothy')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="1 Timothy">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="1 Timothy">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="2 Timothy|4">
             <div class="card-glow"></div>
@@ -1403,8 +300,8 @@
             <div class="card-title">2 TIMOTHY</div>
             <div class="card-section">FINISH THE RACE</div>
             <div class="card-desc">"I have fought the good fight, I have finished the race." Paul's final letter — the sacred scriptures, guarding the deposit, and the crown of righteousness.</div>
-            <button class="excavate-btn" onclick="openExcavation('2 Timothy')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('2 Timothy')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="2 Timothy">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="2 Timothy">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="Titus|3">
             <div class="card-glow"></div>
@@ -1415,8 +312,8 @@
             <div class="card-title">TITUS</div>
             <div class="card-section">SOUND IN FAITH</div>
             <div class="card-desc">"The grace of God that brings salvation." Church leadership, Crete's false teachers, and the appearing of our great God and Savior.</div>
-            <button class="excavate-btn" onclick="openExcavation('Titus')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('Titus')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="Titus">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="Titus">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="Philemon|1">
             <div class="card-glow"></div>
@@ -1427,8 +324,8 @@
             <div class="card-title">PHILEMON</div>
             <div class="card-section">ONESIMUS RESTORED</div>
             <div class="card-desc">"Perhaps this is why I was eager to send him." A personal letter on slavery, love, and the radical equality in Christ revealed.</div>
-            <button class="excavate-btn" onclick="openExcavation('Philemon')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('Philemon')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="Philemon">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="Philemon">EXAMINE</button>
         </div>
     </section>
 
@@ -1446,8 +343,8 @@
             <div class="card-title">HEBREWS</div>
             <div class="card-section">THE BETTER COVENANT</div>
             <div class="card-desc">"Long ago, at many times and in many ways, God spoke to our fathers by the prophets." Christ's superiority over angels, priests, and covenants — and the warning to persevere.</div>
-            <button class="excavate-btn" onclick="openExcavation('Hebrews')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('Hebrews')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="Hebrews">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="Hebrews">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="James|5">
             <div class="card-glow"></div>
@@ -1458,8 +355,8 @@
             <div class="card-title">JAMES</div>
             <div class="card-section">FAITH AT WORK</div>
             <div class="card-desc">"Faith without works is dead." Trials, temptations, the tongue, and the relationship between faith and works in the Christian life.</div>
-            <button class="excavate-btn" onclick="openExcavation('James')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('James')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="James">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="James">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="1 Peter|5">
             <div class="card-glow"></div>
@@ -1470,8 +367,8 @@
             <div class="card-title">1 PETER</div>
             <div class="card-section">LIVING STONES</div>
             <div class="card-desc">"You also, as living stones, are being built up a spiritual house." Sanctification, suffering for righteousness, and the holy life of the exiles.</div>
-            <button class="excavate-btn" onclick="openExcavation('1 Peter')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('1 Peter')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="1 Peter">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="1 Peter">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="2 Peter|3">
             <div class="card-glow"></div>
@@ -1482,8 +379,8 @@
             <div class="card-title">2 PETER</div>
             <div class="card-section">GROWING IN GRACE</div>
             <div class="card-desc">"His divine power has granted us all things for life and godliness." False teachers, the day of the Lord, and the certainty of prophetic word.</div>
-            <button class="excavate-btn" onclick="openExcavation('2 Peter')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('2 Peter')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="2 Peter">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="2 Peter">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="1 John|5">
             <div class="card-glow"></div>
@@ -1494,8 +391,8 @@
             <div class="card-title">1 JOHN</div>
             <div class="card-section">WALKING IN THE LIGHT</div>
             <div class="card-desc">"That which we have seen and heard we proclaim also to you." The Word of life, love as the mark of discipleship, and the truth that abides.</div>
-            <button class="excavate-btn" onclick="openExcavation('1 John')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('1 John')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="1 John">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="1 John">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="2 John|1">
             <div class="card-glow"></div>
@@ -1506,8 +403,8 @@
             <div class="card-title">2 JOHN</div>
             <div class="card-section">TRUTH AND LOVE</div>
             <div class="card-desc">"I rejoiced greatly to find some of your children walking in truth." Walking in love, testing the spirits, and avoiding antichrists.</div>
-            <button class="excavate-btn" onclick="openExcavation('2 John')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('2 John')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="2 John">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="2 John">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="3 John|1">
             <div class="card-glow"></div>
@@ -1518,8 +415,8 @@
             <div class="card-title">3 JOHN</div>
             <div class="card-section">HOSPITALITY IN TRUTH</div>
             <div class="card-desc">"I have no greater joy than to hear that my children are walking in truth." Demetrius, Diotrephes, and walking in the truth revealed.</div>
-            <button class="excavate-btn" onclick="openExcavation('3 John')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('3 John')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="3 John">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="3 John">EXAMINE</button>
         </div>
         <div class="book-card" data-category="epistles" data-book="Jude|1">
             <div class="card-glow"></div>
@@ -1530,8 +427,8 @@
             <div class="card-title">JUDE</div>
             <div class="card-section">CONTESTING FOR THE FAITH</div>
             <div class="card-desc">"Beloved, although I was very eager to write to you... I found it necessary to write appealing you to contend for the faith." Apostates, the faith once delivered, and keeping in the love of God.</div>
-            <button class="excavate-btn" onclick="openExcavation('Jude')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('Jude')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="Jude">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="Jude">EXAMINE</button>
         </div>
     </section>
 
@@ -1549,8 +446,8 @@
             <div class="card-title">REVELATION</div>
             <div class="card-section">THE CROWN OF SCRIPTURE</div>
             <div class="card-desc">"I am the Alpha and the Omega." Seven seals, seven trumpets, seven bowls, Babylon, and the New Jerusalem descending — the final revelation of all things. "Surely I am coming soon."</div>
-            <button class="excavate-btn" onclick="openExcavation('Revelation')">EXCAVATE</button>
-            <button class="examine-btn" onclick="openExamine('Revelation')">EXAMINE</button>
+            <button class="excavate-btn" data-action="excavate" data-book="Revelation">EXCAVATE</button>
+            <button class="examine-btn" data-action="examine" data-book="Revelation">EXAMINE</button>
         </div>
     </section>
 
@@ -1559,17 +456,17 @@
     ═══════════════════════════════════════ -->
     <div id="mapOverlay" class="map-overlay">
         <div class="overlay-content">
-            <button class="close-btn" onclick="closeOverlay()">[ X ] CLOSE ARCHIVE</button>
+            <button class="close-btn" data-action="close-overlay">[ X ] CLOSE ARCHIVE</button>
             <div class="overlay-nav">
-                <button id="btnChapter" class="toggle-btn active" onclick="switchView('chapters')">CHAPTER MAP</button>
-                <button id="btnArch" class="toggle-btn" onclick="switchView('archaeology')">FIELD NOTES</button>
+                <button id="btnChapter" class="toggle-btn active" data-action="switch-chapters">CHAPTER MAP</button>
+                <button id="btnArch" class="toggle-btn" data-action="switch-arch">FIELD NOTES</button>
             </div>
             <div class="overlay-header">
                 <h2 id="overlayTitle" class="map-title"></h2>
                 <p id="overlaySubtitle" class="map-label"></p>
             </div>
             <div id="chapterView" class="view-panel">
-                <button class="audio-btn" id="audioTrigger" onclick="toggleNarration()">
+                <button class="audio-btn" id="audioTrigger" data-action="toggle-narration">
                     <span id="audioIcon">&#128266;</span>
                 </button>
                 <div class="map-grid" id="chapterGrid"></div>
@@ -1578,7 +475,7 @@
                 <div class="field-notes-layout">
                     <div class="microscope-container" onmousemove="moveLens(event)" onmouseleave="hideLens()">
                         <div id="zoomLens" class="zoom-lens"></div>
-                        <img id="artifactImg" src="https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg" alt="Ancient Fragment">
+                        <img id="artifactImg" src="https://upload.wikimedia.org/wikipedia/commons/3/31/Codex_Sinaiticus_1-2.jpg" alt="Ancient Fragment">
                         <div id="zoomResult" class="zoom-result"></div>
                     </div>
                     <div class="field-notes-box">
@@ -1688,12 +585,12 @@
         function readChapter(book, ch) {
             var overlay = document.getElementById('mapOverlay');
             var content = overlay.querySelector('.overlay-content');
-            content.innerHTML = '<button class="close-btn" onclick="closeChapter()">[ X ] CLOSE ARCHIVE</button>' +
+            content.innerHTML = '<button class="close-btn" data-action="close-chapter">[ X ] CLOSE ARCHIVE</button>' +
                 '<div style="text-align:center;padding:80px 20px 60px;">' +
-                '<div style="font-size: 0.66rem;color:rgba(255,255,255,0.3);letter-spacing:4px;margin-bottom:16px;">PREPARING MANUSCRIPT</div>' +
+                '<div style="font-size: 0.66rem;color:var(--text-secondary);letter-spacing:4px;margin-bottom:16px;">PREPARING MANUSCRIPT</div>' +
                 '<div style="font-family:\'Cinzel\',serif;font-size: 2.16rem;color:var(--reality-silver);letter-spacing:3px;margin-bottom:6px;">' + book + ' ' + ch + '</div>' +
-                '<div style="font-size: 0.58rem;color:rgba(255,255,255,0.2);letter-spacing:2px;margin-bottom:40px;">Chapter ' + ch + ' of ' + currentChapters + '</div>' +
-                '<div style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size: 0.66rem;color:rgba(255,255,255,0.2);line-height:1.8;max-width:500px;margin:0 auto;">The sacred manuscript awaits your arrival. Transcribe the verses to unlock the scroll.</div>' +
+                '<div style="font-size: var(--text-micro);color:var(--text-secondary);letter-spacing:2px;margin-bottom:40px;">Chapter ' + ch + ' of ' + currentChapters + '</div>' +
+                '<div style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size: 0.66rem;color:var(--text-secondary);line-height:1.8;max-width:500px;margin:0 auto;">The sacred manuscript awaits your arrival. Transcribe the verses to unlock the scroll.</div>' +
                 '</div>';
             overlay.classList.add('active');
         }
@@ -1719,8 +616,8 @@
                 if (!currentAudio) { currentAudio = document.createElement('audio'); }
                 currentAudio.src = 'assets/audio/' + currentBook.toLowerCase().replace(/ /g, '_') + '_01.mp3';
                 currentAudio.addEventListener('error', function() {
-                    closeOverlay();
                     stopAudio();
+                    ScriptoriumCore.showToast('Audio narration unavailable for this book');
                 });
                 currentAudio.play();
                 currentAudio.onended = function() { stopAudio(); };
@@ -1804,7 +701,7 @@
             if (!empty) {
                 empty = document.createElement('div');
                 empty.id = 'filterEmpty';
-                empty.style.cssText = 'text-align:center;padding:80px 20px;display:none;font-family:\'Cormorant Garamond\',serif;font-size: 0.66rem;color:rgba(255,255,255,0.1);font-style:italic;';
+                empty.style.cssText = 'text-align:center;padding:80px 20px;display:none;font-family:\'Cormorant Garamond\',serif;font-size: 0.66rem;color:var(--text-secondary);font-style:italic;';
                 empty.textContent = 'No scrolls match this filter.';
                 (document.querySelector('.hall-header') || document.querySelector('.vault-header')).after(empty);
             }
@@ -1848,7 +745,7 @@
             var content = document.getElementById('excavationContent');
             if (!data || !overlay || !content) return;
             content.innerHTML =
-                '<button class="close-case" onclick="closeExcavation()">[ X ] CLOSE</button>' +
+                '<button class="close-case" data-action="close-excavation">[ X ] CLOSE</button>' +
                 '<div class="case-label">EXCAVATION REPORT</div>' +
                 '<h2 class="case-title">' + book + '</h2>' +
                 '<div class="case-section">PROVENANCE & DISCOVERY</div>' +
@@ -1860,8 +757,8 @@
                 '<div class="prov-row condition-row"><div class="prov-key">TAGS</div><div class="prov-val"><div class="condition-tags">' + (data.tags||[]).map(function(t){return '<span class="condition-tag">'+t+'</span>';}).join('') + '</div></div></div>' +
                 '</div>' +
                 '<div style="margin-top:28px;display:flex;gap:10px;flex-wrap:wrap;">' +
-                  '<button class="scr-read-btn" onclick="closeExcavation();ScrReader.open(\'' + book.replace(/'/g,"\\'") + '\');" style="font-size:0.65rem;padding:10px 22px;">📖 READ FULL BOOK</button>' +
-                  '<button class="scr-read-btn" onclick="closeExcavation();ScrReader.open(\'' + book.replace(/'/g,"\\'") + '\');setTimeout(function(){ScrReader.downloadBook();},800);" style="font-size:0.65rem;padding:10px 22px;border-color:rgba(224,224,224,0.12);color:rgba(224,224,224,0.4);">⬇ DOWNLOAD FULL BOOK</button>' +
+                  '<button class="scr-read-btn" data-action="scr-read" data-book="' + book + '" style="font-size:0.65rem;padding:10px 22px;">📖 READ FULL BOOK</button>' +
+                  '<button class="scr-read-btn" data-action="scr-download" data-book="' + book + '" style="font-size:0.65rem;padding:10px 22px;border-color:rgba(224,224,224,0.12);color:rgba(224,224,224,0.4);">⬇ DOWNLOAD FULL BOOK</button>' +
                 '</div>';
             overlay.classList.add('active');
         }
@@ -1881,33 +778,33 @@
 
         /* ── ARTIFACT EXAMINATION ── */
         var examineData = {
-            'MATTHEW': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'The book of the genealogy of Jesus Christ, the son of David, the son of Abraham. Abraham was the father of Isaac, and Isaac the father of Jacob.', leftMarg: 'The genealogy — Son of David, Son of Abraham', rightMarg: "The Messiah's lineage through Tamar, Ruth, and Bathsheba", lore1: 'Matthew begins with Abraham, tracing the Messianic line through David to Jesus — the new Abraham.', lore2: 'The genealogy contains four women with scandalous histories — each a divine exception to patriarchal convention.' },
-            'MARK': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'The beginning of the gospel of Jesus Christ, the Son of God. As it is written in Isaiah the prophet, Behold, I send my messenger before your face.', leftMarg: 'The swift opening — immediately', rightMarg: "John the Baptist's voice in the wilderness", lore1: "Mark's gospel opens without a genealogy, without a birth narrative — immediately into the mission.", lore2: 'The word "immediately" appears over 40 times in Mark, giving the narrative its characteristic urgency.' },
-            'LUKE': { chapter: "Chapter II", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'And the angel said to them, Fear not, for behold, I bring you good news of a great joy that will be for all the people.', leftMarg: 'The angels appear to the shepherds', rightMarg: 'Glory to God in the highest, and on earth peace', lore1: 'Luke alone preserves the angels\' message to the shepherds — the good news announced to the poor.', lore2: 'The census of Quirinius, mentioned here, was a historical event that forced Mary and Joseph to Bethlehem.' },
+            'MATTHEW': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/0/0b/Codex_Vaticanus_Matthew_1%2C22-2%2C18.jpg', text: 'The book of the genealogy of Jesus Christ, the son of David, the son of Abraham. Abraham was the father of Isaac, and Isaac the father of Jacob.', leftMarg: 'The genealogy — Son of David, Son of Abraham', rightMarg: "The Messiah's lineage through Tamar, Ruth, and Bathsheba", lore1: 'Matthew begins with Abraham, tracing the Messianic line through David to Jesus — the new Abraham.', lore2: 'The genealogy contains four women with scandalous histories — each a divine exception to patriarchal convention.' },
+            'MARK': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/8/8f/P45_Marc_8.35-9.1.jpg', text: 'The beginning of the gospel of Jesus Christ, the Son of God. As it is written in Isaiah the prophet, Behold, I send my messenger before your face.', leftMarg: 'The swift opening — immediately', rightMarg: "John the Baptist's voice in the wilderness", lore1: "Mark's gospel opens without a genealogy, without a birth narrative — immediately into the mission.", lore2: 'The word "immediately" appears over 40 times in Mark, giving the narrative its characteristic urgency.' },
+            'LUKE': { chapter: "Chapter II", image: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Papyrus_Bodmer_XIV-XV_%28P75%29.jpg', text: 'And the angel said to them, Fear not, for behold, I bring you good news of a great joy that will be for all the people.', leftMarg: 'The angels appear to the shepherds', rightMarg: 'Glory to God in the highest, and on earth peace', lore1: 'Luke alone preserves the angels\' message to the shepherds — the good news announced to the poor.', lore2: 'The census of Quirinius, mentioned here, was a historical event that forced Mary and Joseph to Bethlehem.' },
             'JOHN': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'In the beginning was the Word, and the Word was with God, and the Word was God. He was in the beginning with God.', leftMarg: 'The Prologue — the Logos made flesh', rightMarg: 'The Light shines in the darkness', lore1: 'The most theologically dense opening in all literature — "In the beginning" echoes Genesis.', lore2: 'The Word "was God" — not "was a god" — the Greek text affirms full deity. This was the key verse in the Arian controversy.' },
-            'ACTS': { chapter: "Chapter II", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'And they were all filled with the Holy Spirit and began to speak in other tongues as the Spirit gave them utterance. And there were dwelling in Jerusalem Jews.', leftMarg: 'The day of Pentecost — the Spirit descends', rightMarg: 'They were amazed and perplexed, saying to one another', lore1: 'The birth of the Church on Pentecost — tongues of fire, 120 disciples, three thousand converts in one day.', lore2: 'Peter quotes Joel\'s prophecy — \u201cIn the last days I will pour out my Spirit\u201d — the same text from the Old Testament.' },
-            'ROMANS': { chapter: "Chapter III", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'Therefore you have no excuse, O man, whoever you are, when you judge another, for in judging you condemn yourself, because you practice the very same things.', leftMarg: 'No one is righteous — not even one', rightMarg: 'All are under the power of sin', lore1: 'Paul builds the case for universal sinfulness before the stunning declaration of Romans 3:21.', lore2: 'The phrase "all have sinned and fall short of the glory of God" (3:23) uses the perfect tense — a state that continues.' },
-            '1 CORINTHIANS': { chapter: "Chapter XIII", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'If I speak in the tongues of men and of angels, but have not love, I am a sounding gong or a clanging cymbal.', leftMarg: 'The Love Chapter — the greatest gift', rightMarg: 'Love never ends; prophecies cease, tongues stop', lore1: 'Paul wrote this chapter to correct the Corinthian worship that prioritized tongues over love.', lore2: 'The famous trilogy — faith, hope, and love — appears in verse 13, with love declared the greatest.' },
-            '2 CORINTHIANS': { chapter: "Chapter IV", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'For we have this treasure in jars of clay, to show that the surpassing power belongs to God and not to us.', leftMarg: 'Treasure in jars of clay — the dying Jesus', rightMarg: 'We are afflcited in every way, but not crushed', lore1: 'The paradox of divine power in human weakness — the key to understanding Paul\'s suffering and ministry.', lore2: '"Jars of clay" — cheap, fragile pottery — containing an infinitely valuable treasure.' },
-            'GALATIANS': { chapter: "Chapter III", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'But the Scripture imprisoned everything under sin, so that the promise by faith in Jesus Christ might be given to those who believe.', leftMarg: 'The law as tutor leading to Christ', rightMarg: 'You are all sons of God through faith in Christ', lore1: 'Paul uses the example of Abraham — justified by faith 430 years before the law was given.', lore2: '"In Christ Jesus you are all sons of God, through faith" — the radical equality of Jew and Greek, slave and free.' },
-            'EPHESIANS': { chapter: "Chapter II", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'But God, being rich in mercy, because of the great love with which he loved us, even when we were dead in our trespasses, made us alive together with Christ.', leftMarg: 'Dead in trespasses — made alive in Christ', rightMarg: 'Raised us up with him and seated us with him', lore1: 'The magnificent "but God" moment — the pivot of Ephesians, explaining salvation from God\'s perspective.', lore2: '"Seated us with him in the heavenly places" — past tense. Spiritually, we are already seated with Christ.' },
-            'PHILIPPIANS': { chapter: "Chapter II", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'Have this mind among yourselves, which is yours in Christ Jesus, who, though he was in the form of God, did not count equality with God a thing to be grasped.', leftMarg: 'The Kenosis Hymn — Christ\'s self-emptying', rightMarg: 'He humbled himself by becoming obedient to the point of death', lore1: 'The most profound Christological hymn in the New Testament — pre-existence, incarnation, obedience, exaltation.', lore2: '"Even death on a cross" — the most shameful death in the Roman world applied to the most exalted being.' },
-            'COLOSSIANS': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'He is the image of the invisible God, the firstborn of all creation. For by him all things were created, in heaven and on earth, visible and invisible.', leftMarg: 'Christ preeminent — image of the invisible God', rightMarg: 'All things hold together in him', lore1: 'Paul argues that Christ is fully God — "the image of the invisible God" — the fullest revelation of deity.', lore2: '"Firstborn of all creation" does not mean first created, but supreme over all creation — the heir of everything.' },
-            '1 THESSALONIANS': { chapter: "Chapter IV", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'Then we who are alive, who are left, will be caught up together with them in the clouds to meet the Lord in the air.', leftMarg: 'The Coming of the Lord — the rapture', rightMarg: 'The dead in Christ rise first; then we who are alive', lore1: 'The clearest passage on the "rapture" — caught up to meet the Lord in the air.', lore2: 'Paul says \u201cwe\u201d — he expected to be alive at Christ\'s return. His eschatology was imminent.' },
-            '2 THESSALONIANS': { chapter: "Chapter II", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'Let no one deceive you in any way, for that day will not come unless the rebellion comes first and the man of lawlessness is revealed.', leftMarg: 'The man of lawlessness — the son of destruction', rightMarg: 'The one who now restrains it will do so until he is out of the way', lore1: 'The "man of lawlessness" — also called "the son of destruction" — will sit in the Temple claiming to be God.', lore2: 'The phrase "the son of destruction" (Hebrew: bar shelial) was a common idiom for a most wicked person.' },
-            '1 TIMOTHY': { chapter: "Chapter III", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'If anyone aspires to the office of bishop, he desires a noble task. Now a bishop must be above reproach, the husband of one wife.', leftMarg: 'Qualifications for elders and deacons', rightMarg: 'Deacons must be the husband of one wife', lore1: 'The qualifications for church leadership established here became the blueprint for all subsequent church orders.', lore2: '"Noble task" — the Greek word "kalkon" carries the sense of noble, excellent, commanding respect.' },
-            '2 TIMOTHY': { chapter: "Chapter III", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'All Scripture is breathed out by God and profitable for teaching, for reproof, for correction, and for training in righteousness.', leftMarg: '"All Scripture" — the most quoted verse on biblical authority', rightMarg: 'The sacred writings are able to make you wise for salvation', lore1: 'The most important verse on biblical inspiration — " breathed out by God" (theopneustos).', lore2: "Paul writes to Timothy, a young pastor, emphasizing the Old Testament as scripture for the early church." },
-            'TITUS': { chapter: "Chapter II", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'For the grace of God has appeared, bringing salvation for all people, training us to renounce ungodliness and worldly passions.', leftMarg: 'The appearing of grace — the kindness of God', rightMarg: 'Live self-controlled, upright, and godly in this present age', lore1: "Titus, left to organize Crete's churches, was given this practical letter on doctrine and life.", lore2: '"Training us" — Greek "paideuousa" — the same root as "pedagogy," suggesting education in godliness.' },
-            'PHILEMON': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'For I have derived much joy and comfort from your love, because the hearts of the saints have been refreshed through you.', leftMarg: 'The personal appeal — onboarding Onesimus', rightMarg: "Perhaps this is why I was eager to send him", lore1: "The shortest of Paul's letters — just one page — and the most radical in its challenge to social hierarchy.", lore2: 'Onesimus (meaning "useful") was a slave who escaped, then became useful to Paul and was sent back as a free brother.' },
-            'HEBREWS': { chapter: "Chapter VII", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'For this Melchizedek, king of Salem, priest of the Most High God, met Abraham returning from the slaughter of the kings and blessed him.', leftMarg: 'Melchizedek — priest king of Salem', rightMarg: 'Without father, without mother, without genealogy', lore1: 'The author reveals a mystery: Melchizedek, king of Salem and priest of God Most High, prefigured Christ.', lore2: 'Christ as priest "after the order of Melchizedek" (Psalm 110:4) — a superior priesthood to the Levitical order.' },
-            'JAMES': { chapter: "Chapter II", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'What good is it, my brothers, if someone says he has faith but does not have works? Can faith save him? Faith by itself, if it does not have works, is dead.', leftMarg: 'Faith without works is dead', rightMarg: 'You see then that faith was accounted to Abraham as righteousness', lore1: 'Luther called James "an epistle of straw" — but its emphasis on works flowing from faith was echoed by the entire Reformation.', lore2: "The example of Abraham offering Isaac (Genesis 22) shows works as the evidence, not the cause, of Abraham's faith." },
-            '1 PETER': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'Blessed be the God and Father of our Lord Jesus Christ, who according to his great mercy has caused us to be born again to a living hope.', leftMarg: 'Born again — through imperishable seed', rightMarg: 'An inheritance that is imperishable, undefiled, and unfading', lore1: '"Imperishable seed" — Peter uses the agricultural metaphor to show that the word of God is living and permanent.', lore2: '"A living hope" — not a dead ritual, but a living relationship with a living God through a living hope.' },
-            '2 PETER': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'His divine power has granted to us all things that pertain to life and godliness, through the knowledge of him who called us.', leftMarg: 'All things for life and godliness — through knowledge', rightMarg: 'By which he has granted to us his precious and very great promises', lore1: 'Peter shows that godliness is not achieved by human effort but granted through divine power and promises.', lore2: 'The phrase "knowledge of him" (epignosis) is the fuller, more complete knowing — not mere head knowledge.' },
-            '1 JOHN': { chapter: "Chapter IV", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'Beloved, let us love one another, for love is from God, and whoever loves has been born of God and knows God.', leftMarg: 'God is love — the defining attribute', rightMarg: 'In this is love, not that we have loved God but that he loved us', lore1: 'John defines God by love — not by power, knowledge, or justice, but by the nature of self-giving love.', lore2: '"Whoever loves has been born of God" — love is the proof of spiritual birth, not the other way around.' },
-            '2 JOHN': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'I rejoiced greatly to find some of your children walking in truth, as we received commandment from the Father.', leftMarg: 'Walking in truth — the test of love', rightMarg: 'And now I ask you, dear lady — not as though I were writing a new commandment', lore1: 'The shortest New Testament letter — just 13 verses — on the relationship between love and truth.', lore2: '"Test the spirits" — the first explicit instruction in the New Testament to evaluate prophetic claims.' },
-            '3 JOHN': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'I have no greater joy than to hear that my children are walking in truth. Beloved, it is a faithful thing you do.', leftMarg: 'Gaius — approved by his hospitality', rightMarg: 'Diotrephes — who likes to put himself first', lore1: 'The only New Testament book that explicitly approves of someone — Gaius, for walking in the truth.', lore2: 'Diotrephes is the only person in Scripture described as loving to be first — a warning against church ambition.' },
-            'JUDE': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'Beloved, although I was very eager to write to you about our common salvation, I found it necessary to write appealing you to contend for the faith.', leftMarg: 'The faith once for all delivered to the saints', rightMarg: 'Certain people have crept in unnoticed', lore1: 'The briefest epistle in the "general" category — a call to defend the apostolic deposit against false teachers.', lore2: 'Jude quotes from the Book of Enoch (1 En 1:9) — proving this Jewish text was considered authoritative in the early church.' },
-            'REVELATION': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/3/32/P52_recto.jpg', text: 'The revelation of Jesus Christ, which God gave him to show his servants what must soon take place. He made it known by sending his angel.', leftMarg: 'The apocalypse — unveiling of Jesus Christ', rightMarg: 'Blessedness for those who read, hear, and keep', lore1: 'The final book of the Bible — an apocalypse meaning "unveiling" — not a prediction of the future, but a revelation of the present.', lore2: '"What must soon take place" — the Greek "en tachei" can mean either "quickly" or "suddenly" — both have guided interpretation.' }
+            'ACTS': { chapter: "Chapter II", image: 'https://upload.wikimedia.org/wikipedia/commons/d/d1/Codex_Bezae_01.jpg', text: 'And they were all filled with the Holy Spirit and began to speak in other tongues as the Spirit gave them utterance. And there were dwelling in Jerusalem Jews.', leftMarg: 'The day of Pentecost — the Spirit descends', rightMarg: 'They were amazed and perplexed, saying to one another', lore1: 'The birth of the Church on Pentecost — tongues of fire, 120 disciples, three thousand converts in one day.', lore2: 'Peter quotes Joel\'s prophecy — \u201cIn the last days I will pour out my Spirit\u201d — the same text from the Old Testament.' },
+            'ROMANS': { chapter: "Chapter III", image: 'https://upload.wikimedia.org/wikipedia/commons/0/0f/P46.jpg', text: 'Therefore you have no excuse, O man, whoever you are, when you judge another, for in judging you condemn yourself, because you practice the very same things.', leftMarg: 'No one is righteous — not even one', rightMarg: 'All are under the power of sin', lore1: 'Paul builds the case for universal sinfulness before the stunning declaration of Romans 3:21.', lore2: 'The phrase "all have sinned and fall short of the glory of God" (3:23) uses the perfect tense — a state that continues.' },
+            '1 CORINTHIANS': { chapter: "Chapter XIII", image: 'https://upload.wikimedia.org/wikipedia/commons/c/c5/1K2-4p46.JPG', text: 'If I speak in the tongues of men and of angels, but have not love, I am a sounding gong or a clanging cymbal.', leftMarg: 'The Love Chapter — the greatest gift', rightMarg: 'Love never ends; prophecies cease, tongues stop', lore1: 'Paul wrote this chapter to correct the Corinthian worship that prioritized tongues over love.', lore2: 'The famous trilogy — faith, hope, and love — appears in verse 13, with love declared the greatest.' },
+            '2 CORINTHIANS': { chapter: "Chapter IV", image: 'https://upload.wikimedia.org/wikipedia/commons/e/e6/Codex_Ephraemi_f52.jpg', text: 'For we have this treasure in jars of clay, to show that the surpassing power belongs to God and not to us.', leftMarg: 'Treasure in jars of clay — the dying Jesus', rightMarg: 'We are afflcited in every way, but not crushed', lore1: 'The paradox of divine power in human weakness — the key to understanding Paul\'s suffering and ministry.', lore2: '"Jars of clay" — cheap, fragile pottery — containing an infinitely valuable treasure.' },
+            'GALATIANS': { chapter: "Chapter III", image: 'https://upload.wikimedia.org/wikipedia/commons/4/49/Codex_claromontanus_greek_%28The_S.S._Teacher%27s_Edition-The_Holy_Bible_-_Plate_XXVII%29.jpg', text: 'But the Scripture imprisoned everything under sin, so that the promise by faith in Jesus Christ might be given to those who believe.', leftMarg: 'The law as tutor leading to Christ', rightMarg: 'You are all sons of God through faith in Christ', lore1: 'Paul uses the example of Abraham — justified by faith 430 years before the law was given.', lore2: '"In Christ Jesus you are all sons of God, through faith" — the radical equality of Jew and Greek, slave and free.' },
+            'EPHESIANS': { chapter: "Chapter II", image: 'https://upload.wikimedia.org/wikipedia/commons/e/ee/P.Mich.inv._6238.jpg', text: 'But God, being rich in mercy, because of the great love with which he loved us, even when we were dead in our trespasses, made us alive together with Christ.', leftMarg: 'Dead in trespasses — made alive in Christ', rightMarg: 'Raised us up with him and seated us with him', lore1: 'The magnificent "but God" moment — the pivot of Ephesians, explaining salvation from God\'s perspective.', lore2: '"Seated us with him in the heavenly places" — past tense. Spiritually, we are already seated with Christ.' },
+            'PHILIPPIANS': { chapter: "Chapter II", image: 'https://upload.wikimedia.org/wikipedia/commons/f/f9/Codex_Alexandrinus_1.jpg', text: 'Have this mind among yourselves, which is yours in Christ Jesus, who, though he was in the form of God, did not count equality with God a thing to be grasped.', leftMarg: 'The Kenosis Hymn — Christ\'s self-emptying', rightMarg: 'He humbled himself by becoming obedient to the point of death', lore1: 'The most profound Christological hymn in the New Testament — pre-existence, incarnation, obedience, exaltation.', lore2: '"Even death on a cross" — the most shameful death in the Roman world applied to the most exalted being.' },
+            'COLOSSIANS': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/0/0f/P46.jpg', text: 'He is the image of the invisible God, the firstborn of all creation. For by him all things were created, in heaven and on earth, visible and invisible.', leftMarg: 'Christ preeminent — image of the invisible God', rightMarg: 'All things hold together in him', lore1: 'Paul argues that Christ is fully God — "the image of the invisible God" — the fullest revelation of deity.', lore2: '"Firstborn of all creation" does not mean first created, but supreme over all creation — the heir of everything.' },
+            '1 THESSALONIANS': { chapter: "Chapter IV", image: 'https://upload.wikimedia.org/wikipedia/commons/3/31/Codex_Sinaiticus_1-2.jpg', text: 'Then we who are alive, who are left, will be caught up together with them in the clouds to meet the Lord in the air.', leftMarg: 'The Coming of the Lord — the rapture', rightMarg: 'The dead in Christ rise first; then we who are alive', lore1: 'The clearest passage on the "rapture" — caught up to meet the Lord in the air.', lore2: 'Paul says \u201cwe\u201d — he expected to be alive at Christ\'s return. His eschatology was imminent.' },
+            '2 THESSALONIANS': { chapter: "Chapter II", image: 'https://upload.wikimedia.org/wikipedia/commons/e/e9/Codex_Vaticanus_B%2C_2Thess._3%2C11-18%2C_Hebr._1%2C1-2%2C2.jpg', text: 'Let no one deceive you in any way, for that day will not come unless the rebellion comes first and the man of lawlessness is revealed.', leftMarg: 'The man of lawlessness — the son of destruction', rightMarg: 'The one who now restrains it will do so until he is out of the way', lore1: 'The "man of lawlessness" — also called "the son of destruction" — will sit in the Temple claiming to be God.', lore2: 'The phrase "the son of destruction" (Hebrew: bar shelial) was a common idiom for a most wicked person.' },
+            '1 TIMOTHY': { chapter: "Chapter III", image: 'https://upload.wikimedia.org/wikipedia/commons/0/01/Codex_Ephraemi_1_Tim_3%2C15-16.JPG', text: 'If anyone aspires to the office of bishop, he desires a noble task. Now a bishop must be above reproach, the husband of one wife.', leftMarg: 'Qualifications for elders and deacons', rightMarg: 'Deacons must be the husband of one wife', lore1: 'The qualifications for church leadership established here became the blueprint for all subsequent church orders.', lore2: '"Noble task" — the Greek word "kalkon" carries the sense of noble, excellent, commanding respect.' },
+            '2 TIMOTHY': { chapter: "Chapter III", image: 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Codex_Sinaiticus_-_Early_5th_century.JPG', text: 'All Scripture is breathed out by God and profitable for teaching, for reproof, for correction, and for training in righteousness.', leftMarg: '"All Scripture" — the most quoted verse on biblical authority', rightMarg: 'The sacred writings are able to make you wise for salvation', lore1: 'The most important verse on biblical inspiration — " breathed out by God" (theopneustos).', lore2: "Paul writes to Timothy, a young pastor, emphasizing the Old Testament as scripture for the early church." },
+            'TITUS': { chapter: "Chapter II", image: 'https://upload.wikimedia.org/wikipedia/commons/3/31/Codex_Sinaiticus_1-2.jpg', text: 'For the grace of God has appeared, bringing salvation for all people, training us to renounce ungodliness and worldly passions.', leftMarg: 'The appearing of grace — the kindness of God', rightMarg: 'Live self-controlled, upright, and godly in this present age', lore1: "Titus, left to organize Crete's churches, was given this practical letter on doctrine and life.", lore2: '"Training us" — Greek "paideuousa" — the same root as "pedagogy," suggesting education in godliness.' },
+            'PHILEMON': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/2/2b/Codex_Vaticanus.jpg', text: 'For I have derived much joy and comfort from your love, because the hearts of the saints have been refreshed through you.', leftMarg: 'The personal appeal — onboarding Onesimus', rightMarg: "Perhaps this is why I was eager to send him", lore1: "The shortest of Paul's letters — just one page — and the most radical in its challenge to social hierarchy.", lore2: 'Onesimus (meaning "useful") was a slave who escaped, then became useful to Paul and was sent back as a free brother.' },
+            'HEBREWS': { chapter: "Chapter VII", image: 'https://upload.wikimedia.org/wikipedia/commons/0/0f/P46.jpg', text: 'For this Melchizedek, king of Salem, priest of the Most High God, met Abraham returning from the slaughter of the kings and blessed him.', leftMarg: 'Melchizedek — priest king of Salem', rightMarg: 'Without father, without mother, without genealogy', lore1: 'The author reveals a mystery: Melchizedek, king of Salem and priest of God Most High, prefigured Christ.', lore2: 'Christ as priest "after the order of Melchizedek" (Psalm 110:4) — a superior priesthood to the Levitical order.' },
+            'JAMES': { chapter: "Chapter II", image: 'https://upload.wikimedia.org/wikipedia/commons/5/52/British_Library_03.jpg', text: 'What good is it, my brothers, if someone says he has faith but does not have works? Can faith save him? Faith by itself, if it does not have works, is dead.', leftMarg: 'Faith without works is dead', rightMarg: 'You see then that faith was accounted to Abraham as righteousness', lore1: 'Luther called James "an epistle of straw" — but its emphasis on works flowing from faith was echoed by the entire Reformation.', lore2: "The example of Abraham offering Isaac (Genesis 22) shows works as the evidence, not the cause, of Abraham's faith." },
+            '1 PETER': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Papyrus_Bodmer_VIII.jpg', text: 'Blessed be the God and Father of our Lord Jesus Christ, who according to his great mercy has caused us to be born again to a living hope.', leftMarg: 'Born again — through imperishable seed', rightMarg: 'An inheritance that is imperishable, undefiled, and unfading', lore1: '"Imperishable seed" — Peter uses the agricultural metaphor to show that the word of God is living and permanent.', lore2: '"A living hope" — not a dead ritual, but a living relationship with a living God through a living hope.' },
+            '2 PETER': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/3/3d/Bodmer_VII-IX.jpg', text: 'His divine power has granted to us all things that pertain to life and godliness, through the knowledge of him who called us.', leftMarg: 'All things for life and godliness — through knowledge', rightMarg: 'By which he has granted to us his precious and very great promises', lore1: 'Peter shows that godliness is not achieved by human effort but granted through divine power and promises.', lore2: 'The phrase "knowledge of him" (epignosis) is the fuller, more complete knowing — not mere head knowledge.' },
+            '1 JOHN': { chapter: "Chapter IV", image: 'https://upload.wikimedia.org/wikipedia/commons/0/04/Papyrus66.jpg', text: 'Beloved, let us love one another, for love is from God, and whoever loves has been born of God and knows God.', leftMarg: 'God is love — the defining attribute', rightMarg: 'In this is love, not that we have loved God but that he loved us', lore1: 'John defines God by love — not by power, knowledge, or justice, but by the nature of self-giving love.', lore2: '"Whoever loves has been born of God" — love is the proof of spiritual birth, not the other way around.' },
+            '2 JOHN': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/2/2b/Codex_Vaticanus.jpg', text: 'I rejoiced greatly to find some of your children walking in truth, as we received commandment from the Father.', leftMarg: 'Walking in truth — the test of love', rightMarg: 'And now I ask you, dear lady — not as though I were writing a new commandment', lore1: 'The shortest New Testament letter — just 13 verses — on the relationship between love and truth.', lore2: '"Test the spirits" — the first explicit instruction in the New Testament to evaluate prophetic claims.' },
+            '3 JOHN': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/f/f9/Codex_Alexandrinus_1.jpg', text: 'I have no greater joy than to hear that my children are walking in truth. Beloved, it is a faithful thing you do.', leftMarg: 'Gaius — approved by his hospitality', rightMarg: 'Diotrephes — who likes to put himself first', lore1: 'The only New Testament book that explicitly approves of someone — Gaius, for walking in the truth.', lore2: 'Diotrephes is the only person in Scripture described as loving to be first — a warning against church ambition.' },
+            'JUDE': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/3/3d/Bodmer_VII-IX.jpg', text: 'Beloved, although I was very eager to write to you about our common salvation, I found it necessary to write appealing you to contend for the faith.', leftMarg: 'The faith once for all delivered to the saints', rightMarg: 'Certain people have crept in unnoticed', lore1: 'The briefest epistle in the "general" category — a call to defend the apostolic deposit against false teachers.', lore2: 'Jude quotes from the Book of Enoch (1 En 1:9) — proving this Jewish text was considered authoritative in the early church.' },
+            'REVELATION': { chapter: "Chapter I", image: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/P47.jpg', text: 'The revelation of Jesus Christ, which God gave him to show his servants what must soon take place. He made it known by sending his angel.', leftMarg: 'The apocalypse — unveiling of Jesus Christ', rightMarg: 'Blessedness for those who read, hear, and keep', lore1: 'The final book of the Bible — an apocalypse meaning "unveiling" — not a prediction of the future, but a revelation of the present.', lore2: '"What must soon take place" — the Greek "en tachei" can mean either "quickly" or "suddenly" — both have guided interpretation.' }
         };
 
         var examineZoom = 1;
@@ -2147,7 +1044,11 @@
             var counter = document.getElementById('streakCounter');
             var daysEl = document.getElementById('streakDays');
             var statusEl = document.getElementById('streakStatus');
-            var data = JSON.parse(localStorage.getItem('scribeData') || '{}');
+            var data = (function() {
+                var u = window.__getUnifiedUser ? window.__getUnifiedUser() : null;
+                if (u) return { streak: u.streak.current, lastVisit: u.streak.lastVisit, totalCharacters: u.progress.totalCharacters, dailyChars: u.progress.dailyChars, dailyDate: u.progress.dailyDate };
+                return JSON.parse(localStorage.getItem('scribeData') || '{}');
+            })();
             var today = new Date().toDateString();
             var lastDate = data.lastVisit || null;
             var streak = data.streak || 0;
@@ -2159,6 +1060,10 @@
             function calcRank(c) { return c > 5000 ? "ILLUMINATOR" : c > 1000 ? "MASTER SCRIBE" : c > 200 ? "SCRIBE" : "INITIATE"; }
             if (data.totalCharacters) data.rank = calcRank(data.totalCharacters);
             localStorage.setItem('scribeData', JSON.stringify(data));
+            if (window.__setUnifiedUser && window.__getUnifiedUser) {
+                var v2 = window.__getUnifiedUser();
+                if (v2) { v2.streak.current = streak; v2.streak.lastVisit = today; v2.rank.title = data.rank; window.__setUnifiedUser(v2); }
+            }
             if (streak > 0 && flame) {
                 flame.classList.add('lit');
                 if (streak >= 3) flame.classList.add('warm');
@@ -2171,6 +1076,7 @@
             (function() {
                 var params = new URLSearchParams(window.location.search);
                 var bookParam = params.get('book');
+                var chapterParam = params.get('chapter');
                 if (bookParam) {
                     setTimeout(function() {
                         var idx = timelineBooks.findIndex(function(b) { return b.name.toLowerCase() === bookParam; });
@@ -2182,6 +1088,17 @@
                             }
                         }
                     }, 300);
+                }
+                if (bookParam && chapterParam) {
+                    setTimeout(function() {
+                        if (!window.ScrReader) return;
+                        var name = bookParam.charAt(0).toUpperCase() + bookParam.slice(1);
+                        window.ScrReader.open(name);
+                        var ch = parseInt(chapterParam, 10);
+                        if (ch > 1) {
+                            setTimeout(function() { if (window.ScrReader) window.ScrReader.goToChapter(ch); }, 500);
+                        }
+                    }, 800);
                 }
             })();
         // Sidebar accessibility
@@ -2215,11 +1132,11 @@
                 <span class="artifact-title" id="artifactTitle"></span>
             </div>
             <div class="artifact-controls">
-                <button class="artifact-zoom-btn" onclick="examineZoom=Math.min(3,examineZoom+0.25);document.getElementById('artifactManuscript').querySelector('.artifact-page').style.transform='scale('+examineZoom+')';document.getElementById('zoomDisplay').innerText=Math.round(examineZoom*100)+'%'">+</button>
+                <button class="artifact-zoom-btn" data-action="examine-zoom-in">+</button>
                 <span class="artifact-zoom-display" id="zoomDisplay">100%</span>
-                <button class="artifact-zoom-btn" onclick="examineZoom=Math.max(0.5,examineZoom-0.25);document.getElementById('artifactManuscript').querySelector('.artifact-page').style.transform='scale('+examineZoom+')';document.getElementById('zoomDisplay').innerText=Math.round(examineZoom*100)+'%'">&#8722;</button>
-                <button class="artifact-zoom-btn" onclick="document.getElementById('loreDrawer').classList.toggle('active')">&#9776;</button>
-                <button class="artifact-close" onclick="closeExamine()">[ X ] CLOSE</button>
+                <button class="artifact-zoom-btn" data-action="examine-zoom-out">&#8722;</button>
+                <button class="artifact-zoom-btn" data-action="toggle-lore">&#9776;</button>
+                <button class="artifact-close" data-action="close-examine">[ X ] CLOSE</button>
             </div>
         </div>
         <div class="artifact-canvas-wrap">
@@ -2231,7 +1148,8 @@
         <div class="artifact-nav-hint">HOVER TO EXAMINE &nbsp;&bull;&nbsp; +/- TO ZOOM &nbsp;&bull;&nbsp; L FOR LORE &nbsp;&bull;&nbsp; ESC TO CLOSE</div>
         <div id="artifactCursorLens" class="artifact-cursor-lens"></div>
     </div>
-    <script src="assets/js/scriptorium-core.js"></script>
+    <script defer src="assets/js/scriptorium-core.js"></script>
+    <script defer src="assets/js/features.js"></script>
     <!-- Transition Curtain -->
     <div id="narthex-transition-curtain" class="transition-overlay">
         <div class="transition-flame-container">
@@ -2245,14 +1163,12 @@
             var titleEl = card.querySelector('.card-title');
             if (!titleEl) return;
             var name = titleEl.textContent.trim();
-            var filename = name.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
             var examineBtn = card.querySelector('.examine-btn');
             if (!examineBtn) return;
-            var dl = document.createElement('a');
+            var dl = document.createElement('button');
             dl.className = 'download-btn';
-            dl.href = 'assets/docs/nt/' + filename + '.pdf';
-            dl.download = name + '_Scriptorium_Archive.pdf';
-            dl.textContent = 'DOWNLOAD (.PDF)';
+            dl.textContent = '\uD83D\uDCC4 DOWNLOAD (.PDF)';
+            dl.onclick = function() { scribeGeneratePDF(name, 'nt'); };
             examineBtn.parentNode.insertBefore(dl, examineBtn.nextSibling);
             var readBtn = document.createElement('button');
             readBtn.className = 'download-btn';
@@ -2266,21 +1182,57 @@
     <!-- SCRIPTORIUM GLOBAL READER MODAL -->
     <div id="scriptoriumReaderModal" class="reader-overlay" style="display:none;">
         <div class="reader-content">
-            <button class="reader-close" onclick="closeScriptoriumReader()">✕ CLOSE</button>
+            <button class="reader-close" data-action="close-reader">✕ CLOSE</button>
             <h2 id="readerBookTitle" class="reader-title">MATTHEW</h2>
             <div id="readerSubtext" class="reader-subtext">Sacred Record &amp; Textual Witness</div>
             <div class="reader-tabs">
-                <button id="tabTextMode" onclick="setReaderDisplay('text')" class="reader-tab active">📜 DIGITAL TEXT</button>
-                <button id="tabPdfMode" onclick="setReaderDisplay('pdf')" class="reader-tab">📄 ARCHIVAL PRINT</button>
+                <button id="tabTextMode" data-action="reader-text" class="reader-tab active">📜 DIGITAL TEXT</button>
+                <button id="tabRvNote" data-action="reader-rvnote" class="reader-tab">📖 RV NOTE</button>
+                <button id="tabPatristic" data-action="reader-patristic" class="reader-tab">&#128218; CHURCH FATHERS</button>
+                <button id="tabPdfMode" data-action="reader-pdf" class="reader-tab">📄 ARCHIVAL PRINT</button>
             </div>
             <div id="readerTextDisplay" class="reader-text-display"><p style="color:rgba(255,255,255,0.4);text-align:center;">Loading manuscript scrolls...</p></div>
+            <div id="readerRvNote" class="reader-text-display" style="display:none;"><p style="color:var(--text-secondary);text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;padding:40px;">Select a book to view Recovery Version footnotes on the divine economy.</p></div>
+            <div id="readerPatristic" class="reader-text-display" style="display:none;"><p style="color:var(--text-secondary);text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;padding:40px;">Select a book to read patristic commentary and Recovery ministry excerpts.</p></div>
             <div id="readerPdfDisplay" class="reader-pdf-display" style="display:none;">
                 <iframe id="readerDocumentFrame" class="reader-frame" src=""></iframe>
             </div>
             <div class="reader-footer">
-                <a id="readerDownloadAction" href="#" download class="reader-download-btn">📥 DOWNLOAD FULL BOOK (.PDF)</a>
+                <button id="readerDownloadAction" class="reader-download-btn">📥 DOWNLOAD FULL BOOK (.PDF)</button>
             </div>
         </div>
     </div>
+
+<script>document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('click', function(e) {
+  var t = e.target.closest('[data-action], [data-filter]');
+  if (!t) return;
+  var action = t.getAttribute('data-action');
+  var filter = t.getAttribute('data-filter');
+  var book = t.getAttribute('data-book');
+  if (filter) { filterNT(filter, t); return; }
+  switch (action) {
+    case 'excavate': openExcavation(book); break;
+    case 'examine': openExamine(book); break;
+    case 'close-overlay': closeOverlay(); break;
+    case 'switch-chapters': switchView('chapters'); break;
+    case 'switch-arch': switchView('archaeology'); break;
+    case 'toggle-narration': toggleNarration(); break;
+    case 'close-chapter': closeChapter(); break;
+    case 'close-excavation': closeExcavation(); break;
+    case 'close-examine': closeExamine(); break;
+    case 'close-reader': closeScriptoriumReader(); break;
+    case 'reader-text': setReaderDisplay('text'); break;
+    case 'reader-rvnote': setReaderDisplay('rvnote'); break;
+    case 'reader-patristic': setReaderDisplay('patristic'); break;
+    case 'reader-pdf': setReaderDisplay('pdf'); break;
+    case 'examine-zoom-in': examineZoom = Math.min(3, (examineZoom||1) + 0.25); renderExaminePage(); break;
+    case 'examine-zoom-out': examineZoom = Math.max(0.5, (examineZoom||1) - 0.25); renderExaminePage(); break;
+    case 'toggle-lore': document.getElementById('loreDrawer').classList.toggle('active'); break;
+    case 'scr-read': closeExcavation(); launchScriptoriumReader(book, 'nt'); break;
+    case 'scr-download': closeExcavation(); launchScriptoriumReader(book, 'nt'); setTimeout(function(){ var dl = document.getElementById('readerDownloadAction'); if (dl) dl.click(); }, 1200); break;
+  }
+});
+});</script>
 </body>
 </html>

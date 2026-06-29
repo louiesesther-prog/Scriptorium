@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; style-src-elem 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' unpkg.com cdn.jsdelivr.net; img-src 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; img-src-elem 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; connect-src 'self' *.tile.openstreetmap.org *.basemaps.cartocdn.com; frame-src 'none';">
     <meta charset="UTF-8">
+    <meta property="og:title" content="SCRIPTORIUM | Covenant Map">
+    <meta name="description" content="Interactive covenant timeline map tracing God's redemptive promises from Eden to the New Jerusalem.">
+    <meta property="og:description" content="Scriptorium — a digital archive of biblical texts, maps, genealogies, and manuscript studies.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://scriptorium-sandy.vercel.app/covenant-map.html">
+    <meta property="og:image" content="https://scriptorium-sandy.vercel.app/og-image.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCRIPTORIUM | Covenant Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://unpkg.com">
     <link rel="preconnect" href="https://*.basemaps.cartocdn.com">
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;1,600&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;1,600&display=swap">
+    <link href="assets/fonts/fonts.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/shared.css">
+    <link rel="stylesheet" href="assets/css/features.css">
+    <link rel="manifest" href="/manifest.json">
     <script src="assets/audio/scriptorium-audio.js"></script>
+    <script defer src="assets/js/auth.js"></script>
     <script defer src="assets/js/sidebar.js"></script>
     <script defer src="assets/js/scriptorium-core.js"></script>
     <style>
@@ -128,7 +135,7 @@
         .scribe-names {
             font-family: 'Cormorant Garamond', serif;
             font-size: 0.66rem;
-            color: rgba(255,255,255,0.2);
+            color: var(--text-secondary);
             max-height: 100px;
             overflow-y: auto;
             margin: 6px 0;
@@ -144,7 +151,7 @@
             justify-content: space-between;
         }
         .scribe-names .entry .time {
-            font-size: 0.48rem;
+            font-size: var(--text-micro);
             color: var(--museum-gold-dim);
             font-family: 'Montserrat', sans-serif;
         }
@@ -157,7 +164,7 @@
             font-family: 'Montserrat', sans-serif;
             font-size: 6px;
             letter-spacing: 2px;
-            color: rgba(255,255,255,0.1);
+            color: var(--text-secondary);
         }
         .scribe-stats .progress-bar {
             height: 2px;
@@ -190,7 +197,7 @@
         }
         .chat-header {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.48rem;
+            font-size: var(--text-micro);
             letter-spacing: 3px;
             color: rgba(212,175,55,0.3);
             padding: 6px 10px;
@@ -204,7 +211,7 @@
             margin-top: 4px;
         }
         .tab-btn {
-            font-size: 0.6rem;
+            font-size: var(--text-micro);
             color: rgba(255,255,255,0.98);
             cursor: pointer;
             padding: 2px 6px;
@@ -236,10 +243,10 @@
             animation: fadeInText 0.6s ease;
             line-height: 1.4;
         }
-        .witness-msg strong { color: #d4af37; font-style: normal; font-family: 'Cinzel', serif; font-size: 0.54rem; letter-spacing: 1px; }
+        .witness-msg strong { color: #d4af37; font-style: normal; font-family: 'Cinzel', serif; font-size: var(--text-micro); letter-spacing: 1px; }
         .witness-msg .type-tag {
             display: inline-block;
-            font-size: 0.48rem;
+            font-size: var(--text-micro);
             font-style: normal;
             font-family: 'Montserrat', sans-serif;
             letter-spacing: 1px;
@@ -304,7 +311,7 @@
         .entry-prayer { border-left-color: #a855f7; box-shadow: inset 3px 0 8px rgba(168,85,247,0.12); }
         .entry-thanks { border-left-color: #fff; background: rgba(212,175,55,0.07); }
         .entry-meta { display: flex; justify-content: space-between; margin-bottom: 3px; }
-        .entry-scribe { font-size: 0.54rem; color: #d4af37; font-family: 'Cinzel', serif; letter-spacing: 1px; }
+        .entry-scribe { font-size: var(--text-micro); color: #d4af37; font-family: 'Cinzel', serif; letter-spacing: 1px; }
         .entry-time { font-size: 0.72rem; opacity: 0.6; font-family: 'Montserrat', sans-serif; }
         .entry-content { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.72rem; color: rgba(255,255,255,0.98); line-height: 1.4; }
         .ledger-input-zone { border-top: 1px solid rgba(212,175,55,0.04); padding: 6px; }
@@ -324,7 +331,7 @@
         .ledger-input-zone .seal-btn {
             width: 100%; background: transparent; border: 1px solid rgba(212,175,55,0.06);
             color: #d4af37; padding: 6px;
-            font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 4px;
+            font-family: 'Cinzel', serif; font-size: var(--text-micro); letter-spacing: 4px;
             cursor: pointer; border-radius: 2px; transition: 0.3s;
         }
         .ledger-input-zone .seal-btn:hover { border-color: #d4af37; color: #d4af37; }
@@ -343,7 +350,7 @@
             font-family: 'Cormorant Garamond', serif;
             outline: none;
         }
-        .chat-input-area input::placeholder { color: rgba(255,255,255,0.3); font-style: italic; }
+        .chat-input-area input::placeholder { color: var(--text-secondary); font-style: italic; }
         .chat-input-area button {
             background: rgba(212,175,55,0.06);
             border: none;
@@ -413,12 +420,12 @@
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.08rem;
             font-style: italic;
-            color: rgba(255,255,255,0.2);
+            color: var(--text-secondary);
             margin: 0 0 20px;
         }
         .final-seal-overlay .seal-content .scribe-signature {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.48rem;
+            font-size: var(--text-micro);
             letter-spacing: 4px;
             color: rgba(212,175,55,0.85);
         }
@@ -435,7 +442,6 @@
                 <span>ACTIVE WITNESSES</span>
             </div>
             <div id="scribeList" class="scribe-names">
-                <div class="entry"><span>&bull; Scribe Elias</span><span class="time">NOW</span></div>
             </div>
             <div class="scribe-stats">
                 <small>GLOBAL SYNCHRONIZATION: <span id="syncPercent">5%</span></small>
@@ -446,14 +452,11 @@
 <!-- UNIFIED LEDGER -->
 <div class="ledger-wrapper">
     <div class="ledger-filters">
-        <span class="filter-tab active" onclick="setLedgerFilter('all')">CHRONICLE</span>
-        <span class="filter-tab" onclick="setLedgerFilter('prayer')">INTERCESSION</span>
-        <span class="filter-tab" onclick="setLedgerFilter('thanks')">GRATITUDE</span>
+        <span class="filter-tab active" data-action="setLedgerFilter('all')">CHRONICLE</span>
+        <span class="filter-tab" data-action="setLedgerFilter('prayer')">INTERCESSION</span>
+        <span class="filter-tab" data-action="setLedgerFilter('thanks')">GRATITUDE</span>
     </div>
     <div id="unifiedLedger" class="ledger-body">
-        <div class="ledger-entry entry-chat" data-type="chat"><div class="entry-meta"><span class="entry-scribe">Elias</span><span class="entry-time">NOW</span></div><div class="entry-content">"The Covenant spans all nations."</div></div>
-        <div class="ledger-entry entry-prayer" data-type="prayer"><div class="entry-meta"><span class="entry-scribe">Miriam</span><span class="entry-time">NOW</span></div><div class="entry-content">"Peace over Jerusalem."</div></div>
-        <div class="ledger-entry entry-thanks" data-type="thanks"><div class="entry-meta"><span class="entry-scribe">Caleb</span><span class="entry-time">NOW</span></div><div class="entry-content">"For the preservation of the scrolls."</div></div>
     </div>
     <div class="ledger-input-zone">
         <div class="input-controls">
@@ -464,7 +467,7 @@
             </select>
         </div>
         <textarea id="witnessText" placeholder="Add to the eternal record..." maxlength="120"></textarea>
-        <button onclick="commitWitness()" class="seal-btn">AFFIX SEAL</button>
+        <button data-action="commitWitness()" class="seal-btn">AFFIX SEAL</button>
     </div>
 </div>
 
@@ -476,7 +479,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-        var map = L.map('covenantMap').setView([20.5937, 78.9629], 5);
+        var map = L.map('covenantMap').setView([31.5, 35.0], 6);
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             attribution: 'Scriptorium Sacred Map'
@@ -566,32 +569,6 @@
             document.getElementById('syncFill').style.width = pct + '%';
         }
 
-        // Simulate live scribes arriving
-        var covenantLocs = [
-            [31.7683, 35.2137], [31.5250, 35.4531], [32.7764, 35.3204],
-            [32.0833, 34.7833], [31.0458, 35.2583], [31.7000, 35.2000],
-            [40.7128, -74.0060], [51.5074, -0.1278], [48.8566, 2.3522]
-        ];
-
-        var names = ['Scribe Miriam', 'Scribe Thomas', 'Scribe Esther', 'Scribe Simeon',
-                     'Scribe Hannah', 'Scribe Caleb', 'Scribe Tabitha', 'Scribe Jethro'];
-
-        setTimeout(function() {
-            registerNewScribe('Scribe Miriam', [40.7128, -74.0060]);
-        }, 5000);
-
-        setTimeout(function() {
-            registerNewScribe('Scribe Thomas', [51.5074, -0.1278]);
-        }, 13000);
-
-        // Periodic random scribes
-        setInterval(function() {
-            var name = names[Math.floor(Math.random() * names.length)];
-            var loc = covenantLocs[Math.floor(Math.random() * covenantLocs.length)];
-            var offset = (Math.random() - 0.5) * 0.3;
-            registerNewScribe(name + '_' + Math.random().toString(36).substring(2, 5), [loc[0] + offset, loc[1] + offset]);
-        }, 22000);
-
         // ==================== UNIFIED LEDGER ====================
         var currentFilter = 'all';
 
@@ -601,7 +578,11 @@
             var content = textarea.value.trim();
             if (!content) return;
 
-            var scribe = JSON.parse(localStorage.getItem('activeScribe')) || { name: 'Unknown Scribe' };
+            var scribe = (function() {
+                var u = window.__getUnifiedUser ? window.__getUnifiedUser() : null;
+                if (u) return { name: u.profile.name || 'Unknown Scribe' };
+                return JSON.parse(localStorage.getItem('activeScribe')) || { name: 'Unknown Scribe' };
+            })();
             var entry = {
                 id: Date.now(),
                 scribe: scribe.name,
@@ -735,5 +716,6 @@
         document.getElementById('pillarBar').style.height = h + 'px';
         setTimeout(function() { updatePillarOfLight(globalThanksCount); }, 1000);
     </script>
+<script>(function(){document.body.addEventListener("click",function(e){var t=e.target.closest("[data-action]");if(!t)return;var c=t.getAttribute("data-action");try{(new Function("event",c)).call(t,e)}catch(ex){console.warn("[action]",ex)}})})();</script>
 </body>
 </html>

@@ -1,12 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; style-src-elem 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' unpkg.com cdn.jsdelivr.net; img-src 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; img-src-elem 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; connect-src 'self' *.tile.openstreetmap.org *.basemaps.cartocdn.com; frame-src 'none';">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCRIPTORIUM | Paleo-Epigraphy Lab</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📜</text></svg>">
+    <link rel="canonical" href="https://scriptorium-sandy.vercel.app/paleo-epigraphy.html">
+    <meta name="description" content="Trace ancient Hebrew letters in the Scriptorium Paleo-Epigraphy Lab. Learn 22-letter alphabet with pictograph, Paleo-Hebrew, and modern forms.">
+    <meta property="og:title" content="SCRIPTORIUM | Paleo-Epigraphy Lab">
+    <meta property="og:description" content="Trace ancient Hebrew letters — 22-letter alphabet with pictograph, Paleo-Hebrew, and modern forms.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://scriptorium-sandy.vercel.app/paleo-epigraphy.html">
+    <meta property="og:image" content="https://scriptorium-sandy.vercel.app/og-image.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    <link href="assets/fonts/fonts.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/shared.css">
+    <link rel="stylesheet" href="assets/css/features.css">
+    <link rel="manifest" href="/manifest.json">
     <script src="assets/audio/scriptorium-audio.js" defer></script>
+    <script type="application/ld+json">
+    {
+        "@context":"https://schema.org",
+        "@type":"Book",
+        "name":"Paleo-Epigraphy Lab",
+        "description":"Interactive paleo-epigraphy lab for tracing ancient Hebrew letters across Proto-Sinaitic, Phoenician, Paleo-Hebrew, and Modern Hebrew scripts.",
+        "author":{"@type":"Organization","name":"Scriptorium"},
+        "about":"Biblical paleography education",
+        "audience":"Students of biblical archaeology and ancient scripts"
+    }
+    </script>
     <style>
         :root { --obsidian: #050505; --obsidian-2: #080808; --museum-gold: #d4af37; --museum-gold-dim: rgba(212,175,55,0.6); --museum-gold-faint: rgba(212,175,55,0.17); --museum-bronze: #7a5f1a; --sidebar-w: 80px; --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1); }
         *,*::before,*::after{box-sizing:border-box;}
@@ -24,7 +47,7 @@
         .epigraphy-header{text-align:center;margin-bottom:40px;}
         .epigraphy-header h1{font-size: 2.16rem;letter-spacing:10px;color:var(--museum-gold);margin:0 0 10px;text-shadow:0 0 30px rgba(212,175,55,0.1);}
         .epigraphy-header .subtitle{font-family:'Cormorant Garamond',serif;font-size: 0.66rem;font-style:italic;color:rgba(255,255,255,0.53);}
-        .epigraphy-header .ref{font-family:'Montserrat',sans-serif;font-size: 0.54rem;letter-spacing:4px;color:rgba(212,175,55,0.85);margin-top:8px;}
+        .epigraphy-header .ref{font-family:'Montserrat',sans-serif;font-size: var(--text-micro);letter-spacing:4px;color:rgba(212,175,55,0.85);margin-top:8px;}
 
         .scribe-tablet{
             max-width:560px;width:100%;
@@ -36,7 +59,7 @@
 
         .scribe-tablet .tablet-header{text-align:center;margin-bottom:20px;}
         .scribe-tablet .tablet-header h3{font-size: 0.66rem;letter-spacing:6px;color:var(--museum-gold);margin:0 0 6px;}
-        .scribe-tablet .tablet-header p{font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color:rgba(255,255,255,0.2);font-style:italic;margin:0;}
+        .scribe-tablet .tablet-header p{font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color: var(--text-secondary);font-style:italic;margin:0;}
 
         .canvas-container{
             position:relative;width:400px;height:400px;margin:0 auto 20px;
@@ -64,7 +87,7 @@
         .evolution-line{
             display:flex;justify-content:center;align-items:center;
             gap:12px;font-family:'Montserrat',sans-serif;font-size: 0.66rem;letter-spacing:2px;
-            color:rgba(255,255,255,0.1);margin-bottom:20px;
+            color: var(--text-secondary);margin-bottom:20px;
         }
         .evolution-line .step{padding:4px 10px;border:1px solid transparent;border-radius:3px;transition:all 0.5s;}
         .evolution-line .step.active{color:var(--museum-gold);border-color:rgba(212,175,55,0.2);background:rgba(212,175,55,0.04);}
@@ -74,11 +97,11 @@
             min-height:50px;transition:all 0.5s;
         }
         .letter-info .name{font-family:'Cinzel',serif;font-size: 0.66rem;letter-spacing:4px;color:var(--museum-gold);margin-bottom:4px;}
-        .letter-info .meaning{font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color:rgba(255,255,255,0.2);font-style:italic;}
-        .letter-info .arch{font-family:'Montserrat',sans-serif;font-size: 0.48rem;color:rgba(212,175,55,0.17);margin-top:4px;letter-spacing:1px;}
+        .letter-info .meaning{font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color: var(--text-secondary);font-style:italic;}
+        .letter-info .arch{font-family:'Montserrat',sans-serif;font-size: var(--text-micro);color:rgba(212,175,55,0.17);margin-top:4px;letter-spacing:1px;}
 
         .tablet-controls{display:flex;gap:10px;justify-content:center;margin-top:16px;}
-        .tablet-controls button{padding:6px 16px;background:transparent;border:1px solid rgba(212,175,55,0.85);color:rgba(212,175,55,0.3);font-family:'Cinzel',serif;font-size: 0.54rem;letter-spacing:3px;cursor:pointer;border-radius:3px;transition:0.3s;}
+        .tablet-controls button{padding:6px 16px;background:transparent;border:1px solid rgba(212,175,55,0.85);color:rgba(212,175,55,0.3);font-family:'Cinzel',serif;font-size: var(--text-micro);letter-spacing:3px;cursor:pointer;border-radius:3px;transition:0.3s;}
         .tablet-controls button:hover{border-color:var(--museum-gold);color:var(--museum-gold);}
 
         .letter-selector{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:20px;}
@@ -89,8 +112,22 @@
         .progress-bar{height:2px;background:rgba(255,255,255,0.05);border-radius:2px;margin:8px 0 12px;overflow:hidden;}
         .progress-bar .fill{height:100%;background:var(--museum-gold);width:0%;transition:width 0.3s;}
 
-        @media(max-width:700px){.canvas-container{width:320px;height:320px;}#letterGuide{font-size: 6rem;}}
+        .compare-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.88);z-index:20000;display:none;justify-content:center;align-items:center;backdrop-filter:blur(8px);}
+        .compare-overlay.open{display:flex;}
+        .compare-panel{background:rgba(10,10,10,0.95);border:1px solid rgba(212,175,55,0.2);border-radius:6px;padding:40px 36px;max-width:640px;width:90vw;position:relative;text-align:center;}
+        .compare-close{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--text-secondary);font-size:1.4rem;cursor:pointer;transition:color 0.3s;}
+        .compare-close:hover{color:var(--museum-gold);}
+        .compare-title{font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:6px;color:var(--museum-gold);margin:0 0 4px;}
+        .compare-subtitle{font-family:'Cormorant Garamond',serif;font-size:0.8rem;color:var(--text-secondary);font-style:italic;margin:0 0 28px;}
+        .compare-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;}
+        .compare-cell{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px 8px;background:rgba(0,0,0,0.3);border:1px solid rgba(212,175,55,0.06);border-radius:4px;}
+        .comp-label{font-family:'Montserrat',sans-serif;font-size:var(--text-micro);letter-spacing:2px;color:rgba(212,175,55,0.3);}
+        .comp-glyph{font-size:3.6rem;line-height:1;color:var(--museum-gold);min-height:60px;display:flex;align-items:center;justify-content:center;}
+        .comp-desc{font-family:'Cormorant Garamond',serif;font-size:0.6rem;color:var(--text-secondary);font-style:italic;}
+        .compare-footnote{font-family:'Cormorant Garamond',serif;font-size:0.66rem;color:var(--text-secondary);margin-top:20px;font-style:italic;border-top:1px solid rgba(212,175,55,0.06);padding-top:16px;}
+        @media(max-width:700px){.canvas-container{width:320px;height:320px;}#letterGuide{font-size: 6rem;}.compare-grid{grid-template-columns:1fr 1fr;}}
     </style>
+    <script src="assets/js/auth.js"></script>
     <script src="assets/js/sidebar.js"></script>
 </head>
 <body>
@@ -109,13 +146,7 @@
             <p>Trace the letter form with your cursor to reveal its evolution.</p>
         </div>
 
-        <div class="letter-selector" id="letterSelector">
-            <button class="active" data-letter="aleph" onclick="selectLetter('aleph')">ALEPH</button>
-            <button data-letter="beth" onclick="selectLetter('beth')">BETH</button>
-            <button data-letter="dalet" onclick="selectLetter('dalet')">DALET</button>
-            <button data-letter="ayin" onclick="selectLetter('ayin')">AYIN</button>
-            <button data-letter="resh" onclick="selectLetter('resh')">RESH</button>
-        </div>
+        <div class="letter-selector" id="letterSelector"></div>
 
         <div class="canvas-container" id="canvasContainer">
             <div id="letterGuide">&#128018;</div>
@@ -126,9 +157,9 @@
 
         <div class="evolution-line" id="evolutionLine">
             <span class="step active" id="stepPicto">PICTOGRAPH</span>
-            <span style="color:rgba(255,255,255,0.05);">→</span>
+            <span style="color: var(--text-secondary);">→</span>
             <span class="step" id="stepPaleo">PALEO-HEBREW</span>
-            <span style="color:rgba(255,255,255,0.05);">→</span>
+            <span style="color: var(--text-secondary);">→</span>
             <span class="step" id="stepModern">MODERN HEBREW</span>
         </div>
 
@@ -139,7 +170,23 @@
         </div>
 
         <div class="tablet-controls">
-            <button onclick="resetTrace()">RESET TABLET</button>
+            <button data-action="resetTrace()">RESET TABLET</button>
+            <button data-action="toggleCompare()">COMPARE SCRIPTS</button>
+        </div>
+    </div>
+
+    <div class="compare-overlay" id="compareOverlay">
+        <div class="compare-panel">
+            <button class="compare-close" data-action="toggleCompare()">&times;</button>
+            <h3 class="compare-title">&#128220; SCRIPT EVOLUTION</h3>
+            <p class="compare-subtitle" id="compareLetterName">ALEPH</p>
+            <div class="compare-grid" id="compareGrid">
+                <div class="compare-cell"><span class="comp-label">PROTO-SINAITIC</span><span class="comp-glyph" id="compPicto"></span><span class="comp-desc">c. 1800 BC</span></div>
+                <div class="compare-cell"><span class="comp-label">PHOENICIAN</span><span class="comp-glyph" id="compPhoenician"></span><span class="comp-desc">c. 1000 BC</span></div>
+                <div class="compare-cell"><span class="comp-label">PALEO-HEBREW</span><span class="comp-glyph" id="compPaleo"></span><span class="comp-desc">c. 800 BC</span></div>
+                <div class="compare-cell"><span class="comp-label">MODERN HEBREW</span><span class="comp-glyph" id="compModern"></span><span class="comp-desc">Modern</span></div>
+            </div>
+            <div class="compare-footnote" id="compareMeaning"></div>
         </div>
     </div>
 </main>
@@ -147,46 +194,28 @@
 <script>
 (function() {
     var LETTERS = {
-        aleph: {
-            picto: '\uD83D\uDC02',
-            paleo: '\uD83D\uDCDC',
-            modern: '\u05D0',
-            name: 'ALEPH (\u05D0)',
-            meaning: '"Ox" — The first letter. Originally depicted an ox head, representing strength and leadership.',
-            arch: 'Proto-Sinaitic inscription, Serabit el-Khadim (c. 1800 BC)'
-        },
-        beth: {
-            picto: '\uD83C\uDFD6',
-            paleo: '\uD83D\uDEE0',
-            modern: '\u05D1',
-            name: 'BETH (\u05D1)',
-            meaning: '"House" — The second letter. Its shape evolved from a simple house floorplan.',
-            arch: 'Paleo-Hebrew seal from Megiddo (10th c. BC)'
-        },
-        dalet: {
-            picto: '\uD83D\uDEA3',
-            paleo: '\u25A3',
-            modern: '\u05D3',
-            name: 'DALET (\u05D3)',
-            meaning: '"Door" — The fourth letter. Originated as a fish or door pictograph.',
-            arch: 'Moabite Stone inscription (c. 840 BC)'
-        },
-        ayin: {
-            picto: '\uD83D\uDC41',
-            paleo: '\u25CB',
-            modern: '\u05E2',
-            name: 'AYIN (\u05E2)',
-            meaning: '"Eye" — The sixteenth letter. One of the most visually stable letters across scripts.',
-            arch: 'Tel Dan Stele (c. 840 BC)'
-        },
-        resh: {
-            picto: '\uD83D\uDE46',
-            paleo: '\u25D1',
-            modern: '\u05E8',
-            name: 'RESH (\u05E8)',
-            meaning: '"Head" — The twentieth letter. Its pictograph represents a human head in profile.',
-            arch: 'Lachish Letters (c. 590 BC)'
-        }
+        aleph: { picto:'\uD83D\uDC02', paleo:'\uD802\uDD00', modern:'\u05D0', hebrew:'\u05D0\u05DC\u05E3', name:'ALEPH (\u05D0)', meaning:'"Ox" — The first letter. Originally depicted an ox head, representing strength and leadership.', arch:'Proto-Sinaitic inscription, Serabit el-Khadim (c. 1800 BC)' },
+        beth:  { picto:'\uD83C\uDFD6', paleo:'\uD802\uDD01', modern:'\u05D1', hebrew:'\u05D1\u05D9\u05EA', name:'BETH (\u05D1)', meaning:'"House" — The second letter. Its shape evolved from a simple house floorplan.', arch:'Paleo-Hebrew seal from Megiddo (10th c. BC)' },
+        gimel: { picto:'\uD83D\uDC2A', paleo:'\uD802\uDD02', modern:'\u05D2', hebrew:'\u05D2\u05D9\u05DE\u05DC', name:'GIMEL (\u05D2)', meaning:'"Camel" — The third letter. Originally depicted a throwing stick or camel neck.', arch:'Gezer Calendar (10th c. BC)' },
+        dalet: { picto:'\uD83D\uDEAA', paleo:'\uD802\uDD03', modern:'\u05D3', hebrew:'\u05D3\u05DC\u05EA', name:'DALET (\u05D3)', meaning:'"Door" — The fourth letter. Originated as a door or fish pictograph.', arch:'Moabite Stone inscription (c. 840 BC)' },
+        he:    { picto:'\uD83E\uDE91', paleo:'\uD802\uDD04', modern:'\u05D4', hebrew:'\u05D4\u05D0', name:'HE (\u05D4)', meaning:'"Window" — The fifth letter. Originally a man with raised arms or window frame.', arch:'Siloam Inscription (c. 701 BC)' },
+        vav:   { picto:'\uD83D\uDD30', paleo:'\uD802\uDD05', modern:'\u05D5', hebrew:'\u05D5\u05D0\u05D5', name:'VAV (\u05D5)', meaning:'"Hook" — The sixth letter. Originated as a tent peg or hook shape.', arch:'Lachish Ostraca (c. 590 BC)' },
+        zayin: { picto:'\u2694\uFE0F', paleo:'\uD802\uDD06', modern:'\u05D6', hebrew:'\u05D6\u05D9\u05D9\u05DF', name:'ZAYIN (\u05D6)', meaning:'"Weapon" — The seventh letter. Originally depicted a sword or dagger.', arch:'Tel Zayit Abecedary (10th c. BC)' },
+        chet:  { picto:'\uD83C\uDFF0', paleo:'\uD802\uDD07', modern:'\u05D7', hebrew:'\u05D7\u05D9\u05EA', name:'CHET (\u05D7)', meaning:'"Fence" — The eighth letter. Its shape encloses space like a courtyard wall.', arch:'Khirbet Qeiyafa Ostracon (c. 1000 BC)' },
+        tet:   { picto:'\uD83E\uDDFA', paleo:'\uD802\uDD08', modern:'\u05D8', hebrew:'\u05D8\u05D9\u05EA', name:'TET (\u05D8)', meaning:'"Basket" — The ninth letter. Originated as a coiled basket or wheel.', arch:'Samaria Ostraca (8th c. BC)' },
+        yod:   { picto:'\u270B', paleo:'\uD802\uDD09', modern:'\u05D9', hebrew:'\u05D9\u05D5\u05D3', name:'YOD (\u05D9)', meaning:'"Hand" — The tenth letter. The smallest letter, from the pictograph of an arm and hand.', arch:'Tel Dan Stele (c. 840 BC)' },
+        kaf:   { picto:'\uD83D\uDD90', paleo:'\uD802\uDD0A', modern:'\u05DB', hebrew:'\u05DB\u05E3', name:'KAF (\u05DB)', meaning:'"Palm" — The eleventh letter. Depicts an open palm or wing.', arch:'Kuntilat Ajrud inscriptions (c. 800 BC)' },
+        lamed: { picto:'\uD83E\uDE7E', paleo:'\uD802\uDD0B', modern:'\u05DC', hebrew:'\u05DC\u05DE\u05D3', name:'LAMED (\u05DC)', meaning:'"Goad" — The twelfth letter. Originally an ox goad or shepherd staff.', arch:'Mesha Stele (c. 840 BC)' },
+        mem:   { picto:'\uD83C\uDF0A', paleo:'\uD802\uDD0C', modern:'\u05DE', hebrew:'\u05DE\u05D9\u05DD', name:'MEM (\u05DE)', meaning:'"Water" — The thirteenth letter. A wavy line representing water waves.', arch:'Silver Scroll amulets, Ketef Hinnom (c. 600 BC)' },
+        nun:   { picto:'\uD83D\uDC1F', paleo:'\uD802\uDD0D', modern:'\u05E0', hebrew:'\u05E0\u05D5\u05DF', name:'NUN (\u05E0)', meaning:'"Fish" — The fourteenth letter. Originally depicted a fish or serpent.', arch:'Paleo-Hebrew seal from Jerusalem (7th c. BC)' },
+        samekh:{ picto:'\uD83D\uDE00', paleo:'\uD802\uDD0E', modern:'\u05E1', hebrew:'\u05E1\u05DE\u05DA', name:'SAMEKH (\u05E1)', meaning:'"Support" — The fifteenth letter. A tent peg or column support shape.', arch:'Ivory pomegranate inscription (8th c. BC)' },
+        ayin:  { picto:'\uD83D\uDC41', paleo:'\uD802\uDD0F', modern:'\u05E2', hebrew:'\u05E2\u05D9\u05DF', name:'AYIN (\u05E2)', meaning:'"Eye" — The sixteenth letter. One of the most visually stable letters across scripts.', arch:'Tel Dan Stele (c. 840 BC)' },
+        pe:    { picto:'\uD83D\uDC44', paleo:'\uD802\uDD10', modern:'\u05E4', hebrew:'\u05E4\u05D0', name:'PE (\u05E4)', meaning:'"Mouth" — The seventeenth letter. Originally a mouth or opening shape.', arch:'Lachish Letters (c. 590 BC)' },
+        tsade: { picto:'\uD83C\uDFA3', paleo:'\uD802\uDD11', modern:'\u05E6', hebrew:'\u05E6\u05D3\u05D9', name:'TSADE (\u05E6)', meaning:'"Fishhook" — The eighteenth letter. Depicts a fishhook or hunting tool.', arch:'Arad Ostraca (6th c. BC)' },
+        qof:   { picto:'\uD83C\uDF05', paleo:'\uD802\uDD12', modern:'\u05E7', hebrew:'\u05E7\u05D5\u05E3', name:'QOF (\u05E7)', meaning:'"Horizon" — The nineteenth letter. Originally the sun on the horizon or a needle eye.', arch:'Nash Papyrus (c. 150 BC)' },
+        resh:  { picto:'\uD83D\uDE46', paleo:'\uD802\uDD13', modern:'\u05E8', hebrew:'\u05E8\u05D0\u05E9', name:'RESH (\u05E8)', meaning:'"Head" — The twentieth letter. A human head in profile.', arch:'Lachish Letters (c. 590 BC)' },
+        shin:  { picto:'\uD83E\uDDB7', paleo:'\uD802\uDD14', modern:'\u05E9', hebrew:'\u05E9\u05D9\u05DF', name:'SHIN (\u05E9)', meaning:'"Tooth" — The twenty-first letter. A composite bow or tooth shape.', arch:'Silver Scroll amulets, Ketef Hinnom (c. 600 BC)' },
+        tav:   { picto:'\u271D', paleo:'\uD802\uDD15', modern:'\u05EA', hebrew:'\u05EA\u05D0\u05D5', name:'TAV (\u05EA)', meaning:'"Mark" — The twenty-second and final letter. Originally a cross or mark, like a signature.', arch:'Lachish Letters (c. 590 BC)' }
     };
 
     var canvas = document.getElementById('tracingCanvas');
@@ -198,7 +227,7 @@
     var totalRequired = 400;
     var currentLetter = 'aleph';
     var evolved = false;
-    var currentStage = 0; // 0=picto, 1=paleo, 2=modern
+    var currentStage = 0;
 
     function resize() {
         W = canvas.width = container.offsetWidth;
@@ -209,23 +238,27 @@
 
     function getPos(e) {
         var rect = canvas.getBoundingClientRect();
-        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: clientX - rect.left, y: clientY - rect.top };
     }
 
-    canvas.addEventListener('mousedown', function(e) {
+    function startDraw(e) {
+        e.preventDefault();
         isDrawing = true;
         ctx.beginPath();
         var p = getPos(e);
         ctx.moveTo(p.x, p.y);
-    });
+    }
 
-    window.addEventListener('mouseup', function() {
+    function endDraw() {
         isDrawing = false;
         ctx.beginPath();
-    });
+    }
 
-    canvas.addEventListener('mousemove', function(e) {
+    function moveDraw(e) {
         if (!isDrawing || evolved) return;
+        e.preventDefault();
         var p = getPos(e);
         ctx.lineWidth = 12;
         ctx.lineCap = 'round';
@@ -240,15 +273,20 @@
         var pct = Math.min(100, (pointsDrawn / totalRequired) * 100);
         document.getElementById('traceProgress').style.width = pct + '%';
 
-        // Stage 1 at 50%
         if (pointsDrawn >= totalRequired * 0.5 && currentStage < 1) {
             evolveToStage(1);
         }
-        // Stage 2 at 100%
         if (pointsDrawn >= totalRequired && currentStage < 2) {
             evolveToStage(2);
         }
-    });
+    }
+
+    canvas.addEventListener('mousedown', startDraw);
+    window.addEventListener('mouseup', endDraw);
+    canvas.addEventListener('mousemove', moveDraw);
+    canvas.addEventListener('touchstart', startDraw, { passive: false });
+    window.addEventListener('touchend', endDraw);
+    canvas.addEventListener('touchmove', moveDraw, { passive: false });
 
     function evolveToStage(stage) {
         currentStage = stage;
@@ -269,14 +307,34 @@
             evolved = true;
             canvas.style.cursor = 'default';
             if (window.ScriptoriumAudio) { try { ScriptoriumAudio.transitionTo('nt'); } catch(e) {} }
-            // Update Scribe's Seal
             try {
-                var seal = JSON.parse(localStorage.getItem('scribe_seal') || '{}');
-                seal.epigraphy = (seal.epigraphy || 0) + 1;
-                localStorage.setItem('scribe_seal', JSON.stringify(seal));
+                if (window.__getUnifiedUser && window.__setUnifiedUser) {
+                    var v2 = window.__getUnifiedUser() || { seal: { epigraphy: 0, astronomy: 0, prophecy: 0, restoration: 0 } };
+                    v2.seal.epigraphy = (v2.seal.epigraphy || 0) + 1;
+                    window.__setUnifiedUser(v2);
+                } else {
+                    var seal = JSON.parse(localStorage.getItem('scribe_seal') || '{}');
+                    seal.epigraphy = (seal.epigraphy || 0) + 1;
+                    localStorage.setItem('scribe_seal', JSON.stringify(seal));
+                }
             } catch(e) {}
+            if (window.checkAchievements) setTimeout(checkAchievements, 300);
         }
     }
+
+    // Build letter selector buttons
+    var selector = document.getElementById('letterSelector');
+    var LETTER_KEYS = Object.keys(LETTERS);
+    LETTER_KEYS.forEach(function(key, i) {
+        var btn = document.createElement('button');
+        btn.textContent = key.toUpperCase();
+        btn.dataset.letter = key;
+        if (i === 0) btn.className = 'active';
+        btn.addEventListener('click', function() {
+            selectLetter(key);
+        });
+        selector.appendChild(btn);
+    });
 
     window.selectLetter = function(letter) {
         if (LETTERS[letter]) {
@@ -293,28 +351,41 @@
         evolved = false;
         currentStage = 0;
         canvas.style.cursor = 'crosshair';
-
         ctx.clearRect(0, 0, W, H);
-
         var letter = LETTERS[currentLetter];
         var guide = document.getElementById('letterGuide');
         guide.textContent = letter.picto;
         guide.className = '';
         document.getElementById('traceProgress').style.width = '0%';
-
         document.getElementById('stepPicto').classList.add('active');
         document.getElementById('stepPaleo').classList.remove('active');
         document.getElementById('stepModern').classList.remove('active');
-
         document.getElementById('letterInfo').querySelector('.name').textContent = letter.name;
         document.getElementById('letterInfo').querySelector('.meaning').textContent = letter.meaning;
         document.getElementById('letterInfo').querySelector('.arch').textContent = '\uD83D\uDCDC ' + letter.arch;
     };
 
-    // Init first letter
+    // ── COMPARE SCRIPTS ──
+    window.toggleCompare = function() {
+        var overlay = document.getElementById('compareOverlay');
+        var open = overlay.classList.toggle('open');
+        if (open) updateCompare();
+    };
+
+    function updateCompare() {
+        var letter = LETTERS[currentLetter];
+        document.getElementById('compareLetterName').textContent = letter.name;
+        document.getElementById('compPicto').textContent = letter.picto;
+        document.getElementById('compPhoenician').textContent = letter.paleo;
+        document.getElementById('compPaleo').textContent = letter.paleo;
+        document.getElementById('compModern').textContent = letter.modern;
+        document.getElementById('compareMeaning').textContent = 'Meaning: ' + letter.meaning;
+    }
+
     resetTrace();
 })();
 </script>
     <script src="assets/js/scriptorium-core.js"></script>
+<script>(function(){document.body.addEventListener("click",function(e){var t=e.target.closest("[data-action]");if(!t)return;var c=t.getAttribute("data-action");try{(new Function("event",c)).call(t,e)}catch(ex){console.warn("[action]",ex)}})})();</script>
 </body>
 </html>

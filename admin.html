@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; style-src-elem 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' unpkg.com cdn.jsdelivr.net; img-src 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; img-src-elem 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; connect-src 'self' *.tile.openstreetmap.org *.basemaps.cartocdn.com; frame-src 'none';">
+    <meta charset="UTF-8">
+    <meta property="og:title" content="SCRIPTORIUM | Admin">
+    <meta name="description" content="Scriptorium — a digital archive of biblical texts, maps, genealogies, and manuscript studies.">
+    <meta property="og:description" content="Scriptorium — a digital archive of biblical texts, maps, genealogies, and manuscript studies.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://scriptorium-sandy.vercel.app/admin.html">
+    <meta property="og:image" content="https://scriptorium-sandy.vercel.app/og-image.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCRIPTORIUM | Admin</title>
+    <link href="assets/fonts/fonts.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/shared.css">
+    <link rel="stylesheet" href="assets/css/features.css">
+    <link rel="manifest" href="/manifest.json">
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/sidebar.js"></script>
+    <style>
+        :root { --gold:#d4af37; }
+        body { padding:60px 0 80px 80px; background:#080808; }
+        .page-header { max-width:800px; margin:0 auto 30px; padding:0 24px; text-align:center; }
+        .page-header h1 { font-family:'Cinzel',serif; font-size:1.2rem; letter-spacing:8px; color:var(--gold); margin:0; text-shadow:0 0 30px rgba(212,175,55,0.06); }
+        .card { max-width:800px; margin:0 auto 16px; padding:24px 28px; background:rgba(10,10,10,0.85); border:1px solid rgba(212,175,55,0.06); border-radius:4px; }
+        .card h3 { font-family:'Cinzel',serif; font-size: var(--text-micro); letter-spacing:3px; color:rgba(212,175,55,0.3); margin:0 0 8px; }
+        .stat-row { display:flex; gap:16px; flex-wrap:wrap; }
+        .stat-box { flex:1; min-width:100px; text-align:center; padding:16px; background:rgba(255,255,255,0.01); border:1px solid rgba(212,175,55,0.04); border-radius:3px; }
+        .stat-box .num { font-family:'Cinzel',serif; font-size:1.4rem; color:var(--gold); }
+        .stat-box .lbl { font-family:'Montserrat',sans-serif; font-size: var(--text-micro); letter-spacing:2px; color: var(--text-secondary); margin-top:4px; }
+        .sub-list { margin-top:8px; }
+        .sub-item { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.02); font-family:'Cormorant Garamond',serif; font-size:0.7rem; color: var(--text-secondary); }
+        .sub-item:last-child { border-bottom:none; }
+        .loading { font-family:'Cormorant Garamond',serif; color: var(--text-secondary); text-align:center; padding:40px 0; font-style:italic; }
+        .error-msg { font-family:'Cormorant Garamond',serif; color:#b84a4a; text-align:center; padding:40px 0; }
+    </style>
+</head>
+<body>
+<div id="sidebarContainer"></div>
+<div class="page-header"><h1>ARCHIVE ADMIN</h1></div>
+<div id="statsArea"><div class="loading">Loading stats...</div></div>
+<script>
+(function() {
+var API_BASE = window.SCRIPTORIUM_API || '/api';
+var area = document.getElementById('statsArea');
+function getToken() {
+    return window.Scriptorium && window.Scriptorium.getToken ? window.Scriptorium.getToken() : null;
+}
+var token = getToken();
+if (!token) {
+    area.innerHTML = '<div class="error-msg">Sign in as a scribe to access the admin panel.</div>';
+    return;
+}
+function load() {
+    fetch(API_BASE + '/admin/stats', { headers: { 'Authorization': 'Bearer ' + token } })
+    .then(function(r) { return r.json(); })
+    .then(function(stats) {
+        var html = '<div class="card"><h3>OVERVIEW</h3><div class="stat-row">' +
+            '<div class="stat-box"><div class="num">' + stats.scribes + '</div><div class="lbl">SCRIBES</div></div>' +
+            '<div class="stat-box"><div class="num">' + stats.planSubscriptions + '</div><div class="lbl">PLAN SUBS</div></div>' +
+            '<div class="stat-box"><div class="num">' + stats.challengeSubscriptions + '</div><div class="lbl">CHALLENGE SUBS</div></div>' +
+            '<div class="stat-box"><div class="num">' + stats.newsletterConfirmed + '</div><div class="lbl">NL CONFIRMED</div></div>' +
+            '<div class="stat-box"><div class="num">' + stats.newsletterTotal + '</div><div class="lbl">NL TOTAL</div></div>' +
+            '</div></div>';
+        var breakdown = stats.planBreakdown || {};
+        var planKeys = Object.keys(breakdown);
+        if (planKeys.length) {
+            html += '<div class="card"><h3>PLAN SUBSCRIPTION BREAKDOWN</h3>';
+            for (var i = 0; i < planKeys.length; i++) {
+                html += '<div class="sub-item"><span>' + planKeys[i] + '</span><span>' + breakdown[planKeys[i]] + '</span></div>';
+            }
+            html += '</div>';
+        }
+        area.innerHTML = html;
+    })
+    .catch(function() { area.innerHTML = '<div class="error-msg">Could not fetch stats.</div>'; });
+    fetch(API_BASE + '/newsletter/subscribers', { headers: { 'Authorization': 'Bearer ' + token } })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (!data.subscribers || !data.subscribers.length) return;
+        var html = '<div class="card"><h3>NEWSLETTER SUBSCRIBERS (' + data.total + ')</h3>';
+        for (var i = 0; i < data.subscribers.length; i++) {
+            var s = data.subscribers[i];
+            html += '<div class="sub-item"><span>' + s.email + '</span><span style="font-size: var(--text-micro);color: var(--text-secondary);">' + (s.subscribedAt || '').substring(0,10) + '</span></div>';
+        }
+        html += '</div>';
+        area.innerHTML += html;
+    })
+    .catch(function() {});
+}
+load();
+})();
+</script>
+</body>
+</html>

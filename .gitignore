@@ -1,1 +1,10 @@
 .vercel
+
+node_modules/
+scriptorium-api/node_modules/
+api/node_modules/
+
+data/*.json
+data/*.db
+data/*.db-wal
+data/*.db-shm

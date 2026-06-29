@@ -1,24 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SCRIPTORIUM | TYPOLOGY</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shared.css">
-<style>
-body{padding-left:80px}.card{text-align:center;max-width:480px;padding:60px 48px;background:rgba(10,10,10,0.9);border:1px solid rgba(212,175,55,0.85);border-radius:4px;box-shadow:0 0 80px rgba(0,0,0,0.95)}.icon{font-size: 3rem;color:#d4af37;opacity:0.4;margin-bottom:8px}h1{font-size: 0.66rem;letter-spacing:6px;color:#d4af37;margin:0 0 12px}.subtitle{font-family:'Cormorant Garamond',serif;font-size: 0.66rem;font-style:italic;color:rgba(255,255,255,0.45);margin:0 0 28px}.desc{font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color:rgba(255,255,255,0.45);margin:0 0 32px;line-height:1.6}a{display:inline-block;border:1px solid rgba(212,175,55,0.17);color:rgba(212,175,55,0.3);padding:10px 28px;text-decoration:none;font-size: 0.54rem;letter-spacing:3px;transition:all 0.3s;border-radius:3px}a:hover{border-color:#d4af37;color:#d4af37}
-</style>
-    <script src="assets/js/sidebar.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCRIPTORIUM | Typology</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; style-src-elem 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' unpkg.com cdn.jsdelivr.net; img-src 'self' data:; img-src-elem 'self' data:; connect-src 'self'">
+    <link rel="canonical" href="https://scriptorium-sandy.vercel.app/typology.html">
+    <meta name="description" content="Biblical typology — OT shadows and NT fulfillments. Tabernacle, sacrifices, feasts, and the divine economy of God's redemption.">
+    <meta property="og:title" content="SCRIPTORIUM | Typology — Shadows of Christ">
+    <meta property="og:description" content="Trace OT types to NT antitypes: tabernacle, sacrifices, feasts, and the divine economy woven through Scripture.">
+    <meta property="og:image" content="https://scriptorium-sandy.vercel.app/og-image.svg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://scriptorium-sandy.vercel.app/typology.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23050505'/%3E%3Ctext x='16' y='24' font-size='22' text-anchor='middle' fill='%23d4af37' font-family='serif'%3ES%3C/text%3E%3C/svg%3E">
+    <link href="assets/fonts/fonts.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/shared.css">
+    <link rel="stylesheet" href="assets/css/features.css">
+    <link rel="manifest" href="/manifest.json">
+    <script defer src="assets/audio/scriptorium-audio.js"></script>
+    <script defer src="assets/js/auth.js"></script>
+    <script defer src="assets/js/sidebar.js"></script>
+    <script defer src="assets/js/scriptorium-core.js"></script>
+    <script defer src="assets/js/typology-page.js"></script>
+    <style>
+        :root { --gold: #d4af37; --gold-subtle: rgba(212,175,55,0.85); --text-light: rgba(255,255,255,0.95); --text-dim: rgba(255,255,255,0.85); }
+        .ty-page { margin-left: var(--sidebar-w, 80px); min-height: 100vh; background: radial-gradient(circle at 50% 20%, #0e0c0b 0%, #030303 100%); padding: 60px 20px 80px; display: flex; flex-direction: column; align-items: center; }
+        .ty-header { text-align: center; margin-bottom: 50px; max-width: 720px; }
+        .ty-header h1 { font-size: 2.4rem; letter-spacing: 10px; color: var(--gold); margin: 0 0 12px; text-shadow: 0 0 30px rgba(212,175,55,0.1); }
+        .ty-header .subtitle { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-style: italic; color: var(--text-dim); line-height: 1.7; }
+        .ty-header .scripture-epigraph { font-family: 'Cormorant Garamond', serif; font-size: 0.9rem; font-style: italic; color: var(--gold-subtle); margin-top: 20px; padding: 12px 24px; border-left: 2px solid var(--gold-subtle); background: rgba(212,175,55,0.03); }
+        .ty-section { width: 100%; max-width: 960px; margin-bottom: 50px; }
+        .ty-section-title { font-family: 'Cinzel', serif; font-size: 1.1rem; letter-spacing: 6px; color: var(--gold); margin-bottom: 6px; padding-bottom: 8px; border-bottom: 1px solid rgba(212,175,55,0.1); }
+        .ty-section-desc { font-family: 'Cormorant Garamond', serif; font-size: 0.85rem; color: var(--text-dim); font-style: italic; margin-bottom: 20px; }
+        .ty-grid { display: flex; flex-direction: column; gap: 16px; }
+        .ty-card { display: flex; align-items: stretch; background: rgba(212,175,55,0.02); border: 1px solid rgba(212,175,55,0.08); border-radius: 6px; overflow: hidden; transition: border-color 0.3s, background 0.3s; }
+        .ty-card:hover { border-color: rgba(212,175,55,0.25); background: rgba(212,175,55,0.04); }
+        .ty-card .ty-ot { flex: 1; padding: 18px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border-right: 1px solid rgba(212,175,55,0.06); }
+        .ty-card .ty-ot .ty-label { font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 3px; color: rgba(212,175,55,0.3); margin-bottom: 6px; }
+        .ty-card .ty-ot .ty-name { font-family: 'Cinzel', serif; font-size: 0.9rem; letter-spacing: 2px; color: var(--text-light); }
+        .ty-card .ty-ot .ty-ref { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; color: var(--gold-subtle); margin-top: 4px; }
+        .ty-card .ty-arc { width: 80px; min-width: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--gold); font-size: 0.55rem; letter-spacing: 2px; font-family: 'Cinzel', serif; background: rgba(212,175,55,0.03); padding: 8px 0; gap: 4px; }
+        .ty-card .ty-arc .arc-arrow { font-size: 1.5rem; line-height: 1; }
+        .ty-card .ty-arc .arc-cat { opacity: 0.6; }
+        .ty-card .ty-nt { flex: 1; padding: 18px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .ty-card .ty-nt .ty-label { font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 3px; color: rgba(212,175,55,0.3); margin-bottom: 6px; }
+        .ty-card .ty-nt .ty-name { font-family: 'Cinzel', serif; font-size: 0.9rem; letter-spacing: 2px; color: var(--gold); }
+        .ty-card .ty-nt .ty-ref { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; color: var(--gold-subtle); margin-top: 4px; cursor: pointer; }
+        .ty-card .ty-nt .ty-ref:hover { text-decoration: underline; }
+        .ty-card .ty-exposition { width: 100%; padding: 12px 20px; border-top: 1px solid rgba(212,175,55,0.04); font-family: 'Cormorant Garamond', serif; font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); font-style: italic; }
+        @media (max-width: 700px) { .ty-card { flex-wrap: wrap; } .ty-card .ty-ot, .ty-card .ty-nt { flex: 1 1 40%; } .ty-card .ty-arc { width: 100%; min-width: unset; flex-direction: row; padding: 6px 0; order: -1; } .ty-card .ty-arc .arc-arrow { transform: rotate(90deg); } }
+    </style>
 </head>
 <body>
 <div id="sidebarContainer"></div>
-<div class="card">
-<div class="icon">&#10018;</div>
-<h1>TYPOLOGICAL THREADS</h1>
-<p class="subtitle">Shadows and fulfillment</p>
-<p class="desc">The great patterns of promise and fulfillment — from the Old to the New Covenant — are being woven together for your inspection.</p>
-<a href="scriptorium.html">&larr; RETURN TO THE THRESHOLD</a>
+<div class="ty-page">
+    <header class="ty-header">
+        <h1>TYPOLOGY</h1>
+        <p class="subtitle">The connective tissue between the Testaments — shadows cast backward by the coming Light.</p>
+        <p class="scripture-epigraph">"The law having a shadow of the good things to come, not the very image of the things." — Hebrews 10:1</p>
+    </header>
+
+    <section class="ty-section" id="section-tabernacle">
+        <div class="ty-section-title">THE TABERNACLE</div>
+        <p class="ty-section-desc">Every furnishing, every fabric, every measurement in the Tabernacle of Moses was a type of Christ and the age to come.</p>
+        <div class="ty-grid" id="tabernacleGrid"></div>
+    </section>
+
+    <section class="ty-section" id="section-feasts">
+        <div class="ty-section-title">THE FEASTS OF THE LORD</div>
+        <p class="ty-section-desc">The seven appointed feasts of Leviticus 23 form a prophetic calendar of redemption, from Passover to Tabernacles.</p>
+        <div class="ty-grid" id="feastsGrid"></div>
+    </section>
+
+    <section class="ty-section" id="section-sacrifices">
+        <div class="ty-section-title">THE OFFERINGS</div>
+        <p class="ty-section-desc">The five Levitical offerings described every dimension of Christ's person and work.</p>
+        <div class="ty-grid" id="offeringsGrid"></div>
+    </section>
+
+    <section class="ty-section" id="section-people">
+        <div class="ty-section-title">PERSONS &amp; EVENTS</div>
+        <p class="ty-section-desc">Key figures and historical events that prefigured Christ and the church.</p>
+        <div class="ty-grid" id="peopleGrid"></div>
+    </section>
+
+    <section class="ty-section" id="section-wilderness">
+        <div class="ty-section-title">THE WILDERNESS JOURNEY</div>
+        <p class="ty-section-desc">From Egypt to Canaan — the pattern of redemption, growth, and inheritance.</p>
+        <div class="ty-grid" id="wildernessGrid"></div>
+    </section>
 </div>
+
+
+<div id="narthex-transition-curtain" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:99999;pointer-events:none;opacity:0;transition:opacity 0.6s ease;"></div>
 </body>
 </html>

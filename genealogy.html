@@ -2,901 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta property="og:title" content="SCRIPTORIUM | Genealogy">
+    <meta name="description" content="Biblical genealogy from Adam to Christ — ancestral scroll tracing the messianic line through patriarchs, kings, and the silent years.">
+    <meta property="og:description" content="Scriptorium — a digital archive of biblical texts, maps, genealogies, and manuscript studies.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://scriptorium-sandy.vercel.app/genealogy.html">
+    <meta property="og:image" content="https://scriptorium-sandy.vercel.app/og-image.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCRIPTORIUM | Ancestral Scroll</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="assets/fonts/fonts.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/shared.css">
     <script src="assets/audio/scriptorium-audio.js" defer></script>
-    <style>
-        :root {
-            --obsidian: #050505;
-            --obsidian-2: #080808;
-            --museum-gold: #d4af37;
-            --museum-gold-dim: rgba(212, 175, 55, 0.6);
-            --museum-gold-faint: rgba(212, 175, 55, 0.12);
-            --museum-bronze: #7a5f1a;
-            --sidebar-w: 80px;
-            --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        *, *::before, *::after { box-sizing: border-box; }
-
-        body, html {
-            margin: 0; padding: 0;
-            background: var(--obsidian);
-            color: rgba(255,255,255,0.97);
-            font-family: 'Cinzel', serif;
-            animation: fadeInPage 1.8s var(--transition-smooth) both;
-        }
-
-        .sidebar-logo {
-            width: 100%; padding: 14px 0 12px;
-            display: flex; align-items: center; justify-content: center;
-            border-bottom: 1px solid rgba(212,175,55,0.1); flex-shrink: 0;
-        }
-
-        .sidebar-logo svg { width: 26px; height: 26px; opacity: 0.85; }
-
-        .streak-flame { margin: 8px 0; position: relative; }
-
-        .sidebar-nav {
-            flex: 1; display: flex; flex-direction: column;
-            align-items: center; padding: 8px 0; gap: 4px;
-        }
-
-        .nav-link {
-            display: flex; align-items: center; justify-content: center;
-            width: 50px; height: 50px;
-            color: rgba(255,255,255,0.5); text-decoration: none;
-            border: 1px solid transparent; border-radius: 6px;
-            font-size: 24px; transition: all 0.25s;
-        }
-        .nav-link:hover { color: var(--museum-gold); border-color: rgba(212,175,55,0.4); background: var(--museum-gold-faint); }
-        .nav-link.active { color: var(--museum-gold); border-color: var(--museum-gold); }
-
-        .sidebar-rank {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 8.4px; letter-spacing: 3px;
-            color: rgba(212,175,55,0.4); text-align: center;
-            border-top: 1px solid rgba(212,175,55,0.17); padding-top: 10px; width: 100%;
-        }
-
-        /* ═══════════════════════════════════════
-           GENEALOGY SCROLL
-        ═══════════════════════════════════════ */
-        .genealogy-scroll {
-            margin-left: var(--sidebar-w);
-            padding: 60px 20px 120px;
-            min-height: 100vh;
-            position: relative;
-            font-family: 'Cormorant Garamond', serif;
-        }
-
-        .scroll-header {
-            text-align: center;
-            padding: 40px 20px 20px;
-            max-width: 700px;
-            margin: 0 auto 60px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-        }
-
-        .scroll-header h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 2.64rem; letter-spacing: 14px;
-            color: var(--museum-gold);
-            margin: 0 0 16px;
-            text-shadow: 0 0 40px rgba(212,175,55,0.85);
-        }
-
-        .scroll-header .subtitle {
-            font-style: italic; font-size: 1.32rem;
-            color: rgba(255,255,255,0.98);
-            letter-spacing: 2px;
-        }
-
-        .filter-bar {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .filter-btn {
-            background: transparent;
-            border: 1px solid rgba(212,175,55,0.3);
-            color: var(--museum-gold-dim);
-            padding: 10px 28px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.84rem; letter-spacing: 4px;
-            cursor: pointer;
-            transition: all 0.4s;
-            border-radius: 4px;
-        }
-
-        .filter-btn.active {
-            background: rgba(212,175,55,0.1);
-            border-color: var(--museum-gold);
-            color: var(--museum-gold);
-            box-shadow: 0 0 30px rgba(212,175,55,0.1);
-        }
-
-        .filter-btn:hover {
-            border-color: var(--museum-gold);
-            color: var(--museum-gold);
-        }
-
-        /* LINEAGE SPINE */
-        .lineage-spine {
-            position: absolute;
-            left: 50%;
-            top: 0; bottom: 0;
-            width: 2px;
-            background: linear-gradient(to bottom,
-                transparent 0%,
-                rgba(212,175,55,0.08) 5%,
-                rgba(212,175,55,0.85) 20%,
-                rgba(212,175,55,0.85) 40%,
-                rgba(212,175,55,0.3) 60%,
-                rgba(212,175,55,0.85) 80%,
-                transparent 100%
-            );
-            z-index: 0;
-        }
-
-        .lineage-spine::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 50%;
-            transform: translateX(-50%);
-            width: 10px; height: 10px;
-            background: var(--museum-gold);
-            border-radius: 50%;
-            box-shadow: 0 0 20px var(--museum-gold);
-        }
-
-        .lineage-spine::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 50%;
-            transform: translateX(-50%);
-            width: 6px; height: 60px;
-            background: linear-gradient(to bottom, var(--museum-gold), transparent);
-        }
-
-        /* ERA SECTIONS */
-        .era-section {
-            position: relative;
-            z-index: 1;
-            margin-bottom: 20px;
-        }
-
-        .era-header {
-            text-align: center;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.66rem;
-            letter-spacing: 8px;
-            color: rgba(212,175,55,0.3);
-            padding: 60px 0 20px;
-            position: relative;
-        }
-
-        .era-header::before, .era-header::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 20%;
-            height: 1px;
-            background: linear-gradient(to left, transparent, rgba(212,175,55,0.1));
-        }
-        .era-header::before { left: 10%; }
-        .era-header::after { right: 10%; background: linear-gradient(to right, transparent, rgba(212,175,55,0.1)); }
-
-        /* GENEALOGY NODE */
-        .genealogy-node {
-            width: 420px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-            background: rgba(12, 12, 12, 0.95);
-            border: 1px solid rgba(212, 175, 55, 0.12);
-            padding: 24px 28px;
-            transition: all 0.5s var(--transition-smooth);
-            backdrop-filter: blur(4px);
-        }
-
-        .genealogy-node:hover {
-            background: rgba(18, 18, 18, 0.98);
-            border-color: rgba(212, 175, 55, 0.35);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 40px rgba(0,0,0,0.6);
-        }
-
-        .genealogy-node.messianic {
-            border-color: rgba(212, 175, 55, 0.3);
-            background: rgba(16, 14, 8, 0.95);
-        }
-
-        .genealogy-node.messianic:hover {
-            border-color: var(--museum-gold);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.08), 0 8px 40px rgba(0,0,0,0.6);
-        }
-
-        .genealogy-node { transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-
-        .messianic-view .genealogy-node:not(.messianic) {
-            opacity: 0.08;
-            filter: grayscale(1) blur(2px);
-            transform: scale(0.92);
-            pointer-events: none;
-        }
-
-        .messianic-view .genealogy-node.messianic {
-            border-color: var(--museum-gold);
-            box-shadow: 0 0 40px rgba(212, 175, 55, 0.3), 0 8px 40px rgba(0,0,0,0.6);
-            transform: scale(1.02);
-            z-index: 10;
-        }
-
-        .messianic-view .lineage-spine {
-            background: var(--museum-gold);
-            box-shadow: 0 0 15px var(--museum-gold);
-        }
-
-        /* LIFESPAN DECAY CHART */
-        .lifespan-chart {
-            max-width: 700px;
-            margin: 0 auto 50px;
-            padding: 20px 30px;
-            background: rgba(10,10,10,0.6);
-            border: 1px solid rgba(212,175,55,0.08);
-            border-radius: 4px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .lifespan-chart h4 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.54rem;
-            letter-spacing: 4px;
-            color: rgba(212,175,55,0.3);
-            margin: 0 0 16px;
-            text-align: center;
-        }
-
-        .chart-bars {
-            display: flex;
-            align-items: flex-end;
-            height: 100px;
-            gap: 3px;
-        }
-
-        .chart-bar {
-            flex: 1;
-            background: linear-gradient(to top, rgba(212,175,55,0.3), rgba(212,175,55,0.05));
-            border-radius: 2px 2px 0 0;
-            position: relative;
-            transition: height 1s ease;
-            min-width: 8px;
-        }
-
-        .chart-bar:hover {
-            background: linear-gradient(to top, var(--museum-gold-dim), rgba(212,175,55,0.1));
-        }
-
-        .chart-bar .bar-label {
-            position: absolute;
-            bottom: -18px;
-            left: 50%;
-            transform: translateX(-50%) rotate(-45deg);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.48rem;
-            color: rgba(255,255,255,0.2);
-            white-space: nowrap;
-            pointer-events: none;
-        }
-
-        .chart-bar .bar-value {
-            position: absolute;
-            top: -14px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.48rem;
-            color: rgba(212,175,55,0.2);
-        }
-
-        .node-content h3 {
-            font-family: 'Cinzel', serif;
-            font-size: 1.32rem;
-            letter-spacing: 6px;
-            margin: 0 0 6px;
-            color: #e0e0e0;
-            transition: transform 0.4s, opacity 0.3s;
-        }
-
-        .genealogy-node.messianic .node-content h3 {
-            color: var(--museum-gold);
-            text-shadow: 0 0 20px rgba(212,175,55,0.85);
-        }
-
-        /* Linguistic hover-to-reveal */
-        .name-container {
-            position: relative;
-            height: 36px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 6px;
-        }
-        .name-container .modern-name {
-            font-family: 'Cinzel', serif;
-            font-size: 1.32rem;
-            letter-spacing: 6px;
-            color: inherit;
-            transition: transform 0.4s, opacity 0.3s;
-        }
-        .genealogy-node.messianic .name-container .modern-name { color: var(--museum-gold); text-shadow: 0 0 20px rgba(212,175,55,0.85); }
-        .name-container .ancient-scripts {
-            position: absolute;
-            opacity: 0;
-            transform: translateY(10px);
-            display: flex;
-            gap: 14px;
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-            color: var(--museum-gold-dim);
-            font-size: 1.2rem;
-            pointer-events: none;
-        }
-        .name-container .ancient-scripts .lang-heb { font-family: 'Times New Roman', serif; color: #e0c88a; }
-        .name-container .ancient-scripts .lang-gez { font-family: 'Times New Roman', serif; color: #c9a033; }
-        .genealogy-node:hover .name-container .modern-name {
-            opacity: 0;
-            transform: translateY(-12px);
-        }
-        .genealogy-node:hover .name-container .ancient-scripts {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Messianic line connection glow */
-        .messianic-view .genealogy-node.messianic {
-            border-color: var(--museum-gold);
-            box-shadow: 0 0 25px rgba(212,175,55,0.3), 0 8px 40px rgba(0,0,0,0.6);
-            background: rgba(212,175,55,0.03);
-            z-index: 5;
-        }
-        .messianic-view .lineage-spine {
-            background: var(--museum-gold);
-            box-shadow: 0 0 15px var(--museum-gold);
-        }
-
-        .node-content .lifespan {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.66rem;
-            letter-spacing: 3px;
-            color: rgba(255,255,255,0.3);
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .node-content .node-detail {
-            font-size: 1.08rem;
-            color: rgba(255,255,255,0.5);
-            line-height: 1.6;
-            margin: 0 0 10px;
-            font-style: italic;
-        }
-
-        .node-content .node-meta {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.6rem;
-            letter-spacing: 2px;
-            color: rgba(255,255,255,0.2);
-        }
-
-        .node-content .node-ref {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.54rem;
-            letter-spacing: 1px;
-            color: rgba(212,175,55,0.3);
-            margin-top: 4px;
-        }
-
-        .node-content .tribal-seal {
-            display: inline-block;
-            font-size: 1.44rem;
-            margin-right: 8px;
-            opacity: 0.6;
-            vertical-align: middle;
-        }
-
-        /* LIFESPAN BAR */
-        .lifespan-bar {
-            width: 100%;
-            height: 3px;
-            background: rgba(255,255,255,0.05);
-            margin: 8px 0 10px;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .lifespan-bar .fill {
-            height: 100%;
-            border-radius: 2px;
-            transition: width 1s ease;
-        }
-
-        .lifespan-bar .fill.antediluvian { background: linear-gradient(to right, var(--museum-gold), #8b6914); width: 100%; }
-        .lifespan-bar .fill.patriarch { background: linear-gradient(to right, var(--museum-gold-dim), var(--museum-bronze)); width: 70%; }
-        .lifespan-bar .fill.standard { background: linear-gradient(to right, var(--museum-bronze), #4a3510); width: 30%; }
-        .lifespan-bar .fill.king { background: linear-gradient(to right, var(--museum-gold), var(--museum-gold-dim)); width: 50%; }
-
-        /* ARCHAEOLOGY BADGE */
-        .arch-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.66rem;
-            letter-spacing: 1px;
-            color: var(--museum-gold-dim);
-            margin-top: 12px;
-            padding: 6px 12px;
-            border: 1px solid rgba(212,175,55,0.17);
-            border-radius: 3px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .arch-badge:hover {
-            background: rgba(212,175,55,0.06);
-            border-color: rgba(212,175,55,0.3);
-            color: var(--museum-gold);
-        }
-
-        .arch-badge .icon { font-size: 0.96rem; }
-
-        /* MESSIANIC THREAD INDICATOR */
-        .messianic-thread {
-            position: absolute;
-            left: -12px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 6px;
-            height: 40px;
-            background: linear-gradient(to bottom, transparent, var(--museum-gold), transparent);
-            border-radius: 3px;
-            opacity: 0.4;
-        }
-
-        .genealogy-node:hover .messianic-thread {
-            opacity: 0.8;
-        }
-
-        /* LINE CONNECTOR */
-        .line-connector {
-            width: 80px;
-            height: 30px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .line-connector::before {
-            content: '';
-            width: 1px;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(212,175,55,0.08), rgba(212,175,55,0.85), rgba(212,175,55,0.08));
-        }
-
-        .line-connector .dot {
-            width: 4px;
-            height: 4px;
-            background: rgba(212,175,55,0.2);
-            border-radius: 50%;
-            position: absolute;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 900px) {
-            .genealogy-node { width: 90%; }
-            .scroll-header h1 { font-size: 1.68rem; letter-spacing: 8px; }
-        }
-
-        /* SCROLLBAR */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.2); border-radius: 2px; }
-
-        /* ═══════════════════════════════════════
-           TWELVE TRIBES GRID
-        ═══════════════════════════════════════ */
-        .tribes-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            max-width: 900px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-        }
-
-        .tribe-card {
-            background: rgba(12,12,12,0.9);
-            border: 1px solid rgba(212,175,55,0.08);
-            padding: 16px 12px;
-            text-align: center;
-            transition: all 0.4s;
-            cursor: default;
-        }
-
-        .tribe-card:hover {
-            border-color: rgba(212,175,55,0.85);
-            background: rgba(18,18,18,0.95);
-            transform: translateY(-2px);
-        }
-
-        .tribe-card .tribe-icon { font-size: 2.16rem; margin-bottom: 6px; opacity: 0.6; }
-        .tribe-card h4 { font-family:'Cinzel',serif; font-size: 0.66rem; letter-spacing:3px; color:#ccc; margin:0 0 4px; }
-        .tribe-card .tribe-color { display:inline-block; width:20px; height:3px; border-radius:2px; margin-bottom:6px; }
-        .tribe-card .tribe-blessing { font-family:'Cormorant Garamond',serif; font-size: 0.66rem; color:rgba(255,255,255,0.3); font-style:italic; margin:0 0 4px; }
-        .tribe-card .tribe-region { font-family:'Montserrat',sans-serif; font-size: 0.54rem; color:rgba(255,255,255,0.45); letter-spacing:1px; }
-
-        .tribe-card.shattered {
-            opacity: 0.1;
-            filter: grayscale(1);
-            pointer-events: none;
-            transition: all 1.5s ease;
-        }
-
-        /* ═══════════════════════════════════════
-           TRIBAL SIDEBAR MAP
-        ═══════════════════════════════════════ */
-        .tribal-sidebar {
-            position: fixed;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 140px;
-            background: rgba(8,8,8,0.92);
-            border: 1px solid rgba(212,175,55,0.17);
-            backdrop-filter: blur(8px);
-            padding: 16px;
-            z-index: 100;
-            display: none;
-            transition: all 0.5s;
-        }
-
-        .tribal-sidebar.visible { display: block; }
-
-        .tribal-sidebar .tribe-mini-map {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3px;
-            margin-bottom: 12px;
-        }
-
-        .tribal-sidebar .mini-territory {
-            height: 18px;
-            border-radius: 2px;
-            opacity: 0.15;
-            transition: all 0.4s;
-            border: 1px solid transparent;
-        }
-
-        .tribal-sidebar .mini-territory.active {
-            opacity: 0.8;
-            border-color: rgba(255,255,255,0.2);
-            box-shadow: 0 0 8px currentColor;
-        }
-
-        .tribal-sidebar .mini-territory.shattered {
-            opacity: 0.02;
-            transform: translateX(20px) rotate(5deg);
-            filter: blur(1px);
-            pointer-events: none;
-            transition: all 2s ease;
-        }
-
-        .tribal-sidebar .tribe-id-card { text-align: center; }
-        .tribal-sidebar .tribe-id-card .card-icon { font-size: 1.68rem; opacity:0.5; margin-bottom:4px; }
-        .tribal-sidebar .tribe-id-card .card-name { font-family:'Cinzel',serif; font-size: 0.66rem; letter-spacing:3px; color:var(--museum-gold-dim); margin:0 0 4px; }
-        .tribal-sidebar .tribe-id-card .card-blessing { font-family:'Cormorant Garamond',serif; font-size: 0.66rem; color:rgba(255,255,255,0.53); font-style:italic; margin:0; line-height:1.4; }
-        .tribal-sidebar .tribe-id-card .card-artifact { font-family:'Montserrat',sans-serif; font-size: 0.48rem; color:rgba(212,175,55,0.2); letter-spacing:1px; margin-top:6px; padding-top:6px; border-top:1px solid rgba(212,175,55,0.06); }
-
-        @media (max-width: 1100px) {
-            .tribal-sidebar { display: none !important; }
-            .tribes-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-        @media (max-width: 700px) {
-            .tribes-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        /* ═══════════════════════════════════════
-           LINGUISTIC LAB
-        ═══════════════════════════════════════ */
-        .linguistic-lab {
-            position: fixed;
-            bottom: 0;
-            left: var(--sidebar-w);
-            right: 0;
-            background: rgba(6,6,6,0.95);
-            border-top: 1px solid rgba(212,175,55,0.1);
-            backdrop-filter: blur(12px);
-            z-index: 500;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            padding: 10px 20px;
-            transform: translateY(100%);
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .linguistic-lab.visible { transform: translateY(0); }
-
-        .linguistic-lab .mirror-side {
-            text-align: center;
-            min-width: 100px;
-        }
-
-        .linguistic-lab .script-label {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.48rem;
-            letter-spacing: 2px;
-            color: rgba(255,255,255,0.2);
-            display: block;
-            margin-bottom: 2px;
-        }
-
-        .linguistic-lab .script-text {
-            font-size: 1.92rem;
-            margin: 0;
-            line-height: 1.3;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            cursor: pointer;
-        }
-
-        .linguistic-lab .script-text.morphing {
-            opacity: 0.3;
-            transform: scale(0.95);
-        }
-
-        .linguistic-lab .script-text.hebrew { color: #e0c88a; font-family: 'Times New Roman', serif; }
-        .linguistic-lab .script-text.geez { color: #c9a033; font-family: 'Times New Roman', serif; }
-
-        .linguistic-lab .mirror-divider {
-            width: 1px;
-            height: 40px;
-            background: rgba(212,175,55,0.1);
-        }
-
-        .linguistic-lab .etymology-footer {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.54rem;
-            color: rgba(255,255,255,0.2);
-            letter-spacing: 1px;
-            margin-left: 10px;
-            padding-left: 20px;
-            border-left: 1px solid rgba(212,175,55,0.06);
-        }
-
-        .linguistic-lab .etymology-footer strong {
-            color: rgba(212,175,55,0.4);
-        }
-
-        .linguistic-lab .linguistic-close {
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: 1px solid rgba(212,175,55,0.1);
-            color: rgba(255,255,255,0.2);
-            font-family: 'Cinzel', serif;
-            font-size: 0.48rem;
-            letter-spacing: 2px;
-            padding: 4px 10px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .linguistic-lab .linguistic-close:hover {
-            border-color: var(--museum-gold);
-            color: var(--museum-gold);
-        }
-
-        /* Hover-to-reveal linguistic badges on nodes */
-        .node-lang-badge {
-            display: inline-flex; align-items: center; gap: 6px;
-            font-family: 'Montserrat', sans-serif; font-size: 0.48rem;
-            letter-spacing: 1px; color: rgba(255,255,255,0.1);
-            margin-top: 6px; padding: 3px 8px;
-            border: 1px solid rgba(212,175,55,0.04);
-            border-radius: 3px; cursor: pointer;
-            transition: all 0.4s;
-        }
-        .node-lang-badge:hover {
-            color: var(--museum-gold-dim);
-            border-color: rgba(212,175,55,0.17);
-            background: rgba(212,175,55,0.03);
-        }
-        .node-lang-badge .lang-heb { font-family:'Times New Roman',serif; font-size: 0.66rem; color:rgba(212,175,55,0.2); transition:color 0.3s; }
-        .node-lang-badge:hover .lang-heb { color:rgba(212,175,55,0.5); }
-        .node-lang-badge .lang-gez { font-family:'Times New Roman',serif; font-size: 0.66rem; color:rgba(201,160,51,0.2); transition:color 0.3s; }
-        .node-lang-badge:hover .lang-gez { color:rgba(201,160,51,0.5); }
-
-        /* ═══ COLLAPSIBLE SECTIONS ═══ */
-        .era-collapse-toggle {
-            display: inline-block;
-            background: transparent; border: none;
-            color: rgba(212,175,55,0.2);
-            font-family: 'Cinzel', serif;
-            font-size: 0.6rem; letter-spacing: 3px;
-            cursor: pointer;
-            transition: color 0.3s;
-            padding: 0; margin-left: 10px;
-        }
-        .era-collapse-toggle:hover { color: var(--museum-gold-dim); }
-        .era-section.collapsed .era-content { max-height: 0; opacity: 0; overflow: hidden; padding: 0; }
-        .era-section .era-content { max-height: none; opacity: 1; transition: max-height 0.6s ease, opacity 0.5s ease, padding 0.4s ease; }
-
-        /* ═══ ERA JUMP NAV ═══ */
-        .era-jump-nav {
-            position: fixed;
-            right: 16px; top: 50%;
-            transform: translateY(-50%);
-            z-index: 200;
-            display: flex; flex-direction: column; gap: 6px;
-            background: rgba(8,8,8,0.85);
-            border: 1px solid rgba(212,175,55,0.1);
-            backdrop-filter: blur(8px);
-            padding: 10px 6px;
-            border-radius: 4px;
-        }
-        .era-jump-btn {
-            display: block;
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.48rem; letter-spacing: 2px;
-            color: rgba(255,255,255,0.15);
-            background: transparent; border: none;
-            padding: 6px 3px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .era-jump-btn:hover { color: var(--museum-gold-dim); }
-        .era-jump-btn.active { color: var(--museum-gold); }
-        @media (max-width: 900px) { .era-jump-nav { display: none; } }
-
-        /* ═══ TYPOLOGY OVERLAY ═══ */
-        .typology-badge {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.54rem; letter-spacing: 1px;
-            color: rgba(200,180,100,0.6);
-            background: rgba(212,175,55,0.04);
-            border: 1px solid rgba(212,175,55,0.12);
-            border-radius: 3px;
-            padding: 6px 10px;
-            margin-top: 8px;
-            display: none;
-            line-height: 1.5;
-        }
-        .typology-active .typology-badge { display: block; }
-        .typology-active .genealogy-node.typology-node {
-            border-color: rgba(212,175,55,0.35);
-            box-shadow: 0 0 12px rgba(212,175,55,0.06);
-        }
-
-        /* ═══ WOMEN SIDE-NODE ═══ */
-        .women-section {
-            max-width: 420px; margin: 0 auto;
-            position: relative; z-index: 2;
-        }
-        .women-card {
-            background: rgba(14,12,8,0.92);
-            border: 1px solid rgba(212,175,55,0.08);
-            border-left: 3px solid rgba(212,175,55,0.2);
-            padding: 14px 20px;
-            margin-bottom: 10px;
-            transition: all 0.4s;
-        }
-        .women-card:hover {
-            border-color: rgba(212,175,55,0.25);
-            background: rgba(18,16,12,0.95);
-        }
-        .women-card h4 {
-            font-family: 'Cinzel', serif;
-            font-size: 0.96rem; letter-spacing: 4px;
-            color: var(--museum-gold-dim);
-            margin: 0 0 4px;
-        }
-        .women-card .women-ref {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic; font-size: 1.08rem;
-            color: rgba(255,255,255,0.4);
-            margin: 0 0 4px;
-        }
-        .women-card .women-note {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.6rem; letter-spacing: 1px;
-            color: rgba(255,255,255,0.2);
-        }
-        .women-card .women-significance {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.66rem; font-style: italic;
-            color: rgba(212,175,55,0.3);
-            margin-top: 6px;
-        }
-
-        /* ═══ LUKE 3 DIVERGENT LINE ═══ */
-        .luke-line-toggle {
-            text-align: center;
-            margin: 20px auto;
-            max-width: 420px;
-        }
-        .luke-line-content { display: none; }
-        .luke-line-content.visible { display: block; }
-        .luke-node {
-            background: rgba(10,10,14,0.92);
-            border: 1px solid rgba(100,140,200,0.12);
-            border-left: 3px solid rgba(100,140,200,0.2);
-            padding: 14px 20px;
-            margin: 0 auto 6px;
-            max-width: 420px;
-            transition: all 0.4s;
-        }
-        .luke-node:hover {
-            border-color: rgba(100,140,200,0.3);
-            background: rgba(14,14,18,0.95);
-        }
-        .luke-node h5 {
-            font-family: 'Cinzel', serif;
-            font-size: 0.84rem; letter-spacing: 3px;
-            color: rgba(180,200,230,0.6);
-            margin: 0 0 4px;
-        }
-        .luke-node .luke-detail {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic; font-size: 0.6rem;
-            color: rgba(255,255,255,0.3);
-        }
-        .luke-node .luke-ref {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.48rem; letter-spacing: 1px;
-            color: rgba(255,255,255,0.12);
-            margin-top: 4px;
-        }
-        .luke-node.biological-line {
-            border-left-color: rgba(200,180,100,0.3);
-        }
-        .luke-node.biological-line h5 { color: var(--museum-gold-dim); }
-
-        /* Silent Years nodes — dashed borders, reduced opacity */
-        .genealogy-node.silent-node {
-            border-style: dashed;
-            border-color: rgba(212,175,55,0.08);
-            opacity: 0.75;
-        }
-        .genealogy-node.silent-node:hover {
-            border-color: rgba(212,175,55,0.2);
-            opacity: 0.95;
-        }
-
-        @media (max-width: 800px) {
-            .linguistic-lab { flex-wrap: wrap; gap: 8px; padding: 8px 12px; }
-            .linguistic-lab .script-text { font-size: 1.44rem; }
-            .linguistic-lab .etymology-footer { border-left: none; padding-left: 0; width: 100%; text-align: center; }
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/genealogy.css">
+    <script src="assets/js/auth.js"></script>
     <script src="assets/js/sidebar.js"></script>
 </head>
 <body>
-<script src="assets/js/scriptorium-core.js"></script>
-
 <div id="sidebarContainer"></div>
 
 <main class="genealogy-scroll">
@@ -914,8 +35,8 @@
     </div>
 
     <div class="filter-bar">
-        <button class="filter-btn" id="messianicToggle" onclick="toggleMessianicPath()">&#9812; REVEAL THE SEED</button>
-        <button class="filter-btn" id="typologyToggle" onclick="toggleTypology()" style="margin-left:10px;">&#128214; TYPOLOGY</button>
+        <button class="filter-btn" id="messianicToggle" data-action="toggleMessianicPath()">&#9812; REVEAL THE SEED</button>
+        <button class="filter-btn" id="typologyToggle" data-action="toggleTypology()" style="margin-left:10px;">&#128214; TYPOLOGY</button>
     </div>
 
     <!-- ════════════════════════════════
@@ -1019,8 +140,8 @@
                 <p class="node-detail">He walked with God and was not, for God took him. The only man to escape death before Christ.</p>
                 <div class="node-meta">GENESIS 5:21-24</div>
                 <div class="node-ref">NT References: Hebrews 11:5, Jude 14-15</div>
-                <div class="arch-badge" onclick="alert('1 Enoch fragments found at Qumran (4Q201-212) preserve this text in Aramaic.')"><span class="icon">&#128220;</span> 1 Enoch — Qumran Cave 4</div>
-                <div class="node-lang-badge" onclick="openLinguisticLab('ENOCH')"><span class="lang-heb">&#1495;&#1504;&#1493;&#1498;</span> / <span class="lang-gez">&#4640;&#4756;&#4653;&#4632;</span></div>
+                <div class="arch-badge" data-dossier-key="1 Enoch — Qumran Cave 4"><span class="icon">&#128220;</span> 1 Enoch — Qumran Cave 4</div>
+                <div class="node-lang-badge" data-action="openLinguisticLab('ENOCH')"><span class="lang-heb">&#1495;&#1504;&#1493;&#1498;</span> / <span class="lang-gez">&#4640;&#4756;&#4653;&#4632;</span></div>
             </div>
         </div>
 
@@ -1061,7 +182,7 @@
                 <p class="node-detail">Preserver of the seed through the deluge. The covenant of the rainbow was established through him.</p>
                 <div class="node-meta">GENESIS 6:9 — 9:29</div>
                 <div class="node-ref">NT References: Matthew 24:37, Hebrews 11:7, 1 Peter 3:20</div>
-                <div class="arch-badge" onclick="alert('The Gilgamesh Epic (Standard Babylonian Version, Tablet XI) preserves a flood narrative parallel to Genesis 6-9.')"><span class="icon">&#128220;</span> Gilgamesh Tablet XI (651 BC)</div>
+                <div class="arch-badge" data-dossier-key="Gilgamesh Tablet XI (651 BC)"><span class="icon">&#128220;</span> Gilgamesh Tablet XI (651 BC)</div>
             </div>
         </div>
     </div>
@@ -1191,7 +312,7 @@
                 <p class="node-detail">The covenant bearer. Justified by faith, he received the promise that all nations would be blessed through his seed.</p>
                 <div class="node-meta">GENESIS 12:1 — 25:8</div>
                 <div class="node-ref">NT References: Romans 4:1-25, Galatians 3:6-29, Hebrews 11:8-19 (mentioned 74 times)</div>
-                <div class="arch-badge" onclick="alert('The Covenant of the Pieces (Genesis 15) is one of the most archaeologically significant covenant ceremonies recorded.')"><span class="icon">&#128220;</span> Ancient Near Eastern Covenant Parallels</div>
+                <div class="arch-badge" data-dossier-key="Ancient Near Eastern Covenant Parallels"><span class="icon">&#128220;</span> Ancient Near Eastern Covenant Parallels</div>
             </div>
         </div>
 
@@ -1234,7 +355,7 @@
                 <p class="node-detail">The tribe from which the Messiah would come. "The scepter shall not depart from Judah."</p>
                 <div class="node-meta">GENESIS 49:8-12</div>
                 <div class="node-ref">NT References: Matthew 1:2-3, Hebrews 7:14, Revelation 5:5</div>
-                <div class="arch-badge" onclick="alert('The Tel Dan Stele (9th c. BC) mentions the \"House of David\" — the earliest extra-biblical reference to the Davidic dynasty.')"><span class="icon">&#128220;</span> Tel Dan Stele — House of David</div>
+                <div class="arch-badge" data-dossier-key="Tel Dan Stele — House of David"><span class="icon">&#128220;</span> Tel Dan Stele — House of David</div>
             </div>
         </div>
     </div>
@@ -1456,8 +577,8 @@
                 <p class="node-detail">The man after God's own heart. The covenant of an eternal throne was established with him.</p>
                 <div class="node-meta">1 SAMUEL 16:1 — 1 KINGS 2:11</div>
                 <div class="node-ref">NT References: Matthew 1:1, 1:6, Acts 2:29-30, Romans 1:3</div>
-                <div class="arch-badge" onclick="alert('The Tel Dan Stele (9th c. BC) mentions the \"House of David\" — the earliest extra-biblical reference to King David and his dynasty.')"><span class="icon">&#128220;</span> Tel Dan Stele (c. 840 BC)</div>
-                <div class="arch-badge" onclick="alert('The Mesha Stele (Moabite Stone, c. 840 BC) also references the House of David.')"><span class="icon">&#128220;</span> Mesha Stele</div>
+                <div class="arch-badge" data-dossier-key="Tel Dan Stele (c. 840 BC)"><span class="icon">&#128220;</span> Tel Dan Stele (c. 840 BC)</div>
+                <div class="arch-badge" data-dossier-key="Mesha Stele"><span class="icon">&#128220;</span> Mesha Stele</div>
             </div>
         </div>
 
@@ -1472,7 +593,7 @@
                 <p class="node-detail">Built the Temple. His wisdom was legendary, yet his heart turned away in the end.</p>
                 <div class="node-meta">1 KINGS 1:28 — 11:43</div>
                 <div class="node-ref">NT References: Matthew 1:6-7, 12:42</div>
-                <div class="arch-badge" onclick="alert('A seal bearing the name \"Solomon\" was discovered in Jerusalem, though its authenticity is debated.')"><span class="icon">&#128220;</span> Solomon's Seal (Bullae)</div>
+                <div class="arch-badge" data-dossier-key="Solomon's Seal (Bullae)"><span class="icon">&#128220;</span> Solomon's Seal (Bullae)</div>
             </div>
         </div>
     </div>
@@ -1598,7 +719,7 @@
                 <p class="node-detail">A powerful king struck with leprosy for pride. Isaiah saw the Lord in the year he died.</p>
                 <div class="node-meta">2 KINGS 14:21-22, 15:1-7</div>
                 <div class="node-ref">NT References: Matthew 1:8-9</div>
-                <div class="arch-badge" onclick="alert('A seal impression (bullae) of Uzziah was found in Jerusalem, bearing the inscription \"Belonging to Uzziah son of Joram, King of Judah.\"')"><span class="icon">&#128220;</span> Uzziah Bullae</div>
+                <div class="arch-badge" data-dossier-key="Uzziah Bullae"><span class="icon">&#128220;</span> Uzziah Bullae</div>
             </div>
         </div>
 
@@ -1640,9 +761,9 @@
                 <p class="node-detail">Trusted in the LORD above all kings. Hezekiah's tunnel, the Passover restoration, and the defeat of Sennacherib.</p>
                 <div class="node-meta">2 KINGS 18:1 — 20:21</div>
                 <div class="node-ref">NT References: Matthew 1:9-10</div>
-                <div class="arch-badge" onclick="alert('The Bulla of Hezekiah (his personal seal) was discovered in Jerusalem, reading \"Belonging to Hezekiah, son of Ahaz, King of Judah.\"')"><span class="icon">&#128220;</span> Hezekiah's Bulla</div>
-                <div class="arch-badge" onclick="alert('The Siloam Tunnel Inscription commemorates the construction of Hezekiah\'s tunnel (2 Kings 20:20).')"><span class="icon">&#128220;</span> Siloam Inscription (c. 701 BC)</div>
-                <div class="arch-badge" onclick="alert('The Taylor Prism (Sennacherib\'s Annals) records the Assyrian siege of Jerusalem during Hezekiah\'s reign.')"><span class="icon">&#128220;</span> Taylor Prism (c. 691 BC)</div>
+                <div class="arch-badge" data-dossier-key="Hezekiah's Bulla"><span class="icon">&#128220;</span> Hezekiah's Bulla</div>
+                <div class="arch-badge" data-dossier-key="Siloam Inscription (c. 701 BC)"><span class="icon">&#128220;</span> Siloam Inscription (c. 701 BC)</div>
+                <div class="arch-badge" data-dossier-key="Taylor Prism (c. 691 BC)"><span class="icon">&#128220;</span> Taylor Prism (c. 691 BC)</div>
             </div>
         </div>
 
@@ -1684,7 +805,7 @@
                 <p class="node-detail">Found the Book of the Law. The greatest Passover in Israel's history. His reforms delayed judgment.</p>
                 <div class="node-meta">2 KINGS 22:1 — 23:30</div>
                 <div class="node-ref">NT References: Matthew 1:10-11</div>
-                <div class="arch-badge" onclick="alert('The Book of the Law discovered during Josiah\'s reign (2 Kings 22) is widely identified with the core of Deuteronomy.')"><span class="icon">&#128220;</span> The Temple Scroll Discovery</div>
+                <div class="arch-badge" data-dossier-key="The Temple Scroll Discovery"><span class="icon">&#128220;</span> The Temple Scroll Discovery</div>
             </div>
         </div>
     </div>
@@ -1704,7 +825,7 @@
                 <p class="node-detail">The king exiled to Babylon. The curse upon him (Jeremiah 22:30) was overcome through Joseph's legal lineage.</p>
                 <div class="node-meta">2 KINGS 24:8-17</div>
                 <div class="node-ref">NT References: Matthew 1:11-12</div>
-                <div class="arch-badge" onclick="alert('Babylonian ration tablets mention Jehoiachin by name, confirming his exile and provision in Babylon.')"><span class="icon">&#128220;</span> Jehoiachin's Ration Tablets (c. 592 BC)</div>
+                <div class="arch-badge" data-dossier-key="Jehoiachin's Ration Tablets (c. 592 BC)"><span class="icon">&#128220;</span> Jehoiachin's Ration Tablets (c. 592 BC)</div>
             </div>
         </div>
 
@@ -1730,7 +851,7 @@
                 <p class="node-detail">Led the first return from exile. Rebuilt the Temple. A type of the Messianic restorer.</p>
                 <div class="node-meta">EZRA 2:2, HAGGAI 2:23</div>
                 <div class="node-ref">NT References: Matthew 1:12-13, Luke 3:27</div>
-                <div class="arch-badge" onclick="alert('The Cyrus Cylinder (c. 539 BC) records the Persian decree allowing the exiles to return and rebuild the Temple.')"><span class="icon">&#128220;</span> Cyrus Cylinder</div>
+                <div class="arch-badge" data-dossier-key="Cyrus Cylinder"><span class="icon">&#128220;</span> Cyrus Cylinder</div>
             </div>
         </div>
     </div>
@@ -1844,7 +965,7 @@
                 <span class="lifespan">c. 1st c. BC — The Legal Father</span>
                 <p class="node-detail">Father of Joseph, husband of Mary. Through him the legal throne-right passes to Jesus, bypassing the Jeconiah curse via this line.</p>
                 <div class="node-meta">MATTHEW 1:16</div>
-                <div class="arch-badge" onclick="alert('The Jeconiah Curse (Jeremiah 22:30) barred any descendant of Jeconiah from sitting on David\'s throne. Joseph\'s legal lineage through Solomon faced this curse. The virgin birth through Mary (descended from Nathan, not Solomon) bypasses the curse while Joseph\'s legal paternity preserves the throne-right.')"><span class="icon">&#9878;</span> The Jeconiah Curse Bypass</div>
+                <div class="arch-badge" data-dossier-key="The Jeconiah Curse Bypass"><span class="icon">&#9878;</span> The Jeconiah Curse Bypass</div>
             </div>
         </div>
 
@@ -1931,10 +1052,10 @@
          LUKE 3 DIVERGENT LINE (Nathan → Heli → Mary)
     ════════════════════════════════ -->
     <div class="luke-line-toggle">
-        <button class="filter-btn" id="lukeLineToggle" onclick="toggleLukeLine()">&#128214; REVEAL LUKE 3 — BIOLOGICAL LINE</button>
+        <button class="filter-btn" id="lukeLineToggle" data-action="toggleLukeLine()">&#128214; REVEAL LUKE 3 — BIOLOGICAL LINE</button>
     </div>
     <div class="luke-line-content" id="lukeLineContent">
-        <p style="text-align:center;font-family:'Montserrat',sans-serif;font-size: 0.54rem;letter-spacing:2px;color:rgba(100,140,200,0.3);margin: 0 auto 20px;max-width:500px;line-height:1.6;">
+        <p style="text-align:center;font-family:'Montserrat',sans-serif;font-size: var(--text-micro);letter-spacing:2px;color:rgba(100,140,200,0.3);margin: 0 auto 20px;max-width:500px;line-height:1.6;">
             Matthew's genealogy traces the <strong style="color:rgba(212,175,55,0.4);">legal</strong> throne-right through Solomon.<br>
             Luke's genealogy traces the <strong style="color:rgba(180,200,230,0.4);">biological</strong> descent through Nathan, son of David.
         </p>
@@ -2140,10 +1261,10 @@
          70 GENERATIONS FROM LUKE 3 (Adam → Jesus)
     ════════════════════════════════ -->
     <div class="luke-line-toggle" style="margin-top:30px;">
-        <button class="filter-btn" id="seventyToggle" onclick="toggleSeventyGenerations()">&#128214; REVEAL 70 GENERATIONS — LUKE 3:23-38</button>
+        <button class="filter-btn" id="seventyToggle" data-action="toggleSeventyGenerations()">&#128214; REVEAL 70 GENERATIONS — LUKE 3:23-38</button>
     </div>
     <div class="luke-line-content" id="seventyLineContent">
-        <p style="text-align:center;font-family:'Montserrat',sans-serif;font-size: 0.54rem;letter-spacing:2px;color:rgba(100,140,200,0.3);margin: 0 auto 20px;max-width:500px;line-height:1.6;">
+        <p style="text-align:center;font-family:'Montserrat',sans-serif;font-size: var(--text-micro);letter-spacing:2px;color:rgba(100,140,200,0.3);margin: 0 auto 20px;max-width:500px;line-height:1.6;">
             Luke traces Jesus' lineage all the way back to Adam — 77 generations (11 × 7), the number of completion.<br>
             Where Luke diverges from Matthew, the names are shown in <span style="color:rgba(100,140,200,0.4);">blue</span>.
         </p>
@@ -2189,14 +1310,196 @@
         <div class="luke-node biological-line"><h5>DAVID</h5><div class="luke-detail">The convergence point</div><div class="luke-ref">Luke 3:31</div></div>
     </div>
     <div style="text-align:center;padding:80px 20px 40px;position:relative;z-index:2;">
-        <div style="font-family:'Montserrat',sans-serif;font-size: 0.54rem;letter-spacing:6px;color:rgba(212,175,55,0.85);margin-bottom:20px;">THE THREAD CONTINUES</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size: 0.66rem;color:rgba(255,255,255,0.2);">
+        <div style="font-family:'Montserrat',sans-serif;font-size: var(--text-micro);letter-spacing:6px;color:rgba(212,175,55,0.85);margin-bottom:20px;">THE THREAD CONTINUES</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size: 0.66rem;color:var(--text-secondary);">
             "The book of the genealogy of Jesus Christ, the son of David, the son of Abraham."
         </div>
-        <div style="font-family:'Montserrat',sans-serif;font-size: 0.66rem;color:rgba(255,255,255,0.1);margin-top:12px;letter-spacing:3px;">MATTHEW 1:1</div>
+        <div style="font-family:'Montserrat',sans-serif;font-size: 0.66rem;color:var(--text-secondary);margin-top:12px;letter-spacing:3px;">MATTHEW 1:1</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         ERA VIII: THE SOLOMONIC DYNASTY OF ETHIOPIA
+         Post-biblical thread from Menelik I to Haile Selassie I
+         Connects the Ancestral Scroll to the Tewahedo Archive
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="era-section" data-era="solomonic">
+        <div class="era-header" style="border-bottom-color:rgba(139,0,0,0.5);">
+            <span style="color:rgba(212,175,55,0.15);font-family:'Montserrat',sans-serif;font-size:var(--text-micro);letter-spacing:6px;">ERA VIII</span>
+            <span>THE SOLOMONIC DYNASTY — ETHIOPIA</span>
+            <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.66rem;color:var(--text-secondary);">
+                "The kings of Ethiopia shall bear the title 'Lion of the Tribe of Judah.'" — Kebra Nagast
+            </span>
+        </div>
+        <div style="text-align:center;padding:10px 20px 0;font-family:'Cormorant Garamond',serif;font-size:0.66rem;color:var(--text-secondary);font-style:italic;max-width:500px;margin:0 auto;">
+            After the resurrection, the Davidic covenant extended beyond Judah into Ethiopia. Per Ethiopian tradition, the Solomonic dynasty ruled for nearly 3,000 years — the longest continuous royal line in history — until 1974.
+            <span style="display:block;margin-top:8px;font-size:0.55rem;letter-spacing:2px;color:rgba(212,175,55,0.25);">
+                &#128214; This branch links the Ancestral Scroll to the <a href="ethiopian-canon.html" style="color:var(--museum-gold);text-decoration:none;border-bottom:1px solid rgba(212,175,55,0.2);">Tewahedo Archive</a>
+            </span>
+        </div>
+
+        <!-- Menelik I -->
+        <div class="genealogy-node" id="node-menelik-i">
+            <div class="messianic-thread" style="background:linear-gradient(to bottom,var(--blood-red),rgba(139,0,0,0.3));"></div>
+            <div class="node-content">
+                <h3>MENELIK I</h3>
+                <span class="lifespan">c. 10th Century BC — Ebna La-Hakim</span>
+                <div class="lifespan-bar"><div class="fill king" style="width:40%;background:var(--blood-red);"></div></div>
+                <p class="node-detail">Son of King Solomon of Israel and the Queen of Sheba (Makeda). According to the <strong>Kebra Nagast</strong>, Menelik journeyed to Jerusalem as a young man, was recognized by Solomon, and later returned to Ethiopia bearing the Ark of the Covenant. He founded the Solomonic dynasty that would rule Ethiopia for three millennia.</p>
+                <div class="node-meta">KEBRA NAGAST — Chapters 29–64</div>
+                <div class="node-ref">&#128214; Cross-reference: <span style="color:var(--museum-gold);">1 Kings 10:1-13</span> (Queen of Sheba), &#128214; <a href="ethiopian-canon.html" style="color:var(--text-gold-label);">Tewahedo Archive</a></div>
+                <div class="arch-badge" data-dossier-key="Kebra Nagast — The Glory of Kings">&#128220; Kebra Nagast</div>
+                <div class="node-lang-badge" data-action="openLinguisticLab('MENELIK I')"><span class="lang-heb">&#1502;&#1456;&#1504;&#1462;&#1500;&#1462;&#1498;&#1473;</span> / <span class="lang-gez">&#4778;&#4763;&#4768;&#4716;&#4701;</span></div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot" style="background:var(--blood-red);"></div></div>
+
+        <!-- Ezana of Axum -->
+        <div class="genealogy-node" id="node-ezana">
+            <div class="node-content">
+                <h3>EZANA OF AXUM</h3>
+                <span class="lifespan">c. 320–360 AD — Emperor of Axum</span>
+                <div class="lifespan-bar"><div class="fill king" style="width:50%;background:linear-gradient(to right,#8b4513,#c0392b);"></div></div>
+                <p class="node-detail">The first Christian emperor of the Axumite Kingdom, converted under the teaching of Frumentius (Abba Selama). Ezana made Christianity the state religion of Ethiopia — one of the first nations to do so. His trilingual inscriptions (Ge'ez, Sabaean, Greek) parallel the multicultural character of the Solomonic covenant reaching the nations.</p>
+                <div class="node-meta">EZANA INSCRIPTIONS — Monumentum Adulitanum, 4th Century AD</div>
+                <div class="node-ref">&#128214; Cross-reference: Rufinus, <span style="font-style:italic;">Church History</span> 10.9–10</div>
+                <div class="arch-badge" data-dossier-key="Ezana Inscriptions">&#127963; Axum Obelisks</div>
+                <div class="node-lang-badge" data-action="openLinguisticLab('EZANA')"><span class="lang-heb">&#1488;&#1462;&#1494;&#1464;&#1504;&#1464;&#1492;</span> / <span class="lang-gez">&#5332;&#5322;&#4763;&#4747;</span></div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot" style="background:#8b4513;"></div></div>
+
+        <!-- Gebre Meskel -->
+        <div class="genealogy-node" id="node-gebre-meskel">
+            <div class="node-content">
+                <h3>GEBRE MESKEL</h3>
+                <span class="lifespan">c. 6th Century AD — Emperor of Axum</span>
+                <div class="lifespan-bar"><div class="fill king" style="width:45%;background:linear-gradient(to right,#8b0000,#5a0000);"></div></div>
+                <p class="node-detail">Son of Emperor Kaleb. According to tradition, Gebre Meskel ("Servant of the Cross") built several of Ethiopia's most ancient churches. His reign saw the consolidation of Christianity in the highlands and the translation of Scripture into Ge'ez — the language that would preserve uniquely Ethiopian biblical traditions.</p>
+                <div class="node-meta">ETHIOPIAN ORTHODOX TRADITION — 6th Century AD</div>
+                <div class="node-ref">&#128214; Cross-reference: <a href="ethiopian-canon.html" style="color:var(--text-gold-label);">Tewahedo Archive</a> — Ge'ez biblical manuscripts</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <!-- Lalibela -->
+        <div class="genealogy-node" id="node-lalibela">
+            <div class="node-content">
+                <h3>LALIBELA</h3>
+                <span class="lifespan">c. 1181–1221 AD — Emperor of the Zagwe Dynasty</span>
+                <div class="lifespan-bar"><div class="fill king" style="width:55%;background:linear-gradient(to right,#b8860b,#8b4513);"></div></div>
+                <p class="node-detail">Emperor of the Zagwe dynasty, traditionally recognized as a Solomonic heir through a female line. Lalibela is renowned for commissioning the eleven rock-hewn churches of Lalibela — a "New Jerusalem" carved from living stone. These churches symbolize the earthly Jerusalem and prefigure the heavenly, continuing the typological thread that began in the Tabernacle.</p>
+                <div class="node-meta">LALIBELA CHURCHES — UNESCO World Heritage Site, 12th–13th Century AD</div>
+                <div class="node-ref">&#128214; Cross-reference: <a href="typology.html" style="color:var(--text-gold-label);">Typology</a> — The earthly sanctuary as a pattern of the heavenly</div>
+                <div class="arch-badge" data-dossier-key="Lalibela Rock-Hewn Churches">&#127963; Rock-Hewn Churches</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <!-- Yekuno Amlak -->
+        <div class="genealogy-node" id="node-yekuno-amlak">
+            <div class="node-content">
+                <h3>YEKUNO AMLAK</h3>
+                <span class="lifespan">c. 1270–1285 AD — Emperor of Ethiopia</span>
+                <div class="lifespan-bar"><div class="fill king" style="width:40%;background:linear-gradient(to right,#d4af37,#8b0000);"></div></div>
+                <p class="node-detail">Claiming direct descent from Solomon through the male line, Yekuno Amlak overthrew the Zagwe dynasty and restored the Solomonic dynasty to the Ethiopian throne. His reign marked the beginning of the Solomonic Restoration, a period in which the Kebra Nagast was likely compiled to legitimize and celebrate the dynasty's divine mandate.</p>
+                <div class="node-meta">SOLOMONIC RESTORATION — 1270 AD</div>
+                <div class="node-ref">&#128214; Cross-reference: Kebra Nagast, Ethiopian Royal Chronicles</div>
+                <div class="arch-badge" data-dossier-key="Kebra Nagast — The Glory of Kings">&#128220; Kebra Nagast</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot" style="background:var(--blood-red);"></div></div>
+
+        <!-- Zara Yacob -->
+        <div class="genealogy-node" id="node-zara-yacob">
+            <div class="node-content">
+                <h3>ZARA YACOB</h3>
+                <span class="lifespan">c. 1434–1468 AD — Emperor of Ethiopia</span>
+                <div class="lifespan-bar"><div class="fill king" style="width:60%;background:linear-gradient(to right,#d4af37,#8b4513);"></div></div>
+                <p class="node-detail">One of Ethiopia's greatest emperors. Zara Yacob ("Seed of Jacob") was a religious reformer who centralized the Church, translated Scripture into Ge'ez, and elevated the veneration of the Ark of the Covenant. He composed theological works including the <em>Matshafa Berhan</em> (Book of Light), defending the Orthodox faith against both Islamic and Latin influences.</p>
+                <div class="node-meta">ETHIOPIAN RENAISSANCE — 15th Century AD</div>
+                <div class="node-ref">&#128214; Cross-reference: <a href="ethiopian-canon.html" style="color:var(--text-gold-label);">Tewahedo Archive</a> — Ge'ez manuscripts of his reign</div>
+                <div class="arch-badge" data-dossier-key="Matshafa Berhan — Book of Light">&#128220; Book of Light</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <!-- Fasilides -->
+        <div class="genealogy-node" id="node-fasilides">
+            <div class="node-content">
+                <h3>FASILIDES</h3>
+                <span class="lifespan">c. 1632–1667 AD — Emperor of Ethiopia</span>
+                <div class="lifespan-bar"><div class="fill king" style="width:50%;background:linear-gradient(to right,#b8860b,#654321);"></div></div>
+                <p class="node-detail">Emperor who established Gondar as the capital of Ethiopia and built its famous castle complex. Fasilides expelled the Jesuits and restored Orthodox Christianity as the sole state religion. The Fasil Ghebbi castle-palace complex stands as a symbol of Solomonic imperial power, with each subsequent emperor adding to the royal compound.</p>
+                <div class="node-meta">GONDARINE PERIOD — 17th Century AD</div>
+                <div class="node-ref">&#128214; Cross-reference: Fasil Ghebbi, UNESCO World Heritage Site</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot" style="background:#654321;"></div></div>
+
+        <!-- Tewodros II -->
+        <div class="genealogy-node" id="node-tewodros">
+            <div class="node-content">
+                <h3>TEWODROS II</h3>
+                <span class="lifespan">c. 1855–1868 AD — Emperor of Ethiopia</span>
+                <div class="lifespan-bar"><div class="fill king" style="width:35%;background:linear-gradient(to right,#8b0000,#3a0000);"></div></div>
+                <p class="node-detail">The last Solomonic emperor of the medieval direct line. Tewodros II sought to reunify and modernize Ethiopia. His tragic end — taking his own life at the Battle of Magdala rather than being captured by British forces — marked the end of an era. Yet the Solomonic claim continued through a lateral branch, sustaining the dynastic identity.</p>
+                <div class="node-meta">MODERNIZATION ERA — 19th Century AD</div>
+                <div class="node-ref">&#128214; Cross-reference: British Museum — Magdala Treasures</div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot"></div></div>
+
+        <!-- Menelik II -->
+        <div class="genealogy-node" id="node-menelik-ii">
+            <div class="node-content">
+                <h3>MENELIK II</h3>
+                <span class="lifespan">c. 1889–1913 AD — Emperor of Ethiopia</span>
+                <div class="lifespan-bar"><div class="fill king" style="width:65%;background:linear-gradient(to right,#d4af37,#8b0000,#d4af37);"></div></div>
+                <p class="node-detail">Proclaimed himself of Solomonic descent through a lateral line. Menelik II is celebrated for the <em>Battle of Adwa</em> (1896), where Ethiopian forces decisively defeated Italian colonialism — the first African victory over a European colonial power. He modernized Ethiopia, established Addis Ababa as the capital, and introduced the first telegraph, railway, and postal system.</p>
+                <div class="node-meta">BATTLE OF ADWA — 1 March 1896</div>
+                <div class="node-ref">&#128214; Cross-reference: &#128214; See <a href="MAP.html?place=Adwa" style="color:var(--text-gold-label);">Adwa on the Navigator</a></div>
+            </div>
+        </div>
+
+        <div class="line-connector"><div class="dot" style="background:var(--museum-gold);"></div></div>
+
+        <!-- Haile Selassie I -->
+        <div class="genealogy-node" id="node-haile-selassie">
+            <div class="messianic-thread" style="background:linear-gradient(to bottom,var(--museum-gold),rgba(212,175,55,0.15));"></div>
+            <div class="node-content">
+                <h3>HAILE SELASSIE I</h3>
+                <span class="lifespan" style="color:var(--museum-gold);">c. 1930–1974 AD — The Last Solomonic Emperor</span>
+                <div class="lifespan-bar"><div class="fill king" style="width:100%;background:linear-gradient(to right,var(--blood-red),var(--museum-gold),#d4af37);"></div></div>
+                <p class="node-detail" style="color:rgba(212,175,55,0.4);">The 225th and final Emperor of the Solomonic dynasty. Haile Selassie I ("Power of the Trinity") was a constitutional monarch, a founding figure of the Organization of African Unity, and a symbol of African independence. His full imperial title — <em>"Conquering Lion of the Tribe of Judah, King of Kings of Ethiopia, Elect of God"</em> — explicitly invoked the Davidic covenant. His overthrow in 1974 ended the world's longest continuously reigning dynasty.</p>
+                <div class="node-meta">SOLOMONIC DYNASTY — c. 950 BC – 1974 AD</div>
+                <div class="node-ref" style="color:rgba(212,175,55,0.3);">&#128214; Cross-reference: Kebra Nagast, Ethiopian Constitution of 1931, OAU Charter 1963</div>
+                <div class="arch-badge" data-dossier-key="Kebra Nagast — The Glory of Kings">&#128220; The Solomonic Legacy</div>
+            </div>
+        </div>
+
+        <div style="text-align:center;padding:40px 20px;position:relative;z-index:2;">
+            <div style="font-family:'Montserrat',sans-serif;font-size:var(--text-micro);letter-spacing:6px;color:rgba(212,175,55,0.5);margin-bottom:10px;">&#9774; "LION OF THE TRIBE OF JUDAH"</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.66rem;color:var(--text-secondary);max-width:500px;margin:0 auto;line-height:1.7;">
+                From Solomon to Haile Selassie — the Davidic covenant extended to the ends of the earth.<br>
+                This thread is the bridge between the <a href="index.html" style="color:var(--museum-gold);text-decoration:none;border-bottom:1px solid rgba(212,175,55,0.2);">Ancestral Scroll</a> and the <a href="ethiopian-canon.html" style="color:var(--museum-gold);text-decoration:none;border-bottom:1px solid rgba(212,175,55,0.2);">Tewahedo Archive</a>.
+            </div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:0.55rem;color:var(--text-secondary);margin-top:12px;letter-spacing:3px;">
+                TRADITION BASED ON THE KEBRA NAGAST — APOCRYPHAL, NOT CANONICAL SCRIPTURE
+            </div>
+        </div>
     </div>
 
 </main>
+
+<script src="assets/js/scriptorium-core.js"></script>
 
 <!-- TRIBAL SIDEBAR MAP -->
 <div id="tribalSidebar" class="tribal-sidebar">
@@ -2237,466 +1540,63 @@
         <strong>ROOT MEANING:</strong> <span id="rootMeaning">Of the ground</span>
         &nbsp;&bull;&nbsp; <span id="nameLabel">ADAM</span>
     </div>
-    <button class="linguistic-close" onclick="document.getElementById('linguisticLab').classList.remove('visible')">CLOSE</button>
+    <button class="linguistic-close" data-action="document.getElementById('linguisticLab').classList.remove('visible')">CLOSE</button>
 </div>
 
 <script>
     (function() {
-        var saved = JSON.parse(localStorage.getItem('scribeData') || '{}');
         var now = new Date();
         var today = now.toDateString();
-        if (saved.lastVisit !== today) {
-            if (new Date(saved.lastVisit).getTime() === now.getTime() - 86400000 || !saved.lastVisit) {
-                saved.streak = (saved.streak || 0) + 1;
-            } else if (saved.lastVisit) {
-                saved.streak = 1;
-            }
-            saved.lastVisit = today;
-            localStorage.setItem('scribeData', JSON.stringify(saved));
-        }
-})();
-</script>
-
-<script>
-const TRIBAL_INTEL = {
-    'Reuben': { icon: '&#128014;', blessing: 'Unstable as water, you shall not excel.', artifact: 'Reuben\'s territory — Transjordan plateau', region: 'south' },
-    'Simeon': { icon: '&#9878;', blessing: 'I will scatter them in Jacob.', artifact: 'Simeon absorbed into Judah by 8th c. BC', region: 'south' },
-    'Levi': { icon: '&#10017;', blessing: 'They shall teach Jacob your rules.', artifact: 'High Priest\'s Breastplate — 12 stones', region: 'scattered' },
-    'Judah': { icon: '&#129529;', blessing: 'The scepter shall not depart from Judah.', artifact: 'Tel Dan Stele — House of David (c. 840 BC)', region: 'south' },
-    'Dan': { icon: '&#128018;', blessing: 'Dan shall judge his people.', artifact: 'Dan city gate — 18th c. BC', region: 'north' },
-    'Naphtali': { icon: '&#129420;', blessing: 'He gives beautiful words.', artifact: 'Galilee — ancient Via Maris', region: 'north' },
-    'Gad': { icon: '&#128056;', blessing: 'Raided by raiders, but he raids at their heels.', artifact: 'Mishor plateau — Gad\'s inheritance', region: 'east' },
-    'Asher': { icon: '&#127806;', blessing: 'His bread shall be rich.', artifact: 'Olive Presses of Galilee — 10th c. BC', region: 'north' },
-    'Issachar': { icon: '&#128024;', blessing: 'He bowed his shoulder to bear.', artifact: 'Jezreel Valley — chariot routes', region: 'north' },
-    'Zebulun': { icon: '&#128674;', blessing: 'He shall dwell at the shore of the sea.', artifact: 'Phoenician-style sea anchors — Haifa coast', region: 'north' },
-    'Joseph': { icon: '&#127855;', blessing: 'Joseph is a fruitful vine.', artifact: 'Ephraim & Manasseh — central highlands', region: 'central' },
-    'Benjamin': { icon: '&#128058;', blessing: 'Benjamin is a ravenous wolf.', artifact: 'Central Highlands — Gibeah', region: 'south' }
-};
-
-(function initTribalObserver() {
-    var sidebar = document.getElementById('tribalSidebar');
-    var cardIcon = document.getElementById('cardIcon');
-    var cardName = document.getElementById('cardName');
-    var cardBlessing = document.getElementById('cardBlessing');
-    var cardArtifact = document.getElementById('cardArtifact');
-
-    var nodes = document.querySelectorAll('[data-tribe]');
-    if (nodes.length === 0) return;
-
-    sidebar.classList.add('visible');
-
-    var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-            if (!entry.isIntersecting) return;
-            var tribe = entry.target.getAttribute('data-tribe');
-            var info = TRIBAL_INTEL[tribe];
-            if (!info) return;
-
-            cardIcon.innerHTML = info.icon;
-            cardName.textContent = tribe.toUpperCase();
-            cardBlessing.textContent = '"' + info.blessing + '"';
-            cardArtifact.textContent = '\uD83D\uDCDC ' + info.artifact;
-
-            document.querySelectorAll('.mini-territory').forEach(function(t) {
-                t.classList.remove('active');
-                if (t.getAttribute('data-territory') === tribe) {
-                    t.classList.add('active');
-                }
-            });
-
-            var exile = document.getElementById('node-jeconiah');
-            if (exile && entry.target.compareDocumentPosition(exile) & Node.DOCUMENT_POSITION_FOLLOWING) {
-                document.querySelectorAll('.mini-territory').forEach(function(t) {
-                    var reg = TRIBAL_INTEL[t.getAttribute('data-territory')];
-                    if (reg && reg.region === 'north') t.classList.add('shattered');
-                });
-            } else {
-                document.querySelectorAll('.mini-territory.shattered').forEach(function(t) {
-                    t.classList.remove('shattered');
-                });
-            }
-        });
-    }, { threshold: 0.4 });
-
-    nodes.forEach(function(n) { observer.observe(n); });
-})();
-
-const LEXICON = {
-    'ADAM': { heb: 'אָדָם', gez: 'አዳም', root: 'Of the ground / Mankind' },
-    'SETH': { heb: 'שֵׁת', gez: 'ሴት', root: 'Appointed / Placed' },
-    'ENOSH': { heb: 'אֱנוֹשׁ', gez: 'ሄኖስ', root: 'Mortal / Human' },
-    'CAINAN': { heb: 'קֵינָן', gez: 'ቃይናን', root: 'Possession' },
-    'MAHALALEL': { heb: 'מַהֲלַלְאֵל', gez: 'ማህላልኤል', root: 'Praise of God' },
-    'JARED': { heb: 'יֶרֶד', gez: 'ያሬድ', root: 'Descent' },
-    'ENOCH': { heb: 'חֲנוֹךְ', gez: 'ሄኖክ', root: 'Initiated / Dedicated' },
-    'METHUSELAH': { heb: 'מְתוּשֶׁלַח', gez: 'ማቱሳላ', root: 'Man of the dart' },
-    'LAMECH': { heb: 'לֶמֶךְ', gez: 'ላሜክ', root: 'Powerful / Wild man' },
-    'NOAH': { heb: 'נֹחַ', gez: 'ኖኅ', root: 'Rest / Comfort' },
-    'SHEM': { heb: 'שֵׁם', gez: 'ሴም', root: 'Name / Renown' },
-    'ABRAHAM': { heb: 'אַבְרָהָם', gez: 'አብርሃም', root: 'Father of a Multitude' },
-    'ISAAC': { heb: 'יִצְחָק', gez: 'ይስሐቅ', root: 'He Laughs' },
-    'JACOB': { heb: 'יַעֲקֹב', gez: 'ያዕቆብ', root: 'Supplanter / Heel-holder' },
-    'JUDAH': { heb: 'יְהוּדָה', gez: 'ይሁዳ', root: 'Praise' },
-    'DAVID': { heb: 'דָּוִד', gez: 'ዳዊት', root: 'Beloved One' },
-    'SOLOMON': { heb: 'שְׁלֹמֹה', gez: 'ሰሎሞን', root: 'Peaceful' },
-    'ZERUBBABEL': { heb: 'זְרֻבָּבֶל', gez: 'ዘሩባቤል', root: 'Seed of Babylon' }
-};
-
-(function initLinguisticLab() {
-    var lab = document.getElementById('linguisticLab');
-    var hebEl = document.getElementById('hebName');
-    var gezEl = document.getElementById('gezName');
-    var rootEl = document.getElementById('rootMeaning');
-    var labelEl = document.getElementById('nameLabel');
-
-    var nodes = document.querySelectorAll('[data-linguistic]');
-    if (nodes.length === 0) return;
-
-    setTimeout(function() { lab.classList.add('visible'); }, 2000);
-
-    var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-            if (!entry.isIntersecting) return;
-            var key = entry.target.getAttribute('data-linguistic');
-            var entry_lex = LEXICON[key];
-            if (!entry_lex) return;
-
-            hebEl.classList.add('morphing');
-            gezEl.classList.add('morphing');
-
-            clearTimeout(entry._morphTimer);
-            entry._morphTimer = setTimeout(function() {
-                hebEl.textContent = entry_lex.heb;
-                gezEl.textContent = entry_lex.gez;
-                rootEl.textContent = entry_lex.root;
-                labelEl.textContent = key;
-                hebEl.classList.remove('morphing');
-                gezEl.classList.remove('morphing');
-            }, 300);
-        });
-    }, { threshold: 0.3 });
-
-    nodes.forEach(function(n) { observer.observe(n); });
-})();
-
-window.openLinguisticLab = function(key) {
-    var entry = LEXICON[key];
-    if (!entry) return;
-    var lab = document.getElementById('linguisticLab');
-    var hebEl = document.getElementById('hebName');
-    var gezEl = document.getElementById('gezName');
-    var rootEl = document.getElementById('rootMeaning');
-    var labelEl = document.getElementById('nameLabel');
-    if (!lab || !hebEl) return;
-    hebEl.textContent = entry.heb;
-    gezEl.textContent = entry.gez;
-    rootEl.textContent = entry.root;
-    labelEl.textContent = key;
-    lab.classList.add('visible');
-    setTimeout(function() {
-        lab.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }, 200);
-};
-</script>
-
-<script>
-const GENEALOGY_DATA = [
-    { name: 'Adam', lifespan: 930, era: 'Antediluvian', messianic: true },
-    { name: 'Seth', lifespan: 912, era: 'Antediluvian', messianic: true },
-    { name: 'Enosh', lifespan: 905, era: 'Antediluvian', messianic: true },
-    { name: 'Cainan', lifespan: 910, era: 'Antediluvian', messianic: true },
-    { name: 'Mahalalel', lifespan: 895, era: 'Antediluvian', messianic: true },
-    { name: 'Jared', lifespan: 962, era: 'Antediluvian', messianic: true },
-    { name: 'Enoch', lifespan: 365, era: 'Antediluvian', messianic: true },
-    { name: 'Methuselah', lifespan: 969, era: 'Antediluvian', messianic: true },
-    { name: 'Lamech', lifespan: 777, era: 'Antediluvian', messianic: true },
-    { name: 'Noah', lifespan: 950, era: 'Antediluvian', messianic: true },
-    { name: 'Shem', lifespan: 600, era: 'Patriarch', messianic: true },
-    { name: 'Arpachshad', lifespan: 438, era: 'Patriarch', messianic: true },
-    { name: 'Shelah', lifespan: 433, era: 'Patriarch', messianic: false },
-    { name: 'Eber', lifespan: 464, era: 'Patriarch', messianic: false },
-    { name: 'Peleg', lifespan: 239, era: 'Patriarch', messianic: false },
-    { name: 'Reu', lifespan: 239, era: 'Patriarch', messianic: false },
-    { name: 'Serug', lifespan: 230, era: 'Patriarch', messianic: false },
-    { name: 'Nahor', lifespan: 148, era: 'Patriarch', messianic: false },
-    { name: 'Terah', lifespan: 205, era: 'Patriarch', messianic: false },
-    { name: 'Abraham', lifespan: 175, era: 'Patriarch', messianic: true },
-    { name: 'Isaac', lifespan: 180, era: 'Patriarch', messianic: true },
-    { name: 'Jacob', lifespan: 147, era: 'Patriarch', messianic: true },
-    { name: 'Judah', lifespan: null, era: 'Patriarch', messianic: true },
-    { name: 'Perez', lifespan: null, era: 'Egypt', messianic: false },
-    { name: 'Hezron', lifespan: null, era: 'Egypt', messianic: false },
-    { name: 'Ram', lifespan: null, era: 'Egypt', messianic: false },
-    { name: 'Amminadab', lifespan: null, era: 'Egypt', messianic: false },
-    { name: 'Nahshon', lifespan: null, era: 'Exodus', messianic: false },
-    { name: 'Salmon', lifespan: null, era: 'Conquest', messianic: false },
-    { name: 'Boaz', lifespan: null, era: 'Judges', messianic: true },
-    { name: 'Obed', lifespan: null, era: 'Judges', messianic: true },
-    { name: 'Jesse', lifespan: null, era: 'Judges', messianic: true },
-    { name: 'David', lifespan: 70, era: 'Monarchy', messianic: true },
-    { name: 'Solomon', lifespan: null, era: 'Monarchy', messianic: true }
-];
-
-(function buildLifespanChart() {
-    var container = document.getElementById('lifespanChart');
-    if (!container) return;
-    var max = 969;
-    GENEALOGY_DATA.forEach(function(d) {
-        if (d.lifespan === null) return;
-        var bar = document.createElement('div');
-        bar.className = 'chart-bar';
-        var pct = (d.lifespan / max) * 100;
-        bar.style.height = pct + '%';
-        bar.innerHTML = '<div class="bar-value">' + d.lifespan + '</div><div class="bar-label">' + d.name + '</div>';
-        container.appendChild(bar);
-    });
-})();
-</script>
-
-<script>
-var pathActive = false;
-
-function toggleMessianicPath() {
-    pathActive = !pathActive;
-    var btn = document.getElementById('messianicToggle');
-
-    if (pathActive) {
-        document.body.classList.add('messianic-view');
-        if (!localStorage.getItem('messianic_path_viewed')) {
-            localStorage.setItem('messianic_path_viewed', 'true');
-            if (window.checkAchievements) setTimeout(checkAchievements, 500);
-        }
-        btn.innerHTML = '&#9812; VIEW FULL TREE';
-        btn.classList.add('active');
-        if (window.ScriptoriumAudio) ScriptoriumAudio.transitionTo('nt');
-        drawMessianicSpine();
+        var saved = null;
+        var v2 = null;
+        if (window.__getUnifiedUser) v2 = window.__getUnifiedUser();
+    if (v2) {
+        saved = { streak: v2.streak.current, lastVisit: v2.streak.lastVisit };
     } else {
-        document.body.classList.remove('messianic-view');
-        btn.innerHTML = '&#9812; REVEAL THE SEED';
-        btn.classList.remove('active');
-        if (window.ScriptoriumAudio) ScriptoriumAudio.transitionTo('ot');
-        var spine = document.getElementById('messianicSpine');
-        if (spine) spine.innerHTML = '';
+        saved = {};
     }
-}
-
-function drawMessianicSpine() {
-    var svg = document.getElementById('messianicSpine');
-    if (!svg) return;
-    var nodes = document.querySelectorAll('.genealogy-node.messianic');
-    if (nodes.length < 2) return;
-
-    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    var path = '';
-    nodes.forEach(function(node, i) {
-        var rect = node.getBoundingClientRect();
-        var x = rect.left + rect.width / 2;
-        var y = rect.top + rect.height / 2 + scrollTop;
-        path += (i === 0 ? 'M' : 'L') + x + ',' + y + ' ';
-    });
-
-    var w = Math.max(document.documentElement.scrollWidth, window.innerWidth);
-    var h = Math.max(document.documentElement.scrollHeight, window.innerHeight);
-    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
-    svg.setAttribute('width', w);
-    svg.setAttribute('height', h);
-    svg.innerHTML = '<path d="' + path + '" stroke="rgba(212,175,55,0.85)" stroke-width="2" fill="none" stroke-dasharray="8,4" stroke-linejoin="round"/>' +
-                    '<path d="' + path + '" stroke="rgba(212,175,55,0.08)" stroke-width="6" fill="none" stroke-linejoin="round" filter="url(#glow)"/>';
-}
-
-window.addEventListener('scroll', function() {
-    if (document.body.classList.contains('messianic-view')) drawMessianicSpine();
-});
-window.addEventListener('resize', function() {
-    if (document.body.classList.contains('messianic-view')) drawMessianicSpine();
-});
-
-// Linguistic hover-to-reveal: transform <h3> into name-container
-(function() {
-    var LEX = {
-        'ADAM': { heb: '\u05D0\u05B8\u05D3\u05B8\u05DD', gez: '\u1220\u12F5\u12EB' },
-        'SETH': { heb: '\u05E9\u05B5\u05C1\u05EA', gez: '\u1234\u1275' },
-        'ENOSH': { heb: '\u05D0\u05B1\u05E0\u05D5\u05B9\u05E9\u05C1', gez: '\u1204\u1295\u12ED\u1235' },
-        'NOAH': { heb: '\u05E0\u05B9\u05D7\u05B7', gez: '\u1295\u122D' },
-        'ABRAHAM': { heb: '\u05D0\u05B7\u05D1\u05B0\u05E8\u05B8\u05D4\u05B8\u05DD', gez: '\u12A0\u1265\u122D\u1203\u121D' },
-        'ISAAC': { heb: '\u05D9\u05B4\u05E6\u05B0\u05D7\u05B8\u05E7', gez: '\u12E5\u1235\u1210\u1245' },
-        'JACOB': { heb: '\u05D9\u05B7\u05E2\u05B2\u05E7\u05B9\u05D1', gez: '\u12E8\u12E2\u1246\u1265' },
-        'JUDAH': { heb: '\u05D9\u05B0\u05D4\u05D5\u05BC\u05D3\u05B8\u05D4', gez: '\u12E8\u1203\u12F3' },
-        'DAVID': { heb: '\u05D3\u05B8\u05BC\u05D5\u05B4\u05D3', gez: '\u12F3\u12CB\u1275' },
-        'SOLOMON': { heb: '\u05E9\u05B0\u05C1\u05DC\u05B9\u05DE\u05B9\u05D4', gez: '\u1230\u1208\u121D\u1295' },
-        'ZERUBBABEL': { heb: '\u05D6\u05B0\u05E8\u05BB\u05D1\u05B8\u05D1\u05B6\u05DC', gez: '\u12D8\u1228\u1263\u1260\u1208' }
-    };
-
-    document.querySelectorAll('.genealogy-node').forEach(function(node) {
-        var h3 = node.querySelector('.node-content h3');
-        if (!h3) return;
-        var name = h3.textContent.trim().toUpperCase();
-        var entry = LEX[name];
-        if (!entry) return;
-        var container = document.createElement('div');
-        container.className = 'name-container';
-        var modern = document.createElement('span');
-        modern.className = 'modern-name';
-        modern.textContent = h3.textContent.trim();
-        var ancient = document.createElement('div');
-        ancient.className = 'ancient-scripts';
-        ancient.innerHTML = '<span class="lang-heb">' + entry.heb + '</span><span class="lang-gez">' + entry.gez + '</span>';
-        container.appendChild(modern);
-        container.appendChild(ancient);
-        h3.parentNode.replaceChild(container, h3);
-    });
-})();
-
-// ═══════════════════════════════════════
-// TYPOLOGY DATA & OVERLAY
-// ═══════════════════════════════════════
-const TYPOLOGY = {
-    'ADAM': { type: 'Christ as the Last Adam', ref: 'Romans 5:14, 1 Corinthians 15:45', desc: 'As Adam brought death through one act of disobedience, Christ brings life through one act of righteousness.' },
-    'SETH': { type: 'The Appointed Seed', ref: 'Genesis 4:25', desc: 'Seth replaces Abel as the promised seed — a type of Christ who replaces the old covenant with the new.' },
-    'NOAH': { type: 'Salvation Through Judgment', ref: '1 Peter 3:20-21', desc: 'As Noah passed through the waters of judgment into a new creation, baptism prefigures salvation through Christ.' },
-    'MELCHIZEDEK': { type: 'Priest-King', ref: 'Hebrews 7:1-17', desc: 'The priest-king of Salem who blessed Abraham. A type of Christ\'s eternal priesthood, not by lineage but by divine appointment.' },
-    'ABRAHAM': { type: 'Father of Faith', ref: 'Galatians 3:6-9, Romans 4:1-25', desc: 'Abraham believed God and it was credited as righteousness. He is the prototype of all who are justified by faith.' },
-    'ISAAC': { type: 'The Beloved Sacrifice', ref: 'Hebrews 11:17-19', desc: 'Isaac carried the wood for his own sacrifice, as Christ carried His cross. Abraham\'s willingness to sacrifice Isaac prefigures God the Father giving His Son.' },
-    'JACOB': { type: 'The Chosen Supplanter', ref: 'Romans 9:10-13', desc: 'Jacob was chosen before birth, not by works. A type of election by grace. His ladder vision prefigures Christ as the bridge between heaven and earth.' },
-    'JUDAH': { type: 'The Lion of the Tribe', ref: 'Revelation 5:5', desc: 'The scepter belongs to Judah. Christ is the Lion of Judah who alone is worthy to open the scroll.' },
-    'BOAZ': { type: 'The Kinsman-Redeemer', ref: 'Ruth 4:1-10', desc: 'Boaz redeems Ruth by paying the price and taking her as his bride. Christ redeems His Church as the greater Kinsman-Redeemer.' },
-    'DAVID': { type: 'The Shepherd King', ref: 'Ezekiel 34:23-24, John 10:11', desc: 'David the shepherd-king prefigures Christ the Good Shepherd who lays down His life for the sheep and reigns forever.' },
-    'SOLOMON': { type: 'The Prince of Peace', ref: 'Matthew 12:42, Isaiah 9:6', desc: 'Solomon built the Temple and ruled in wisdom. Christ builds the spiritual temple and is Wisdom incarnate. The Queen of Sheba prefigures the Gentiles seeking Christ.' },
-    'ZERUBBABEL': { type: 'The Restorer', ref: 'Haggai 2:23, Zechariah 4:6-10', desc: 'Zerubbabel rebuilt the Temple after exile. A type of Christ who restores the house of God and rebuilds what was broken.' },
-    'JOSEPH (guardian)': { type: 'The Righteous Guardian', ref: 'Matthew 1:19-20', desc: 'Joseph, a just man, protected and provided for the Messiah. A type of faithful stewardship and obedience to divine direction.' }
-};
-
-var typologyActive = false;
-
-function toggleTypology() {
-    typologyActive = !typologyActive;
-    var btn = document.getElementById('typologyToggle');
-    if (typologyActive) {
-        document.body.classList.add('typology-active');
-        btn.classList.add('active');
-        btn.innerHTML = '&#128214; TYPOLOGY ON';
-    } else {
-        document.body.classList.remove('typology-active');
-        btn.classList.remove('active');
-        btn.innerHTML = '&#128214; TYPOLOGY';
+    if (saved.lastVisit !== today) {
+        if (new Date(saved.lastVisit).getTime() === now.getTime() - 86400000 || !saved.lastVisit) {
+            saved.streak = (saved.streak || 0) + 1;
+        } else if (saved.lastVisit) {
+            saved.streak = 1;
+        }
+        saved.lastVisit = today;
+        if (window.__setUnifiedUser) {
+            if (!v2) v2 = window.__getUnifiedUser ? window.__getUnifiedUser() : null;
+            if (!v2) v2 = { profile: {}, progress: {}, streak: {}, rank: {} };
+            v2.streak.current = saved.streak;
+            v2.streak.lastVisit = today;
+            window.__setUnifiedUser(v2);
+        }
     }
-    attachTypologyBadges();
-}
-
-function attachTypologyBadges() {
-    if (!typologyActive) return;
-    document.querySelectorAll('.genealogy-node').forEach(function(node) {
-        if (node.querySelector('.typology-badge')) return;
-        var h3 = node.querySelector('.node-content h3, .name-container .modern-name');
-        if (!h3) return;
-        var name = h3.textContent.trim().toUpperCase().replace(/^\u2713\s*/, '').replace(/\s*\(.*?\)\s*$/, '').trim();
-        var typ = TYPOLOGY[name];
-        if (!typ) return;
-        var badge = document.createElement('div');
-        badge.className = 'typology-badge';
-        badge.innerHTML = '<strong>TYPE & SHADOW:</strong> ' + typ.type + '<br><span style="font-size: 0.48rem;color:rgba(212,175,55,0.2);">' + typ.ref + '</span><br>' + typ.desc;
-        node.querySelector('.node-content').appendChild(badge);
-        node.classList.add('typology-node');
-    });
-}
-
-// ═══════════════════════════════════════
-// COLLAPSIBLE SECTIONS
-// ═══════════════════════════════════════
-(function initCollapsible() {
-    document.querySelectorAll('.era-section').forEach(function(section) {
-        var header = section.querySelector('.era-header');
-        if (!header) return;
-        var content = document.createElement('div');
-        content.className = 'era-content';
-        var childNodes = Array.from(section.childNodes);
-        var afterHeader = false;
-        childNodes.forEach(function(node) {
-            if (node === header) { afterHeader = true; return; }
-            if (afterHeader) content.appendChild(node);
-        });
-        section.innerHTML = '';
-        section.appendChild(header);
-        section.appendChild(content);
-        var toggle = document.createElement('button');
-        toggle.className = 'era-collapse-toggle';
-        toggle.textContent = '\u2014';
-        toggle.setAttribute('aria-label', 'Collapse section');
-        toggle.onclick = function() {
-            section.classList.toggle('collapsed');
-            toggle.textContent = section.classList.contains('collapsed') ? '+' : '\u2014';
-        };
-        header.appendChild(toggle);
-    });
 })();
-
-// ═══════════════════════════════════════
-// ERA JUMP NAV
-// ═══════════════════════════════════════
-(function initEraJumpNav() {
-    var nav = document.createElement('nav');
-    nav.className = 'era-jump-nav';
-    nav.id = 'eraJumpNav';
-    var eras = [
-        { label: 'ANTE-DILUVIAN', section: 0 },
-        { label: 'PATRIARCHS', section: 1 },
-        { label: 'TRIBES', section: 2 },
-        { label: 'EXODUS', section: 3 },
-        { label: 'MONARCHY', section: 4 },
-        { label: 'DIVIDED', section: 5 },
-        { label: 'EXILE', section: 6 },
-        { label: 'SILENT', section: 7 }
-    ];
-    var sections = document.querySelectorAll('.era-section');
-    eras.forEach(function(e, i) {
-        var btn = document.createElement('button');
-        btn.className = 'era-jump-btn';
-        btn.textContent = e.label;
-        btn.onclick = function() {
-            if (sections[e.section]) sections[e.section].scrollIntoView({ behavior: 'smooth', block: 'start' });
-        };
-        nav.appendChild(btn);
-    });
-    document.body.appendChild(nav);
-
-    // Scroll-spy
-    var btns = nav.querySelectorAll('.era-jump-btn');
-    var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-            if (!entry.isIntersecting) return;
-            var idx = Array.from(sections).indexOf(entry.target);
-            if (idx >= 0 && btns[idx]) {
-                btns.forEach(function(b) { b.classList.remove('active'); });
-                btns[idx].classList.add('active');
-            }
-        });
-    }, { threshold: 0.15 });
-    sections.forEach(function(s) { observer.observe(s); });
-})();
-
-// ═══════════════════════════════════════
-// LUKE 3 TOGGLE
-// ═══════════════════════════════════════
-function toggleLukeLine() {
-    var c = document.getElementById('lukeLineContent');
-    var btn = document.getElementById('lukeLineToggle');
-    if (!c || !btn) return;
-    var visible = c.classList.toggle('visible');
-    btn.classList.toggle('active', visible);
-    btn.innerHTML = visible ? '&#128214; HIDE LUKE 3 LINE' : '&#128214; REVEAL LUKE 3 — BIOLOGICAL LINE';
-}
-
-// ═══════════════════════════════════════
-// 70 GENERATIONS TOGGLE
-// ═══════════════════════════════════════
-function toggleSeventyGenerations() {
-    var c = document.getElementById('seventyLineContent');
-    var btn = document.getElementById('seventyToggle');
-    if (!c || !btn) return;
-    var visible = c.classList.toggle('visible');
-    btn.classList.toggle('active', visible);
-    btn.innerHTML = visible ? '&#128214; HIDE 70 GENERATIONS' : '&#128214; REVEAL 70 GENERATIONS — LUKE 3:23-38';
-}
 </script>
+
+<script src="assets/js/genealogy-page.js"></script>
+
+
+
+
+
+<!-- ─── ARCHAEOLOGICAL DOSSIER DRAWER ─── -->
+<div id="dossierDrawer" class="archaeological-drawer">
+    <div class="drawer-handle" id="dossierHandle">
+        <span class="drawer-title">&#128220; ARCHAEOLOGICAL DOSSIER</span>
+        <button class="drawer-close" id="dossierClose">&times;</button>
+    </div>
+    <div class="drawer-body" id="dossierBody">
+        <div class="dossier-name" id="dossierName"></div>
+        <div class="dossier-field"><strong>Discovery:</strong> <span id="dossierDate"></span></div>
+        <div class="dossier-field"><strong>Repository:</strong> <span id="dossierRepository"></span></div>
+        <div class="dossier-summary" id="dossierSummary"></div>
+        <div class="dossier-ref" id="dossierRef"></div>
+    </div>
+</div>
+
+
+
+<!-- data-action dispatcher (CSP unsafe-eval) -->
+<script>(function(){document.body.addEventListener("click",function(e){var t=e.target.closest("[data-action]");if(!t)return;var c=t.getAttribute("data-action");try{(new Function("event",c)).call(t,e)}catch(ex){console.warn("[action]",ex)}})})();</script>
 </body>
 </html>

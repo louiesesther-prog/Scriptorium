@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; style-src-elem 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' unpkg.com cdn.jsdelivr.net; img-src 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; img-src-elem 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; connect-src 'self' *.tile.openstreetmap.org *.basemaps.cartocdn.com; frame-src 'none';">
     <meta charset="UTF-8">
+    <meta property="og:title" content="SCRIPTORIUM | Scribes Chamber">
+    <meta name="description" content="The Scribe's Chamber — track your reading progress, daily streaks, and unlock scribal ranks as you study Scripture.">
+    <meta property="og:description" content="Scriptorium — a digital archive of biblical texts, maps, genealogies, and manuscript studies.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://scriptorium-sandy.vercel.app/scribes-chamber.html">
+    <meta property="og:image" content="https://scriptorium-sandy.vercel.app/og-image.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCRIPTORIUM | The Scribe's Chamber</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;1,600&display=swap" rel="stylesheet">
+    <link href="assets/fonts/fonts.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/shared.css">
+    <link rel="stylesheet" href="assets/css/features.css">
+    <link rel="manifest" href="/manifest.json">
     <script src="assets/audio/scriptorium-audio.js"></script>
     <style>
         :root {
@@ -94,8 +103,12 @@
             opacity: 1;
         }
 
+        .medal.earned {
+            animation: sealPulse 2s ease-in-out infinite;
+        }
         .medal.earned:hover {
             transform: translateY(-8px);
+            animation: none;
         }
 
         .wax-seal {
@@ -250,7 +263,14 @@
             margin: 0 auto;
         }
 
+        @keyframes sealPulse {
+            0% { box-shadow: 0 0 8px rgba(212,175,55,0.1); }
+            50% { box-shadow: 0 0 24px rgba(212,175,55,0.3); }
+            100% { box-shadow: 0 0 8px rgba(212,175,55,0.1); }
+        }
+
     </style>
+    <script src="assets/js/auth.js"></script>
     <script src="assets/js/sidebar.js"></script>
 </head>
 <body>
@@ -295,6 +315,16 @@
                 <span class="medal-label">RESTORER OF REALITY</span>
                 <span class="medal-desc">10 NT verses</span>
             </div>
+            <div class="medal" id="medal-7">
+                <div class="wax-seal">&#128220;</div>
+                <span class="medal-label">PALEO SCRIBE</span>
+                <span class="medal-desc">Trace a letter in the lab</span>
+            </div>
+            <div class="medal" id="medal-8">
+                <div class="wax-seal">&#128142;</div>
+                <span class="medal-label">FRAGMENT RESTORER</span>
+                <span class="medal-desc">Restore a carbonized scroll</span>
+            </div>
         </div>
 
         <div class="service-record">
@@ -338,14 +368,26 @@
     </main>
 
     <script>
-        var data = JSON.parse(localStorage.getItem('scribeData')) || {
-            totalCharacters: 0,
-            rank: "INITIATE",
-            name: "Anonymous Scribe",
-            versesCompleted: 0,
-            ntVerses: 0,
-            streak: 0
-        };
+        var data = (function() {
+            var u = window.__getUnifiedUser ? window.__getUnifiedUser() : null;
+            if (u) return {
+                totalCharacters: u.progress.totalCharacters,
+                rank: u.rank.title,
+                name: u.profile.name || 'Anonymous Scribe',
+                versesCompleted: u.progress.versesCompleted,
+                ntVerses: u.progress.ntVerses,
+                streak: u.streak.current
+            };
+            var legacy = {};
+            return {
+                totalCharacters: legacy.totalCharacters || 0,
+                rank: legacy.rank || "INITIATE",
+                name: legacy.name || "Anonymous Scribe",
+                versesCompleted: legacy.versesCompleted || 0,
+                ntVerses: legacy.ntVerses || 0,
+                streak: legacy.streak || 0
+            };
+        })();
 
         var verseLen = 89;
 
@@ -445,6 +487,8 @@
         if (data.totalCharacters >= 5000) document.getElementById('medal-4').classList.add('earned');
         if (data.totalCharacters >= 10000) document.getElementById('medal-5').classList.add('earned');
         if (data.ntVerses >= 10) document.getElementById('medal-6').classList.add('earned');
+        if (localStorage.getItem('achiev_epigraphy')) document.getElementById('medal-7').classList.add('earned');
+        if (localStorage.getItem('achiev_restored_fragments')) document.getElementById('medal-8').classList.add('earned');
     </script>
 
     <!-- ═══════════════════════════════════════
@@ -454,39 +498,39 @@
         <div style="text-align:center;margin-bottom:30px;">
             <h2 style="font-size: 0.66rem;letter-spacing:8px;color:var(--museum-gold);margin:0 0 8px;">THE RESTORATION LAB</h2>
             <p style="font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color:rgba(255,255,255,0.53);font-style:italic;">"Brush away the carbonization to reveal the ancient text beneath."</p>
-            <p style="font-family:'Montserrat',sans-serif;font-size: 0.66rem;color:rgba(255,255,255,0.1);letter-spacing:2px;">Click and drag to clean the damaged manuscript</p>
+            <p style="font-family:'Montserrat',sans-serif;font-size: 0.66rem;color: var(--text-secondary);letter-spacing:2px;">Click and drag to clean the damaged manuscript</p>
         </div>
 
         <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center;align-items:flex-start;">
             <div style="position:relative;border:1px solid rgba(212,175,55,0.85);border-radius:4px;overflow:hidden;">
                 <canvas id="restoreCanvas" width="480" height="360" style="display:block;background:#1a1510;cursor:crosshair;"></canvas>
-                <div style="position:absolute;top:8px;left:10px;font-family:'Montserrat',sans-serif;font-size: 0.72rem;letter-spacing:2px;color:rgba(255,255,255,0.1);pointer-events:none;">EN-GEDI SCROLL — RESTORATION IN PROGRESS</div>
+                <div style="position:absolute;top:8px;left:10px;font-family:'Montserrat',sans-serif;font-size: 0.72rem;letter-spacing:2px;color: var(--text-secondary);pointer-events:none;">EN-GEDI SCROLL — RESTORATION IN PROGRESS</div>
                 <div id="restoreProgress" style="position:absolute;bottom:0;left:0;height:3px;background:var(--museum-gold);width:0%;transition:width 0.3s;"></div>
             </div>
             <div style="max-width:240px;">
                 <div style="background:rgba(10,10,10,0.6);border:1px solid rgba(212,175,55,0.08);border-radius:4px;padding:16px;margin-bottom:12px;">
-                    <div style="font-family:'Montserrat',sans-serif;font-size: 0.48rem;letter-spacing:2px;color:rgba(255,255,255,0.2);margin-bottom:8px;">TOOLS</div>
+                    <div style="font-family:'Montserrat',sans-serif;font-size: var(--text-micro);letter-spacing:2px;color: var(--text-secondary);margin-bottom:8px;">TOOLS</div>
                     <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                        <button id="restoreBrush" class="sandbox-tool active" onclick="setRestoreTool('brush')" style="padding:6px 12px;background:rgba(212,175,55,0.1);border:1px solid var(--museum-gold);color:var(--museum-gold);cursor:pointer;font-size: 0.54rem;border-radius:3px;font-family:'Montserrat',sans-serif;">BRUSH</button>
-                        <button id="restoreMSI" class="sandbox-tool" onclick="setRestoreTool('msi')" style="padding:6px 12px;background:rgba(0,0,0,0.3);border:1px solid rgba(212,175,55,0.85);color:rgba(212,175,55,0.4);cursor:pointer;font-size: 0.54rem;border-radius:3px;font-family:'Montserrat',sans-serif;">MSI VIEW</button>
-                        <button onclick="resetRestoration()" style="padding:6px 12px;background:rgba(139,0,0,0.15);border:1px solid rgba(139,0,0,0.3);color:#c77;cursor:pointer;font-size: 0.54rem;border-radius:3px;font-family:'Montserrat',sans-serif;">RESET</button>
+                        <button id="restoreBrush" class="sandbox-tool active" data-action="setRestoreTool('brush')" style="padding:6px 12px;background:rgba(212,175,55,0.1);border:1px solid var(--museum-gold);color:var(--museum-gold);cursor:pointer;font-size: var(--text-micro);border-radius:3px;font-family:'Montserrat',sans-serif;">BRUSH</button>
+                        <button id="restoreMSI" class="sandbox-tool" data-action="setRestoreTool('msi')" style="padding:6px 12px;background:rgba(0,0,0,0.3);border:1px solid rgba(212,175,55,0.85);color:rgba(212,175,55,0.4);cursor:pointer;font-size: var(--text-micro);border-radius:3px;font-family:'Montserrat',sans-serif;">MSI VIEW</button>
+                        <button data-action="resetRestoration()" style="padding:6px 12px;background:rgba(139,0,0,0.15);border:1px solid rgba(139,0,0,0.3);color:#c77;cursor:pointer;font-size: var(--text-micro);border-radius:3px;font-family:'Montserrat',sans-serif;">RESET</button>
                     </div>
                 </div>
                 <div style="background:rgba(10,10,10,0.6);border:1px solid rgba(212,175,55,0.08);border-radius:4px;padding:16px;margin-bottom:12px;">
-                    <div style="font-family:'Montserrat',sans-serif;font-size: 0.48rem;letter-spacing:2px;color:rgba(255,255,255,0.2);margin-bottom:6px;">MULTI-SPECTRAL IMAGING</div>
-                    <label style="font-size: 0.48rem;color:rgba(255,255,255,0.45);display:block;margin-bottom:4px;">IR INTENSITY: <span id="irValue">0</span>%</label>
+                    <div style="font-family:'Montserrat',sans-serif;font-size: var(--text-micro);letter-spacing:2px;color: var(--text-secondary);margin-bottom:6px;">MULTI-SPECTRAL IMAGING</div>
+                    <label style="font-size: var(--text-micro);color:rgba(255,255,255,0.45);display:block;margin-bottom:4px;">IR INTENSITY: <span id="irValue">0</span>%</label>
                     <input type="range" id="irSlider" min="0" max="100" value="0" oninput="adjustIR(this.value)" style="width:100%;height:3px;-webkit-appearance:none;background:rgba(139,0,0,0.2);border-radius:2px;outline:none;">
-                    <div style="display:flex;justify-content:space-between;font-size: 0.6rem;color:rgba(255,255,255,0.05);margin-top:2px;">
+                    <div style="display:flex;justify-content:space-between;font-size: var(--text-micro);color: var(--text-secondary);margin-top:2px;">
                         <span>VISIBLE</span>
                         <span>INFRARED</span>
                     </div>
                 </div>
                 <div style="background:rgba(10,10,10,0.6);border:1px solid rgba(212,175,55,0.08);border-radius:4px;padding:16px;">
-                    <div style="font-family:'Montserrat',sans-serif;font-size: 0.48rem;letter-spacing:2px;color:rgba(255,255,255,0.2);margin-bottom:6px;">RECOVERED TEXT</div>
+                    <div style="font-family:'Montserrat',sans-serif;font-size: var(--text-micro);letter-spacing:2px;color: var(--text-secondary);margin-bottom:6px;">RECOVERED TEXT</div>
                     <div id="restoreText" style="font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color:rgba(255,255,255,0.45);font-style:italic;line-height:1.6;min-height:40px;">Clean the scroll to reveal the hidden words...</div>
                     <div id="restoreComplete" style="display:none;margin-top:8px;font-family:'Cinzel',serif;font-size: 0.66rem;letter-spacing:3px;color:#4caf50;">&#9989; RESTORATION COMPLETE — TEXT RECOVERED</div>
                     <div style="margin-top:8px;">
-                        <button id="aiInpaintBtn" onclick="applyAIPrediction()" style="width:100%;padding:6px;background:rgba(100,149,237,0.1);border:1px solid rgba(100,149,237,0.2);color:rgba(100,149,237,0.5);cursor:pointer;font-size: 0.48rem;border-radius:3px;font-family:'Montserrat',sans-serif;letter-spacing:2px;transition:0.3s;">&#9889; AI INPAINTING</button>
+                        <button id="aiInpaintBtn" data-action="applyAIPrediction()" style="width:100%;padding:6px;background:rgba(100,149,237,0.1);border:1px solid rgba(100,149,237,0.2);color:rgba(100,149,237,0.5);cursor:pointer;font-size: var(--text-micro);border-radius:3px;font-family:'Montserrat',sans-serif;letter-spacing:2px;transition:0.3s;">&#9889; AI INPAINTING</button>
                     </div>
                 </div>
             </div>
@@ -768,23 +812,31 @@
             }
             // Update Scribe's Seal
             try {
-                var seal = JSON.parse(localStorage.getItem('scribe_seal') || '{}');
-                seal.restoration = (seal.restoration || 0) + 1;
-                localStorage.setItem('scribe_seal', JSON.stringify(seal));
+                if (window.__getUnifiedUser && window.__setUnifiedUser) {
+                    var v2 = window.__getUnifiedUser() || { seal: { epigraphy: 0, astronomy: 0, prophecy: 0, restoration: 0 } };
+                    v2.seal.restoration = (v2.seal.restoration || 0) + 1;
+                    window.__setUnifiedUser(v2);
+                } else {
+                    var seal = JSON.parse(localStorage.getItem('scribe_seal') || '{}');
+                    seal.restoration = (seal.restoration || 0) + 1;
+                    localStorage.setItem('scribe_seal', JSON.stringify(seal));
+                }
             } catch(e) {}
+            if (window.checkAchievements) setTimeout(checkAchievements, 300);
             renderGallery();
             var note = document.createElement('div');
             note.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.92);border:1px solid var(--museum-gold);padding:20px 30px;z-index:1000;text-align:center;border-radius:6px;animation:notifFade 3s ease forwards;pointer-events:none;';
-            note.innerHTML = '<div style="font-size: 2.4rem;margin-bottom:8px;">\uD83D\uDC8E</div><div style="font-family:\'Cinzel\',serif;font-size: 0.66rem;letter-spacing:4px;color:var(--museum-gold);margin-bottom:4px;">FRAGMENT ARCHIVED</div><div style="font-family:\'Cormorant Garamond\',serif;font-size: 0.66rem;color:rgba(255,255,255,0.3);font-style:italic;">Preserved in the Hall of the Preserved.</div>';
+            note.innerHTML = '<div style="font-size: 2.4rem;margin-bottom:8px;">\uD83D\uDC8E</div><div style="font-family:\'Cinzel\',serif;font-size: 0.66rem;letter-spacing:4px;color:var(--museum-gold);margin-bottom:4px;">FRAGMENT ARCHIVED</div><div style="font-family:\'Cormorant Garamond\',serif;font-size: 0.66rem;color: var(--text-secondary);font-style:italic;">Preserved in the Hall of the Preserved.</div>';
             document.body.appendChild(note);
             setTimeout(function() { note.remove(); }, 3500);
             if (window.ScriptoriumAudio) { try { window.ScriptoriumAudio.transitionTo('nt'); } catch(e) {} }
         }
 
-        setInterval(function() {
+        var restoreTimer = setInterval(function() {
             var el = document.getElementById('restoreComplete');
             if (el && el.style.display === 'block' && !window._restoreSaved) {
                 window._restoreSaved = true;
+                clearInterval(restoreTimer);
                 completeRestoration('isaiah-44');
             }
         }, 1000);
@@ -795,5 +847,6 @@
     })();
 </script>
     <script src="assets/js/scriptorium-core.js"></script>
+<script>(function(){document.body.addEventListener("click",function(e){var t=e.target.closest("[data-action]");if(!t)return;var c=t.getAttribute("data-action");try{(new Function("event",c)).call(t,e)}catch(ex){console.warn("[action]",ex)}})})();</script>
 </body>
 </html>

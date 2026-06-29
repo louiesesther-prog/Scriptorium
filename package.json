@@ -1,0 +1,16 @@
+{
+  "name": "scriptorium",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "minify": "node minify.js",
+    "test:api": "node scriptorium-api/test.js",
+"test:frontend": "node tests/regression.js",
+"test": "node scriptorium-api/test.js && node tests/regression.js"
+  },
+  "dependencies": {
+    "pg": "^8.13.0",
+    "better-sqlite3": "^11.0.0",
+    "@vercel/kv": "^3.0.0"
+  }
+}

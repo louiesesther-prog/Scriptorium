@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; style-src-elem 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' unpkg.com cdn.jsdelivr.net; img-src 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; img-src-elem 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; connect-src 'self' *.tile.openstreetmap.org *.basemaps.cartocdn.com bible-api.com api.scripture.api.bible; frame-src 'none';">
     <meta charset="UTF-8">
+    <meta property="og:title" content="SCRIPTORIUM | Comparison Mode">
+    <meta name="description" content="Side-by-side biblical comparison mode — analyze OT and NT passages, translations, and manuscript witnesses together.">
+    <meta property="og:description" content="Scriptorium — a digital archive of biblical texts, maps, genealogies, and manuscript studies.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://scriptorium-sandy.vercel.app/comparison-mode.html">
+    <meta property="og:image" content="https://scriptorium-sandy.vercel.app/og-image.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scriptorium - Side-by-Side Analysis</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+    <link href="assets/fonts/fonts.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/shared.css">
+    <link rel="stylesheet" href="assets/css/features.css">
+    <link rel="manifest" href="/manifest.json">
     <style>
         :root {
             --obsidian: #050505;
@@ -353,7 +362,7 @@
 
     <div id="sidebarContainer"></div>
 
-<button class="exit-btn" onclick="window.location.href='scriptorium.html'">[ X ] RETURN</button>
+<button class="exit-btn" data-action="window.location.href='scriptorium.html'">[ X ] RETURN</button>
 
 <div class="main-content">
     <div class="comparison-header">
@@ -393,10 +402,10 @@
     <div style="text-align:center;margin-bottom:20px;">
         <div class="control-group" style="display:inline-flex;flex-wrap:wrap;gap:8px;">
             <label style="line-height:32px;">PALEOGRAPHY PRESETS:</label>
-            <button onclick="setComparison('dead_sea','p52_rylands')" style="padding:6px 12px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);color:var(--museum-gold);cursor:pointer;font-size: 12px;border-radius:4px;font-family:'Montserrat';">2nd c. BC → 2nd c. AD</button>
-            <button onclick="setComparison('isaiah_scroll','p52_rylands')" style="padding:6px 12px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);color:var(--museum-gold);cursor:pointer;font-size: 12px;border-radius:4px;font-family:'Montserrat';">Uncial → Ge'ez Script</button>
-            <button onclick="setComparison('sinaiticus','dead_sea')" style="padding:6px 12px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);color:var(--museum-gold);cursor:pointer;font-size: 12px;border-radius:4px;font-family:'Montserrat';">4th c. → 2nd c. BC</button>
-            <button onclick="setComparison('p52_rylands','sinaiticus')" style="padding:6px 12px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);color:var(--museum-gold);cursor:pointer;font-size: 12px;border-radius:4px;font-family:'Montserrat';">Minuscule → Uncial</button>
+            <button data-action="setComparison('dead_sea','p52_rylands')" style="padding:6px 12px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);color:var(--museum-gold);cursor:pointer;font-size: 12px;border-radius:4px;font-family:'Montserrat';">2nd c. BC → 2nd c. AD</button>
+            <button data-action="setComparison('isaiah_scroll','p52_rylands')" style="padding:6px 12px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);color:var(--museum-gold);cursor:pointer;font-size: 12px;border-radius:4px;font-family:'Montserrat';">Uncial → Ge'ez Script</button>
+            <button data-action="setComparison('sinaiticus','dead_sea')" style="padding:6px 12px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);color:var(--museum-gold);cursor:pointer;font-size: 12px;border-radius:4px;font-family:'Montserrat';">4th c. → 2nd c. BC</button>
+            <button data-action="setComparison('p52_rylands','sinaiticus')" style="padding:6px 12px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);color:var(--museum-gold);cursor:pointer;font-size: 12px;border-radius:4px;font-family:'Montserrat';">Minuscule → Uncial</button>
         </div>
     </div>
 
@@ -441,28 +450,28 @@
     <div class="cross-reference-section">
         <h3>CROSS-REFERENCE ARCHAEOLOGICAL LINKS</h3>
         <div class="ref-grid">
-            <div class="ref-item" onclick="setComparison('garima', 'qumran_aramaic')">
+            <div class="ref-item" data-action="setComparison('garima', 'qumran_aramaic')">
                 <div class="ref-icon">&#9752;</div>
                 <div class="ref-text">
                     <strong>Ethiopic &amp; Qumran</strong>
                     <span>GE'EZ SCRIPT vs QUMRAN SEMITIC</span>
                 </div>
             </div>
-            <div class="ref-item" onclick="setComparison('sinaiticus', 'dead_sea')">
+            <div class="ref-item" data-action="setComparison('sinaiticus', 'dead_sea')">
                 <div class="ref-icon">&#10022;</div>
                 <div class="ref-text">
                     <strong>Codex vs Scroll</strong>
                     <span>4TH CENTURY CODEX vs 2ND CENTURY BC SCROLL</span>
                 </div>
             </div>
-            <div class="ref-item" onclick="setComparison('isaiah_scroll', 'p66_john')">
+            <div class="ref-item" data-action="setComparison('isaiah_scroll', 'p66_john')">
                 <div class="ref-icon">&#128220;</div>
                 <div class="ref-text">
                     <strong>Isaiah &amp; John</strong>
                     <span>HEBREW PROPHECY vs GREEK GOSPEL</span>
                 </div>
             </div>
-            <div class="ref-item" onclick="setComparison('p52_rylands', 'dead_sea')">
+            <div class="ref-item" data-action="setComparison('p52_rylands', 'dead_sea')">
                 <div class="ref-icon">&#128214;</div>
                 <div class="ref-text">
                     <strong>P52 &amp; Qumran</strong>
@@ -597,7 +606,9 @@
     });
 </script>
 
+    <script src="assets/js/auth.js"></script>
     <script src="assets/js/sidebar.js"></script>
     <script src="assets/js/scriptorium-core.js"></script>
+<script>(function(){document.body.addEventListener("click",function(e){var t=e.target.closest("[data-action]");if(!t)return;var c=t.getAttribute("data-action");try{(new Function("event",c)).call(t,e)}catch(ex){console.warn("[action]",ex)}})})();</script>
 </body>
 </html>

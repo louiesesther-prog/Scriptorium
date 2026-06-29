@@ -1,493 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCRIPTORIUM | Scribe Induction</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/shared.css">
-    <script src="assets/audio/scriptorium-audio.js" defer></script>
-    <script src="assets/js/sidebar.js"></script>
-    <script src="assets/js/scriptorium-core.js"></script>
-    <style>
-        :root {
-            --obsidian: #050505;
-            --museum-gold: #d4af37;
-            --museum-gold-dim: rgba(212,175,55,0.4);
-            --museum-gold-faint: rgba(212,175,55,0.08);
-        }
-        body {
-            padding:40px 0 40px 80px;
-        }
-        .glow-overlay {
-            position:fixed;inset:0;
-            background:radial-gradient(circle,rgba(212,175,55,0.04) 0%,transparent 70%);
-            pointer-events:none;
-        }
-        .scroll-frame {
-            width:560px;max-width:92vw;
-            padding:50px 48px;
-            background:rgba(10,10,10,0.88);
-            border:1px solid var(--museum-gold-dim);
-            backdrop-filter:blur(20px);
-            -webkit-backdrop-filter:blur(20px);
-            box-shadow:0 0 100px rgba(0,0,0,1);
-            position:relative;z-index:1;
-            border-radius:4px;
-            transition:opacity 0.8s ease, transform 0.8s ease;
-        }
-        .scroll-frame.fade-out{opacity:0;transform:translateY(-20px);}
-        .scroll-frame .label{
-            font-family:'Montserrat',sans-serif;
-            font-size: 0.48rem;letter-spacing:5px;
-            color:rgba(212,175,55,0.2);display:block;text-align:center;margin-bottom:8px;
-        }
-        .scroll-frame h1{
-            font-size: 1.56rem;letter-spacing:10px;
-            color:var(--museum-gold);text-align:center;
-            margin:0 0 36px;
-            text-shadow:0 0 30px rgba(212,175,55,0.06);
-        }
-        .form-section{margin-bottom:32px;text-align:left;}
-        .section-title{
-            font-family:'Montserrat',sans-serif;
-            font-size: 0.54rem;letter-spacing:4px;
-            color:var(--museum-gold-dim);
-            border-bottom:1px solid rgba(212,175,55,0.04);
-            padding-bottom:6px;margin-bottom:16px;opacity:0.6;
-        }
-        .input-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-        .input-group{margin-bottom:16px;position:relative;}
-        .input-group label{
-            display:block;
-            font-family:'Montserrat',sans-serif;
-            font-size: 0.72rem;letter-spacing:2px;
-            color:rgba(212,175,55,0.2);margin-bottom:4px;
-        }
-        .input-group input,.input-group select{
-            width:100%;
-            background:transparent;
-            border:none;
-            border-bottom:1px solid rgba(212,175,55,0.08);
-            color:rgba(255,255,255,0.4);
-            font-family:'Cormorant Garamond',serif;
-            font-size: 0.66rem;padding:6px 2px;
-            outline:none;transition:border-color 0.3s,color 0.3s;
-        }
-        .input-group input:focus,.input-group select:focus{border-bottom-color:rgba(212,175,55,0.3);color:#fff;}
-        .input-group input::placeholder{color:rgba(255,255,255,0.04);font-style:italic;}
-        .input-group select{appearance:none;cursor:pointer;}
-        .input-group select option{background:#111;color:#ccc;}
-
-        .level-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;}
-        .level-selector input{display:none;}
-        .level-selector label{
-            background:rgba(255,255,255,0.02);
-            border:1px solid rgba(212,175,55,0.06);
-            padding:12px 8px;text-align:center;cursor:pointer;
-            font-family:'Cinzel',serif;font-size: 0.66rem;letter-spacing:2px;
-            color:rgba(255,255,255,0.45);transition:all 0.3s;border-radius:3px;
-        }
-        .level-selector label:hover{border-color:rgba(212,175,55,0.85);color:var(--museum-gold-dim);}
-        .level-selector input:checked+label{
-            background:var(--museum-gold);color:#000;
-            box-shadow:0 0 15px rgba(212,175,55,0.2);
-        }
-        .level-selector label span{
-            display:block;font-family:'Cormorant Garamond',serif;
-            font-size: 0.66rem;opacity:0.5;margin-top:3px;
-        }
-        .level-selector input:checked+label span{opacity:0.7;}
-        .meter-bar{height:2px;width:0%;background:#555;transition:all 0.3s;margin-top:4px;border-radius:2px;}
-        .rule-met{color:var(--museum-gold)!important;}
-        .cipher-rules li{transition:color 0.3s;}
-        .seal-button{
-            display:block;margin:36px auto 0;
-            background:transparent;
-            border:1px solid rgba(212,175,55,0.85);
-            color:var(--museum-gold-dim);
-            padding:14px 36px;
-            font-family:'Cinzel',serif;
-            font-size: 0.66rem;letter-spacing:5px;
-            cursor:pointer;transition:all 0.5s ease;
-            border-radius:4px;
-        }
-        .seal-button:hover{
-            background:var(--museum-gold);
-            color:#000;
-            box-shadow:0 0 30px rgba(212,175,55,0.2);
-            transform:scale(1.02);
-        }
-        .guest-link{
-            display:block;margin-top:12px;text-align:center;
-            font-family:'Montserrat',sans-serif;
-            font-size: 0.72rem;letter-spacing:2px;
-            color:rgba(255,255,255,0.04);
-            text-decoration:none;transition:color 0.3s;
-        }
-        .guest-link:hover{color:rgba(212,175,55,0.1);}
-        .back-link{display:block;margin-top:4px;font-family:'Montserrat',sans-serif;font-size: 0.72rem;letter-spacing:2px;color:rgba(255,255,255,0.03);text-decoration:none;transition:color 0.3s;}
-        .back-link:hover{color:rgba(212,175,55,0.1);}
-        @media(max-width:600px){.input-row{grid-template-columns:1fr;}.scroll-frame{padding:30px 24px;}}
-
-        .modal-overlay{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);animation:fadeInPage 0.5s ease;}
-        .museum-modal{background:rgba(10,10,10,0.95);border:1px solid var(--museum-gold-dim);padding:40px;max-width:400px;text-align:center;border-radius:4px;}
-        .museum-modal h2{font-family:'Cinzel',serif;font-size: 0.66rem;letter-spacing:6px;color:var(--museum-gold);margin:0 0 10px;}
-        .museum-modal p{font-family:'Cormorant Garamond',serif;font-size: 0.66rem;color:rgba(255,255,255,0.2);font-style:italic;margin:0 0 24px;}
-        .modal-actions{display:flex;gap:10px;justify-content:center;}
-        .modal-actions button{background:transparent;border:1px solid rgba(212,175,55,0.17);color:rgba(212,175,55,0.3);padding:8px 18px;font-family:'Cinzel',serif;font-size: 0.54rem;letter-spacing:3px;cursor:pointer;border-radius:3px;transition:0.3s;}
-        .modal-actions button:hover{border-color:var(--museum-gold);color:var(--museum-gold);}
-        .modal-actions .primary{background:var(--museum-gold);color:#000;border-color:var(--museum-gold);}
-        .modal-actions .primary:hover{box-shadow:0 0 20px rgba(212,175,55,0.2);}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCRIPTORIUM | Scribe Induction</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; style-src-elem 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' unpkg.com cdn.jsdelivr.net; img-src 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; img-src-elem 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; connect-src 'self' *.tile.openstreetmap.org *.basemaps.cartocdn.com">
+<link rel="canonical" href="https://scriptorium-sandy.vercel.app/register.html">
+<meta property="og:title" content="SCRIPTORIUM | Scribe Induction">
+<meta property="og:description" content="Seal your name to the eternal record and enter the Scriptorium as a scribe.">
+    <meta property="og:image" content="https://scriptorium-sandy.vercel.app/og-image.svg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://scriptorium-sandy.vercel.app/register.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Seal your name to the eternal record and enter the Scriptorium as a scribe.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23050505'/%3E%3Ctext x='16' y='24' font-size='22' text-anchor='middle' fill='%23d4af37' font-family='serif'%3ES%3C/text%3E%3C/svg%3E">
+<link href="assets/fonts/fonts.css" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/shared.css">
+<link rel="stylesheet" href="assets/css/features.css">
+<link rel="manifest" href="/manifest.json">
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/sidebar.js"></script>
+<style>
+body { padding: 60px 0 80px 80px; background: #080808; }
+.register-frame { max-width: 480px; margin: 0 auto; padding: 0 24px; }
+.register-card { background: rgba(10,10,10,0.9); border: 1px solid rgba(212,175,55,0.12); border-radius: 4px; padding: 48px 40px; box-shadow: 0 0 80px rgba(0,0,0,0.95); }
+.register-card .seal-icon { text-align: center; font-size: 2.4rem; opacity: 0.25; margin-bottom: 8px; }
+.register-card .label { text-align: center; font-family: 'Montserrat', sans-serif; font-size: var(--text-micro); letter-spacing: 5px; color: rgba(212,175,55,0.2); margin-bottom: 4px; }
+.register-card h1 { text-align: center; font-family: 'Cinzel', serif; font-size: 1rem; letter-spacing: 8px; color: var(--gold); margin: 0 0 24px; text-shadow: 0 0 30px rgba(212,175,55,0.06); }
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; font-family: 'Montserrat', sans-serif; font-size: var(--text-micro); letter-spacing: 3px; color: rgba(212,175,55,0.25); margin-bottom: 6px; }
+.form-group input { width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.6); border: 1px solid rgba(212,175,55,0.08); color: rgba(255,255,255,0.7); font-family: 'Cormorant Garamond', serif; font-size: 0.85rem; border-radius: 2px; outline: none; transition: border-color 0.3s; box-sizing: border-box; }
+.form-group input:focus { border-color: rgba(212,175,55,0.3); }
+.form-group input.error { border-color: #b84a4a; }
+.form-group .hint { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; letter-spacing: 1px; color: rgba(255,255,255,0.2); margin-top: 4px; }
+.form-group .error-msg { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; color: #d48a8a; margin-top: 4px; display: none; }
+.form-group .error-msg.show { display: block; }
+.submit-btn { width: 100%; padding: 12px; background: transparent; border: 1px solid rgba(212,175,55,0.85); color: rgba(212,175,55,0.4); font-family: 'Cinzel', serif; font-size: var(--text-micro); letter-spacing: 4px; cursor: pointer; border-radius: 3px; transition: all 0.5s ease; margin-top: 6px; }
+.submit-btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 30px rgba(212,175,55,0.15); }
+.submit-btn:disabled { opacity: 0.3; cursor: not-allowed; box-shadow: none; }
+.alt-links { text-align: center; margin-top: 20px; }
+.alt-links a { display: inline-block; font-family: 'Montserrat', sans-serif; font-size: var(--text-micro); letter-spacing: 2px; color: var(--text-secondary); text-decoration: none; transition: color 0.3s; margin: 0 8px; }
+.alt-links a:hover { color: rgba(212,175,55,0.1); }
+.form-divider { border: none; border-top: 1px solid rgba(212,175,55,0.04); margin: 24px 0; }
+.toast-container { position: fixed; top: 20px; right: 20px; z-index: 20000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+.toast { pointer-events: auto; padding: 12px 20px; border-radius: 3px; font-family: 'Cinzel', serif; font-size: var(--text-micro); letter-spacing: 2px; background: rgba(10,10,10,0.95); border: 1px solid rgba(212,175,55,0.15); color: rgba(255,255,255,0.6); backdrop-filter: blur(12px); box-shadow: 0 4px 30px rgba(0,0,0,0.5); max-width: 340px; animation: toastIn 0.4s ease; transition: opacity 0.4s ease, transform 0.4s ease; }
+.toast.toast-out { opacity: 0; transform: translateX(40px); }
+.toast.toast-error { border-color: #b84a4a; color: #d48a8a; }
+.toast.toast-success { border-color: rgba(100,200,100,0.4); color: rgba(200,255,200,0.7); }
+@keyframes toastIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+.loading-spinner { display: none; width: 14px; height: 14px; border: 1.5px solid rgba(212,175,55,0.1); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; }
+.loading-spinner.show { display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 600px) { body { padding: 40px 0 60px 0; } .register-card { padding: 32px 24px; } }
+</style>
 </head>
 <body>
 <div id="sidebarContainer"></div>
-<div class="glow-overlay"></div>
-<div class="scroll-frame" id="scrollFrame">
-    <span class="label">OFFICE OF THE ARCHIVE</span>
-    <h1>SCRIBE INDUCTION</h1>
-    <form id="inductionForm">
-        <section class="form-section">
-            <h3 class="section-title">I. THE VESSEL</h3>
-            <div class="input-row">
-                <div class="input-group">
-                    <label>COUNTRY</label>
-                    <select id="regCountry" required>
-                        <option value="">Select Country</option>
-                        <option value="US">United States</option>
-                        <option value="GB">United Kingdom</option>
-                        <option value="CA">Canada</option>
-                        <option value="AU">Australia</option>
-                        <option value="DE">Germany</option>
-                        <option value="FR">France</option>
-                        <option value="IT">Italy</option>
-                        <option value="ES">Spain</option>
-                        <option value="BR">Brazil</option>
-                        <option value="MX">Mexico</option>
-                        <option value="IN">India</option>
-                        <option value="CN">China</option>
-                        <option value="JP">Japan</option>
-                        <option value="KR">South Korea</option>
-                        <option value="PH">Philippines</option>
-                        <option value="NG">Nigeria</option>
-                        <option value="ZA">South Africa</option>
-                        <option value="KE">Kenya</option>
-                        <option value="EG">Egypt</option>
-                        <option value="ET">Ethiopia</option>
-                        <option value="GH">Ghana</option>
-                        <option value="IL">Israel</option>
-                        <option value="AE">UAE</option>
-                        <option value="SA">Saudi Arabia</option>
-                        <option value="TR">Turkey</option>
-                        <option value="RU">Russia</option>
-                        <option value="UA">Ukraine</option>
-                        <option value="PL">Poland</option>
-                        <option value="NL">Netherlands</option>
-                        <option value="SE">Sweden</option>
-                        <option value="NO">Norway</option>
-                        <option value="DK">Denmark</option>
-                        <option value="FI">Finland</option>
-                        <option value="CH">Switzerland</option>
-                        <option value="AT">Austria</option>
-                        <option value="BE">Belgium</option>
-                        <option value="PT">Portugal</option>
-                        <option value="GR">Greece</option>
-                        <option value="IE">Ireland</option>
-                        <option value="NZ">New Zealand</option>
-                        <option value="SG">Singapore</option>
-                        <option value="MY">Malaysia</option>
-                        <option value="ID">Indonesia</option>
-                        <option value="TH">Thailand</option>
-                        <option value="VN">Vietnam</option>
-                        <option value="AR">Argentina</option>
-                        <option value="CL">Chile</option>
-                        <option value="CO">Colombia</option>
-                        <option value="PE">Peru</option>
-                        <option value="OTHER">Other</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>CITY</label>
-                    <input type="text" id="regCity" placeholder="e.g. Jerusalem" required>
-                </div>
-            </div>
-            <div class="input-row">
-                <div class="input-group">
-                    <label>DAY OF ORIGIN</label>
-                    <input type="date" id="regDob" required>
-                </div>
-                <div class="input-group">
-                    <label>IDENTITY</label>
-                    <select id="regGender">
-                        <option value="male">Brother</option>
-                        <option value="female">Sister</option>
-                        <option value="seeker">Seeker</option>
-                    </select>
-                </div>
-            </div>
-            <div class="input-row">
-                <div class="input-group">
-                    <label>DAY OF ORIGIN</label>
-                    <input type="date" id="regDob" required>
-                </div>
-                <div class="input-group">
-                    <label>IDENTITY</label>
-                    <select id="regGender">
-                        <option value="male">Brother</option>
-                        <option value="female">Sister</option>
-                        <option value="seeker">Seeker</option>
-                    </select>
-                </div>
-            </div>
-        </section>
-
-        <section class="form-section">
-            <h3 class="section-title">II. THE CIPHER</h3>
-            <div class="input-group">
-                <label>CHOSEN USER ID</label>
-                <input type="text" id="regId" placeholder="Unique_ID_123" required>
-            </div>
-            <div class="input-group">
-                <label>PARCHMENT ADDRESS (EMAIL)</label>
-                <input type="email" id="regEmail" placeholder="scribe@scriptorium.org" required>
-            </div>
-            <div class="input-group">
-                <label>SECRET KEY (PASSWORD)</label>
-                <input type="password" id="regPassword" oninput="checkStrength(this.value)" required>
-                <div id="strengthMeter" class="meter-bar"></div>
-                <ul class="cipher-rules" id="cipherRules" style="list-style:none;padding:0;margin:4px 0 0;font-family:'Montserrat',sans-serif;font-size: 0.72rem;color:#444;">
-                    <li id="ruleLen">&#x25CF; 8+ characters</li>
-                    <li id="ruleNum">&#x25CF; Contains a number</li>
-                    <li id="ruleSpec">&#x25CF; Special character (!@#$%^&*)</li>
-                </ul>
-            </div>
-        </section>
-
-        <section class="form-section">
-            <h3 class="section-title">III. THE SCHOLARSHIP</h3>
-            <div class="input-group">
-                <label>BIBLICAL KNOWLEDGE LEVEL</label>
-                <div class="level-selector">
-                    <input type="radio" name="kb" value="1" id="lv1" checked>
-                    <label for="lv1">Novice<span>New to the Word</span></label>
-                    <input type="radio" name="kb" value="2" id="lv2">
-                    <label for="lv2">Student<span>Familiar with Text</span></label>
-                    <input type="radio" name="kb" value="3" id="lv3">
-                    <label for="lv3">Scribe<span>Diligent Researcher</span></label>
-                    <input type="radio" name="kb" value="4" id="lv4">
-                    <label for="lv4">Sage<span>Theological Expert</span></label>
-                </div>
-            </div>
-        </section>
-
-        <button type="submit" class="seal-button">AFFIX SEAL &amp; ENTER</button>
-        <a href="scriptorium.html" class="guest-link">ENTER AS A GUEST</a>
-        <a href="login.html" class="guest-link" style="margin-top:4px;">ALREADY A SCRIBE? SIGN IN</a>
-        <a href="scriptorium.html" class="back-link">&#8592; RETURN TO THE THRESHOLD</a>
-    </form>
+<div class="register-frame">
+<div class="register-card">
+<div class="seal-icon">&#x2726;</div>
+<div class="label">OFFICE OF THE ARCHIVE</div>
+<h1>THE RITE OF INDUCTION</h1>
+<form id="registerForm" novalidate>
+<div class="form-group">
+<label for="regName">SCRIBE NAME</label>
+<input type="text" id="regName" placeholder="Your name among the scribes" autocomplete="name">
+<div class="hint">The name by which you shall be known in the Archive</div>
+<div class="error-msg" id="nameError"></div>
 </div>
-
+<div class="form-group">
+<label for="regUserId">SCRIBE ID</label>
+<input type="text" id="regUserId" placeholder="A unique identifier (3+ characters)" autocomplete="username">
+<div class="hint">Letters, numbers, hyphens, underscores — 3 to 30 characters</div>
+<div class="error-msg" id="userIdError"></div>
+</div>
+<div class="form-group">
+<label for="regEmail">EMAIL</label>
+<input type="email" id="regEmail" placeholder="your@correspondence.com" autocomplete="email">
+<div class="hint">Your seal of correspondence with the Order</div>
+<div class="error-msg" id="emailError"></div>
+</div>
+<div class="form-group">
+<label for="regPassword">CIPHER (PASSWORD)</label>
+<input type="password" id="regPassword" placeholder="8 characters or more" autocomplete="new-password">
+<div class="hint">A secret key — guard it well. Minimum 8 characters.</div>
+<div class="error-msg" id="passwordError"></div>
+</div>
+<div class="form-group">
+<label for="regConfirm">CONFIRM CIPHER</label>
+<input type="password" id="regConfirm" placeholder="Repeat your secret key" autocomplete="new-password">
+<div class="error-msg" id="confirmError"></div>
+</div>
+<button type="submit" class="submit-btn" id="submitBtn">AFFIX YOUR SEAL <span class="loading-spinner" id="spinner"></span></button>
+</form>
+<hr class="form-divider">
+<div class="alt-links">
+<a href="login.html">ALREADY SEALED? SIGN IN</a>
+<a href="scriptorium.html">ENTER AS A GUEST</a>
+</div>
+</div>
+</div>
+<div class="toast-container" id="toastContainer" aria-live="polite"></div>
 <script>
-    window.checkStrength = function(p) {
-        var strength = 0;
-        var len = p.length >= 8;
-        var num = /[0-9]/.test(p);
-        var spec = /[!@#$%^&*]/.test(p);
-        if (len) { strength += 33; document.getElementById('ruleLen').classList.add('rule-met'); } else { document.getElementById('ruleLen').classList.remove('rule-met'); }
-        if (num) { strength += 33; document.getElementById('ruleNum').classList.add('rule-met'); } else { document.getElementById('ruleNum').classList.remove('rule-met'); }
-        if (spec) { strength += 34; document.getElementById('ruleSpec').classList.add('rule-met'); } else { document.getElementById('ruleSpec').classList.remove('rule-met'); }
-        var meter = document.getElementById('strengthMeter');
-        if (meter) { meter.style.width = strength + '%'; meter.style.background = strength === 100 ? '#d4af37' : (strength > 33 ? '#b8860b' : '#8b0000'); }
-    };
+(function() {
+var form = document.getElementById('registerForm');
+var submitBtn = document.getElementById('submitBtn');
+var spinner = document.getElementById('spinner');
+var toastContainer = document.getElementById('toastContainer');
+var inputs = {
+  name: document.getElementById('regName'),
+  userId: document.getElementById('regUserId'),
+  email: document.getElementById('regEmail'),
+  password: document.getElementById('regPassword'),
+  confirm: document.getElementById('regConfirm')
+};
+var errors = {
+  name: document.getElementById('nameError'),
+  userId: document.getElementById('userIdError'),
+  email: document.getElementById('emailError'),
+  password: document.getElementById('passwordError'),
+  confirm: document.getElementById('confirmError')
+};
 
-    function validateCipher(p) { return /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(p); }
+function showToast(title, msg, type) {
+  if (window.Scr && window.Scr.toast) { window.Scr.toast(title + ' | ' + msg, type); return; }
+  var t = document.createElement('div');
+  t.className = 'toast' + (type === 'error' ? ' toast-error' : type === 'success' ? ' toast-success' : '');
+  t.innerHTML = title + '<div style="font-family:\'Cormorant Garamond\',serif;font-size:0.65rem;color:rgba(255,255,255,0.4);margin-top:4px;">' + msg + '</div>';
+  toastContainer.appendChild(t);
+  setTimeout(function() { t.classList.add('toast-out'); setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 400); }, 5000);
+}
 
-    async function hashPassword(pass) {
-        if (!crypto || !crypto.subtle || !crypto.subtle.digest) {
-            throw new Error('CRYPTO_UNAVAILABLE');
-        }
-        var enc = new TextEncoder();
-        var buf = await crypto.subtle.digest('SHA-256', enc.encode(pass));
-        var arr = Array.from(new Uint8Array(buf));
-        return arr.map(function(b) { return b.toString(16).padStart(2,'0'); }).join('');
-    }
+function clearErrors() {
+  Object.keys(errors).forEach(function(k) {
+    errors[k].textContent = '';
+    errors[k].classList.remove('show');
+    if (inputs[k]) inputs[k].classList.remove('error');
+  });
+}
 
-    document.getElementById('inductionForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        var pass = document.getElementById('regPassword').value;
-        if (!validateCipher(pass)) {
-            alert('Your Cipher Key must be at least 8 characters with at least one number and one special character (!@#$%^&*).');
-            return;
-        }
-        var hashed;
-        try { hashed = await hashPassword(pass); } catch (h) {
-            if (h.message === 'CRYPTO_UNAVAILABLE') { alert('Your browser does not support cryptographic functions on file://. Please use Chrome, Edge, or Firefox.'); return; }
-            alert('An unexpected error occurred during registration.'); return;
-        }
-        var kb = document.querySelector('input[name="kb"]:checked').value;
-        var rankTitles = { '1': 'Novice of the Outer Court', '2': 'Student of the Living Word', '3': 'Witness of the Covenant', '4': 'Scribe of the High Archive' };
-        var countrySelect = document.getElementById('regCountry');
-        var countryText = countrySelect.options[countrySelect.selectedIndex].text;
-        var profile = {
-            name: document.getElementById('regName').value,
-            country: document.getElementById('regCountry').value,
-            countryName: countryText,
-            city: document.getElementById('regCity').value,
-            location: countryText + ', ' + document.getElementById('regCity').value,
-            userId: document.getElementById('regId').value,
-            email: document.getElementById('regEmail').value,
-            password: hashed,
-            dob: document.getElementById('regDob').value,
-            gender: document.getElementById('regGender').value,
-            knowledge: kb,
-            rank: rankTitles[kb] || 'Seeker',
-            joined: new Date().toISOString(),
-            lastActive: Date.now(),
-            totalCharacters: 0,
-            versesCompleted: 0,
-            ntVerses: 0,
-            _v: 2
-        };
-        localStorage.setItem('activeScribe', JSON.stringify(profile));
-        localStorage.setItem('scribeData', JSON.stringify({
-            name: profile.name,
-            totalCharacters: 0,
-            rank: profile.rank,
-            versesCompleted: 0,
-            ntVerses: 0,
-            _v: 2
-        }));
-        document.getElementById('scrollFrame').classList.add('fade-out');
-        if (window.ScriptoriumAudio) { try { window.ScriptoriumAudio.transitionTo('ot'); } catch(e) {} }
-        showInductionModal();
-    });
+function showFieldError(key, msg) {
+  if (errors[key]) { errors[key].textContent = msg; errors[key].classList.add('show'); }
+  if (inputs[key]) inputs[key].classList.add('error');
+}
 
-    function showInductionModal() {
-        var modal = document.createElement('div');
-        modal.className = 'modal-overlay';
-        modal.innerHTML = '<div class="museum-modal"><h2>INDUCTION COMPLETE</h2><p>Your seal has been affixed to the eternal record.</p><div class="modal-actions"><button onclick="this.closest(\'.modal-overlay\').remove();window.location.href=\'scriptorium.html\'" class="primary">ENTER THE ARCHIVE</button><button onclick="this.closest(\'.modal-overlay\').remove();setTimeout(function(){window.generateScribeCertificate()},100)">DOWNLOAD CREDENTIALS</button><button onclick="this.closest(\'.modal-overlay\').remove();setTimeout(function(){window.generateWelcomeLetter()},100)">&#128231; LETTER OF APPOINTMENT</button></div></div>';
-        document.body.appendChild(modal);
-    }
+function setLoading(v) {
+  submitBtn.disabled = v;
+  spinner.classList.toggle('show', v);
+  submitBtn.textContent = v ? 'SEALING\u2026 ' : 'AFFIX YOUR SEAL ';
+  if (v) submitBtn.appendChild(spinner);
+}
 
-    function openDocWindow(html) {
-        var blob = new Blob([html], {type: 'text/html'});
-        var url = URL.createObjectURL(blob);
-        var w = window.open(url, '_blank');
-        if (!w || w.closed) {
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = 'document.html';
-            a.click();
-        }
-    }
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  clearErrors();
+  var name = inputs.name.value.trim();
+  var userId = inputs.userId.value.trim();
+  var email = inputs.email.value.trim();
+  var password = inputs.password.value;
+  var confirm = inputs.confirm.value;
+  var valid = true;
 
-    function buildDocTemplate(opts) {
-        var now = new Date();
-        var refNum = 'SCR-' + now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0') + '-' + Math.floor(Math.random()*9000+1000);
-        var dateStr = now.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
-        return '<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"><style>' +
-            'body{margin:0;padding:0;background:#0a0a0a;font-family:"Cormorant Garamond",serif;color:#e0e0e0;min-height:100vh;}' +
-            '.doc-wrapper{max-width:700px;margin:0 auto;position:relative;}' +
-            '.doc-border{position:absolute;inset:12px;border:1px solid rgba(212,175,55,0.2);pointer-events:none;}' +
-            '.doc-border::before,.doc-border::after{content:"";position:absolute;width:20px;height:20px;border-color:rgba(212,175,55,0.5);border-style:solid;}' +
-            '.doc-border::before{top:-1px;left:-1px;border-width:2px 0 0 2px;}' +
-            '.doc-border::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0;}' +
-            '.doc-header{padding:40px 40px 30px;text-align:center;border-bottom:1px solid rgba(212,175,55,0.15);position:relative;}' +
-            '.doc-seal{width:60px;height:60px;margin:0 auto 15px;}' +
-            '.doc-seal svg{width:100%;height:100%;}' +
-            '.doc-title{font-family:"Cinzel",serif;font-size:1.8rem;letter-spacing:8px;color:#d4af37;margin:0 0 4px;}' +
-            '.doc-subtitle{font-family:"Cormorant Garamond",serif;font-size:0.9rem;font-style:italic;color:rgba(212,175,55,0.5);margin:0 0 15px;}' +
-            '.doc-type{font-family:"Cinzel",serif;font-size:0.6rem;letter-spacing:4px;color:rgba(212,175,55,0.3);text-transform:uppercase;}' +
-            '.doc-body{padding:35px 40px;}' +
-            '.doc-footer{padding:20px 40px;border-top:1px solid rgba(212,175,55,0.1);text-align:center;}' +
-            '.doc-footer-ref{font-family:"Cinzel",serif;font-size:0.5rem;letter-spacing:3px;color:rgba(212,175,55,0.25);}' +
-            '.doc-footer-date{font-family:"Cormorant Garamond",serif;font-size:0.75rem;font-style:italic;color:rgba(255,255,255,0.2);margin-top:4px;}' +
-            '.doc-watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-family:"Cinzel",serif;font-size:8rem;letter-spacing:20px;color:rgba(212,175,55,0.02);pointer-events:none;white-space:nowrap;z-index:0;}' +
-            '.doc-content{position:relative;z-index:1;}' +
-            '@media print{body{background:#fff;color:#333;}.doc-border{border-color:rgba(0,0,0,0.15);}.doc-border::before,.doc-border::after{border-color:rgba(0,0,0,0.3);}.doc-title{color:#333;}.doc-subtitle{color:#666;}.doc-type{color:#888;}.doc-footer-ref{color:#888;}.doc-footer-date{color:#666;}.doc-watermark{color:rgba(0,0,0,0.03);}}' +
-            '</style></head><body>' +
-            '<div class="doc-watermark">SCRIPTORIUM</div>' +
-            '<div class="doc-wrapper"><div class="doc-border"></div>' +
-            '<div class="doc-content">' +
-            '<div class="doc-header">' +
-            '<div class="doc-seal"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="28" fill="none" stroke="rgba(212,175,55,0.4)" stroke-width="1"/><circle cx="30" cy="30" r="24" fill="none" stroke="rgba(212,175,55,0.2)" stroke-width="0.5"/><path d="M30 8 L30 52 M8 30 L52 30" stroke="rgba(212,175,55,0.1)" stroke-width="0.3"/><text x="30" y="36" text-anchor="middle" font-family="Cinzel,serif" font-size="22" fill="rgba(212,175,55,0.5)">S</text></svg></div>' +
-            '<h1 class="doc-title">SCRIPTORIUM</h1>' +
-            '<p class="doc-subtitle">The Eternal Record of the Word</p>' +
-            '<div class="doc-type">' + (opts.docType || 'OFFICIAL DOCUMENT') + '</div>' +
-            '</div>' +
-            '<div class="doc-body">' + (opts.body || '') + '</div>' +
-            '<div class="doc-footer">' +
-            '<div class="doc-footer-ref">REF: ' + refNum + ' &bull; ESTABLISHED IN THE ETERNAL RECORD</div>' +
-            '<div class="doc-footer-date">Generated: ' + dateStr + '</div>' +
-            '</div></div></div></body></html>';
-    }
+  if (!name) { showFieldError('name', 'A scribe name is required'); valid = false; }
+  if (!userId) { showFieldError('userId', 'A Scribe ID is required'); valid = false; }
+  else if (userId.length < 3) { showFieldError('userId', 'Scribe ID must be at least 3 characters'); valid = false; }
+  else if (!/^[a-zA-Z0-9_-]+$/.test(userId)) { showFieldError('userId', 'Letters, numbers, hyphens, underscores only'); valid = false; }
+  if (!email) { showFieldError('email', 'An email is required'); valid = false; }
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showFieldError('email', 'Provide a valid email address'); valid = false; }
+  if (!password) { showFieldError('password', 'A cipher is required'); valid = false; }
+  else if (password.length < 8) { showFieldError('password', 'Cipher must be 8 or more characters'); valid = false; }
+  if (password !== confirm) { showFieldError('confirm', 'Ciphers do not match'); valid = false; }
 
-    window.generateScribeCertificate = function() {
-        var scribe = JSON.parse(localStorage.getItem('activeScribe'));
-        if (!scribe) return;
-        var titles = { '1': 'Novice of the Outer Court', '2': 'Student of the Living Word', '3': 'Witness of the Covenant', '4': 'Scribe of the High Archive' };
-        var body = '<div style="text-align:center;padding:20px 0;">' +
-            '<p style="font-size:1.1rem;color:rgba(255,255,255,0.5);margin:0 0 30px;font-style:italic;">Official Credentials of the Order</p>' +
-            '<p style="font-size:1.3rem;line-height:1.8;margin:0 0 30px;">This document certifies that the soul known as<br>' +
-            '<span style="font-family:\'Cinzel\',serif;font-size:2rem;color:#d4af37;letter-spacing:4px;display:inline-block;margin:15px 0;border-bottom:1px solid rgba(212,175,55,0.3);padding-bottom:5px;">' + scribe.name + '</span><br>' +
-            'hailing from <strong style="color:#e6c667;">' + (scribe.city || '') + ', ' + (scribe.countryName || 'Unknown') + '</strong><br>' +
-            'has been formally inducted with the standing of:</p>' +
-            '<p style="font-family:\'Cinzel\',serif;font-size:1.4rem;color:#d4af37;letter-spacing:3px;margin:0 0 30px;">' + (titles[scribe.knowledge] || 'Seeker') + '</p>' +
-            '<div style="width:80px;height:80px;margin:0 auto 20px;background:rgba(183,28,28,0.8);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:\'Cinzel\',serif;font-size:2.5rem;color:#fff;box-shadow:3px 3px 15px rgba(0,0,0,0.4);">S</div>' +
-            '<p style="font-size:0.85rem;color:rgba(255,255,255,0.3);margin:0;">Scribe ID: ' + (scribe.userId || '\u2014') + ' &bull; Joined: ' + new Date(scribe.joined).toLocaleDateString() + '</p>' +
-            '</div>';
-        openDocWindow(buildDocTemplate({ docType: 'CERTIFICATE OF INDUCTION', body: body }));
-    };
+  if (!valid) return;
+  if (typeof ScriptoriumAPI === 'undefined' || typeof ScriptoriumAPI.register !== 'function') {
+    showToast('ARCHIVE ERROR', 'The induction rite cannot be reached at this time. The Archive may be sealed.', 'error');
+    return;
+  }
 
-    window.generateWelcomeLetter = function() {
-        var s = JSON.parse(localStorage.getItem('activeScribe'));
-        if (!s) return;
-        var gender = s.gender === 'female' ? 'Sister' : 'Brother';
-        var titles = { '1': 'Novice of the Outer Court', '2': 'Student of the Living Word', '3': 'Witness of the Covenant', '4': 'Scribe of the High Archive' };
-        var body = '<p style="font-family:\'Cinzel\',serif;font-size:1.2rem;color:#d4af37;margin:0 0 20px;">Greetings, ' + gender + ' ' + s.name + ',</p>' +
-            '<p style="font-size:1.05rem;line-height:1.8;margin:0 0 20px;">Your petition for induction into the <strong style="color:#e6c667;">Order of Scribes</strong> has been reviewed and accepted. Your seal is now affixed to the global chronicle, marking your place among the witnesses of the Covenant.</p>' +
-            '<p style="font-size:1.05rem;line-height:1.8;margin:0 0 20px;">Based on your scholarship, you have been granted the following standing within the Archive:</p>' +
-            '<div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.2);padding:20px;margin:20px 0;border-radius:3px;">' +
-            '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(212,175,55,0.08);"><span style="font-family:\'Cinzel\',serif;font-size:0.65rem;letter-spacing:2px;color:rgba(212,175,55,0.4);">SCRIBE ID</span><span style="font-size:0.95rem;color:#e0e0e0;">' + (s.userId || '\u2014') + '</span></div>' +
-            '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(212,175,55,0.08);"><span style="font-family:\'Cinzel\',serif;font-size:0.65rem;letter-spacing:2px;color:rgba(212,175,55,0.4);">REGION</span><span style="font-size:0.95rem;color:#e0e0e0;">' + ((s.city && s.countryName) ? (s.city + ', ' + s.countryName) : (s.location || 'Unknown')) + '</span></div>' +
-            '<div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="font-family:\'Cinzel\',serif;font-size:0.65rem;letter-spacing:2px;color:rgba(212,175,55,0.4);">STANDING</span><span style="font-family:\'Cinzel\',serif;font-size:0.95rem;color:#d4af37;">' + (titles[s.knowledge] || 'Seeker') + '</span></div>' +
-            '</div>' +
-            '<p style="font-size:1.05rem;line-height:1.8;margin:0 0 20px;">You may now enter the Scriptorium to read, compare, and chronicle. Your journey has been marked from this day forward.</p>' +
-            '<p style="font-style:italic;color:rgba(212,175,55,0.5);font-size:0.95rem;margin:0;text-align:center;">"Let the wise hear and increase in learning." \u2014 Proverbs 1:5</p>';
-        openDocWindow(buildDocTemplate({ docType: 'LETTER OF APPOINTMENT', body: body }));
-    };
-
-    window.generateMilestone = function() {
-        var s = JSON.parse(localStorage.getItem('activeScribe')) || { name: 'Scribe' };
-        var streak = JSON.parse(localStorage.getItem('scribe_logia_streak')) || { count: 0 };
-        var body = '<div style="text-align:center;padding:10px 0 25px;">' +
-            '<div style="font-size:2.5rem;margin-bottom:10px;">&#x1F52E;</div>' +
-            '<p style="font-family:\'Cinzel\',serif;font-size:0.65rem;letter-spacing:4px;color:rgba(212,175,55,0.4);margin:0 0 5px;">RANK ASCENDED</p>' +
-            '<p style="font-family:\'Cinzel\',serif;font-size:1.6rem;color:#d4af37;letter-spacing:4px;margin:0 0 20px;">The Guardian</p>' +
-            '</div>' +
-            '<p style="font-size:1.1rem;line-height:1.8;margin:0 0 20px;">Peace be with you, <strong style="color:#e6c667;">' + s.name + '</strong>.</p>' +
-            '<p style="font-size:1.05rem;line-height:1.8;margin:0 0 20px;">Thirty suns have risen and set since you began your vigil in the Scriptorium. Your consistency has not gone unnoticed by the Order.</p>' +
-            '<p style="font-size:1.05rem;margin:0 0 20px;">Your current streak: <strong style="color:#d4af37;">' + streak.count + ' days</strong></p>' +
-            '<div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.2);padding:20px;margin:20px 0;border-radius:3px;">' +
-            '<p style="font-family:\'Cinzel\',serif;font-size:0.65rem;letter-spacing:3px;color:rgba(212,175,55,0.5);margin:0 0 15px;">NEW POWERS UNLOCKED</p>' +
-            '<ul style="list-style:none;padding:0;margin:0;">' +
-            '<li style="padding:6px 0;border-bottom:1px solid rgba(212,175,55,0.06);font-size:0.95rem;line-height:1.5;"><strong style="color:#e6c667;">Celestial Aura:</strong> Your marker on the Map now pulses with blue-gold light.</li>' +
-            '<li style="padding:6px 0;border-bottom:1px solid rgba(212,175,55,0.06);font-size:0.95rem;line-height:1.5;"><strong style="color:#e6c667;">Guardian\'s Ink:</strong> Your messages in the Witness Wall carry the Guardian\'s shimmer.</li>' +
-            '<li style="padding:6px 0;font-size:0.95rem;line-height:1.5;"><strong style="color:#e6c667;">Deeper Access:</strong> Obscure archaeological dossiers are now visible to your eyes.</li>' +
-            '</ul></div>' +
-            '<p style="font-style:italic;color:rgba(212,175,55,0.5);font-size:0.95rem;margin:0;text-align:center;">Continue your toil, faithful scribe. The Word is eternal.</p>';
-        openDocWindow(buildDocTemplate({ docType: 'MILESTONE ACHIEVEMENT', body: body }));
-    };
-
-    window.generatePasswordReset = function() {
-        var s = JSON.parse(localStorage.getItem('activeScribe')) || { name: 'Scribe', userId: '\u2014' };
-        var body = '<p style="font-size:1.05rem;line-height:1.8;margin:0 0 20px;">A request has been received to reset the <strong style="color:#e6c667;">Cipher Key</strong> associated with your identity <strong style="color:#d4af37;">' + s.userId + '</strong> in the Scriptorium.</p>' +
-            '<p style="font-size:1.05rem;line-height:1.8;margin:0 0 20px;">To forge a new key and regain access to your scrolls and discoveries, please use the secure link below. This portal will remain open for only one hour.</p>' +
-            '<div style="text-align:center;margin:30px 0;"><a href="#" style="display:inline-block;border:1px solid rgba(212,175,55,0.4);color:#d4af37;padding:12px 30px;text-decoration:none;font-family:\'Cinzel\',serif;font-size:0.7rem;letter-spacing:3px;border-radius:3px;">REFORGE CIPHER KEY</a></div>' +
-            '<p style="font-style:italic;color:rgba(255,255,255,0.3);font-size:0.9rem;margin:0;text-align:center;">If you did not request this restoration, your current cipher remains secure. No action is required from your hand.</p>';
-        openDocWindow(buildDocTemplate({ docType: 'CIPHER KEY RESTORATION', body: body }));
-    };
+  setLoading(true);
+  ScriptoriumAPI.register({ name: name, userId: userId, email: email, password: password }).then(function(res) {
+    setLoading(false);
+    showToast('INDUCTION COMPLETE', 'Your name has been written in the Lamb\'s Scroll. You may now enter as a scribe.', 'success');
+    setTimeout(function() { window.location.href = 'login.html'; }, 1800);
+  }).catch(function(err) {
+    setLoading(false);
+    var msg = err && err.error ? err.error : 'The seal could not be affixed. The Archive may be unreachable.';
+    showToast('INDUCTION FAILED', msg, 'error');
+  });
+});
+})();
 </script>
 </body>
 </html>
