@@ -1,10 +1,193 @@
 {
-  "version": "Placeholder",
+  "version": "Deuterocanonical",
   "bookId": "DIDACHE",
   "title": "Didache",
-  "writer": "Twelve Apostles",
+  "writer": "Unknown (early church manual)",
   "era": "nt",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 16,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": [
+        "There are two ways: one of life and one of death, and there is a great difference between the two ways.",
+        "Now the way of life is this: first, you shall love God who made you; second, love your neighbor as yourself.",
+        "And do not do to another what you would not have done to you.",
+        "Bless those who curse you and pray for your enemies; fast for those who persecute you.",
+        "For what credit is it if you love those who love you? Do not even the Gentiles do the same?",
+        "But love those who hate you, and you will have no enemy."
+      ]
+    },
+    {
+      "number": 2,
+      "verses": [
+        "You shall not murder; you shall not commit adultery; you shall not corrupt boys; you shall not commit sexual immorality; you shall not steal; you shall not practice magic; you shall not use potions; you shall not murder a child by abortion nor kill an infant after birth.",
+        "You shall not covet your neighbor's possessions; you shall not swear falsely; you shall not bear false witness; you shall not speak evil; you shall not hold grudges.",
+        "You shall not be double-minded nor double-tongued, for duplicity is a snare of death.",
+        "Your word shall not be false or empty, but fulfilled by action.",
+        "You shall not be greedy or rapacious or hypocritical or malicious or arrogant.",
+        "You shall not plot evil against your neighbor.",
+        "You shall not hate any person, but some you shall reprove, and for others you shall pray, and some you shall love more than your own life."
+      ]
+    },
+    {
+      "number": 3,
+      "verses": [
+        "My child, flee from all evil and from everything like it.",
+        "Do not be prone to anger, for anger leads to murder; do not be jealous or quarrelsome or hot-tempered, for from all these things murders are born.",
+        "My child, do not be lustful, for lust leads to sexual immorality; do not use foul speech or be lecherous, for from all these things adulteries are born.",
+        "My child, do not be an augur, since it leads to idolatry; do not practice magic or astrology or purifications, for from all these things idolatry is born.",
+        "My child, do not be a liar, for lying leads to theft; do not be greedy or vainglorious, for from all these things thefts are born.",
+        "My child, do not be a murmurer, since it leads to blasphemy; do not be arrogant or evil-minded, for from all these things blasphemies are born.",
+        "But be meek, for the meek shall inherit the earth.",
+        "Be patient and merciful and guileless and gentle and good, and tremble at the words which you have heard.",
+        "You shall not exalt yourself nor give license to your soul to be arrogant.",
+        "Your soul shall not be joined with the proud, but you shall walk with the righteous and humble.",
+        "Accept the things that happen to you as good, knowing that apart from God nothing happens."
+      ]
+    },
+    {
+      "number": 4,
+      "verses": [
+        "My child, remember night and day the one who speaks the word of God to you, and honor him as the Lord, for where the Lord's nature is spoken, there the Lord is present.",
+        "Seek out daily the presence of the saints, so that you may find rest in their words.",
+        "You shall not cause division, but you shall reconcile those who quarrel; you shall judge righteously, and you shall not show partiality when reproving transgressions.",
+        "You shall not waver in your decision.",
+        "Do not be one who stretches out his hands to receive but withdraws them when it is time to give.",
+        "If you have anything earned by your hands, you shall give a ransom for your sins.",
+        "You shall not hesitate to give, nor shall you grumble when giving, for you know who is the good paymaster of the reward.",
+        "You shall not turn away the needy, but share everything with your brother, and do not claim anything as your own, for if you are sharers in the imperishable, how much more in the perishable things?",
+        "You shall not withhold your hand from your son or your daughter, but from their youth you shall teach them the fear of God.",
+        "You shall not give orders in bitterness to your male or female servant who hope in the same God, lest they stop fearing the God who is over both of you; for he comes not to call according to the outward appearance, but to those whom the Spirit has prepared.",
+        "And you, servants, submit to your masters as to the image of God, with respect and fear.",
+        "Hate all hypocrisy and everything that is not pleasing to the Lord.",
+        "Do not forsake the commandments of the Lord, but keep what you have received, neither adding nor subtracting.",
+        "Confess your transgressions in church, and do not approach your prayer with an evil conscience.",
+        "This is the way of life."
+      ]
+    },
+    {
+      "number": 5,
+      "verses": [
+        "But the way of death is this: first of all, it is evil and full of curses — murder, adultery, lust, sexual immorality, theft, idolatry, magic, sorcery, robbery, false testimony, hypocrisy, duplicity, deceit, arrogance, malice, stubbornness, greed, foul speech, jealousy, insolence, pride, boastfulness.",
+        "Those who persecute the good, who hate the truth, who love lies, who do not know the reward of righteousness, who do not adhere to what is good nor to righteous judgment, who keep watch not for good but for evil, from whom gentleness and patience are far off, who love empty things, who pursue gain, who show no mercy to the poor, who do not work for the burdened, who do not know their Maker, who murder children and destroy the image of God, who turn away the needy, who oppress the afflicted, who are advocates of the rich, who are lawless judges of the poor.",
+        "May you be delivered, children, from all these things!"
+      ]
+    },
+    {
+      "number": 6,
+      "verses": [
+        "See that no one leads you astray from this way of teaching, for such a person teaches you apart from God.",
+        "For if you can bear the entire yoke of the Lord, you will be perfect; but if you cannot, do what you can.",
+        "Concerning food, bear what you can, but keep strictly from that which is sacrificed to idols, for it is the worship of dead gods."
+      ]
+    },
+    {
+      "number": 7,
+      "verses": [
+        "Concerning baptism, baptize in this way: after you have said all these things, baptize in the name of the Father and of the Son and of the Holy Spirit, in living water.",
+        "If you do not have living water, baptize in other water; and if you cannot in cold, then in warm.",
+        "If you have neither, pour water three times on the head in the name of the Father and of the Son and of the Holy Spirit.",
+        "Before the baptism, let the baptizer and the candidate fast, and any others who are able; and command the candidate to fast one or two days beforehand."
+      ]
+    },
+    {
+      "number": 8,
+      "verses": [
+        "Do not let your fasts coincide with those of the hypocrites; they fast on Monday and Thursday, but you should fast on Wednesday and Friday.",
+        "Do not pray like the hypocrites, but pray as the Lord commanded in his Gospel: Our Father in heaven, hallowed be your name, your kingdom come, your will be done on earth as it is in heaven. Give us today our daily bread. Forgive us our debt, as we forgive our debtors. And lead us not into temptation, but deliver us from the evil one. For yours is the power and the glory forever.",
+        "Pray this three times a day."
+      ]
+    },
+    {
+      "number": 9,
+      "verses": [
+        "Concerning the Eucharist, give thanks in this way:",
+        "First, over the cup: We thank you, our Father, for the holy vine of David your servant, which you made known to us through Jesus your servant. To you be the glory forever.",
+        "And over the broken bread: We thank you, our Father, for the life and knowledge which you made known to us through Jesus your servant. To you be the glory forever.",
+        "As this broken bread was scattered over the mountains and being gathered together became one, so may your church be gathered together from the ends of the earth into your kingdom, for yours is the glory and the power through Jesus Christ forever.",
+        "Let no one eat or drink of your Eucharist except those baptized in the name of the Lord, for concerning this the Lord said, Do not give what is holy to the dogs."
+      ]
+    },
+    {
+      "number": 10,
+      "verses": [
+        "After you have been filled, give thanks in this way:",
+        "We thank you, holy Father, for your holy name, which you have made dwell in our hearts, and for the knowledge and faith and immortality which you made known to us through Jesus your servant. To you be the glory forever.",
+        "You, Lord Almighty, created all things for your name's sake, and gave food and drink to humans for enjoyment, so that they might give thanks to you; but to us you have given spiritual food and drink and eternal life through your servant.",
+        "Above all, we thank you because you are mighty. To you be the glory forever.",
+        "Remember, Lord, your church, to deliver it from every evil and to perfect it in your love, and gather it from the four winds, sanctified for your kingdom, which you have prepared for it. For yours is the power and the glory forever.",
+        "Let grace come, and let this world pass away. Hosanna to the God of David. If anyone is holy, let him come; if anyone is not, let him repent. Maranatha. Amen.",
+        "But allow the prophets to give thanks as much as they wish."
+      ]
+    },
+    {
+      "number": 11,
+      "verses": [
+        "Receive whoever comes and teaches you all these things.",
+        "But if the teacher himself turns away and teaches a different doctrine that undermines this, do not listen to him; but if he teaches so as to increase righteousness and knowledge of the Lord, receive him as the Lord.",
+        "Concerning the apostles and prophets, follow the decree of the Gospel.",
+        "Let every apostle who comes to you be received as the Lord.",
+        "But he shall not stay more than one day; if necessary, a second day. If he stays three days, he is a false prophet.",
+        "When he leaves, let the apostle receive nothing except bread until he finds lodging; but if he asks for money, he is a false prophet.",
+        "Do not test or judge any prophet who speaks in the Spirit, for every sin will be forgiven, but this sin will not be forgiven.",
+        "But not everyone who speaks in the Spirit is a prophet; only if he has the ways of the Lord. By their behavior you will distinguish the false from the true.",
+        "And any prophet who orders a meal in the Spirit does not eat from it; if he does, he is a false prophet.",
+        "And any prophet who teaches the truth but does not do what he teaches is a false prophet.",
+        "And any prophet who is approved and true and who acts with a view to the earthly mystery of the church, but does not teach others to do what he himself does, shall not be judged by you, for his judgment is with God; for the ancient prophets also acted in this way.",
+        "But if anyone says in the Spirit, Give me money, or something else, do not listen to him; but if he tells you to give for others who are in need, let no one judge him."
+      ]
+    },
+    {
+      "number": 12,
+      "verses": [
+        "Let everyone who comes in the name of the Lord be received. Then when you examine him you will know him, for you will have understanding of the true and the false.",
+        "If the one who comes is a traveler, help him as much as you can, but he shall not stay with you more than two or three days, if necessary.",
+        "If he wants to settle among you and has a trade, let him work and eat.",
+        "But if he has no trade, use your judgment to provide for him, so that no idle person lives among you as a Christian.",
+        "If he does not want to work, he is a trafficker in Christ. Keep away from such people."
+      ]
+    },
+    {
+      "number": 13,
+      "verses": [
+        "But any true prophet who wants to settle among you is worthy of his food.",
+        "Likewise a true teacher is worthy of his food, like a worker.",
+        "Therefore take the first fruits of the produce of the wine press and threshing floor, of oxen and sheep, and give them to the prophets, for they are your high priests.",
+        "But if you have no prophet, give the first fruits to the poor.",
+        "If you bake bread, give the first fruits according to the commandment.",
+        "Likewise when you open a jar of wine or oil, give the first fruits to the prophets.",
+        "Of money, clothing, and every possession, take the first fruits as seems best, and give according to the commandment."
+      ]
+    },
+    {
+      "number": 14,
+      "verses": [
+        "On the Lord's Day, gather together, break bread, and give thanks, after confessing your transgressions, so that your sacrifice may be pure.",
+        "But anyone who has a quarrel with his neighbor must not join you until they are reconciled, so that your sacrifice may not be profaned.",
+        "For this is the sacrifice concerning which the Lord said, In every place and time, offer me a pure sacrifice, for I am a great King, says the Lord, and my name is wonderful among the nations."
+      ]
+    },
+    {
+      "number": 15,
+      "verses": [
+        "Appoint for yourselves bishops and deacons worthy of the Lord — men who are humble, not lovers of money, truthful and approved — for they also perform the ministry of the prophets and teachers for you.",
+        "Therefore do not despise them, for they are your honored members, together with the prophets and teachers.",
+        "Reprove one another, not in anger but in peace, as you have in the Gospel; but if anyone sins against another, let no one speak to him until he repents.",
+        "And pray and give alms and do everything as you have found it in the Gospel of our Lord."
+      ]
+    },
+    {
+      "number": 16,
+      "verses": [
+        "Watch over your life; let your lamps not go out, and your loins not be ungirded, but be ready, for you do not know the hour when our Lord comes.",
+        "Come together often, seeking the things that benefit your souls, for the whole time of your faith will not profit you if you are not perfected at the end time.",
+        "For in the last days the false prophets and corrupters will be multiplied, and the sheep will turn into wolves, and love will turn into hate.",
+        "For as lawlessness increases, people will hate and persecute and betray one another; and then the deceiver of the world will appear as a son of God, and will perform signs and wonders, and the earth will be given into his hands, and he will commit iniquities that have never happened since the beginning.",
+        "Then all humanity will come to the fire of testing, and many will fall away and perish, but those who endure in their faith will be saved.",
+        "And then the signs of the truth will appear: first the sign of the opening of heaven, then the sign of the trumpet sounding, and third the resurrection of the dead.",
+        "But not of all the dead, but as it was said: The Lord will come and all his saints with him.",
+        "Then the world will see the Lord coming on the clouds of heaven."
+      ]
+    }
+  ]
 }

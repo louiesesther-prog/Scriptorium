@@ -656,6 +656,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ── DAILY PERICOPE ──
     (function() {
+        try { localStorage.setItem('achiev_daily_verse_used', 'true'); } catch(e) {}
         var container = document.getElementById('dailyPericope');
         var labelEl = document.getElementById('pericopeLabel');
         var readingsEl = document.getElementById('pericopeReadings');

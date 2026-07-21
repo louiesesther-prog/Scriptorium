@@ -1,0 +1,619 @@
+/* ── Light / Parchment Theme ── */
+[data-theme="light"] {
+  --obsidian: #f5f0e8;
+  --obsidian-2: #efe9dd;
+  --museum-gold: #8b6914;
+  --museum-gold-dim: rgba(139,105,20,0.6);
+  --museum-gold-faint: rgba(139,105,20,0.1);
+  --museum-bronze: #6b4f0a;
+  --museum-bronze-dim: rgba(107,79,10,0.3);
+  --reality-silver: #333333;
+  --text-primary: rgba(20,20,20,0.92);
+  --text-secondary: rgba(20,20,20,0.6);
+  --text-tertiary: rgba(20,20,20,0.25);
+  --border-gold: rgba(139,105,20,0.2);
+  --border-silver: rgba(0,0,0,0.08);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+[data-theme="light"] body,
+[data-theme="light"] html {
+  background: var(--obsidian);
+  color: var(--text-primary);
+}
+[data-theme="light"] .transition-overlay { background: #f5f0e8; }
+[data-theme="light"] .sidebar { background: var(--obsidian-2); }
+[data-theme="light"] input,
+[data-theme="light"] textarea { background: #fff; color: #333; }
+
+/* ── Theme Toggle Button ── */
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--border-gold);
+  color: var(--museum-gold);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.theme-toggle:hover {
+  background: var(--museum-gold-faint);
+  border-color: var(--museum-gold);
+}
+
+/* ── Font Size Controls ── */
+.font-size-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0;
+}
+.font-size-btn {
+  background: transparent;
+  border: 1px solid var(--border-gold);
+  color: var(--text-secondary);
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+.font-size-btn:hover { background: var(--museum-gold-faint); color: var(--museum-gold); }
+.font-size-label {
+  font-size: var(--text-micro);
+  color: var(--text-tertiary);
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* ── Reading Streak Calendar ── */
+.streak-calendar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 8px 0;
+}
+.streak-day {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  border: 1px solid var(--border-silver);
+}
+.streak-day.level-0 { background: var(--obsidian-2); }
+.streak-day.level-1 { background: rgba(139,105,20,0.15); }
+.streak-day.level-2 { background: rgba(139,105,20,0.35); }
+.streak-day.level-3 { background: rgba(139,105,20,0.55); }
+.streak-day.level-4 { background: rgba(139,105,20,0.75); }
+.streak-day.level-5 { background: var(--museum-gold); }
+[data-theme="light"] .streak-day.level-0 { background: #e8e2d6; }
+[data-theme="light"] .streak-day.level-1 { background: rgba(139,105,20,0.1); }
+[data-theme="light"] .streak-day.level-2 { background: rgba(139,105,20,0.2); }
+[data-theme="light"] .streak-day.level-3 { background: rgba(139,105,20,0.35); }
+[data-theme="light"] .streak-day.level-4 { background: rgba(139,105,20,0.5); }
+[data-theme="light"] .streak-day.level-5 { background: var(--museum-gold); }
+.streak-label { font-size: var(--text-micro); color: var(--text-tertiary); font-family: 'Cinzel', serif; letter-spacing: 1px; }
+
+/* ── Bookmark Styles ── */
+.bookmark-indicator {
+  display: inline-block;
+  color: var(--museum-gold);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: transform 0.2s ease;
+  user-select: none;
+}
+.bookmark-indicator:hover { transform: scale(1.2); }
+.bookmark-indicator.active { color: var(--museum-gold); text-shadow: 0 0 8px rgba(212,175,55,0.5); }
+
+/* ── Daily Verse Widget ── */
+.daily-verse-widget {
+  padding: 10px;
+  border: 1px solid var(--border-gold);
+  border-radius: 6px;
+  background: var(--obsidian-2);
+  margin: 8px 0;
+}
+.daily-verse-widget .verse-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0 0 6px;
+}
+.daily-verse-widget .verse-ref {
+  font-family: 'Cinzel', serif;
+  font-size: var(--text-micro);
+  color: var(--museum-gold-dim);
+  letter-spacing: 1px;
+}
+
+/* ── Search Overlay ── */
+.scr-search-overlay {
+  position:fixed;inset:0;z-index:99999;
+  display:none;flex-direction:column;
+  align-items:center;justify-content:flex-start;
+  padding-top:60px;
+}
+.scr-search-overlay.open { display:flex; }
+.scr-search-backdrop {
+  position:absolute;inset:0;
+  background:rgba(0,0,0,0.92);backdrop-filter:blur(16px);
+}
+.scr-search-panel {
+  position:relative;z-index:1;
+  width:90%;max-width:680px;
+  background:var(--obsidian-2);
+  border:1px solid var(--border-gold);
+  border-radius:8px;
+  display:flex;flex-direction:column;
+  max-height:80vh;
+  box-shadow:0 20px 60px rgba(0,0,0,0.6);
+}
+.scr-search-header {
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;
+  border-bottom:1px solid var(--border-silver);
+}
+.scr-search-title {
+  font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:3px;
+  color:var(--museum-gold);
+}
+.scr-search-close {
+  background:none;border:none;color:var(--text-tertiary);
+  font-size:1.5rem;cursor:pointer;padding:0 4px;
+  line-height:1;transition:color 0.2s;
+}
+.scr-search-close:hover { color:var(--museum-gold); }
+.scr-search-controls {
+  display:flex;gap:8px;padding:12px 20px;
+  border-bottom:1px solid var(--border-silver);
+}
+.scr-search-input {
+  flex:1;padding:10px 14px;
+  background:var(--obsidian);border:1px solid var(--border-gold);
+  color:var(--text-primary);font-family:'Cormorant Garamond',serif;
+  font-size:1rem;border-radius:4px;outline:none;
+  transition:border-color 0.2s;
+}
+.scr-search-input:focus { border-color:var(--museum-gold-dim); }
+.scr-search-filter {
+  padding:8px 12px;
+  background:var(--obsidian);border:1px solid var(--border-gold);
+  color:var(--text-secondary);font-family:'Cinzel',serif;
+  font-size: var(--text-micro);border-radius:4px;outline:none;
+  letter-spacing:1px;cursor:pointer;
+}
+.scr-search-results {
+  flex:1;overflow-y:auto;padding:12px 20px 20px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--border-gold) transparent;
+}
+.scr-search-results::-webkit-scrollbar { width:3px; }
+.scr-search-results::-webkit-scrollbar-thumb { background:var(--border-gold); }
+.scr-search-empty {
+  text-align:center;padding:40px 20px;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:var(--text-tertiary);font-size:0.85rem;
+}
+.scr-search-count {
+  font-family:'Cinzel',serif;font-size: var(--text-micro);letter-spacing:2px;
+  color:var(--text-tertiary);margin-bottom:12px;
+}
+.scr-search-result {
+  padding:10px 12px;cursor:pointer;
+  border-radius:4px;transition:background 0.2s;
+  margin-bottom:4px;
+}
+.scr-search-result:hover { background:var(--museum-gold-faint); }
+.scr-result-ref {
+  font-family:'Cinzel',serif;font-size: var(--text-micro);letter-spacing:1px;
+  margin-bottom:3px;
+}
+.scr-result-ref.ot { color:rgba(200,180,140,0.7); }
+.scr-result-ref.nt { color:var(--museum-gold-dim); }
+.scr-result-ref.dc { color:rgba(140,160,200,0.5); }
+.scr-result-text {
+  font-family:'Cormorant Garamond',serif;
+  font-size:0.8rem;color:var(--text-secondary);line-height:1.5;
+}
+.scr-search-loading {
+  text-align:center;padding:30px;
+  font-family:'Cinzel',serif;font-size: var(--text-micro);letter-spacing:3px;
+  color:var(--text-tertiary);animation:scr-pulse 1.5s ease infinite;
+}
+@keyframes scr-pulse { 0%,100%{opacity:0.3}50%{opacity:0.8} }
+
+/* ── Search Sidebar Button ── */
+.scr-search-btn {
+  background:transparent;border:1px solid var(--border-gold);
+  color:var(--museum-gold-dim);width:36px;height:36px;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:1rem;transition:all 0.2s ease;margin:4px auto;
+}
+.scr-search-btn:hover { background:var(--museum-gold-faint);color:var(--museum-gold);border-color:var(--museum-gold); }
+
+/* ── Audio/Cross-Ref button fixes for reader ── */
+[data-theme="light"] .scr-xref-panel { background:rgba(240,235,225,0.8); }
+[data-theme="light"] .scr-xref-text { color:rgba(20,20,20,0.55); }
+[data-theme="light"] .scr-audio-bar, [data-theme="light"] .scr-reader-footer { background:#efe9dd; }
+[data-theme="light"] .scr-xref-placeholder { color:rgba(20,20,20,0.3); }
+
+/* ── Typology Overlay ── */
+.scr-ty-overlay {
+  position: fixed; inset: 0; z-index: 99997;
+  display: none; flex-direction: column;
+  align-items: center; justify-content: flex-start;
+  padding-top: 40px;
+}
+.scr-ty-overlay.open { display: flex; }
+.scr-ty-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.92); backdrop-filter: blur(16px);
+}
+.scr-ty-panel {
+  position: relative; z-index: 1;
+  width: 90%; max-width: 780px;
+  background: var(--obsidian-2);
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  display: flex; flex-direction: column;
+  max-height: 85vh;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+.scr-ty-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-silver);
+}
+.scr-ty-title {
+  font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 3px;
+  color: var(--museum-gold);
+}
+.scr-ty-close {
+  background: none; border: none; color: var(--text-tertiary);
+  font-size: 1.5rem; cursor: pointer; padding: 0 4px;
+  line-height: 1; transition: color 0.2s;
+}
+.scr-ty-close:hover { color: var(--museum-gold); }
+.scr-ty-body {
+  flex: 1; overflow-y: auto; padding: 16px 20px 20px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-gold) transparent;
+}
+.scr-ty-body::-webkit-scrollbar { width: 3px; }
+.scr-ty-body::-webkit-scrollbar-thumb { background: var(--border-gold); }
+
+/* Typology threads inside the overlay use the same scr-ty-* classes injected by scriptorium-core.js,
+   but we add an enhanced visual for the OT→NT arc display */
+.scr-ty-pair {
+  display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; margin-top: 6px;
+}
+.scr-ty-arc {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.scr-ty-arc-line {
+  width: 40px; height: 2px;
+  background: linear-gradient(90deg, rgba(212,175,55,0.4), rgba(212,175,55,0.1));
+  position: relative;
+}
+.scr-ty-arc-line::before,
+.scr-ty-arc-line::after {
+  content: ''; position: absolute; top: -3px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(212,175,55,0.3);
+}
+.scr-ty-arc-line::before { left: -4px; }
+.scr-ty-arc-line::after { right: -4px; background: rgba(212,175,55,0.15); }
+.scr-ty-arc-label {
+  font-family: 'Cinzel', serif; font-size: var(--text-micro); letter-spacing: 1px;
+  color: rgba(212,175,55,0.25); white-space: nowrap;
+}
+/* Light theme adjustments */
+[data-theme="light"] .scr-ty-panel { background: var(--obsidian-2); }
+[data-theme="light"] .scr-ty-item { background: rgba(0,0,0,0.02); }
+[data-theme="light"] .scr-ty-desc { color: var(--text-secondary); }
+
+/* Typology sidebar button */
+.scr-ty-btn {
+  background: transparent; border: 1px solid var(--border-gold);
+  color: var(--museum-gold-dim); width: 36px; height: 36px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 1rem; transition: all 0.2s ease; margin: 4px auto;
+}
+.scr-ty-btn:hover { background: var(--museum-gold-faint); color: var(--museum-gold); border-color: var(--museum-gold); }
+
+/* ── Verse Quick-Look Panel ── */
+#scr-quicklook-panel {
+  position: fixed; bottom: -300px; left: 50%; transform: translateX(-50%);
+  z-index: 99998; width: 90%; max-width: 560px;
+  background: #1a1520; border: 1px solid rgba(212,175,55,0.15);
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 -4px 30px rgba(0,0,0,0.6);
+  transition: bottom 0.35s cubic-bezier(0.4,0,0.2,1);
+  font-family: 'Cormorant Garamond', serif; padding: 16px 20px;
+}
+#scr-quicklook-panel.open { bottom: 0; }
+#scr-quicklook-panel .ql-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+}
+#scr-quicklook-panel .ql-ref {
+  font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 2px; color: #d4af37;
+}
+#scr-quicklook-panel .ql-close {
+  background: none; border: none; color: rgba(255,255,255,0.3);
+  font-size: 1.2rem; cursor: pointer; padding: 0 4px;
+}
+#scr-quicklook-panel .ql-close:hover { color: #d4af37; }
+#scr-quicklook-panel .ql-loading {
+  text-align: center; color: rgba(212,175,55,0.4); font-style: italic; padding: 12px;
+}
+#scr-quicklook-panel .ql-text {
+  font-size: 1rem; line-height: 1.6; color: rgba(255,255,255,0.72); margin: 0;
+}
+#scr-quicklook-panel .ql-actions { display: flex; gap: 8px; margin-top: 10px; }
+#scr-quicklook-panel .ql-btn {
+  background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.2);
+  color: rgba(212,175,55,0.7); padding: 5px 12px;
+  font-family: 'Cinzel', serif; font-size: var(--text-micro); letter-spacing: 1px;
+  cursor: pointer; border-radius: 3px; transition: 0.2s;
+}
+#scr-quicklook-panel .ql-btn:hover {
+  background: rgba(212,175,55,0.15); color: #d4af37; border-color: #d4af37;
+}
+/* ── Shared Toast (slides in from top) ── */
+.scr-toast {
+  position: fixed; top: -60px; left: 50%; transform: translateX(-50%);
+  z-index: 100000;
+  background: #1a1520; border: 1px solid #d4af37;
+  border-radius: 0 0 6px 6px;
+  padding: 12px 24px;
+  font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 1px;
+  color: #d4af37;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  transition: top 0.35s cubic-bezier(0.4,0,0.2,1);
+  pointer-events: none;
+  white-space: nowrap;
+  max-width: 90vw;
+  text-overflow: ellipsis; overflow: hidden;
+}
+.scr-toast.open { top: 0; }
+[data-theme="light"] .scr-toast { background: #f5f0e8; color: #8b6914; border-color: #8b6914; }
+
+/* ── Quick-look scripture link style ── */
+.scr-ref-link {
+  color: #d4af37; cursor: pointer; border-bottom: 1px dotted rgba(212,175,55,0.3);
+  transition: border-color 0.2s; text-decoration: none;
+}
+.scr-ref-link:hover { border-bottom-color: #d4af37; }
+
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+  .sidebar { width: 60px !important; }
+  .sidebar .nav-label { display: none; }
+  .sidebar .nav-icon { font-size: 1.1rem; }
+  .main-content { margin-left: 60px !important; padding: 10px !important; }
+  #sidebarToggle { display: block !important; }
+  h1 { font-size: 1.2rem !important; }
+  h2 { font-size: 1rem !important; }
+  .portal-grid { grid-template-columns: 1fr !important; }
+  .admin-grid { grid-template-columns: 1fr !important; }
+  .plans-grid { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 480px) {
+  .sidebar { width: 0 !important; overflow: hidden; }
+  .sidebar.open { width: 60px !important; }
+  .main-content { margin-left: 0 !important; padding: 8px !important; }
+  body { font-size: 14px; }
+}
+
+/* ── DAILY PERICOPE ── */
+.daily-pericope {
+  text-align: center;
+  padding: 28px 20px 18px;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 100;
+}
+.pericope-header {
+  font-family: 'Cinzel', serif;
+  font-size: var(--text-micro);
+  letter-spacing: 8px;
+  color: rgba(212,175,55,0.25);
+  margin-bottom: 4px;
+}
+.pericope-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  font-style: italic;
+  color: rgba(255,255,255,0.15);
+  margin-bottom: 14px;
+}
+.pericope-readings {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.pericope-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(212,175,55,0.03);
+  border: 1px solid rgba(212,175,55,0.08);
+  border-radius: 2px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.45s ease, background 0.3s ease, border-color 0.3s ease;
+  will-change: transform, opacity;
+}
+.pericope-card:hover {
+  background: rgba(212,175,55,0.08);
+  border-color: rgba(212,175,55,0.2);
+}
+.pericope-card.swipe-left {
+  transform: translateX(-120%);
+  opacity: 0;
+  pointer-events: none;
+}
+.pericope-card.swipe-right {
+  transform: translateX(120%);
+  opacity: 0;
+  pointer-events: none;
+}
+.pericope-card.swipe-up {
+  transform: translateY(-120%);
+  opacity: 0;
+  pointer-events: none;
+}
+.pc-type {
+  font-family: 'Montserrat', sans-serif;
+  font-size: var(--text-micro);
+  letter-spacing: 2px;
+  padding: 2px 6px;
+  border-radius: 1px;
+}
+.pc-ot { background: rgba(139,69,19,0.2); color: rgba(205,133,63,0.6); }
+.pc-psalm { background: rgba(70,130,180,0.2); color: rgba(100,149,237,0.6); }
+.pc-nt { background: rgba(139,0,0,0.2); color: rgba(220,20,60,0.6); }
+.pc-gospel { background: rgba(212,175,55,0.15); color: rgba(212,175,55,0.6); }
+.pc-book {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.5);
+}
+.pc-chapter {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  color: rgba(212,175,55,0.4);
+}
+.pc-arrow {
+  font-size: 0.7rem;
+  color: rgba(212,175,55,0.15);
+}
+.pericope-card:hover .pc-book { color: rgba(255,255,255,0.8); }
+.pericope-card:hover .pc-chapter { color: rgba(212,175,55,0.7); }
+.pericope-card:hover .pc-arrow { color: rgba(212,175,55,0.5); }
+[data-theme="light"] .daily-pericope { padding: 28px 20px 18px; }
+[data-theme="light"] .pericope-label { color: rgba(0,0,0,0.3); }
+[data-theme="light"] .pericope-card { background: rgba(139,105,20,0.03); border-color: rgba(139,105,20,0.08); }
+[data-theme="light"] .pericope-card:hover { background: rgba(139,105,20,0.06); border-color: rgba(139,105,20,0.15); }
+[data-theme="light"] .pc-book { color: rgba(0,0,0,0.5); }
+[data-theme="light"] .pericope-card:hover .pc-book { color: rgba(0,0,0,0.8); }
+
+/* ── Reader Font Family (set via settings page) ── */
+:root { --reader-font: inherit; }
+.scr-reading-area,
+.scr-reading-area p,
+.scr-verse-text { font-family: var(--reader-font), 'Cormorant Garamond', serif; }
+
+/* ── Prayer Wall ── */
+.prayer-wall {
+  max-width: 540px; margin: 40px auto 60px;
+  border: 1px solid rgba(212,175,55,0.08);
+  background: rgba(0,0,0,0.15);
+  border-radius: 4px;
+  font-family: 'Cormorant Garamond', serif;
+}
+.prayer-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 18px; cursor: pointer;
+  font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 4px;
+  color: rgba(212,175,55,0.3);
+  border-bottom: 1px solid rgba(212,175,55,0.06);
+  user-select: none;
+}
+.prayer-header:hover { color: rgba(212,175,55,0.6); }
+.prayer-toggle { font-size: 0.5rem; transition: transform 0.25s; }
+.prayer-toggle.open { transform: rotate(180deg); }
+.prayer-body { padding: 0; }
+.prayer-list {
+  max-height: 400px; overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212,175,55,0.1) transparent;
+}
+.prayer-list::-webkit-scrollbar { width: 3px; }
+.prayer-list::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.1); }
+.prayer-loading {
+  text-align: center; padding: 30px 16px;
+  font-family: 'Cinzel', serif; font-size: var(--text-micro); letter-spacing: 3px;
+  color: rgba(212,175,55,0.2);
+  animation: scr-pulse 1.5s ease infinite;
+}
+.prayer-item {
+  padding: 12px 18px; border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.prayer-item:last-child { border-bottom: none; }
+.prayer-text {
+  font-size: 0.9rem; color: rgba(255,255,255,0.72);
+  line-height: 1.7; margin-bottom: 6px;
+}
+.prayer-meta {
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: 'Cinzel', serif; font-size: var(--text-micro); letter-spacing: 1px;
+}
+.prayer-name { color: rgba(212,175,55,0.25); font-style: italic; }
+.prayer-actions { display: flex; gap: 8px; align-items: center; }
+.prayer-pray-btn {
+  background: rgba(212,175,55,0.04); border: 1px solid rgba(212,175,55,0.12);
+  color: rgba(212,175,55,0.35); padding: 2px 10px;
+  font-family: 'Cinzel', serif; font-size: var(--text-micro); letter-spacing: 1px;
+  cursor: pointer; border-radius: 2px; transition: 0.25s;
+}
+.prayer-pray-btn:hover { background: rgba(212,175,55,0.1); color: #d4af37; border-color: #d4af37; }
+.prayer-pray-btn.prayed { background: rgba(212,175,55,0.08); color: #d4af37; }
+.prayer-count {
+  font-family: 'Cinzel', serif; font-size: var(--text-micro);
+  color: rgba(212,175,55,0.2); min-width: 14px; text-align: center;
+}
+.prayer-submit {
+  border-top: 1px solid rgba(212,175,55,0.06);
+  padding: 12px 18px;
+}
+.prayer-input {
+  width: 100%; background: rgba(0,0,0,0.2); border: 1px solid rgba(212,175,55,0.08);
+  color: rgba(255,255,255,0.7); padding: 8px 10px;
+  font-family: 'Cormorant Garamond', serif; font-size: 0.85rem;
+  border-radius: 2px; resize: vertical; min-height: 40px;
+  box-sizing: border-box;
+}
+.prayer-input:focus { outline: none; border-color: rgba(212,175,55,0.25); }
+.prayer-submit-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 8px;
+}
+.prayer-anon-label {
+  font-family: 'Cinzel', serif; font-size: var(--text-micro); letter-spacing: 1px;
+  color: rgba(212,175,55,0.2); cursor: pointer; display: flex; align-items: center; gap: 5px;
+}
+.prayer-anon-label input { accent-color: #d4af37; }
+.prayer-send {
+  background: rgba(212,175,55,0.04); border: 1px solid rgba(212,175,55,0.15);
+  color: rgba(212,175,55,0.5); padding: 5px 18px;
+  font-family: 'Cinzel', serif; font-size: var(--text-micro); letter-spacing: 2px;
+  cursor: pointer; border-radius: 2px; transition: 0.25s;
+}
+.prayer-send:hover { background: rgba(212,175,55,0.1); color: #d4af37; border-color: #d4af37; }
+.prayer-empty {
+  text-align: center; padding: 30px 16px;
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-size: 0.75rem; color: var(--text-secondary);
+}
+[data-theme="light"] .prayer-wall { background: rgba(139,105,20,0.02); border-color: rgba(139,105,20,0.06); }
+[data-theme="light"] .prayer-input { background: rgba(0,0,0,0.03); border-color: rgba(139,105,20,0.08); color: rgba(0,0,0,0.6); }
+[data-theme="light"] .prayer-item { border-bottom-color: rgba(0,0,0,0.03); }
+[data-theme="light"] .prayer-text { color: rgba(0,0,0,0.5); }

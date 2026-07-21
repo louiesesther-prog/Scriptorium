@@ -1,1 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M16 4 L16 28 M12 8 L16 4 L20 8" fill="none" stroke="rgba(212,175,55,0.7)" stroke-width="1.5"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <defs><filter id="g"><feDropShadow dx="0.5" dy="0.5" stdDeviation="0.8" flood-opacity="0.4"/></filter></defs>
+  <circle cx="16" cy="16" r="12" fill="none" stroke="#d4af37" stroke-width="1.5" filter="url(#g)"/>
+  <circle cx="16" cy="16" r="8" fill="#d4af37" opacity="0.1" stroke="#7a5f1a" stroke-width="0.8"/>
+  <text x="16" y="20" text-anchor="middle" font-size="12" font-family="serif" fill="#d4af37" font-weight="bold">S</text>
+</svg>

@@ -12,15 +12,18 @@ const { validate } = require('./validate');
 const db = require('./db');
 const { getDailyVerse } = require('./daily-verse');
 const { getCrossReferences } = require('./cross-references');
+const { getWordStudy } = require('./word-study');
 const audioBible = require('./audio-bible');
+const push = require('./push');
 const rateLimit = require('express-rate-limit');
 const pinoHttp = require('pino-http');
 const logger = require('./logger');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: process.env.ALLOWED_ORIGIN || 'https://scriptorium-sandy.vercel.app' }));
 app.use(express.json({ limit: '1mb' }));
+app.use(express.static(path.join(__dirname, '..')));
 
 // Structured request logging
 app.use(pinoHttp({ logger }));
@@ -99,7 +102,7 @@ app.get('/api/config', (req, res) => {
 
 app.post('/api/auth/register', validate('register'), async (req, res) => {
   try {
-    const { name, userId, email, password } = req.validated;
+    const { name, userId, email, password, tradition } = req.validated;
     const { country, city, gender, knowledge } = req.body;
     if (await db.findScribeByUserId(userId)) return res.status(409).json({ error: 'A scribe with this User ID already exists.' });
     if (await db.findScribeByEmail(email)) return res.status(409).json({ error: 'A scribe with this Email already exists.' });
@@ -114,11 +117,12 @@ app.post('/api/auth/register', validate('register'), async (req, res) => {
       joined: new Date().toISOString(),
       lastActive: Date.now(),
       totalCharacters: 0, versesCompleted: 0, ntVerses: 0,
-      planSubscriptions: [], challengeSubscriptions: []
+      planSubscriptions: [], challengeSubscriptions: [],
+      tradition: tradition || ''
     };
     await db.insertScribe(scribe);
-    const token = jwt.sign({ userId: scribe.userId, name: scribe.name, rank: scribe.rank, isAdmin: scribe.isAdmin || 0 }, JWT_SECRET, { expiresIn: JWT_EXPIRY });
-    res.status(201).json({ message: 'Induction complete. Your seal is affixed.', token, scribe: { userId: scribe.userId, name: scribe.name, rank: scribe.rank, joined: scribe.joined } });
+    const token = jwt.sign({ userId: scribe.userId, name: scribe.name, rank: scribe.rank, isAdmin: scribe.isAdmin || 0, tradition: scribe.tradition }, JWT_SECRET, { expiresIn: JWT_EXPIRY });
+    res.status(201).json({ message: 'Induction complete. Your seal is affixed.', token, scribe: { userId: scribe.userId, name: scribe.name, rank: scribe.rank, joined: scribe.joined, tradition: scribe.tradition } });
   } catch(e) {
     res.status(500).json({ error: 'Internal error during induction.' });
   }
@@ -132,8 +136,8 @@ app.post('/api/auth/login', validate('login'), async (req, res) => {
     const valid = await bcrypt.compare(password, scribe.password);
     if (!valid) return res.status(401).json({ error: 'Invalid Scribe ID or Cipher Key.' });
     await db.updateScribe(userId, { lastActive: Date.now() });
-    const token = jwt.sign({ userId: scribe.userId, name: scribe.name, rank: scribe.rank, isAdmin: scribe.isAdmin || 0 }, JWT_SECRET, { expiresIn: JWT_EXPIRY });
-    res.json({ message: 'Access granted.', token, scribe: { userId: scribe.userId, name: scribe.name, rank: scribe.rank, joined: scribe.joined } });
+    const token = jwt.sign({ userId: scribe.userId, name: scribe.name, rank: scribe.rank, isAdmin: scribe.isAdmin || 0, tradition: scribe.tradition || '' }, JWT_SECRET, { expiresIn: JWT_EXPIRY });
+    res.json({ message: 'Access granted.', token, scribe: { userId: scribe.userId, name: scribe.name, rank: scribe.rank, joined: scribe.joined, tradition: scribe.tradition || '' } });
   } catch(e) {
     res.status(500).json({ error: 'Internal error during authentication.' });
   }
@@ -146,7 +150,98 @@ app.post('/api/auth/logout', authMiddleware, (req, res) => {
 app.get('/api/auth/me', authMiddleware, async (req, res) => {
   const scribe = await db.findScribeByUserId(req.scribe.userId);
   if (!scribe) return res.status(404).json({ error: 'Scribe record not found.' });
-  res.json({ scribe: { userId: scribe.userId, name: scribe.name, rank: scribe.rank, knowledge: scribe.knowledge, joined: scribe.joined, country: scribe.country, city: scribe.city, gender: scribe.gender, totalCharacters: scribe.totalCharacters, versesCompleted: scribe.versesCompleted } });
+  res.json({ scribe: { userId: scribe.userId, name: scribe.name, rank: scribe.rank, knowledge: scribe.knowledge, joined: scribe.joined, country: scribe.country, city: scribe.city, gender: scribe.gender, totalCharacters: scribe.totalCharacters, versesCompleted: scribe.versesCompleted, tradition: scribe.tradition || '' } });
+});
+
+app.put('/api/auth/tradition', authMiddleware, async (req, res) => {
+  try {
+    const { tradition } = req.body;
+    if (!tradition) return res.status(400).json({ error: 'Tradition identifier required.' });
+    await db.updateScribe(req.scribe.userId, { tradition: String(tradition).slice(0, 40) });
+    res.json({ message: 'Tradition updated.', tradition: String(tradition).slice(0, 40) });
+  } catch(e) {
+    res.status(500).json({ error: 'Error updating tradition.' });
+  }
+});
+
+app.post('/api/auth/achievements', authMiddleware, async (req, res) => {
+  try {
+    const { badges, xp, rank } = req.body;
+    if (rank) await db.updateScribe(req.scribe.userId, { rank: String(rank).slice(0, 40) });
+    res.json({ message: 'Achievements synced.' });
+  } catch(e) {
+    res.status(500).json({ error: 'Error syncing achievements.' });
+  }
+});
+
+// ── READING PARTNER ROUTES ──
+
+app.get('/api/partners/scribes', authMiddleware, async (req, res) => {
+  try {
+    const q = (req.query.q || '').trim().toLowerCase();
+    if (q.length < 2) return res.json({ scribes: [] });
+    const all = await db.allScribes();
+    const matched = all.filter(function(s) {
+      if (!s.name) return false;
+      if (s.userId === req.scribe.userId) return false;
+      return s.name.toLowerCase().indexOf(q) >= 0 || s.userId.toLowerCase().indexOf(q) >= 0;
+    }).slice(0, 10).map(function(s) {
+      return { userId: s.userId, name: s.name, tradition: s.tradition || '', rank: s.rank || '' };
+    });
+    res.json({ scribes: matched });
+  } catch(e) { res.status(500).json({ error: 'Search failed.' }); }
+});
+
+app.post('/api/partners/request', authMiddleware, async (req, res) => {
+  try {
+    const { targetId, planId } = req.body;
+    if (!targetId || !planId) return res.status(400).json({ error: 'targetId and planId required.' });
+    if (targetId === req.scribe.userId) return res.status(400).json({ error: 'Cannot partner with yourself.' });
+    const target = await db.findScribeByUserId(targetId);
+    if (!target) return res.status(404).json({ error: 'Scribe not found.' });
+    const existing = await db.getPartnerShips(req.scribe.userId);
+    const already = existing.some(function(s) {
+      return (s.requesterId === targetId || s.targetId === targetId) && s.planId === planId;
+    });
+    if (already) return res.status(409).json({ error: 'Already partnered on this plan.' });
+    const request = await db.requestPartner(req.scribe.userId, targetId, planId);
+    if (!request) return res.status(500).json({ error: 'Could not create request.' });
+    res.status(201).json({ request: { id: request.id, requesterId: request.requesterId, targetId: request.targetId, planId: request.planId, status: request.status } });
+  } catch(e) { res.status(500).json({ error: 'Request failed.' }); }
+});
+
+app.post('/api/partners/respond', authMiddleware, async (req, res) => {
+  try {
+    const { id, status } = req.body;
+    if (!id || !status) return res.status(400).json({ error: 'id and status required.' });
+    if (status !== 'accepted' && status !== 'rejected') return res.status(400).json({ error: 'status must be accepted or rejected.' });
+    const request = await db.respondToPartner(id, status);
+    if (!request) return res.status(404).json({ error: 'Request not found.' });
+    if (request.targetId !== req.scribe.userId) return res.status(403).json({ error: 'Not your request to respond to.' });
+    res.json({ request: { id: request.id, status: request.status, respondedAt: request.respondedAt } });
+  } catch(e) { res.status(500).json({ error: 'Response failed.' }); }
+});
+
+app.get('/api/partners/requests', authMiddleware, async (req, res) => {
+  try {
+    const requests = await db.getPartnerRequests(req.scribe.userId);
+    res.json({ requests: requests.map(function(r) { return { id: r.id, requesterId: r.requesterId, planId: r.planId, status: r.status, createdAt: r.createdAt }; }) });
+  } catch(e) { res.status(500).json({ error: 'Failed to fetch requests.' }); }
+});
+
+app.get('/api/partners/ships', authMiddleware, async (req, res) => {
+  try {
+    const ships = await db.getPartnerShips(req.scribe.userId);
+    res.json({ partnerships: ships.map(function(s) { return { id: s.id, requesterId: s.requesterId, targetId: s.targetId, planId: s.planId, status: s.status, createdAt: s.createdAt }; }) });
+  } catch(e) { res.status(500).json({ error: 'Failed to fetch partnerships.' }); }
+});
+
+app.get('/api/partners/progress/:userId', authMiddleware, async (req, res) => {
+  try {
+    const target = await db.findScribeByUserId(req.params.userId);
+    if (!target) return res.status(404).json({ error: 'Scribe not found.' });
+    res.json({ progress: target.readingProgress || target.planSubscriptions || [] });
+  } catch(e) { res.status(500).json({ error: 'Failed to fetch progress.' }); }
 });
 
 // ── BOOKMARK ROUTES ──
@@ -191,8 +286,8 @@ app.post('/api/reading/log', authMiddleware, async (req, res) => {
     if (!bookId || !chapter) return res.status(400).json({ error: 'bookId and chapter required.' });
     const date = new Date().toISOString().split('T')[0];
     await db.logDailyReading(req.scribe.userId, date, bookId, chapter);
-    const streak = await db.getStreak(req.scribe.userId);
-    res.json({ message: 'Reading logged.', date, streak });
+    const detail = await db.getStreakDetails(req.scribe.userId);
+    res.json({ message: 'Reading logged.', date, streak: detail.streak, graceDays: detail.graceDays, withinGrace: detail.withinGrace });
   } catch(e) {
     res.status(500).json({ error: 'Error logging reading.' });
   }
@@ -202,8 +297,8 @@ app.get('/api/reading/history', authMiddleware, async (req, res) => {
   try {
     const days = parseInt(req.query.days) || 365;
     const history = await db.getReadingHistory(req.scribe.userId, days);
-    const streak = await db.getStreak(req.scribe.userId);
-    res.json({ history, streak });
+    const detail = await db.getStreakDetails(req.scribe.userId);
+    res.json({ history, streak: detail.streak, graceDays: detail.graceDays, withinGrace: detail.withinGrace });
   } catch(e) {
     res.status(500).json({ error: 'Error fetching history.' });
   }
@@ -211,8 +306,8 @@ app.get('/api/reading/history', authMiddleware, async (req, res) => {
 
 app.get('/api/reading/streak', authMiddleware, async (req, res) => {
   try {
-    const streak = await db.getStreak(req.scribe.userId);
-    res.json({ streak });
+    const detail = await db.getStreakDetails(req.scribe.userId);
+    res.json({ streak: detail.streak, graceDays: detail.graceDays, withinGrace: detail.withinGrace, prevStreak: detail.prevStreak, gap: detail.gap });
   } catch(e) {
     res.status(500).json({ error: 'Error fetching streak.' });
   }
@@ -248,6 +343,17 @@ app.get('/api/cross-references/:book/:chapter', async (req, res) => {
     res.json({ book: book, chapter: chapter, crossReferences: combined, total: combined.length });
   } catch(e) {
     res.status(500).json({ error: 'Error fetching cross-references.' });
+  }
+});
+
+// ── WORD STUDY ROUTE ──
+app.get('/api/word-study/:word', function(req, res) {
+  try {
+    var result = getWordStudy(req.params.word);
+    if (!result) return res.status(404).json({ error: 'Word not found.' });
+    res.json(result);
+  } catch(e) {
+    res.status(500).json({ error: 'Error looking up word.' });
   }
 });
 
@@ -411,7 +517,12 @@ app.get('/api/admin/stats', authMiddleware, adminMiddleware, async (req, res) =>
 
 app.get('/api/plans', (req, res) => {
   const category = req.query.category || null;
-  res.json({ plans: listPlans(category) });
+  const tradition = req.query.tradition || null;
+  res.json({ plans: listPlans(category, tradition) });
+});
+
+app.get('/api/traditions', (req, res) => {
+  res.json({ traditions: require('./plans-data').TRADITIONS });
 });
 
 app.get('/api/plans/:id', (req, res) => {
@@ -687,6 +798,9 @@ app.post('/api/auth/reset-password', validate('resetPassword'), async (req, res)
   }
 });
 
+var CANON_OT = ['genesis','exodus','leviticus','numbers','deuteronomy','joshua','judges','ruth','1_samuel','2_samuel','1_kings','2_kings','1_chronicles','2_chronicles','ezra','nehemiah','esther','job','psalms','proverbs','ecclesiastes','song_of_solomon','isaiah','jeremiah','lamentations','ezekiel','daniel','hosea','joel','amos','obadiah','jonah','micah','nahum','habakkuk','zephaniah','haggai','zechariah','malachi'];
+var CANON_NT = ['matthew','mark','luke','john','acts','romans','1_corinthians','2_corinthians','galatians','ephesians','philippians','colossians','1_thessalonians','2_thessalonians','1_timothy','2_timothy','titus','philemon','hebrews','james','1_peter','2_peter','1_john','2_john','3_john','jude','revelation'];
+
 function loadBookIndex() {
   const index = {};
   const testaments = { ot: [], nt: [], ethiopian: [] };
@@ -697,10 +811,12 @@ function loadBookIndex() {
       const data = JSON.parse(fs.readFileSync(path.join(BIBLE_DIR, files[i]), 'utf8'));
       const fileId = path.basename(files[i], '.json');
       const slug = fileId.toLowerCase();
-      const isDeut = data.version === 'Deuterocanonical' || data.version === 'Placeholder';
-      index[slug] = { fileId, title: data.title, writer: data.writer, era: data.era, totalChapters: data.totalChapters, deuterocanonical: isDeut };
-      if (!isDeut && testaments[data.era]) testaments[data.era].push(slug);
-      if (isDeut) testaments.ethiopian.push(slug);
+      const isCanonOT = data.version === 'NIV' && data.era === 'ot' && CANON_OT.includes(slug);
+      const isCanonNT = data.version === 'NIV' && data.era === 'nt' && CANON_NT.includes(slug);
+      index[slug] = { fileId, title: data.title, writer: data.writer, era: data.era, totalChapters: data.totalChapters, deuterocanonical: !isCanonOT && !isCanonNT };
+      if (isCanonOT) testaments.ot.push(slug);
+      if (isCanonNT) testaments.nt.push(slug);
+      if (!isCanonOT && !isCanonNT) testaments.ethiopian.push(slug);
     } catch (e) {}
   }
   return { index, testaments };
@@ -866,5 +982,55 @@ app.get('/api/search', (req, res) => {
     res.status(500).json({ error: 'Search failed.' });
   }
 });
+
+// ── Web Push endpoints ──
+app.get('/api/push/vapid-key', (req, res) => {
+  var key = push.getPublicKey();
+  if (!key) return res.status(500).json({ error: 'VAPID keys not configured' });
+  res.json({ publicKey: key });
+});
+
+app.post('/api/push/subscribe', (req, res) => {
+  var sub = req.body;
+  var ok = push.subscribe(sub);
+  res.status(ok ? 200 : 400).json({ ok: ok, count: push.subscriptionCount() });
+});
+
+app.post('/api/push/unsubscribe', (req, res) => {
+  var endpoint = req.body.endpoint;
+  if (!endpoint) return res.status(400).json({ ok: false, error: 'endpoint required' });
+  var ok = push.unsubscribe(endpoint);
+  res.json({ ok: ok, count: push.subscriptionCount() });
+});
+
+// ── Cron: daily devotional push ──
+app.post('/api/push/daily', async (req, res) => {
+  var auth = req.headers['authorization'];
+  if (auth !== 'Bearer ' + (process.env.CRON_SECRET || 'local-cron-secret')) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  var verse = require('./daily-verse').getDailyVerse();
+  if (!verse) return res.status(500).json({ error: 'No verse available' });
+  var result = await push.sendDailyNotification('📖 Daily Verse', verse.ref + ' — ' + verse.text.substring(0, 120) + '…', '/scriptorium.html?book=' + encodeURIComponent(verse.book) + '&chapter=' + verse.chapter);
+  res.json({ ok: true, sent: result.sent, failed: result.failed, subscriberCount: push.subscriptionCount() });
+});
+
+// ── Test-only admin seeding endpoint ──
+if (process.env.NODE_ENV === 'test') {
+  app.post('/api/test/setup-admin', async (req, res) => {
+    try {
+      const { userId } = req.body;
+      if (!userId) return res.status(400).json({ error: 'userId required' });
+      const scribe = await db.findScribeByUserId(userId);
+      if (!scribe) return res.status(404).json({ error: 'Scribe not found' });
+      scribe.isAdmin = 1;
+      await db.updateScribe(userId, { isAdmin: 1 });
+      const token = jwt.sign({ userId: scribe.userId, name: scribe.name, rank: scribe.rank, isAdmin: 1, tradition: scribe.tradition || '' }, JWT_SECRET, { expiresIn: JWT_EXPIRY });
+      res.json({ message: 'Scribe promoted to admin', token });
+    } catch(e) {
+      res.status(500).json({ error: 'Error promoting to admin' });
+    }
+  });
+}
 
 module.exports = app;

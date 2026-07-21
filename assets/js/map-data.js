@@ -466,7 +466,7 @@ path: [
 "thomas": { name: "Thomas", desc: "Apostle - Doubter", category: "Apostles", color: "#DAA520", year: 30, era: "NEW TESTAMENT",
 path: [
 { name: "Galilee", lat: 32.800, lng: 35.500, ref: "John 21:2", desc: "Appears to Thomas", notes: ["My Lord and my God"] },
-{ name: "India", lat: 10.163, lng: 76.441, ref: "tradition", desc: "Martyrdom in Madras", notes: ["Parangi"] }
+{ name: "India", lat: 13.007, lng: 80.193, ref: "tradition", desc: "St. Thomas Mount, Chennai", notes: ["Parangi"] }
 ] },
 "bartholomew": { name: "Bartholomew", desc: "Apostle - Nathaniel", category: "Apostles", color: "#DAA520", year: 30, era: "NEW TESTAMENT",
 path: [

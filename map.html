@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; style-src-elem 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' unpkg.com cdn.jsdelivr.net; img-src 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; img-src-elem 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; connect-src 'self' *.tile.openstreetmap.org *.basemaps.cartocdn.com; frame-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; style-src-elem 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; connect-src 'self' *.tile.openstreetmap.org *.basemaps.cartocdn.com; frame-src 'none';">
     <meta charset="UTF-8">
     <meta property="og:title" content="SCRIPTORIUM | Map">
     <meta property="og:description" content="Scriptorium — a digital archive of biblical texts, maps, genealogies, and manuscript studies.">
@@ -14,7 +14,7 @@
     <link href="assets/fonts/fonts.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/shared.css">
     <link rel="stylesheet" href="assets/css/features.css">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <script defer src="assets/audio/scriptorium-audio.js"></script>
     <script src="https://unpkg.com/fuse.js@7.0.0/dist/fuse.min.js"></script>
     <script>document.addEventListener('DOMContentLoaded',function(){document.fonts.ready.then(function(){document.documentElement.classList.add('fonts-loaded')})});</script>
@@ -3100,6 +3100,10 @@ const regions = [
         }
 
         function refreshJourneyDropdown() {
+            if (typeof JOURNEYS === 'undefined') {
+                console.error('[Journey] JOURNEYS data object is undefined — check that assets/js/map-data.js loaded successfully (network tab / 404 / CSP block / JS syntax error in that file).');
+                return;
+            }
             var journeySelect = document.getElementById('journey-select');
             var categories = ['Patriarchs', 'Judges', 'Kings', 'Prophets', 'Apostles'];
             var favoritesHtml = '';

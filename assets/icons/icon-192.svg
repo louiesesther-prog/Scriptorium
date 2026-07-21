@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <rect width="192" height="192" rx="32" fill="#0f0b14"/>
+  <circle cx="96" cy="92" r="56" fill="none" stroke="#d4af37" stroke-width="4"/>
+  <path d="M68 72 L96 56 L124 72 L124 104 Q96 120 68 104 Z" fill="#d4af37" opacity="0.9"/>
+  <path d="M74 80 L96 66 L118 80 L118 102 Q96 114 74 102 Z" fill="#0f0b14"/>
+  <text x="96" y="166" font-family="serif" font-size="16" fill="#d4af37" text-anchor="middle" letter-spacing="2">SCRIBE</text>
+</svg>

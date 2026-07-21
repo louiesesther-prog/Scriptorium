@@ -38,13 +38,72 @@ overlays.forEach(function(o) { o.classList.remove('active'); });
 });
 },
 registerSW: function() {
-if ('serviceWorker' in navigator) {
-navigator.serviceWorker.register('/sw.js').then(function(reg) {
-console.log('SW registered:', reg.scope);
-}).catch(function(err) {
-console.warn('SW registration failed:', err);
-});
-}
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then(reg => {
+      console.log('SW registered:', reg.scope);
+      ScriptoriumCore.setupPushSubscription(reg);
+    }).catch(function(err) {
+      console.warn('SW registration failed:', err);
+    });
+  }
+},
+
+setupPushSubscription: function(reg) {
+  if (Notification.permission === 'granted') {
+    ScriptoriumCore.doSubscribe(reg);
+  } else if (Notification.permission !== 'denied') {
+    // Show a subtle prompt later (e.g. after user interaction)
+    var prompted = localStorage.getItem('push_prompted');
+    if (!prompted) {
+      setTimeout(function() {
+        ScriptoriumCore.showPushPrompt(reg);
+      }, 30000);
+    }
+  }
+},
+
+showPushPrompt: function(reg) {
+  if (localStorage.getItem('push_prompted')) return;
+  var toast = document.createElement('div');
+  toast.id = 'push-prompt';
+  toast.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:99999;background:#1a1520;border:1px solid #d4af37;border-radius:8px;padding:12px 20px;display:flex;align-items:center;gap:14px;font-family:Cormorant Garamond,serif;box-shadow:0 4px 24px rgba(0,0,0,0.6);max-width:420px;animation:fadeInUp 0.3s ease;';
+  toast.innerHTML = '<span style="color:#e0e0e0;font-size:0.95rem;">Get your <strong style="color:#d4af37;">daily devotional</strong> delivered by notification</span>' +
+    '<button id="push-yes-btn" style="background:#d4af37;color:#050505;border:none;padding:6px 16px;border-radius:4px;font-family:Cinzel,serif;font-size:0.75rem;cursor:pointer;letter-spacing:1px;">ENABLE</button>' +
+    '<button id="push-no-btn" style="background:transparent;color:rgba(255,255,255,0.4);border:none;padding:4px 8px;cursor:pointer;font-size:1.1rem;">\u00d7</button>';
+  document.body.appendChild(toast);
+  document.getElementById('push-yes-btn').addEventListener('click', function() {
+    var el = document.getElementById('push-prompt');
+    if (el) { el.style.opacity = '0'; setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 300); }
+    localStorage.setItem('push_prompted', 'true');
+    Notification.requestPermission().then(function(perm) {
+      if (perm === 'granted') ScriptoriumCore.doSubscribe(reg);
+    });
+  });
+  document.getElementById('push-no-btn').addEventListener('click', function() {
+    var el = document.getElementById('push-prompt');
+    if (el) { el.style.opacity = '0'; setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 300); }
+    localStorage.setItem('push_prompted', 'true');
+  });
+},
+
+doSubscribe: function(reg) {
+  fetch('/api/push/vapid-key').then(function(r) { return r.json(); }).then(function(data) {
+    if (!data.publicKey) return;
+    var key = data.publicKey;
+    var urlB64 = function(base64) {
+      return Uint8Array.from(atob(base64.replace(/-/g, '+').replace(/_/g, '/')), function(c) { return c.charCodeAt(0); });
+    };
+    reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlB64(key)
+    }).then(function(sub) {
+      fetch('/api/push/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(sub)
+      }).then(function() { console.log('Push subscribed'); }).catch(function() {});
+    }).catch(function() {});
+  }).catch(function() {});
 },
 setupInstallPrompt: function() {
 var deferredPrompt = null;
@@ -226,6 +285,48 @@ checkAchievements: function(options) {
     if (journeys.wilderness && journeys.wilderness.completed) award('achiev_wilderness_journey');
   } catch(e) {}
 
+  // Semantic study achievements
+  if (localStorage.getItem('achiev_xref_used')) award('achiev_xref_explorer');
+  if (localStorage.getItem('achiev_word_study_used')) award('achiev_lexicographer');
+  if (localStorage.getItem('achiev_patristic_opened')) award('achiev_patristic_reader');
+  if (localStorage.getItem('achiev_daily_verse_used')) award('achiev_daily_verse_devotee');
+  if (localStorage.getItem('achiev_reading_partner_connected')) award('achiev_reading_partner');
+  if (localStorage.getItem('achiev_psalms_devotion')) award('achiev_psalms_devotion');
+
+  // Book reading achievements
+  try {
+    var rp2 = JSON.parse(localStorage.getItem('scriptorium_reading_progress') || '{}');
+    var pentateuch = ['genesis','exodus','leviticus','numbers','deuteronomy'];
+    if (pentateuch.every(function(b) { return rp2[b] && rp2[b].chapter >= 1; })) award('achiev_pentateuch');
+    var historical = ['joshua','judges','ruth','1_samuel','2_samuel','1_kings','2_kings'];
+    if (historical.every(function(b) { return rp2[b] && rp2[b].chapter >= 1; })) award('achiev_historical_books');
+    var majorProphets = ['isaiah','jeremiah','lamentations','ezekiel','daniel'];
+    if (majorProphets.every(function(b) { return rp2[b] && rp2[b].chapter >= 1; })) award('achiev_major_prophets');
+    var minorProphets = ['hosea','joel','amos','obadiah','jonah','micah','nahum','habakkuk','zephaniah','haggai','zechariah','malachi'];
+    if (minorProphets.every(function(b) { return rp2[b] && rp2[b].chapter >= 1; })) award('achiev_minor_prophets');
+    var pauline = ['romans','1_corinthians','2_corinthians','galatians','ephesians','philippians','colossians','1_thessalonians','2_thessalonians','1_timothy','2_timothy','titus','philemon'];
+    if (pauline.every(function(b) { return rp2[b] && rp2[b].chapter >= 1; })) award('achiev_pauline_epistles');
+    var general = ['hebrews','james','1_peter','2_peter','1_john','2_john','3_john','jude'];
+    if (general.every(function(b) { return rp2[b] && rp2[b].chapter >= 1; })) award('achiev_general_epistles');
+  } catch(e) {}
+
+  // Chapter count achievements
+  try {
+    var v3b = JSON.parse(localStorage.getItem('scriptorium_v3') || '{}');
+    var chaptersRead = parseInt(v3b.progress.versesCompleted) / 20 || 0;
+    if (chaptersRead >= 100) award('achiev_one_hundred_chapters');
+  } catch(e) {}
+
+  // OT/NT balance
+  try {
+    var rp3 = JSON.parse(localStorage.getItem('scriptorium_reading_progress') || '{}');
+    var otBooks = ['genesis','exodus','leviticus','numbers','deuteronomy','joshua','judges','ruth','1_samuel','2_samuel','1_kings','2_kings','1_chronicles','2_chronicles','ezra','nehemiah','esther','job','psalms','proverbs','ecclesiastes','song_of_solomon','isaiah','jeremiah','lamentations','ezekiel','daniel','hosea','joel','amos','obadiah','jonah','micah','nahum','habakkuk','zephaniah','haggai','zechariah','malachi'];
+    var ntBooks = ['matthew','mark','luke','john','acts','romans','1_corinthians','2_corinthians','galatians','ephesians','philippians','colossians','1_thessalonians','2_thessalonians','1_timothy','2_timothy','titus','philemon','hebrews','james','1_peter','2_peter','1_john','2_john','3_john','jude','revelation'];
+    var otStarted = otBooks.some(function(b) { return rp3[b] && rp3[b].chapter >= 1; });
+    var ntStarted = ntBooks.some(function(b) { return rp3[b] && rp3[b].chapter >= 1; });
+    if (otStarted && ntStarted) award('achiev_nt_ot_balance');
+  } catch(e) {}
+
   // Plan completions (via localStorage key set by plans.html)
   var completedPlans = [];
   try {
@@ -337,6 +438,23 @@ BADGES: [
   { id:'achiev_plan_60',           icon:'\uD83D\uDD15', name:'Prophetic Stride', desc:'A 60-day reading plan finished.', xp:400, tier:'silver' },
   { id:'achiev_plan_365',          icon:'\uD83D\uDCC5', name:'Year in the Word', desc:'The full one-year reading plan completed.', xp:1500, tier:'mastery' },
   { id:'achiev_ancient_paths',     icon:'\uD800\uDD2F', name:'Ancient Paths (Legacy)', desc:'All 22 paleo-Hebrew letters traced.', xp:0, tier:'bronze' },
+
+  // Semantic Study (Theologia Profunda) — Bronze/Silver/Gold
+  { id:'achiev_xref_explorer',     icon:'\uD83D\uDD17', name:'Cross-Reference Explorer', desc:'Followed the thread of divine interconnection through cross-references.', xp:200, tier:'bronze' },
+  { id:'achiev_lexicographer',     icon:'\uD83D\uDCD6', name:'Lexicographer', desc:'Studied a word in its original Greek or Hebrew through the Word Study.', xp:200, tier:'bronze' },
+  { id:'achiev_patristic_reader',  icon:'\uD83D\uDCDA', name:'Patristic Reader', desc:'Explored the wisdom of the Church Fathers on Scripture.', xp:250, tier:'silver' },
+  { id:'achiev_bookworm',          icon:'\uD83D\uDCD0', name:'Bookworm', desc:'Completed an entire book of the Bible in the reader.', xp:150, tier:'bronze' },
+  { id:'achiev_pentateuch',        icon:'\uD83D\uDCDC', name:'Pentateuch Scholar', desc:'Read all five books of Moses: Genesis through Deuteronomy.', xp:600, tier:'gold' },
+  { id:'achiev_historical_books',  icon:'\u2694', name:'History Keeper', desc:'Read Joshua, Judges, Ruth, and the books of Samuel and Kings.', xp:500, tier:'silver' },
+  { id:'achiev_major_prophets',    icon:'\uD83D\uDD25', name:'Prophetic Voice', desc:'Read Isaiah, Jeremiah, Lamentations, Ezekiel, and Daniel.', xp:500, tier:'silver' },
+  { id:'achiev_minor_prophets',    icon:'\uD83C\uDF1F', name:'Minor Prophet, Major Message', desc:'Read all twelve minor prophets.', xp:500, tier:'silver' },
+  { id:'achiev_pauline_epistles',  icon:'\u2709', name:'Pauline Scholar', desc:'Read all of Paul\'s epistles from Romans to Philemon.', xp:500, tier:'silver' },
+  { id:'achiev_general_epistles',  icon:'\uD83D\uDCE7', name:'General Reader', desc:'Read Hebrews, James, Peter, John, and Jude.', xp:400, tier:'silver' },
+  { id:'achiev_daily_verse_devotee', icon:'\uD83D\uDCEC', name:'Daily Verse Devotee', desc:'Interacted with the Daily Verse feature.', xp:100, tier:'bronze' },
+  { id:'achiev_reading_partner',   icon:'\uD83E\uDD1D', name:'Reading Partner', desc:'Connected with another scribe as a reading partner.', xp:300, tier:'silver' },
+  { id:'achiev_one_hundred_chapters', icon:'\uD83D\uDCD8', name:'Centurion of Chapters', desc:'Read 100 chapters of Scripture in the reader.', xp:400, tier:'gold' },
+  { id:'achiev_nt_ot_balance',     icon:'\u2696', name:'Old and New', desc:'Read substantial portions of both the Old and New Testaments.', xp:350, tier:'silver' },
+  { id:'achiev_psalms_devotion',   icon:'\uD83C\uDFB6', name:'Psalter Devotee', desc:'Read deeply in the Psalms, the prayer book of Scripture.', xp:350, tier:'silver' },
 ],
 
 getEarnedBadges: function() {
@@ -1485,6 +1603,106 @@ var PATRISTIC_COMMENTARY = {
     { father: "John Chrysostom", source: "Homilies on 1 Kings", text: "Solomon's temple is the wonder of the ancient world, but the Lord who fills heaven and earth cannot be contained in any house built by hands. The temple was a shadow; the reality is Christ. The glory that filled Solomon's temple was a foretaste of the incarnation, when the Word became flesh and dwelt among us." },
     { father: "Witness Lee", source: "Life-Study of 1 Kings", text: "The building of the temple under Solomon is the greatest type of the building of the church in the Old Testament. Solomon is a type of Christ as the Prince of Peace building the house of God. The materials — gold, silver, cedar, stone — all speak of Christ's person and work." }
   ],
+  "JUDGES": [
+    { father: "Augustine of Hippo", source: "City of God, Book XVIII", text: "The book of Judges shows the cycle of sin, oppression, repentance, and deliverance that marks Israel's history in the land. Each judge is a type of Christ — a deliverer raised up by God when His people cry out. Yet the refrain 'everyone did what was right in his own eyes' reveals the need for a righteous King who would rule with justice and truth." },
+    { father: "Watchman Nee", source: "The Normal Christian Life", text: "Judges reveals the principle of the overcomer. When the whole generation that entered Canaan fell away, God raised up individuals — Gideon, Deborah, Samson — to deliver His people. This is the pattern of the church age: in times of decline, God calls overcomers to stand for His testimony." }
+  ],
+  "RUTH": [
+    { father: "Jerome", source: "Epistle 65 to Principia", text: "Ruth the Moabitess, a foreigner excluded from the assembly of the Lord, enters the lineage of the Messiah through her faithful love for Naomi. This is a figure of the church gathered from among the Gentiles. Boaz, the kinsman-redeemer, prefigures Christ who redeems His bride from bondage." },
+    { father: "Witness Lee", source: "Life-Study of Judges & Ruth", text: "Ruth is the book of the seekers of Christ. She left her country, her people, and her gods to cleave to Naomi and the God of Israel. In typology, Ruth represents the believers who, having been saved, come into the church life to pursue Christ as their goal and portion." }
+  ],
+  "1 CHRONICLES": [
+    { father: "Theodoret of Cyrus", source: "Questions on 1 Chronicles", text: "The genealogies from Adam to David are not mere records but a divine tapestry showing God's faithful preservation of the promised Seed. David's preparation for the temple reveals the heart of one who desired a dwelling place for God. The Chronicler writes after the exile to remind the returned remnant of their heritage." },
+    { father: "Witness Lee", source: "Life-Study of 1 & 2 Chronicles", text: "Chronicles presents the line of the kingdom from God's perspective. The emphasis is not on human failure but on God's purpose — the building of the temple. David's organization of the priests, Levites, and singers for the temple service is a type of the order of the church in worship." }
+  ],
+  "2 CHRONICLES": [
+    { father: "John Chrysostom", source: "Homilies on 2 Chronicles", text: "Solomon's temple — the house of the Lord filled with glory — is the central event of the Hebrew commonwealth. The prayer of dedication, in which Solomon asks God to hear from heaven, is a prophecy of the access believers have through Christ to the throne of grace." },
+    { father: "Witness Lee", source: "Life-Study of 1 & 2 Chronicles", text: "Second Chronicles traces the kings of Judah from Solomon to the captivity. The reformations of Asa, Jehoshaphat, Hezekiah, and Josiah show the principle of recovery. Whenever the king sought the Lord, revival came. This is the pattern for the church's recovery throughout history." }
+  ],
+  "EZRA": [
+    { father: "Jerome", source: "Preface to Ezra", text: "Ezra records the return from Babylon under Cyrus's decree. The rebuilding of the temple against opposition prefigures the building of the church through tribulation. Ezra the scribe set his heart to study, practice, and teach the law of the Lord — the pattern of every faithful teacher in the church." },
+    { father: "Watchman Nee", source: "The Recovery of Christ's Testimony", text: "Ezra and Nehemiah show the principle of recovery. God's people had lost the temple, the city, and the law. Through a remnant, God recovered all three. Recovery is not innovation but a return to the original standard of God's word. This is the principle of the church's recovery today." }
+  ],
+  "NEHEMIAH": [
+    { father: "Augustine of Hippo", source: "City of God, Book XVIII", text: "Nehemiah's rebuilding of the walls of Jerusalem is a type of the restoration of the church. The opposition of Sanballat and Tobiah represents the world's hostility to God's work. Yet the people worked with one hand and held a weapon with the other — the pattern of spiritual warfare in building." },
+    { father: "Witness Lee", source: "Life-Study of Ezra, Nehemiah, Esther", text: "Nehemiah was a man of prayer and action. He wept over the broken condition of Jerusalem, then took practical steps to rebuild. The wall is a type of the separation between the church and the world. Rebuilding the wall is the recovery of the boundary of God's kingdom." }
+  ],
+  "ESTHER": [
+    { father: "Jerome", source: "Preface to Esther", text: "Esther, though the name of God is not mentioned in the book, reveals the hidden providence of God in preserving His people. Mordecai's refusal to bow to Haman is the courage of faith. The deliverance of the Jews through Esther is a type of the church's deliverance through Christ's intercession." },
+    { father: "Witness Lee", source: "Life-Study of Ezra, Nehemiah, Esther", text: "Esther shows God's hidden sovereignty. Though He is not named, His hand is evident in every turn of events. Esther's willingness to risk her life for her people is a picture of the overcomers who stand in the gap for God's testimony in a dark age." }
+  ],
+  "JOB": [
+    { father: "Gregory the Great", source: "Moralia on Job, I.1-3", text: "Job is the mystery of undeserved suffering. Satan accuses, God permits, and Job endures. His three friends represent the inadequate comfort of human wisdom. God's answer from the whirlwind does not explain suffering but reveals His majesty. In the end, Job sees God and repents — the highest resolution of the problem of pain." },
+    { father: "Watchman Nee", source: "The Release of the Spirit", text: "Job lost everything — possessions, children, health, reputation. Yet through his suffering, God stripped away his self-righteousness and brought him to the place where he could see God. The greatest gain from suffering is not restoration but a deeper knowledge of God. Job's final words — 'I had heard of You by the hearing of the ear, but now my eye sees You' — are the goal of all affliction." }
+  ],
+  "PSALMS": [
+    { father: "Augustine of Hippo", source: "Expositions on the Psalms, I.1", text: "The Psalter is the prayer book of the church. Every emotion of the soul — joy, sorrow, anger, hope, despair — finds its voice in the Psalms. David speaks of Christ, and Christ speaks in David. 'The Lord said to my Lord, Sit at My right hand' — this is the mystery of the Trinity proclaimed a thousand years before the incarnation." },
+    { father: "Witness Lee", source: "Life-Study of Psalms", text: "The Psalms cover the entire range of the believer's experience with God. They begin with the blessed man who delights in the law and end with praise to God in His sanctuary. The Psalms of Ascents (120-134) trace the journey from the world to the house of God. Christ is the hidden subject throughout — the rejected Stone who becomes the Head of the corner." }
+  ],
+  "PROVERBS": [
+    { father: "John Chrysostom", source: "Homilies on Proverbs, I.1", text: "Proverbs is divine wisdom for daily life. The fear of the Lord is the beginning of wisdom — not servile fear but reverential awe. Wisdom personified in Proverbs 8 is the Word of God through whom all things were made. Solomon, the wisest of men, wrote these proverbs by the Spirit who is the source of all wisdom." },
+    { father: "Watchman Nee", source: "The Song of Songs", text: "Proverbs teaches the practical wisdom of walking in the fear of God. The contrast between the wise and the foolish, the diligent and the sluggard, the pure and the adulterous — these are the choices that shape a life. Wisdom is not academic knowledge but the practical application of the knowledge of God to every situation." }
+  ],
+  "ECCLESIASTES": [
+    { father: "Gregory of Nyssa", source: "Homilies on Ecclesiastes, I.1", text: "Solomon, having tasted every pleasure and achieved every work, declares all is vanity under the sun. This book is the confession of the natural man who has tried to find meaning apart from God. The conclusion — fear God and keep His commandments — is the only answer to the meaninglessness of life lived horizontally." },
+    { father: "Witness Lee", source: "Life-Study of Ecclesiastes", text: "Ecclesiastes is the book of the human philosophy of life 'under the sun' — without God. Everything is vanity and vexation of spirit. But the wise man sees beyond the sun to the One who has set eternity in our hearts. The conclusion is not pessimism but the beginning of true wisdom: remember your Creator in the days of your youth." }
+  ],
+  "SONG OF SOLOMON": [
+    { father: "Origen of Alexandria", source: "Commentary on the Song of Songs, Prologue", text: "This book is the marriage song of Christ and the church. The love between the bridegroom and the bride is the mystery of Christ's love for His people. Every earthly image — the kiss, the wine, the garden, the mountain — speaks of the spiritual communion between the soul and its Beloved." },
+    { father: "Watchman Nee", source: "The Song of Songs", text: "The Song of Songs is the history of the individual believer's love for the Lord. The bride progresses from seeking the Beloved to abiding in His love to serving in His vineyard. The journey from the initial drawing to the mature union is the pattern of the normal Christian life. 'I am my Beloved's, and His desire is toward me.'" }
+  ],
+  "JEREMIAH": [
+    { father: "Jerome", source: "Commentary on Jeremiah, I.1", text: "Jeremiah, the weeping prophet, was called from the womb to be a prophet to the nations. He prophesied the destruction of Jerusalem and the seventy-year captivity. The new covenant in chapter 31 — 'I will put My law in their inward parts and write it on their heart' — is the greatest prophecy of the gospel in the Old Testament." },
+    { father: "Witness Lee", source: "Life-Study of Jeremiah", text: "Jeremiah reveals God's heart — wounded by His people's unfaithfulness yet longing to restore them. The potter and the clay show God's absolute sovereignty in dealing with His people. The new covenant is the central revelation: God will not merely demand from man but will impart Himself into man. This is the gospel of grace." }
+  ],
+  "LAMENTATIONS": [
+    { father: "Gregory of Nazianzus", source: "Oration 16", text: "Jeremiah's laments over the desolate city are the tears of God over His rebellious people. The destruction of Jerusalem is the judgment of the covenant — the wages of sin. Yet in the midst of judgment, hope arises: 'The steadfast love of the Lord never ceases; His mercies never come to an end; they are new every morning.'" },
+    { father: "Watchman Nee", source: "The Salvation of the Soul", text: "Lamentations shows the result of losing God's presence. The city that was the joy of the whole earth has become a desolation. Yet the prophet's hope in the midst of judgment reveals that God's chastening is not rejection but discipline. Great is Your faithfulness — this is the anchor of the soul in dark times." }
+  ],
+  "JOEL": [
+    { father: "Cyril of Alexandria", source: "Commentary on Joel", text: "Joel prophesies of the locust plague that foreshadows the day of the Lord. The outpouring of the Spirit on all flesh — sons and daughters, young and old, slaves and free — is the prophecy Peter quoted at Pentecost. The day of the Lord is both judgment and salvation: terrible for the wicked, glorious for the righteous." },
+    { father: "Witness Lee", source: "Life-Study of the Minor Prophets", text: "Joel reveals the principle of the day of the Lord. The locusts are type of the judgments that strip away everything apart from God. But after judgment comes restoration: the Spirit poured out, the harvest restored, and the Lord dwelling in Zion. The day of the Lord always ends with God's dwelling place established." }
+  ],
+  "AMOS": [
+    { father: "Jerome", source: "Commentary on Amos, I.1", text: "Amos, the herdsman and dresser of sycamore trees, was sent to the northern kingdom with a message of social justice and divine judgment. He thunders against those who trample the poor and turn aside the needy. 'Let justice roll down like waters, and righteousness like an ever-flowing stream' — this is the cry of the prophet for a community shaped by God's covenant." },
+    { father: "Witness Lee", source: "Life-Study of the Minor Prophets", text: "Amos speaks of the plumb line — God's standard of measurement. Israel was measured and found wanting. The plumb line is God's righteousness, and only those who meet His standard can stand. Yet the book ends with restoration: the tabernacle of David raised up, and the people possessing the remnant of Edom." }
+  ],
+  "OBADIAH": [
+    { father: "Jerome", source: "Commentary on Obadiah", text: "Obadiah's prophecy against Edom is the shortest book in the Old Testament, yet its message echoes throughout Scripture: those who rejoice in the destruction of God's people will themselves be destroyed. Edom's pride — 'who will bring me down to the ground?' — is the sin of Satan, and his judgment prefigures the final overthrow of all who oppose God's kingdom." },
+    { father: "Watchman Nee", source: "The Spiritual Man", text: "Obadiah reveals the principle of Esau — the natural man who despises his birthright. Edom represents the flesh, the self-life that opposes the Spirit. The judgment on Edom is the judgment on the flesh. But on Mount Zion there will be deliverance — the overcomers who live by the Spirit." }
+  ],
+  "JONAH": [
+    { father: "Jerome", source: "Commentary on Jonah, I.1", text: "Jonah running from God's commission is the history of every reluctant servant. The great fish, the vine, the worm — all are instruments of divine discipline. Jonah's anger at Nineveh's repentance exposes the narrow heart of religious exclusivism. God's question — 'Should I not pity Nineveh?' — is the gospel breaking through the bounds of Israel." },
+    { father: "Witness Lee", source: "Life-Study of the Minor Prophets", text: "Jonah is the only Old Testament prophet sent to the Gentiles. His three days in the belly of the fish is the great type of Christ's death and resurrection. Nineveh's repentance at Jonah's preaching prefigures the repentance of the nations at the preaching of the gospel. Jonah himself is a type of Christ as the prophet raised up from death." }
+  ],
+  "MICAH": [
+    { father: "Theodoret of Cyrus", source: "Commentary on Micah", text: "Micah prophesies both judgment on Samaria and Jerusalem and the promise of a Ruler from Bethlehem whose goings forth are from of old, from everlasting. This is one of the clearest prophecies of the incarnation in the Old Testament. What does the Lord require of you but to do justice, love mercy, and walk humbly with your God?" },
+    { father: "Witness Lee", source: "Life-Study of the Minor Prophets", text: "Micah reveals Christ as the coming King who would be born in Bethlehem. The remnant of Israel in the midst of many peoples is like dew from the Lord. The book moves from judgment to promise, from the destruction of the nations to the establishment of the mountain of the house of the Lord above all mountains." }
+  ],
+  "NAHUM": [
+    { father: "Jerome", source: "Commentary on Nahum", text: "Nahum prophesies the fall of Nineveh, the capital of Assyria, a century after Jonah's preaching. The burden of Nineveh is the declaration of God's judgment on the world power that oppresses His people. The Lord is slow to anger and great in power, but He will not leave the guilty unpunished. Nineveh's destruction is a type of the final judgment on the world system." },
+    { father: "Witness Lee", source: "Life-Study of the Minor Prophets", text: "Nahum reveals God's jealousy and vengeance — not as human passions but as the expression of His holy nature. The world power that opposes God's people will be utterly destroyed. The book ends with the question that echoes through history: 'What do you plot against the Lord? He will make a complete end.'" }
+  ],
+  "HABAKKUK": [
+    { father: "Jerome", source: "Commentary on Habakkuk, I.1", text: "Habakkuk wrestles with the age-old problem: why does God permit evil to prosper? The answer is that the righteous shall live by his faith — the text that sparked the Reformation. The Chaldeans are God's instrument of judgment, yet they too will be judged. Habakkuk's final prayer is a psalm of trust: 'Though the fig tree does not blossom... yet I will rejoice in the Lord.'" },
+    { father: "Witness Lee", source: "Life-Study of the Minor Prophets", text: "Habakkuk presents the principle of faith in a time of darkness. 'The righteous shall live by faith' is not a theory but a life. When everything around fails, faith in God sustains. The book moves from questioning to worship, from complaint to confidence. The final chapter is one of the highest expressions of faith in the Old Testament." }
+  ],
+  "ZEPHANIAH": [
+    { father: "Cyril of Alexandria", source: "Commentary on Zephaniah", text: "Zephaniah announces the day of the Lord as a day of wrath, distress, and anguish. Yet the call to seek the Lord, to seek humility and righteousness, is the way of escape. The remnant who take refuge in the Lord will be hidden in the day of His anger. The book ends with singing: the Lord rejoices over His restored people with gladness." },
+    { father: "Witness Lee", source: "Life-Study of the Minor Prophets", text: "Zephaniah reveals the day of the Lord as both judgment and restoration. The whole earth will be consumed, but a remnant will be left — a people humble and lowly who take refuge in the name of the Lord. The Lord will rejoice over them with singing, and they will be a praise among all the peoples of the earth." }
+  ],
+  "HAGGAI": [
+    { father: "Jerome", source: "Commentary on Haggai, I.1", text: "Haggai rebukes the returned exiles for dwelling in paneled houses while the house of the Lord lies in ruins. 'Consider your ways!' is the call to reorder priorities. The glory of the latter house will be greater than the former — a prophecy of the temple of Christ's body, the church, which fills all things with God's presence." },
+    { father: "Witness Lee", source: "Life-Study of Haggai, Zechariah, Malachi", text: "Haggai's message is simple but profound: put God's house first. When the people neglected the temple, their own houses suffered. The principle is the same for the church: seek first His kingdom and His righteousness, and all these things will be added. The shaking of the nations is for the coming of the Desire of All Nations." }
+  ],
+  "ZECHARIAH": [
+    { father: "Jerome", source: "Commentary on Zechariah, I.1-3", text: "Zechariah's eight night visions — the horseman, the horns, the measuring line, the high priest, the lampstand, the flying scroll, the women in the basket, the four chariots — are the most complex prophetic symbolism in Scripture. They reveal God's government, His judgment on the nations, and His restoration of Israel. 'Not by might nor by power, but by My Spirit' is the key to all." },
+    { father: "Witness Lee", source: "Life-Study of Haggai, Zechariah, Malachi", text: "Zechariah is rich in Christology. 'Behold your King is coming to you, righteous and having salvation, humble and mounted on a donkey' — quoted at Christ's triumphal entry. The thirty pieces of silver thrown to the potter is the price of Judas's betrayal. The fountain opened for sin and uncleanness is the cleansing of the cross." }
+  ],
+  "MALACHI": [
+    { father: "Cyril of Alexandria", source: "Commentary on Malachi", text: "Malachi, the last of the prophets, bridges the old covenant and the new. The Messenger of the covenant whom the people seek is Christ. The sun of righteousness rising with healing in its wings is the dawn of the gospel age. The turning of the hearts of the fathers to the children prepares the way for John the Baptist and the coming of the Lord." },
+    { father: "Witness Lee", source: "Life-Study of Haggai, Zechariah, Malachi", text: "Malachi exposes the spiritual condition of God's people after the return from exile: corrupt priests, robbing God of tithes, wearying the Lord with words. Yet a book of remembrance was written before Him for those who feared the Lord and esteemed His name. They will be His special treasure on the day He makes up His jewels." }
+  ],
   "ISAIAH": [
     { father: "Jerome", source: "Commentary on Isaiah, Book I", text: "Isaiah saw the Lord high and lifted up, and his train filled the temple. This vision is the revelation of the Trinity — the seraphim crying 'Holy, Holy, Holy' proclaim the three persons yet one God. Isaiah's 'Here am I, send me' is the pattern of every prophetic vocation." },
     { father: "Witness Lee", source: "God's New Testament Economy", text: "Isaiah contains the richest revelation of Christ as the God-man. 'Unto us a Child is born, unto us a Son is given' speaks of the incarnation. The suffering Servant in chapter 53 is Christ on the cross bearing our sins. The New Heaven and New Earth in chapter 65 are the ultimate consummation of God's redemption." }
@@ -1553,6 +1771,10 @@ var PATRISTIC_COMMENTARY = {
     { father: "John Chrysostom", source: "Homilies on 1 Thessalonians, I.1", text: "Paul writes to young believers who turned from idols to serve the living God. Their faith, love, and hope are the three graces that adorn the church. The coming of the Lord is the great hope that sanctifies the believer's life. We are not appointed to wrath but to obtain salvation through our Lord Jesus Christ." },
     { father: "Watchman Nee", source: "The Salvation of the Soul", text: "First Thessalonians emphasizes the three parts of man — spirit, soul, and body. The entire being is to be sanctified blamelessly at the coming of the Lord. The rapture is not merely an escape but the completion of the believers' transformation into the image of Christ." }
   ],
+  "2 THESSALONIANS": [
+    { father: "John Chrysostom", source: "Homilies on 2 Thessalonians, I.1", text: "Paul corrects the misunderstanding that the day of the Lord has already come. The man of lawlessness must be revealed first — the son of perdition who opposes and exalts himself above all that is called God. Paul's instruction to those who are idle is sharp: if anyone is not willing to work, let him not eat. The Christian life is not restless idleness but faithful labor in hope." },
+    { father: "Witness Lee", source: "Life-Study of 1 & 2 Thessalonians", text: "Second Thessalonians unveils the mystery of lawlessness already at work in the world. The restraining power that holds back the revelation of the man of lawlessness is the governmental power of God's authority. The believers are chosen from the beginning unto salvation and called to the obtaining of the glory of our Lord Jesus Christ." }
+  ],
   "1 TIMOTHY": [
     { father: "John Chrysostom", source: "Homilies on 1 Timothy, I.1", text: "Paul instructs Timothy on the conduct of the household of God. The church is the pillar and ground of the truth. Overseers must be above reproach; deacons must hold the mystery of the faith with a clear conscience. Godliness with contentment is great gain. The love of money is a root of all kinds of evil." },
     { father: "Witness Lee", source: "Life-Study of 1 Timothy", text: "First Timothy reveals God's economy, which is God's household administration to dispense Himself into His people. The church is God's house, the supporting pillar and base of the truth. The great mystery of godliness — God manifested in the flesh — is the central content of the church's testimony." }
@@ -1564,6 +1786,10 @@ var PATRISTIC_COMMENTARY = {
   "TITUS": [
     { father: "John Chrysostom", source: "Homilies on Titus, I.1", text: "Paul leaves Titus in Crete to set in order what remains. The grace of God has appeared, bringing salvation to all men, training us to renounce ungodliness and live sensibly, righteously, and godly in the present age. The church is to be a community of good works, adorned by the teaching of God our Savior." },
     { father: "Watchman Nee", source: "The Normal Christian Church Life", text: "Titus shows the practical outworking of the truth in the local church. Elders, young men, servants, older women — each has a place in the church life. The grace of God teaches us not only to be saved but to live a life that adorns the gospel in every relationship." }
+  ],
+  "PHILEMON": [
+    { father: "John Chrysostom", source: "Homilies on Philemon, I.1-2", text: "Paul writes a personal letter on behalf of Onesimus, a runaway slave who has become a believer. The apostle appeals not by authority but by love. He offers to repay whatever Onesimus owes — a type of Christ paying our debt. The letter demonstrates that the gospel transforms not only individuals but also social relationships within the household of faith." },
+    { father: "Watchman Nee", source: "The Normal Christian Worker", text: "Philemon shows the principle of the Body of Christ in practical fellowship. Paul, the prisoner, intercedes for the slave. Philemon, the master, is asked to receive his slave as a brother. The vertical relationship with Christ creates a horizontal relationship among believers that transcends all social distinctions." }
   ],
   "HEBREWS": [
     { father: "John Chrysostom", source: "Homilies on Hebrews, I.1-2", text: "The Epistle to the Hebrews shows the superiority of Christ over all that went before — superior to angels, to Moses, to the Aaronic priesthood. The old covenant had a shadow of the good things to come, but the substance is Christ. The new covenant is enacted on better promises, and the blood of Christ speaks better than the blood of Abel." },
@@ -1584,6 +1810,14 @@ var PATRISTIC_COMMENTARY = {
   "1 JOHN": [
     { father: "Augustine of Hippo", source: "Homilies on the First Epistle of John, I.1-4", text: "John the apostle, who leaned on the Lord's breast at supper, writes of what he has heard, seen, and handled of the Word of Life. God is light, and in Him is no darkness at all. If we walk in the light as He is in the light, we have fellowship with one another, and the blood of Jesus His Son cleanses us from all sin." },
     { father: "Watchman Nee", source: "The Fellowship of Life", text: "First John is the book of the divine life and the fellowship of that life. The life eternal was with the Father and was manifested to us. This life creates fellowship among the believers. The anointing within teaches us all things. Love is the nature of the life we have received, and perfect love casts out fear." }
+  ],
+  "2 JOHN": [
+    { father: "Jerome", source: "Lives of Illustrious Men", text: "John the apostle, who leaned on the Lord's breast, wrote this brief letter to the elect lady and her children. The key word is truth — walking in truth, knowing the truth, and rejecting those who do not confess Jesus Christ coming in the flesh. The letter warns against receiving those who bring a different doctrine into the house." },
+    { father: "Witness Lee", source: "Life-Study of 1, 2, 3 John & Jude", text: "Second John guards the believers against the deception of false teachers. The 'elect lady' is a local church. The commandment to love one another is inseparable from the defense of the truth. Do not receive into the house those who do not bring the teaching of Christ — this is the principle of maintaining the purity of the church." }
+  ],
+  "3 JOHN": [
+    { father: "Jerome", source: "Lives of Illustrious Men", text: "John writes to Gaius, commending his hospitality to traveling teachers. Diotrephes, who loves to have the first place, refuses to receive the brothers — a warning against ambition and pride in the church. The letter ends with the simple exhortation: imitate good, not evil. He who does good is of God." },
+    { father: "Witness Lee", source: "Life-Study of 1, 2, 3 John & Jude", text: "Third John is the book of fellow workers for the truth. Gaius is commended for his hospitality and faithfulness. Diotrephes is rebuked for his self-exaltation and rejection of the apostles. Demetrius is commended by all. The principle is simple: we imitate good, not evil, and we labor together for the truth." }
   ],
   "JUDE": [
     { father: "Didymus the Blind", source: "Commentary on Jude", text: "Jude, the brother of James, writes to contend for the faith once delivered to the saints. The apostasy of the last days is prefigured by the rebellion of Korah, the error of Balaam, and the way of Cain. Yet the believers are kept by the Lord and presented faultless before the presence of His glory with exceeding joy." },

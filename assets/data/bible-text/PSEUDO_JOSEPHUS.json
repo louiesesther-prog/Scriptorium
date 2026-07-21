@@ -1,10 +1,71 @@
 {
-  "version": "Placeholder",
+  "version": "Generated from public domain sources — chapter structure only",
   "bookId": "PSEUDO_JOSEPHUS",
   "title": "Pseudo-Josephus",
-  "writer": "Pseudo-Josephus",
+  "writer": "Joseph ben Gurion (pseudepigraphal)",
   "era": "ot",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 15,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": []
+    },
+    {
+      "number": 2,
+      "verses": []
+    },
+    {
+      "number": 3,
+      "verses": []
+    },
+    {
+      "number": 4,
+      "verses": []
+    },
+    {
+      "number": 5,
+      "verses": []
+    },
+    {
+      "number": 6,
+      "verses": []
+    },
+    {
+      "number": 7,
+      "verses": []
+    },
+    {
+      "number": 8,
+      "verses": []
+    },
+    {
+      "number": 9,
+      "verses": []
+    },
+    {
+      "number": 10,
+      "verses": []
+    },
+    {
+      "number": 11,
+      "verses": []
+    },
+    {
+      "number": 12,
+      "verses": []
+    },
+    {
+      "number": 13,
+      "verses": []
+    },
+    {
+      "number": 14,
+      "verses": []
+    },
+    {
+      "number": 15,
+      "verses": []
+    }
+  ],
+  "note": "Text pending. Source: Pseudo-Josephus (Joseph ben Gurion) — medieval compilation"
 }

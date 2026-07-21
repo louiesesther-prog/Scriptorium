@@ -1,10 +1,175 @@
 {
-  "version": "Placeholder",
+  "version": "Generated from public domain sources — chapter structure only",
   "bookId": "ACTS_PETER",
   "title": "Acts of Peter",
-  "writer": "Peter",
+  "writer": "Unknown",
   "era": "nt",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 41,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": []
+    },
+    {
+      "number": 2,
+      "verses": []
+    },
+    {
+      "number": 3,
+      "verses": []
+    },
+    {
+      "number": 4,
+      "verses": []
+    },
+    {
+      "number": 5,
+      "verses": []
+    },
+    {
+      "number": 6,
+      "verses": []
+    },
+    {
+      "number": 7,
+      "verses": []
+    },
+    {
+      "number": 8,
+      "verses": []
+    },
+    {
+      "number": 9,
+      "verses": []
+    },
+    {
+      "number": 10,
+      "verses": []
+    },
+    {
+      "number": 11,
+      "verses": []
+    },
+    {
+      "number": 12,
+      "verses": []
+    },
+    {
+      "number": 13,
+      "verses": []
+    },
+    {
+      "number": 14,
+      "verses": []
+    },
+    {
+      "number": 15,
+      "verses": []
+    },
+    {
+      "number": 16,
+      "verses": []
+    },
+    {
+      "number": 17,
+      "verses": []
+    },
+    {
+      "number": 18,
+      "verses": []
+    },
+    {
+      "number": 19,
+      "verses": []
+    },
+    {
+      "number": 20,
+      "verses": []
+    },
+    {
+      "number": 21,
+      "verses": []
+    },
+    {
+      "number": 22,
+      "verses": []
+    },
+    {
+      "number": 23,
+      "verses": []
+    },
+    {
+      "number": 24,
+      "verses": []
+    },
+    {
+      "number": 25,
+      "verses": []
+    },
+    {
+      "number": 26,
+      "verses": []
+    },
+    {
+      "number": 27,
+      "verses": []
+    },
+    {
+      "number": 28,
+      "verses": []
+    },
+    {
+      "number": 29,
+      "verses": []
+    },
+    {
+      "number": 30,
+      "verses": []
+    },
+    {
+      "number": 31,
+      "verses": []
+    },
+    {
+      "number": 32,
+      "verses": []
+    },
+    {
+      "number": 33,
+      "verses": []
+    },
+    {
+      "number": 34,
+      "verses": []
+    },
+    {
+      "number": 35,
+      "verses": []
+    },
+    {
+      "number": 36,
+      "verses": []
+    },
+    {
+      "number": 37,
+      "verses": []
+    },
+    {
+      "number": 38,
+      "verses": []
+    },
+    {
+      "number": 39,
+      "verses": []
+    },
+    {
+      "number": 40,
+      "verses": []
+    },
+    {
+      "number": 41,
+      "verses": []
+    }
+  ],
+  "note": "Text pending. Source: Acts of Peter — Ante-Nicene Fathers Vol. VIII (ANF08)"
 }

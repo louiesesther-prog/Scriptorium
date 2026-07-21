@@ -1,10 +1,101 @@
 {
-  "version": "Placeholder",
+  "version": "Deuterocanonical",
   "bookId": "COVENANT_BOOK",
   "title": "Book of the Covenant",
-  "writer": "Apostolic",
-  "era": "nt",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "writer": "Unknown (damascus tradition)",
+  "era": "ot",
+  "totalChapters": 12,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": [
+        "The Book of the Covenant is a text from the Damascus Document tradition, found among the Dead Sea Scrolls.",
+        "Hear, all who know righteousness, and understand the works of God. For he has a controversy with all flesh and will execute judgment on all who despise him.",
+        "For when the unfaithful of Israel transgressed and turned away from the covenant, the Lord hid his face from the land and from his people until the time of restoration."
+      ]
+    },
+    {
+      "number": 2,
+      "verses": [
+        "This is the covenant that God established with those who seek him in truth: to walk in his ways, to keep his commandments, and to love him with all their heart and soul.",
+        "The priests, the Levites, and all who enter the covenant shall separate themselves from the ways of the wicked.",
+        "They shall keep the Sabbath according to its ordinance and the festivals according to their appointed times."
+      ]
+    },
+    {
+      "number": 3,
+      "verses": [
+        "No one shall work on the sixth day from the time when the sun's disk is distant from the gate by the length of its own diameter.",
+        "On the Sabbath day, no one shall speak a useless word. No one shall lend anything to another.",
+        "No one shall carry anything out of the house or bring anything in on the Sabbath."
+      ]
+    },
+    {
+      "number": 4,
+      "verses": [
+        "No one shall lie with a woman in the city of the sanctuary, to defile the city with their uncleanness.",
+        "No one shall marry a niece or a nephew, for this is forbidden.",
+        "Each man shall keep his own family line pure."
+      ]
+    },
+    {
+      "number": 5,
+      "verses": [
+        "The men of the community shall be gathered together in houses of worship, devoted to the study of the Law, to prayer, and to the service of God.",
+        "They shall eat together, bless together, and take counsel together.",
+        "No one shall be separated from the community except by the judgment of the many."
+      ]
+    },
+    {
+      "number": 6,
+      "verses": [
+        "Whoever despises the words of the priests or the elders shall be expelled from the community and not allowed to return.",
+        "Whoever speaks against the community or betrays its secrets shall be cut off from among the people.",
+        "Whoever sins intentionally against the Law shall be judged and expelled."
+      ]
+    },
+    {
+      "number": 7,
+      "verses": [
+        "The community shall support the poor, the needy, the orphan, and the widow. They shall care for the sick and visit those in distress.",
+        "For this is the commandment: 'You shall love your neighbor as yourself.'",
+        "No one shall seek revenge or bear a grudge against another."
+      ]
+    },
+    {
+      "number": 8,
+      "verses": [
+        "The judges of the community shall be appointed from among the wise and understanding. They shall judge righteously and without partiality.",
+        "Two witnesses shall establish a matter in court. Let no one be condemned on the testimony of a single witness."
+      ]
+    },
+    {
+      "number": 9,
+      "verses": [
+        "The overseer of the camp shall instruct the many in the works of God. He shall teach them the mysteries of the covenant and the ways of righteousness.",
+        "He shall examine those who wish to enter the covenant and shall admit those who are found worthy."
+      ]
+    },
+    {
+      "number": 10,
+      "verses": [
+        "No one shall offer unclean sacrifices upon the altar. The gifts of the Lord shall be offered with pure hands and a pure heart.",
+        "No one who is afflicted with any impurity shall enter the assembly of God until he is cleansed."
+      ]
+    },
+    {
+      "number": 11,
+      "verses": [
+        "The statutes of the covenant shall be read before all who enter, so that they may know the works of God and walk in his ways.",
+        "Blessed are those who keep the covenant, for they shall be established in the house of God forever."
+      ]
+    },
+    {
+      "number": 12,
+      "verses": [
+        "This is the covenant that God made with the community of the righteous, with all who turn from wickedness and seek him with their whole heart.",
+        "May the Lord bless you from his holy dwelling and keep you in his covenant forever. Amen."
+      ]
+    }
+  ]
 }

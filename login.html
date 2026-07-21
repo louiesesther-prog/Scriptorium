@@ -186,7 +186,7 @@
                 } catch(e) {}
                 if (window.ScriptoriumAudio) { try { ScriptoriumAudio.transitionTo('ot'); } catch(e) {} }
                 document.getElementById('loginBox').classList.add('authenticating');
-                setTimeout(function() { window.location.href = 'MAP.html'; }, 1200);
+                setTimeout(function() { window.location.href = 'map.html'; }, 1200);
             } else {
                 showLoginError(result.error || 'Authentication failed.');
             }
@@ -232,7 +232,7 @@
     var token = Scriptorium.getToken();
     var sess = localStorage.getItem('scriptorium_session') || sessionStorage.getItem('scriptorium_session');
     if (token && sess && Date.now() - parseInt(sess) < 86400000) {
-        window.location.href = 'MAP.html';
+        window.location.href = 'map.html';
     }
 
     (function() {

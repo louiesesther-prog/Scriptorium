@@ -1984,6 +1984,10 @@ const regions = [
             const nextBtn = document.getElementById('next-step');
             const isLastStop = currentStepIndex === journey.path.length - 1;
             nextBtn.disabled = isLastStop;
+            if (isLastStop && journey.id) {
+                var completed = JSON.parse(localStorage.getItem('scriptorium_journeys') || '[]');
+                if (!completed.includes(journey.id)) { completed.push(journey.id); localStorage.setItem('scriptorium_journeys', JSON.stringify(completed)); }
+            }
             
             // Show complete state instead of dark disabled
             if (isLastStop) {

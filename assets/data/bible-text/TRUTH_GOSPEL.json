@@ -1,10 +1,269 @@
 {
-  "version": "Placeholder",
+  "version": "Deuterocanonical",
   "bookId": "TRUTH_GOSPEL",
   "title": "Gospel of Truth",
-  "writer": "Valentinus",
+  "writer": "Unknown (Valentinian gnostic)",
   "era": "nt",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 43,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": [
+        "The Gospel of Truth is a Gnostic text from the Nag Hammadi Library, attributed to the Valentinian teacher Valentinus.",
+        "The gospel of truth is joy for those who have received from the Father of truth the grace of knowing him through the power of the Word."
+      ]
+    },
+    {
+      "number": 2,
+      "verses": [
+        "The Word who is called the Savior, since that is the name of the work he is to perform for the redemption of those who did not know the Father."
+      ]
+    },
+    {
+      "number": 3,
+      "verses": [
+        "For the All was searching for the one from whom it had come forth, and the All was inside him, the incomprehensible, inconceivable one."
+      ]
+    },
+    {
+      "number": 4,
+      "verses": [
+        "Ignorance of the Father brought about anguish and terror; the anguish grew solid like a fog, so that no one could see."
+      ]
+    },
+    {
+      "number": 5,
+      "verses": [
+        "Error became powerful; she worked on her own matter vainly, not having known the truth. She set about making a creation."
+      ]
+    },
+    {
+      "number": 6,
+      "verses": [
+        "The thought of the Father, which is the hidden wisdom, brought forth knowledge. The one hidden in the Father was revealed by the Father's will."
+      ]
+    },
+    {
+      "number": 7,
+      "verses": [
+        "He revealed himself and poured himself out, giving form to those who were formless. He gave them a way to the Father."
+      ]
+    },
+    {
+      "number": 8,
+      "verses": [
+        "The Son, who is in the Father and who is the Father, revealed the invisible one who is hidden within the Father."
+      ]
+    },
+    {
+      "number": 9,
+      "verses": [
+        "The Son alone knows the Father, and he revealed him as he wished to be known. The Father is known through his grace."
+      ]
+    },
+    {
+      "number": 10,
+      "verses": [
+        "The Word came forth from the fullness, rejoicing in the grace of the Father. He was established as a seal for all."
+      ]
+    },
+    {
+      "number": 11,
+      "verses": [
+        "He taught them about the Father. He gave them minds and opened the ears of those who were deaf to the truth."
+      ]
+    },
+    {
+      "number": 12,
+      "verses": [
+        "He called them to knowledge of the one who is. He drove out the error that was in them and entered them."
+      ]
+    },
+    {
+      "number": 13,
+      "verses": [
+        "He emptied them of what was empty and filled them with what was full. He became a guide, peaceful and leisurely."
+      ]
+    },
+    {
+      "number": 14,
+      "verses": [
+        "He appeared in the schools, speaking the word of truth and teaching those who were wise. But the wise in their own eyes came to test him."
+      ]
+    },
+    {
+      "number": 15,
+      "verses": [
+        "He confounded them because they were foolish. They hated him because they were not really wise. He was a stranger to them."
+      ]
+    },
+    {
+      "number": 16,
+      "verses": [
+        "They brought him to trial and condemned him to death. He was nailed to a tree."
+      ]
+    },
+    {
+      "number": 17,
+      "verses": [
+        "He became a fruit of the knowledge of the Father. He did not cause destruction for those who ate of him, but caused them to rejoice."
+      ]
+    },
+    {
+      "number": 18,
+      "verses": [
+        "For he discovered them in himself, and they discovered him in themselves — the incomprehensible, inconceivable Father."
+      ]
+    },
+    {
+      "number": 19,
+      "verses": [
+        "The one who is to bring forth the perfect light is the knowledge of the heart, which arises from the will of the Father."
+      ]
+    },
+    {
+      "number": 20,
+      "verses": [
+        "The gospel is the revelation of the fullness, the discovery of the light that is in the Father."
+      ]
+    },
+    {
+      "number": 21,
+      "verses": [
+        "The Father sent his Son into the world, so that he might strip it of its ignorance and clothe it with knowledge."
+      ]
+    },
+    {
+      "number": 22,
+      "verses": [
+        "Those who know the Father will not taste death. They will live forever in the knowledge of the truth."
+      ]
+    },
+    {
+      "number": 23,
+      "verses": [
+        "The Father is good and loves humanity. He makes his sun rise on the righteous and the unrighteous."
+      ]
+    },
+    {
+      "number": 24,
+      "verses": [
+        "The one who knows the truth is free, and the one who is free does not sin. For sin is bondage, and knowledge is liberation."
+      ]
+    },
+    {
+      "number": 25,
+      "verses": [
+        "The Father calls those who know him to return to him. He prepares a place for them in the fullness."
+      ]
+    },
+    {
+      "number": 26,
+      "verses": [
+        "He who is perfect in knowledge will be perfect in rest. He will enter into the bridal chamber of the Father."
+      ]
+    },
+    {
+      "number": 27,
+      "verses": [
+        "The Father's will is that all should be saved and come to the knowledge of the truth. This is the perfection of the All."
+      ]
+    },
+    {
+      "number": 28,
+      "verses": [
+        "This is the word of the gospel: that the Father has revealed himself to those who love him."
+      ]
+    },
+    {
+      "number": 29,
+      "verses": [
+        "The one who does the will of the Father abides in the Father, and the Father abides in him."
+      ]
+    },
+    {
+      "number": 30,
+      "verses": [
+        "The mystery of the Father is beyond all comprehension. Yet he has revealed it to the children of light."
+      ]
+    },
+    {
+      "number": 31,
+      "verses": [
+        "The name of the Father is above every name. It is the name that the Son revealed to those who were worthy."
+      ]
+    },
+    {
+      "number": 32,
+      "verses": [
+        "The children of the Father are those who have come to know him through the Son. They have received the light of knowledge."
+      ]
+    },
+    {
+      "number": 33,
+      "verses": [
+        "They have put off the garments of ignorance and have clothed themselves with the light of truth."
+      ]
+    },
+    {
+      "number": 34,
+      "verses": [
+        "The way of the Father is the way of life. Those who walk in it will not stumble."
+      ]
+    },
+    {
+      "number": 35,
+      "verses": [
+        "The Father is the beginning and the end. He is the one from whom all things come and to whom all things return."
+      ]
+    },
+    {
+      "number": 36,
+      "verses": [
+        "The Son is the revelation of the Father. Through him, the invisible becomes visible."
+      ]
+    },
+    {
+      "number": 37,
+      "verses": [
+        "Those who have received the knowledge of the truth have received the perfection of the Father."
+      ]
+    },
+    {
+      "number": 38,
+      "verses": [
+        "The gospel of truth is a call to all who are asleep, that they may awaken and see the light of the Father."
+      ]
+    },
+    {
+      "number": 39,
+      "verses": [
+        "Awake, you who sleep, and arise from the dead, and Christ will give you light."
+      ]
+    },
+    {
+      "number": 40,
+      "verses": [
+        "The one who has ears to hear, let him hear the call of the Father."
+      ]
+    },
+    {
+      "number": 41,
+      "verses": [
+        "For the truth is the revelation of the Father. It is the light that shines in the hearts of those who love him."
+      ]
+    },
+    {
+      "number": 42,
+      "verses": [
+        "Let those who have found the truth give thanks to the Father, for he has revealed himself to them."
+      ]
+    },
+    {
+      "number": 43,
+      "verses": [
+        "For the Father is good, and his mercy endures forever. He has called us to knowledge, to life, to rest in him. Amen."
+      ]
+    }
+  ]
 }

@@ -1,10 +1,39 @@
 {
-  "version": "Placeholder",
+  "version": "Generated from public domain sources — chapter structure only",
   "bookId": "MACCABEES3",
   "title": "3 Maccabees",
-  "writer": "Unknown",
+  "writer": "Unknown (Hellenistic Jewish)",
   "era": "ot",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 7,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": []
+    },
+    {
+      "number": 2,
+      "verses": []
+    },
+    {
+      "number": 3,
+      "verses": []
+    },
+    {
+      "number": 4,
+      "verses": []
+    },
+    {
+      "number": 5,
+      "verses": []
+    },
+    {
+      "number": 6,
+      "verses": []
+    },
+    {
+      "number": 7,
+      "verses": []
+    }
+  ],
+  "note": "Text pending. Source: 3 Maccabees — Septuagint (Rahlfs)"
 }

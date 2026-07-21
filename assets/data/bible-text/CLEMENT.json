@@ -1,10 +1,271 @@
 {
-  "version": "Placeholder",
+  "version": "Generated from public domain sources — chapter structure only",
   "bookId": "CLEMENT",
-  "title": "1-2 Clement",
-  "writer": "Clement",
+  "title": "1 Clement",
+  "writer": "Clement of Rome",
   "era": "nt",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 65,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": []
+    },
+    {
+      "number": 2,
+      "verses": []
+    },
+    {
+      "number": 3,
+      "verses": []
+    },
+    {
+      "number": 4,
+      "verses": []
+    },
+    {
+      "number": 5,
+      "verses": []
+    },
+    {
+      "number": 6,
+      "verses": []
+    },
+    {
+      "number": 7,
+      "verses": []
+    },
+    {
+      "number": 8,
+      "verses": []
+    },
+    {
+      "number": 9,
+      "verses": []
+    },
+    {
+      "number": 10,
+      "verses": []
+    },
+    {
+      "number": 11,
+      "verses": []
+    },
+    {
+      "number": 12,
+      "verses": []
+    },
+    {
+      "number": 13,
+      "verses": []
+    },
+    {
+      "number": 14,
+      "verses": []
+    },
+    {
+      "number": 15,
+      "verses": []
+    },
+    {
+      "number": 16,
+      "verses": []
+    },
+    {
+      "number": 17,
+      "verses": []
+    },
+    {
+      "number": 18,
+      "verses": []
+    },
+    {
+      "number": 19,
+      "verses": []
+    },
+    {
+      "number": 20,
+      "verses": []
+    },
+    {
+      "number": 21,
+      "verses": []
+    },
+    {
+      "number": 22,
+      "verses": []
+    },
+    {
+      "number": 23,
+      "verses": []
+    },
+    {
+      "number": 24,
+      "verses": []
+    },
+    {
+      "number": 25,
+      "verses": []
+    },
+    {
+      "number": 26,
+      "verses": []
+    },
+    {
+      "number": 27,
+      "verses": []
+    },
+    {
+      "number": 28,
+      "verses": []
+    },
+    {
+      "number": 29,
+      "verses": []
+    },
+    {
+      "number": 30,
+      "verses": []
+    },
+    {
+      "number": 31,
+      "verses": []
+    },
+    {
+      "number": 32,
+      "verses": []
+    },
+    {
+      "number": 33,
+      "verses": []
+    },
+    {
+      "number": 34,
+      "verses": []
+    },
+    {
+      "number": 35,
+      "verses": []
+    },
+    {
+      "number": 36,
+      "verses": []
+    },
+    {
+      "number": 37,
+      "verses": []
+    },
+    {
+      "number": 38,
+      "verses": []
+    },
+    {
+      "number": 39,
+      "verses": []
+    },
+    {
+      "number": 40,
+      "verses": []
+    },
+    {
+      "number": 41,
+      "verses": []
+    },
+    {
+      "number": 42,
+      "verses": []
+    },
+    {
+      "number": 43,
+      "verses": []
+    },
+    {
+      "number": 44,
+      "verses": []
+    },
+    {
+      "number": 45,
+      "verses": []
+    },
+    {
+      "number": 46,
+      "verses": []
+    },
+    {
+      "number": 47,
+      "verses": []
+    },
+    {
+      "number": 48,
+      "verses": []
+    },
+    {
+      "number": 49,
+      "verses": []
+    },
+    {
+      "number": 50,
+      "verses": []
+    },
+    {
+      "number": 51,
+      "verses": []
+    },
+    {
+      "number": 52,
+      "verses": []
+    },
+    {
+      "number": 53,
+      "verses": []
+    },
+    {
+      "number": 54,
+      "verses": []
+    },
+    {
+      "number": 55,
+      "verses": []
+    },
+    {
+      "number": 56,
+      "verses": []
+    },
+    {
+      "number": 57,
+      "verses": []
+    },
+    {
+      "number": 58,
+      "verses": []
+    },
+    {
+      "number": 59,
+      "verses": []
+    },
+    {
+      "number": 60,
+      "verses": []
+    },
+    {
+      "number": 61,
+      "verses": []
+    },
+    {
+      "number": 62,
+      "verses": []
+    },
+    {
+      "number": 63,
+      "verses": []
+    },
+    {
+      "number": 64,
+      "verses": []
+    },
+    {
+      "number": 65,
+      "verses": []
+    }
+  ],
+  "note": "Text pending. Source: 1 Clement — Ante-Nicene Fathers Vol. I (ANF01)"
 }

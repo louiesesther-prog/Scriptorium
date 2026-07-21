@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://scriptorium-sandy.vercel.app/</loc><priority>1.0</priority><changefreq>daily</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/scriptorium.html</loc><priority>1.0</priority><changefreq>daily</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/ot-gallery.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/nt-gallery.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/map.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/tabernacle.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/genealogy.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/onomasticon.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/challenges.html</loc><priority>0.7</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/plans.html</loc><priority>0.7</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/ethiopian-canon.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/covenant-map.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/paleo-epigraphy.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/scribes-chamber.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/induction.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/register.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/login.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/settings.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/typology.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/sanctum-3d.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/prophetic-mesh.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/narthex.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/archive.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/comparison-mode.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/admin.html</loc><priority>0.3</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/reset-password.html</loc><priority>0.3</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://scriptorium-sandy.vercel.app/placeholder.html</loc><priority>0.1</priority><changefreq>yearly</changefreq></url>
+</urlset>

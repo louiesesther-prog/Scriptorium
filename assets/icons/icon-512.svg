@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="64" fill="#0f0b14"/>
+  <circle cx="256" cy="240" r="144" fill="none" stroke="#d4af37" stroke-width="8"/>
+  <path d="M180 176 L256 128 L332 176 L332 272 Q256 312 180 272 Z" fill="#d4af37" opacity="0.9"/>
+  <path d="M196 192 L256 152 L316 192 L316 262 Q256 290 196 262 Z" fill="#0f0b14"/>
+  <text x="256" y="440" font-family="serif" font-size="42" fill="#d4af37" text-anchor="middle" letter-spacing="4">SCRIBE</text>
+</svg>

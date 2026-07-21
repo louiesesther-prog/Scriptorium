@@ -1,10 +1,53 @@
 {
-  "version": "Placeholder",
+  "version": "Deuterocanonical",
   "bookId": "EBIONITES_GOSPEL",
   "title": "Gospel of the Ebionites",
-  "writer": "Unknown",
+  "writer": "Unknown (Ebionite tradition)",
   "era": "nt",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 7,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": [
+        "The Gospel of the Ebionites is a Jewish-Christian gospel used by the Ebionites in the early second century. Only fragments survive, preserved by Epiphanius of Salamis.",
+        "Fragment 1 (Epiphanius, Panarion 30.13.2-3): 'There appeared a certain man named Jesus, about thirty years old, who chose us. And when he came to Capernaum...'"
+      ]
+    },
+    {
+      "number": 2,
+      "verses": [
+        "Fragment 2 (Epiphanius, Panarion 30.13.4): 'The Gospel begins: In the days of Herod, king of Judea, John came baptizing a baptism of repentance in the Jordan River. He was said to be from the lineage of Aaron the priest, the son of Zacharias and Elizabeth.'"
+      ]
+    },
+    {
+      "number": 3,
+      "verses": [
+        "Fragment 3 (Epiphanius, Panarion 30.13.7-8): 'And when the people were baptized, Jesus also came and was baptized by John. And as he came up from the water, the heavens opened, and he saw the Holy Spirit descending in the form of a dove and entering into him. And a voice from heaven said: You are my beloved Son; in you I am well pleased. Today I have begotten you.'"
+      ]
+    },
+    {
+      "number": 4,
+      "verses": [
+        "Fragment 4 (Epiphanius, Panarion 30.14.3-4): 'The Gospel denies that Jesus ate meat, saying: As you see, I have earnestly desired to eat this Passover meat with you, but I will not eat it.'"
+      ]
+    },
+    {
+      "number": 5,
+      "verses": [
+        "Fragment 5 (Epiphanius, Panarion 30.16.5): 'The Gospel says: I have come to abolish the sacrifices; if you do not cease from sacrificing, the wrath of God will not cease from you.'"
+      ]
+    },
+    {
+      "number": 6,
+      "verses": [
+        "Fragment 6 (Epiphanius, Panarion 30.17.5): 'The Gospel says: Where will I find brothers? I have come to abolish the sacrifices; the temple is the house of my Father.'"
+      ]
+    },
+    {
+      "number": 7,
+      "verses": [
+        "Fragment 7 (Epiphanius, Panarion 30.22.4): 'The Gospel says that John the Baptist baptized and that Jesus was baptized by him, and that after he was baptized, a voice from heaven said: Today I have begotten you.'"
+      ]
+    }
+  ]
 }

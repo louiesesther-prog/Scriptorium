@@ -422,6 +422,35 @@ function injectStyles() {
 }
 .scr-study-popover .sp-action:hover { color:#d4af37;border-color:rgba(212,175,55,0.3); }
 
+/* ── WORD STUDY (inline word lookup) ── */
+.scr-word { cursor:pointer; transition:color 0.15s, background 0.15s; border-radius:2px; padding:0 1px; }
+.scr-word:hover { color:#d4af37; background:rgba(212,175,55,0.06); }
+.scr-word.active { color:#f5d86a; background:rgba(212,175,55,0.1); }
+.scr-word-panel {
+  display:inline-block;z-index:9500;
+  background:#12100e;border:1px solid rgba(212,175,55,0.12);
+  padding:10px 14px;border-radius:4px;
+  min-width:200px;max-width:360px;width:max-content;
+  font-family:'Cormorant Garamond',serif;font-size:0.75rem;
+  color:rgba(255,255,255,0.78);line-height:1.5;
+  box-shadow:0 6px 24px rgba(0,0,0,0.6);
+  position:absolute;top:22px;left:0;
+}
+.scr-word-panel .sp-head {
+  font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:2px;
+  color:rgba(212,175,55,0.4);margin-bottom:4px;
+  border-bottom:1px solid rgba(212,175,55,0.06);padding-bottom:3px;
+}
+.scr-word-panel .sp-row {
+  display:flex;gap:4px;margin-bottom:2px;align-items:flex-start;
+}
+.scr-word-panel .sp-label {
+  flex-shrink:0;font-family:'Cinzel',serif;font-size:0.4rem;letter-spacing:1px;
+  color:rgba(212,175,55,0.2);min-width:44px;padding-top:2px;
+}
+.scr-word-panel .sp-value { color:rgba(255,255,255,0.5);font-size:0.7rem; }
+.scr-word-panel .sp-loading { font-style:italic;color:rgba(255,255,255,0.2);font-size:0.65rem; }
+
 /* ── TRANSLATION SELECTOR ── */
 .scr-trans-select {
   background:rgba(10,10,10,0.9);color:rgba(212,175,55,0.5);
@@ -736,6 +765,18 @@ document.addEventListener('click', function(e) {
     while (pop && !pop.classList.contains('scr-fn-popover')) pop = pop.nextElementSibling;
     if (pop) pop.classList.remove('open');
   });
+  // Open word study on word click
+  var wordEl = e.target.closest('.scr-word');
+  if (wordEl) {
+    if (e.target.closest('.scr-word-panel')) return;
+    openWordStudy(wordEl);
+    return;
+  }
+  var inWordPanel = e.target.closest('.scr-word-panel');
+  if (inWordPanel) return;
+  document.querySelectorAll('.scr-word-panel').forEach(function(p) { p.remove(); });
+  document.querySelectorAll('.scr-word.active').forEach(function(w) { w.classList.remove('active'); });
+
   // Open study popover on verse text click
   var verseText = e.target.closest('.scr-verse-text');
   if (verseText) {
@@ -781,6 +822,36 @@ window.ScrReader.openCrossRef = function(ref) {
     loadChapter();
   }
 };
+
+// ── WORD STUDY ──
+function openWordStudy(el) {
+  try { localStorage.setItem('achiev_word_study_used', 'true'); if (typeof ScriptoriumCore !== 'undefined') ScriptoriumCore.checkAchievements(); } catch(e) {}
+  document.querySelectorAll('.scr-word-panel').forEach(function(p) { p.remove(); });
+  document.querySelectorAll('.scr-word.active').forEach(function(w) { w.classList.remove('active'); });
+  el.classList.add('active');
+  var word = el.getAttribute('data-word');
+  if (!word || word.length < 2) return;
+  var panel = document.createElement('div');
+  panel.className = 'scr-word-panel';
+  panel.innerHTML = '<div class="sp-loading" style="font-style:italic;color:rgba(255,255,255,0.3);font-size:0.7rem;">SEARCHING THE ARCHIVES...</div>';
+  el.parentNode.appendChild(panel);
+  fetch('/api/word-study/' + encodeURIComponent(word))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data) { panel.innerHTML = '<div class="sp-head" style="border-bottom:none;">' + word + '</div><div class="sp-loading" style="font-style:italic;color:rgba(255,255,255,0.2);font-size:0.7rem;">No additional data for this word.</div>'; return; }
+      var html = '<div class="sp-head">' + word + '</div>';
+      html += '<div class="sp-row"><span class="sp-label">FREQUENCY</span><span class="sp-value">' + data.frequency + 'x in Scripture</span></div>';
+      if (data.strong) html += '<div class="sp-row"><span class="sp-label">STRONG\'S</span><span class="sp-value">' + data.strong + '</span></div>';
+      if (data.greek) html += '<div class="sp-row"><span class="sp-label">GREEK</span><span class="sp-value">' + data.greek + '</span></div>';
+      if (data.hebrew) html += '<div class="sp-row"><span class="sp-label">HEBREW</span><span class="sp-value">' + data.hebrew + '</span></div>';
+      if (data.definition) html += '<div class="sp-row" style="flex-direction:column;align-items:flex-start;gap:4px;"><span class="sp-label">DEFINITION</span><span class="sp-value" style="line-height:1.5;">' + data.definition + '</span></div>';
+      if (data.baseForm) html += '<div class="sp-row"><span class="sp-label" style="font-size:0.5rem;">BASE FORM</span><span class="sp-value" style="font-style:italic;">' + data.baseForm + '</span></div>';
+      panel.innerHTML = html;
+    })
+    .catch(function() {
+      panel.innerHTML = '<div class="sp-head" style="border-bottom:none;">' + word + '</div><div class="sp-loading" style="font-style:italic;color:rgba(255,255,255,0.2);font-size:0.7rem;">Study data unavailable.</div>';
+    });
+}
 
 // ── STUDY POPOVER ──
 function openStudyPopover(el) {
@@ -861,6 +932,7 @@ window.ScrReader.initTranslationSelector = initTranslationSelector;
 
 // ── PATRISTIC COMMENTARY LOADER ───────────────────────────────────
 function loadPatristic(book) {
+  try { localStorage.setItem('achiev_patristic_opened', 'true'); if (typeof ScriptoriumCore !== 'undefined') ScriptoriumCore.checkAchievements(); } catch(e) {}
   var pat = (typeof window.PATRISTIC_COMMENTARY !== 'undefined') ? window.PATRISTIC_COMMENTARY : null;
   var panel = document.getElementById('scrPatContent');
   if (!panel) return;
@@ -909,7 +981,11 @@ function renderChapter(data) {
   data.verses.forEach(function(v) {
     html += `<div class="scr-verse">`;
     html += `<span class="scr-verse-num">${v.verse}</span>`;
-    html += `<span class="scr-verse-text">${v.text}</span>`;
+    var wordHtml = v.text.replace(/[<>]/g,'').split(/(\s+)/).map(function(w) {
+      var trimmed = w.replace(/[^a-zA-Z'-]/g,'');
+      return trimmed ? '<span class="scr-word" data-word="' + trimmed.toLowerCase() + '">' + w + '</span>' : w;
+    }).join('');
+    html += `<span class="scr-verse-text">${wordHtml}</span>`;
 
     if (fnMap) {
       var matches = fnMap.filter(function(n) {
@@ -1196,6 +1272,7 @@ function clearCrossRefs() {
 }
 
 function loadCrossRefs(book, chapter) {
+  try { localStorage.setItem('achiev_xref_used', 'true'); if (typeof ScriptoriumCore !== 'undefined') ScriptoriumCore.checkAchievements(); } catch(e) {}
   var panel = document.getElementById('scrXrefContent');
   var btn = document.getElementById('scrXrefToggle');
   if (!panel) return;
@@ -1309,12 +1386,20 @@ var readerApi = {
     if (ch < 1 || ch > totalChapters) return;
     currentChapter = ch;
     loadChapter();
+    // Book completion detection
+    if (currentChapter >= totalChapters && currentBook) {
+      try { localStorage.setItem('achiev_bookworm_' + currentBook.replace(/[^a-zA-Z0-9]/g, '_'), 'true'); localStorage.setItem('achiev_bookworm', 'true'); if (typeof ScriptoriumCore !== 'undefined') ScriptoriumCore.checkAchievements(); } catch(e) {}
+    }
   },
 
   nextChapter: function() {
     if (currentChapter < totalChapters) {
       currentChapter++;
       loadChapter();
+      // Book completion detection
+      if (currentChapter >= totalChapters && currentBook) {
+        try { localStorage.setItem('achiev_bookworm_' + currentBook.replace(/[^a-zA-Z0-9]/g, '_'), 'true'); localStorage.setItem('achiev_bookworm', 'true'); if (typeof ScriptoriumCore !== 'undefined') ScriptoriumCore.checkAchievements(); } catch(e) {}
+      }
     }
   },
 

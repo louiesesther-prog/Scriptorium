@@ -92,6 +92,13 @@ body { padding: 60px 0 80px 80px; background: #080808; }
 <input type="password" id="regConfirm" placeholder="Repeat your secret key" autocomplete="new-password">
 <div class="error-msg" id="confirmError"></div>
 </div>
+<div class="form-group">
+<label for="regTradition">TRADITION (OPTIONAL)</label>
+<select id="regTradition" style="background:var(--obsidian);color:var(--text);border:1px solid var(--border-silver);border-radius:4px;padding:10px 12px;font-family:'Cormorant Garamond',serif;width:100%;font-size:0.85rem">
+<option value="">— Choose your stream (optional) —</option>
+</select>
+<div class="hint">Affiliate with a tradition to see curated reading plans and lectionaries</div>
+</div>
 <button type="submit" class="submit-btn" id="submitBtn">AFFIX YOUR SEAL <span class="loading-spinner" id="spinner"></span></button>
 </form>
 <hr class="form-divider">
@@ -113,8 +120,21 @@ var inputs = {
   userId: document.getElementById('regUserId'),
   email: document.getElementById('regEmail'),
   password: document.getElementById('regPassword'),
-  confirm: document.getElementById('regConfirm')
+  confirm: document.getElementById('regConfirm'),
+  tradition: document.getElementById('regTradition')
 };
+
+// Load traditions dropdown
+(function loadTraditions() {
+  var sel = document.getElementById('regTradition');
+  fetch('/api/traditions').then(function(r) { return r.json(); }).then(function(d) {
+    if (d && d.traditions) d.traditions.forEach(function(t) {
+      var opt = document.createElement('option');
+      opt.value = t.id; opt.textContent = t.label;
+      sel.appendChild(opt);
+    });
+  }).catch(function() {});
+})();
 var errors = {
   name: document.getElementById('nameError'),
   userId: document.getElementById('userIdError'),
@@ -179,7 +199,7 @@ form.addEventListener('submit', function(e) {
   }
 
   setLoading(true);
-  ScriptoriumAPI.register({ name: name, userId: userId, email: email, password: password }).then(function(res) {
+  ScriptoriumAPI.register({ name: name, userId: userId, email: email, password: password, tradition: inputs.tradition ? inputs.tradition.value : '' }).then(function(res) {
     setLoading(false);
     showToast('INDUCTION COMPLETE', 'Your name has been written in the Lamb\'s Scroll. You may now enter as a scribe.', 'success');
     setTimeout(function() { window.location.href = 'login.html'; }, 1800);

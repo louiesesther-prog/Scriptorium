@@ -1,10 +1,105 @@
 {
-  "version": "Placeholder",
+  "version": "Deuterocanonical",
   "bookId": "POLYCARP_EPISTLE",
-  "title": "Epistle of Polycarp",
-  "writer": "Polycarp",
+  "title": "Polycarp's Epistle to the Philippians",
+  "writer": "Polycarp of Smyrna",
   "era": "nt",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 14,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": [
+        "I rejoiced greatly with you in our Lord Jesus Christ, because you received the followers of the true love and escorted them on their way.",
+        "Though you did not see him, you believe with inexpressible joy, knowing that you are saved by grace through Jesus Christ."
+      ]
+    },
+    {
+      "number": 2,
+      "verses": [
+        "Gird up your loins and serve God in fear and truth, putting aside empty speech.",
+        "Blessed are the poor and those who are persecuted for righteousness' sake, for the kingdom of heaven is theirs."
+      ]
+    },
+    {
+      "number": 3,
+      "verses": [
+        "I write these things about righteousness, not because I take this upon myself, but because you invited me.",
+        "Faith is the mother of us all, with hope following, and love for God and Christ and neighbor leading the way."
+      ]
+    },
+    {
+      "number": 4,
+      "verses": [
+        "The love of money is the beginning of all troubles. Let us arm ourselves with the weapons of righteousness.",
+        "Teach your wives to walk in faith, love, and purity. Let the widows be self-controlled in their faith."
+      ]
+    },
+    {
+      "number": 5,
+      "verses": [
+        "Let the deacons be blameless before his righteousness, not slanderers or double-tongued or lovers of money.",
+        "If we please him in this present world, we will also receive the world to come."
+      ]
+    },
+    {
+      "number": 6,
+      "verses": [
+        "Let the elders be compassionate, merciful to all, turning back the sheep that have gone astray.",
+        "If we pray to the Lord that he would forgive us, we also ought to forgive others."
+      ]
+    },
+    {
+      "number": 7,
+      "verses": [
+        "Let us serve him with fear and reverence, keeping away from stumbling blocks and false brothers.",
+        "Everyone who does not confess that Jesus Christ has come in the flesh is antichrist."
+      ]
+    },
+    {
+      "number": 8,
+      "verses": [
+        "Let us forsake the futile speculations of the crowd and turn to the word delivered to us from the beginning.",
+        "Be sober in prayer and persistent in fasting."
+      ]
+    },
+    {
+      "number": 9,
+      "verses": [
+        "I urge you to obey the word of righteousness and practice endurance, which you saw in Ignatius, Zosimus, Rufus, and Paul.",
+        "They did not love the present world, but him who died for us."
+      ]
+    },
+    {
+      "number": 10,
+      "verses": [
+        "Stand firm in these things, loving the brotherhood, united in the truth.",
+        "When you can do good, do not postpone it, for almsgiving delivers from death."
+      ]
+    },
+    {
+      "number": 11,
+      "verses": [
+        "I am grieved for Valens, who fails to understand the office given to him. Keep from love of money.",
+        "If anyone cannot control himself, how can he command self-control to another?"
+      ]
+    },
+    {
+      "number": 12,
+      "verses": [
+        "May the God and Father of our Lord Jesus Christ build you up in faith and truth, in patience and endurance."
+      ]
+    },
+    {
+      "number": 13,
+      "verses": [
+        "I write this by Crescens, whom I commend to you. You are established in the truth. Farewell in the Lord Jesus Christ."
+      ]
+    },
+    {
+      "number": 14,
+      "verses": [
+        "May you be established in the truth. I pray that you may always be so. Grace be with you all. Amen."
+      ]
+    }
+  ]
 }

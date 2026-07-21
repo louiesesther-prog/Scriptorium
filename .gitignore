@@ -8,3 +8,15 @@ data/*.json
 data/*.db
 data/*.db-wal
 data/*.db-shm
+
+# Temp & backup
+*.log
+*.tmp
+*.swp
+*.bak
+*.bundle
+.env
+.env.local
+Thumbs.db
+.DS_Store
+desktop.ini

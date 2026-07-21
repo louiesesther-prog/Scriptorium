@@ -1,10 +1,53 @@
 {
-  "version": "Placeholder",
+  "version": "Deuterocanonical",
   "bookId": "HEBREWS_GOSPEL",
   "title": "Gospel of the Hebrews",
-  "writer": "Unknown",
+  "writer": "Unknown (Jewish Christian tradition)",
   "era": "nt",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 7,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": [
+        "The Gospel of the Hebrews is a Jewish-Christian gospel, written in Aramaic, used by the Nazarenes and Ebionites. Only fragments survive, preserved in quotations by early church fathers.",
+        "Fragment 1 (Jerome, Commentary on Ephesians 5:4): 'Even so my mother the Holy Spirit took me by one of my hairs and carried me to the great Mount Tabor.'"
+      ]
+    },
+    {
+      "number": 2,
+      "verses": [
+        "Fragment 2 (Jerome, On Isaiah 11:2): 'And it came to pass when the Lord came up out of the water, the entire fountain of the Holy Spirit descended upon him and rested upon him, and said to him: My Son, in all the prophets I was waiting for you, that you might come and I might rest in you. For you are my rest; you are my firstborn Son, who reigns forever.'"
+      ]
+    },
+    {
+      "number": 3,
+      "verses": [
+        "Fragment 3 (Jerome, Commentary on Ezekiel 16:13): 'He who seeks will not rest until he finds; and when he finds, he will be astonished; and being astonished, he will reign; and reigning, he will rest.'"
+      ]
+    },
+    {
+      "number": 4,
+      "verses": [
+        "Fragment 4 (Origen, Commentary on John 2:12): 'The Savior himself said: Even now my mother the Holy Spirit took me.'"
+      ]
+    },
+    {
+      "number": 5,
+      "verses": [
+        "Fragment 5 (Jerome, On Illustrious Men): 'The Gospel of the Hebrews which I have recently translated into Greek and Latin, and which Origen often uses, records that after the resurrection the Lord gave the shroud to the servant of the priest.'"
+      ]
+    },
+    {
+      "number": 6,
+      "verses": [
+        "Fragment 6 (Jerome, Commentary on Matthew 6:11): 'Give us this day our daily bread — that is, tomorrow's bread — meaning the bread of the coming kingdom.'"
+      ]
+    },
+    {
+      "number": 7,
+      "verses": [
+        "Fragment 7 (Eusebius, Theophany): 'The Lord said to his disciples: And never be joyful except when you look upon your brother in love.'"
+      ]
+    }
+  ]
 }

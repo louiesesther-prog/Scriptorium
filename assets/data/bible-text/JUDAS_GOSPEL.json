@@ -1,10 +1,98 @@
 {
-  "version": "Placeholder",
+  "version": "Deuterocanonical",
   "bookId": "JUDAS_GOSPEL",
   "title": "Gospel of Judas",
-  "writer": "Judas",
+  "writer": "Unknown (gnostic tradition)",
   "era": "nt",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 13,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": [
+        "The Gospel of Judas is a Gnostic gospel preserved in the Codex Tchacos (c. 3rd-4th century).",
+        "The beginning of the account: When Jesus appeared on earth performing signs for the salvation of humanity, the twelve disciples were called.",
+        "He began to speak with them about the mysteries beyond the world and what would happen at the end."
+      ]
+    },
+    {
+      "number": 2,
+      "verses": [
+        "Often he did not appear to his disciples as himself. One day he found them gathered in pious observance and laughed.",
+        "The disciples said: 'Why are you laughing at our prayer?' He answered: 'I am not laughing at you.'",
+        "'Truly I say to you, no generation among you will know me.'"
+      ]
+    },
+    {
+      "number": 3,
+      "verses": [
+        "When his disciples heard this, they became angry. Jesus said: 'Let any of you who is strong enough bring forth the perfect human.'",
+        "Judas Iscariot was able to stand before him and said: 'I know who you are and where you have come from.'"
+      ]
+    },
+    {
+      "number": 4,
+      "verses": [
+        "Jesus said to him: 'Separate from them, and I will tell you the mysteries of the kingdom.'",
+        "Judas said: 'When will you tell me these things?' Jesus left him."
+      ]
+    },
+    {
+      "number": 5,
+      "verses": [
+        "Jesus appeared to his disciples again. They said: 'Where did you go?' Jesus said: 'I went to another great and holy generation.'",
+        "'Truly I say to you, no one born of this age will see that generation.'"
+      ]
+    },
+    {
+      "number": 6,
+      "verses": [
+        "His disciples were troubled in spirit. Jesus said: 'Why has your trouble led you to anger?'",
+        "'Let any of you who is strong enough bring forth the perfect human and stand before my face.'"
+      ]
+    },
+    {
+      "number": 7,
+      "verses": [
+        "Jesus said: 'Stop struggling with me. Each of you has his own star.'",
+        "'The spirit of every human will be raised: those who walk in righteousness will receive the salvation of the angels.'"
+      ]
+    },
+    {
+      "number": 8,
+      "verses": [
+        "Judas said: 'What kind of fruit does this generation produce?' Jesus said: 'The souls of every human generation will die.'",
+        "'When the spirit separates from them, their bodies will die, but their souls will be alive.'"
+      ]
+    },
+    {
+      "number": 9,
+      "verses": [
+        "Jesus said: 'The cloud of light came and spoke: Let the angel be my attendant.' A great angel came forth, the enlightened divine Self-Generated."
+      ]
+    },
+    {
+      "number": 10,
+      "verses": [
+        "Jesus said: 'The Self-Generated created a great multitude of angels to serve him: the holy luminaries and the heavenly aeons.'"
+      ]
+    },
+    {
+      "number": 11,
+      "verses": [
+        "Jesus said to Judas: 'Look, I have told you the mysteries of the kingdom and have taught you about the error of the stars. This is your star.'"
+      ]
+    },
+    {
+      "number": 12,
+      "verses": [
+        "Judas said: 'Could it be that my seed is under the control of the rulers?' Jesus answered: 'You will sacrifice the man who clothes me.'"
+      ]
+    },
+    {
+      "number": 13,
+      "verses": [
+        "Jesus said: 'You will exceed all of them. For you will sacrifice the man who clothes me. Truly I say to you, your last days will be filled with sorrow.'"
+      ]
+    }
+  ]
 }

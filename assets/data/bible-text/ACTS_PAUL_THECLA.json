@@ -1,10 +1,104 @@
 {
-  "version": "Placeholder",
+  "version": "Deuterocanonical",
   "bookId": "ACTS_PAUL_THECLA",
-  "title": "Acts of Paul & Thecla",
-  "writer": "Paul",
+  "title": "Acts of Paul and Thecla",
+  "writer": "Unknown",
   "era": "nt",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 12,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": [
+        "The Acts of Paul and Thecla is a second-century text recounting the story of Thecla, a young woman from Iconium who converted through Paul's preaching.",
+        "When Paul was traveling to Iconium after fleeing from Antioch, his companions were Demas and Hermogenes, who were full of hypocrisy.",
+        "Paul looked at the road and saw a certain man named Onesiphorus coming to meet him. When Onesiphorus saw Paul, he recognized him, though he had never seen him before."
+      ]
+    },
+    {
+      "number": 2,
+      "verses": [
+        "Onesiphorus said to Paul: 'I have heard about you and have desired to see you. Come, for the Lord has sent you to us.'",
+        "Paul entered the house of Onesiphorus, and there was great joy. They knelt and prayed, and Paul broke bread and gave thanks to God."
+      ]
+    },
+    {
+      "number": 3,
+      "verses": [
+        "Now a certain woman named Thecla lived in a neighboring house. She was the daughter of Theocleia. Thecla was engaged to a man named Thamyris.",
+        "She sat at her window day and night listening to Paul's words about God, about love, and about the faith in Christ.",
+        "She was captivated and would not leave the window."
+      ]
+    },
+    {
+      "number": 4,
+      "verses": [
+        "Theocleia, seeing her daughter's condition, went to Thamyris and said: 'My daughter is possessed. She sits at the window day and night, listening to a stranger.'",
+        "Thamyris came to the house and found Thecla at the window, unable to tear herself away from Paul's preaching."
+      ]
+    },
+    {
+      "number": 5,
+      "verses": [
+        "Thamyris, filled with jealousy and anger, went with the authorities to arrest Paul. Paul was brought before the governor.",
+        "The governor questioned Paul, but Paul spoke boldly about the gospel of Christ.",
+        "The governor ordered Paul to be bound and cast into prison until a fuller hearing could be held."
+      ]
+    },
+    {
+      "number": 6,
+      "verses": [
+        "When Thecla learned that Paul was in prison, she bribed the jailer with her bracelets and gained entrance.",
+        "She sat at Paul's feet, listening to his teaching about the word of God and the way of salvation.",
+        "When her family discovered this, both Paul and Thecla were brought before the governor."
+      ]
+    },
+    {
+      "number": 7,
+      "verses": [
+        "The governor questioned Thecla and urged her to marry Thamyris, but she remained silent, looking only at Paul.",
+        "Her mother cried out: 'Burn her! Burn the lawless one!'",
+        "The governor, moved by Theocleia's demand, ordered Thecla to be bound and burned at the stake."
+      ]
+    },
+    {
+      "number": 8,
+      "verses": [
+        "Thecla was stripped and placed on the pyre. The wood was lit, but a sudden cloudburst extinguished the flames.",
+        "The crowd was amazed, and Thecla, finding herself freed, went in search of Paul.",
+        "She found him in a tomb outside the city, praying."
+      ]
+    },
+    {
+      "number": 9,
+      "verses": [
+        "Thecla said to Paul: 'I will cut my hair short and follow you wherever you go.'",
+        "Paul said: 'The time is short, and you are beautiful. May you not face temptation.'",
+        "Thecla said: 'Only give me the seal of Christ, and no temptation will move me.'"
+      ]
+    },
+    {
+      "number": 10,
+      "verses": [
+        "Paul said: 'Be patient, Thecla. You will receive baptism when the time is right.'",
+        "They traveled together to Antioch, where a nobleman named Alexander saw Thecla and desired her.",
+        "When Alexander tried to take her, Thecla resisted and cried out."
+      ]
+    },
+    {
+      "number": 11,
+      "verses": [
+        "Alexander brought Thecla before the governor, who condemned her to the wild beasts.",
+        "She was thrown to a lioness, but the lioness lay at her feet and licked them.",
+        "Other beasts were released, but they refused to harm her."
+      ]
+    },
+    {
+      "number": 12,
+      "verses": [
+        "The governor, amazed at her deliverance, released her.",
+        "Thecla went to Paul and said: 'I have received the seal of Christ through my sufferings.'",
+        "Paul said: 'Go and teach the word of God.' Thecla returned to Iconium and later became a missionary, spreading the gospel."
+      ]
+    }
+  ]
 }

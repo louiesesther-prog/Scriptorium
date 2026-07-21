@@ -1,10 +1,694 @@
 {
-  "version": "Placeholder",
+  "version": "Deuterocanonical",
   "bookId": "THOMAS_GOSPEL",
   "title": "Gospel of Thomas",
-  "writer": "Didymos Judas Thomas",
+  "writer": "Unknown (attributed to Didymus Judas Thomas)",
   "era": "nt",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 114,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": [
+        "And he said, 'Whoever discovers the meaning of these words will not taste death.'"
+      ]
+    },
+    {
+      "number": 2,
+      "verses": [
+        "Jesus said, 'Let one who seeks not stop seeking until he finds. When he finds, he will be troubled. When he is troubled, he will marvel, and he will rule over all.'"
+      ]
+    },
+    {
+      "number": 3,
+      "verses": [
+        "Jesus said, 'If your leaders say to you, Look, the kingdom is in the sky, then the birds of the sky will get there before you. If they say that it is in the sea, then the fish will get there before you. Rather, the kingdom is inside you and outside you. When you know yourselves, then you will be known, and you will understand that you are children of the living Father. But if you do not know yourselves, then you live in poverty, and you are the poverty.'"
+      ]
+    },
+    {
+      "number": 4,
+      "verses": [
+        "Jesus said, 'The person old in days will not hesitate to ask a little child seven days old about the place of life, and that person will live. For many who are first will become last, and they will become a single one.'"
+      ]
+    },
+    {
+      "number": 5,
+      "verses": [
+        "Jesus said, 'Know what is in front of your face, and what is hidden from you will be disclosed. For there is nothing hidden that will not be revealed.'"
+      ]
+    },
+    {
+      "number": 6,
+      "verses": [
+        "His disciples asked him, 'Do you want us to fast? How should we pray? Should we give to charity? What diet should we observe?' Jesus said, 'Do not lie. Do not do what you hate, for all things are disclosed before heaven. For there is nothing hidden that will not be revealed, and there is nothing covered that will remain undisclosed.'"
+      ]
+    },
+    {
+      "number": 7,
+      "verses": [
+        "Jesus said, 'Blessed is the lion that a person eats and the lion becomes human. And cursed is the person whom a lion eats, and the lion becomes human.'"
+      ]
+    },
+    {
+      "number": 8,
+      "verses": [
+        "He said, 'The person is like a wise fisherman who cast his net into the sea and drew it up from the sea full of little fish. Among them the wise fisherman found a large fine fish. He threw all the little fish back into the sea and without hesitation chose the large fish. Whoever has ears to hear should hear.'"
+      ]
+    },
+    {
+      "number": 9,
+      "verses": [
+        "Jesus said, 'Look, the sower went out, took a handful of seeds, and scattered them. Some fell on the road, and the birds came and pecked them up. Others fell on rock, and they did not take root in the soil and did not produce heads of grain. Others fell among thorns, and they choked the seeds and worms ate them. And others fell on good soil, and it produced good fruit: it yielded sixty per measure and one hundred twenty per measure.'"
+      ]
+    },
+    {
+      "number": 10,
+      "verses": [
+        "Jesus said, 'I have cast fire upon the world, and look, I am guarding it until it blazes.'"
+      ]
+    },
+    {
+      "number": 11,
+      "verses": [
+        "Jesus said, 'This heaven will pass away, and the one above it will pass away. The dead are not alive, and the living will not die. During the days when you ate what is dead, you made it alive. When you come to dwell in the light, what will you do? On the day when you were one, you became two. But when you become two, what will you do?'"
+      ]
+    },
+    {
+      "number": 12,
+      "verses": [
+        "The disciples said to Jesus, 'We know that you are going to leave us. Who will be our leader?' Jesus said to them, 'Wherever you are, you should go to James the Just, for whose sake heaven and earth came into being.'"
+      ]
+    },
+    {
+      "number": 13,
+      "verses": [
+        "Jesus said to his disciples, 'Compare me to something and tell me what I am like.' Simon Peter said to him, 'You are like a righteous messenger.' Matthew said to him, 'You are like a wise philosopher.' Thomas said to him, 'Teacher, my mouth cannot express what you are like.' Jesus said, 'I am not your teacher. Because you have drunk, you have become intoxicated from the bubbling spring that I have tended.' He took him aside and told him three things. When Thomas returned to his companions, they asked him, 'What did Jesus say to you?' Thomas said to them, 'If I tell you one of the things he said to me, you will pick up stones and throw them at me, and fire will come out of the stones and consume you.'"
+      ]
+    },
+    {
+      "number": 14,
+      "verses": [
+        "Jesus said to them, 'If you fast, you will bring sin upon yourselves. If you pray, you will be condemned. If you give to charity, you will harm your spirits. When you go into any land and travel from place to place, if they welcome you, eat what they serve you and heal the sick among them. For what goes into your mouth will not defile you; rather, what comes out of your mouth will defile you.'"
+      ]
+    },
+    {
+      "number": 15,
+      "verses": [
+        "Jesus said, 'When you see one who was not born of woman, fall on your faces and worship. That one is your Father.'"
+      ]
+    },
+    {
+      "number": 16,
+      "verses": [
+        "Jesus said, 'Perhaps people think that I have come to cast peace upon the world. They do not know that I have come to cast discord upon the earth: fire, sword, war. For there will be five in a house: three will be against two and two against three, father against son and son against father, and they will stand alone.'"
+      ]
+    },
+    {
+      "number": 17,
+      "verses": [
+        "Jesus said, 'I will give you what no eye has seen, what no ear has heard, what no hand has touched, and what has not arisen in the human heart.'"
+      ]
+    },
+    {
+      "number": 18,
+      "verses": [
+        "The disciples said to Jesus, 'Tell us how our end will be.' Jesus said, 'Have you already discovered the beginning, that you now seek the end? For where the beginning is, the end will be. Blessed is the one who stands at the beginning: that one will know the end and will not taste death.'"
+      ]
+    },
+    {
+      "number": 19,
+      "verses": [
+        "Jesus said, 'Blessed is the one who came into being before coming into being. If you become my disciples and listen to my words, these stones will serve you. For there are five trees in Paradise that do not change, summer or winter, and their leaves do not fall. Whoever knows them will not taste death.'"
+      ]
+    },
+    {
+      "number": 20,
+      "verses": [
+        "The disciples said to Jesus, 'Tell us what the kingdom of heaven is like.' He said to them, 'It is like a mustard seed, the smallest of all seeds. But when it falls on worked soil, it produces a large plant and becomes a shelter for birds of the sky.'"
+      ]
+    },
+    {
+      "number": 21,
+      "verses": [
+        "Mary said to Jesus, 'What are your disciples like?' He said, 'They are like children who live in a field that is not theirs. When the owners come, they will say, \"Give us back our field.\" They take off their clothes in their presence, leaving the field for them and returning it to them. For this reason I say: If the master of a house knows that a thief is coming, he will keep watch before the thief comes and will not let the thief break into his house of his kingdom and carry off his possessions. You, then, must be on guard against the world. Gird your loins with great strength, so that the robbers may not find a way to reach you.'"
+      ]
+    },
+    {
+      "number": 22,
+      "verses": [
+        "Jesus saw some infants nursing. He said to his disciples, 'These nursing infants are like those who enter the kingdom.' They said to him, 'If we become infants, will we enter the kingdom?' Jesus said to them, 'When you make the two into one, and when you make the inside like the outside and the outside like the inside, and the above like the below, and when you make the male and the female into a single one, so that the male will not be male and the female will not be female, when you make eyes in place of an eye, a hand in place of a hand, a foot in place of a foot, and an image in place of an image, then you will enter the kingdom.'"
+      ]
+    },
+    {
+      "number": 23,
+      "verses": [
+        "Jesus said, 'I will choose you, one from a thousand and two from ten thousand, and they will stand as a single one.'"
+      ]
+    },
+    {
+      "number": 24,
+      "verses": [
+        "His disciples said, 'Show us the place where you are, for we must seek it.' He said to them, 'Whoever has ears should hear. There is light within a person of light, and it shines on the whole world. If it does not shine, it is dark.'"
+      ]
+    },
+    {
+      "number": 25,
+      "verses": [
+        "Jesus said, 'Love your brother like your own soul; protect that person like the apple of your eye.'"
+      ]
+    },
+    {
+      "number": 26,
+      "verses": [
+        "Jesus said, 'You see the speck in your brother's eye, but you do not see the beam in your own eye. When you remove the beam from your own eye, then you will see clearly enough to remove the speck from your brother's eye.'"
+      ]
+    },
+    {
+      "number": 27,
+      "verses": [
+        "Jesus said, 'If you do not fast from the world, you will not find the kingdom. If you do not observe the Sabbath as a Sabbath, you will not see the Father.'"
+      ]
+    },
+    {
+      "number": 28,
+      "verses": [
+        "Jesus said, 'I took my stand in the midst of the world, and I appeared to them in the flesh. I found them all drunk, and I found none among them thirsty. My soul ached for the children of humanity, for they are blind in their hearts and do not see that they came into the world empty, seeking also to leave the world empty. But now they are drunk. When they shake off their wine, they will change their ways.'"
+      ]
+    },
+    {
+      "number": 29,
+      "verses": [
+        "Jesus said, 'If the flesh came into being because of the spirit, it is a wonder. But if the spirit came into being because of the body, it is a wonder of wonders. Indeed, I am amazed at how this great wealth has made its home in this poverty.'"
+      ]
+    },
+    {
+      "number": 30,
+      "verses": [
+        "Jesus said, 'Where there are three deities, they are divine. Where there are two or one, I am with them.'"
+      ]
+    },
+    {
+      "number": 31,
+      "verses": [
+        "Jesus said, 'No prophet is accepted in his own village; no physician heals those who know him.'"
+      ]
+    },
+    {
+      "number": 32,
+      "verses": [
+        "Jesus said, 'A city built on a high hill and fortified cannot fall, nor can it be hidden.'"
+      ]
+    },
+    {
+      "number": 33,
+      "verses": [
+        "Jesus said, 'What you hear in one ear, proclaim from the rooftops. For no one lights a lamp and puts it under a basket, nor does one put it in a hidden place; rather, one puts it on a lampstand so that all who come and go will see its light.'"
+      ]
+    },
+    {
+      "number": 34,
+      "verses": [
+        "Jesus said, 'If a blind person leads a blind person, both will fall into a pit.'"
+      ]
+    },
+    {
+      "number": 35,
+      "verses": [
+        "Jesus said, 'It is not possible for anyone to enter the house of a strong person and take it by force without tying the person's hands. Then one can loot the house.'"
+      ]
+    },
+    {
+      "number": 36,
+      "verses": [
+        "Jesus said, 'Do not fret, from morning to evening and from evening to morning, about what you will wear.'"
+      ]
+    },
+    {
+      "number": 37,
+      "verses": [
+        "His disciples said, 'When will you become visible to us, and when will we see you?' Jesus said, 'When you disrobe without shame and take up your garments, place them at your feet like little children and trample them, then you will see the child of the living one and you will not be afraid.'"
+      ]
+    },
+    {
+      "number": 38,
+      "verses": [
+        "Jesus said, 'Often you have desired to hear these words that I am speaking to you, and you have no one else from whom to hear them. The days will come when you will seek me and you will not find me.'"
+      ]
+    },
+    {
+      "number": 39,
+      "verses": [
+        "Jesus said, 'The Pharisees and the scribes have taken the keys of knowledge and have hidden them. They have not entered, nor have they allowed those who wish to enter to do so. As for you, be as shrewd as snakes and as innocent as doves.'"
+      ]
+    },
+    {
+      "number": 40,
+      "verses": [
+        "Jesus said, 'A grapevine has been planted outside the Father. Since it is not strong, it will be pulled up by its root and will perish.'"
+      ]
+    },
+    {
+      "number": 41,
+      "verses": [
+        "Jesus said, 'Whoever has something in hand will receive more. Whoever has nothing will be deprived of even the little they have.'"
+      ]
+    },
+    {
+      "number": 42,
+      "verses": [
+        "Jesus said, 'Be passersby.'"
+      ]
+    },
+    {
+      "number": 43,
+      "verses": [
+        "His disciples said to him, 'Who are you to say these things to us?' Jesus said to them, 'From what I say to you, do you not realize who I am? But you have become like the Jews: they love the tree but hate its fruit; they love the fruit but hate the tree.'"
+      ]
+    },
+    {
+      "number": 44,
+      "verses": [
+        "Jesus said, 'Whoever blasphemes against the Father will be forgiven; whoever blasphemes against the Son will be forgiven; but whoever blasphemes against the Holy Spirit will not be forgiven, either on earth or in heaven.'"
+      ]
+    },
+    {
+      "number": 45,
+      "verses": [
+        "Jesus said, 'Grapes are not harvested from thorn bushes, nor are figs gathered from thistles, for they yield no fruit. Good people produce good from what they have stored up; evil people produce evil from the evil they have stored up in their hearts, and they speak evil. For from the overflow of the heart they produce evil.'"
+      ]
+    },
+    {
+      "number": 46,
+      "verses": [
+        "Jesus said, 'From Adam to John the Baptist, among those born of women, no one is so much greater than John the Baptist that his eyes should not be averted. Yet I have said that whoever among you becomes a child will know the kingdom and will become greater than John.'"
+      ]
+    },
+    {
+      "number": 47,
+      "verses": [
+        "Jesus said, 'It is impossible for a person to mount two horses or to stretch two bows. And it is impossible for a servant to serve two masters; otherwise, that one will honor the first and insult the other. No one drinks aged wine and immediately wants to drink new wine. New wine is not poured into old wineskins, or they might burst; aged wine is not poured into a new wineskin, or it might spoil. An old patch is not sewn onto a new garment, for a tear would result.'"
+      ]
+    },
+    {
+      "number": 48,
+      "verses": [
+        "Jesus said, 'If two make peace with each other in a single house, they will say to the mountain, \"Move away,\" and it will move.'"
+      ]
+    },
+    {
+      "number": 49,
+      "verses": [
+        "Jesus said, 'Blessed are the solitary and the chosen, for you will find the kingdom. For you come from it and will return to it again.'"
+      ]
+    },
+    {
+      "number": 50,
+      "verses": [
+        "Jesus said, 'If they say to you, \"Where have you come from?\" say to them, \"We have come from the light, from the place where the light came into being by itself, established itself, and appeared in their image.\" If they say to you, \"Is it you?\" say, \"We are its children, and we are the chosen of the living Father.\" If they ask you, \"What is the evidence of your Father in you?\" say to them, \"It is movement and rest.\"'"
+      ]
+    },
+    {
+      "number": 51,
+      "verses": [
+        "His disciples said to him, 'When will the dead rest? When will the new world come?' He said to them, 'What you look for has come, but you do not know it.'"
+      ]
+    },
+    {
+      "number": 52,
+      "verses": [
+        "His disciples said to him, 'Twenty-four prophets spoke in Israel, and they all spoke of you.' He said to them, 'You have disregarded the living one who is in your presence and have spoken of the dead.'"
+      ]
+    },
+    {
+      "number": 53,
+      "verses": [
+        "His disciples said to him, 'Is circumcision beneficial or not?' He said to them, 'If it were beneficial, their Father would beget them already circumcised from their mother. Rather, the true circumcision in spirit has become entirely profitable.'"
+      ]
+    },
+    {
+      "number": 54,
+      "verses": [
+        "Jesus said, 'Blessed are the poor, for yours is the kingdom of heaven.'"
+      ]
+    },
+    {
+      "number": 55,
+      "verses": [
+        "Jesus said, 'Whoever does not hate father and mother cannot be my disciple. Whoever does not hate brothers and sisters and take up the cross as I do will not be worthy of me.'"
+      ]
+    },
+    {
+      "number": 56,
+      "verses": [
+        "Jesus said, 'Whoever has come to know the world has found a corpse, and whoever has found a corpse is superior to the world.'"
+      ]
+    },
+    {
+      "number": 57,
+      "verses": [
+        "Jesus said, 'The kingdom of the Father is like a person who had good seed. The enemy came by night and sowed weeds among the good seed. The person did not let them pull up the weeds, saying, \"I am afraid that you might pull up the wheat along with the weeds.\" For on the day of harvest, the weeds will be plainly visible and will be pulled up and burned.'"
+      ]
+    },
+    {
+      "number": 58,
+      "verses": [
+        "Jesus said, 'Blessed is the person who has toiled and has found life.'"
+      ]
+    },
+    {
+      "number": 59,
+      "verses": [
+        "Jesus said, 'Look to the living one while you are alive, lest you die and then try to see him and are unable to see him.'"
+      ]
+    },
+    {
+      "number": 60,
+      "verses": [
+        "They saw a Samaritan carrying a lamb on the way to Judea. He said to his disciples, 'Why is that person carrying the lamb?' They said to him, 'So that he may kill it and eat it.' He said to them, 'As long as it is alive, he will not eat it, but only after he has killed it and it has become a corpse.' They said, 'Otherwise he cannot do it.' He said to them, 'You, too, seek a place for yourselves within, so that you do not become corpses and get eaten.'"
+      ]
+    },
+    {
+      "number": 61,
+      "verses": [
+        "Jesus said, 'Two will rest on a bed: one will die, the other will live.' Salome said, 'Who are you, mister? You have climbed onto my couch and eaten from my table as if you are from someone.' Jesus said to her, 'I am the one who comes from the one who is whole. I was given from the things of my Father.' Salome said, 'I am your disciple.' Jesus said to her, 'Therefore I say: When one is whole, one will be filled with light; but when one is divided, one will be filled with darkness.'"
+      ]
+    },
+    {
+      "number": 62,
+      "verses": [
+        "Jesus said, 'I disclose my mysteries to those who are worthy of my mysteries. Do not let your left hand know what your right hand is doing.'"
+      ]
+    },
+    {
+      "number": 63,
+      "verses": [
+        "Jesus said, 'There was a rich person who had many possessions. He said, \"I will use my possessions to sow, reap, plant, and fill my barns with produce, so that I will lack nothing.\" These were the things he was thinking in his heart, but that very night he died. Whoever has ears should hear.'"
+      ]
+    },
+    {
+      "number": 64,
+      "verses": [
+        "Jesus said, 'A person was receiving guests. When he had prepared the dinner, he sent his servant to invite the guests. The servant went to the first and said, \"My master invites you.\" The guest said, \"Some merchants owe me money; they are coming to me tonight. I must go and give them instructions. Please excuse me from the dinner.\" The servant went to another and said, \"My master invites you.\" The guest said, \"I have bought a house and have been called away for a day. I will have no time.\" The servant went to another and said, \"My master invites you.\" The guest said, \"My friend is to be married and I am to arrange the banquet. I will not be able to come. Please excuse me from the dinner.\" The servant went to another and said, \"My master invites you.\" The guest said, \"I have bought a farm and I am going to collect the rent. I will not be able to come. Please excuse me.\" The servant returned and said to his master, \"Those whom you invited to the dinner have excused themselves.\" The master said to his servant, \"Go out to the roads and bring whomever you find so that they may have dinner.\" Buyers and merchants will not enter the places of my Father.'"
+      ]
+    },
+    {
+      "number": 65,
+      "verses": [
+        "He said, 'A good person owned a vineyard. He leased it to some farmers so that they might work it and he might receive its produce from them. He sent his servant so that the farmers might give him the produce of the vineyard. They seized his servant and beat him, almost killing him. The servant went back and told his master. The master said, \"Perhaps he did not know them.\" He sent another servant, and the farmers beat that one as well. Then the master sent his son and said, \"Perhaps they will respect my son.\" Since the farmers knew that he was the heir of the vineyard, they seized him and killed him. Whoever has ears should hear.'"
+      ]
+    },
+    {
+      "number": 66,
+      "verses": [
+        "Jesus said, 'Show me the stone that the builders rejected: that is the cornerstone.'"
+      ]
+    },
+    {
+      "number": 67,
+      "verses": [
+        "Jesus said, 'Those who know all but are lacking within themselves are utterly lacking.'"
+      ]
+    },
+    {
+      "number": 68,
+      "verses": [
+        "Jesus said, 'Blessed are you when you are hated and persecuted; no place will be found where you have been persecuted.'"
+      ]
+    },
+    {
+      "number": 69,
+      "verses": [
+        "Jesus said, 'Blessed are those who have been persecuted in their hearts. They are the ones who have truly come to know the Father. Blessed are the hungry, for the belly of the one who desires will be filled.'"
+      ]
+    },
+    {
+      "number": 70,
+      "verses": [
+        "Jesus said, 'When you bring forth what is within you, what you have will save you. If you do not have that within you, what you do not have within you will kill you.'"
+      ]
+    },
+    {
+      "number": 71,
+      "verses": [
+        "Jesus said, 'I will destroy this house, and no one will be able to rebuild it.'"
+      ]
+    },
+    {
+      "number": 72,
+      "verses": [
+        "A person said to him, 'Tell my brothers to divide my father's possessions with me.' He said to the person, 'Mister, who made me a divider?' He turned to his disciples and said to them, 'I am not a divider, am I?'"
+      ]
+    },
+    {
+      "number": 73,
+      "verses": [
+        "Jesus said, 'The harvest is indeed plentiful, but the laborers are few. Ask the Lord to send out laborers for the harvest.'"
+      ]
+    },
+    {
+      "number": 74,
+      "verses": [
+        "He said, 'Lord, there are many around the drinking trough, but there is nothing in the well.'"
+      ]
+    },
+    {
+      "number": 75,
+      "verses": [
+        "Jesus said, 'Many are standing at the door, but it is the solitary who will enter the wedding chamber.'"
+      ]
+    },
+    {
+      "number": 76,
+      "verses": [
+        "Jesus said, 'The kingdom of the Father is like a merchant who had merchandise and found a pearl. That merchant was wise; he sold the merchandise and bought the pearl alone for himself. You, too, seek the treasure that does not perish, that endures, where no moth comes near to devour and no worm destroys.'"
+      ]
+    },
+    {
+      "number": 77,
+      "verses": [
+        "Jesus said, 'I am the light that is over all. I am the All. From me the All came forth, and to me the All has extended. Split a piece of wood, and I am there. Lift up a stone, and you will find me there.'"
+      ]
+    },
+    {
+      "number": 78,
+      "verses": [
+        "Jesus said, 'Why have you come out to the countryside? To see a reed shaken by the wind? To see a person dressed in soft garments, like your rulers and powerful people? They are dressed in soft garments and cannot understand the truth.'"
+      ]
+    },
+    {
+      "number": 79,
+      "verses": [
+        "A woman in the crowd said to him, 'Blessed is the womb that bore you and the breasts that nourished you.' He said to her, 'Blessed are those who have heard the word of the Father and have kept it in truth. For days will come when you will say, \"Blessed is the womb that has not conceived and the breasts that have not nursed.\"'"
+      ]
+    },
+    {
+      "number": 80,
+      "verses": [
+        "Jesus said, 'Whoever has come to know the world has found the body, and whoever has found the body is superior to the world.'"
+      ]
+    },
+    {
+      "number": 81,
+      "verses": [
+        "Jesus said, 'Let one who has become wealthy become ruler, and let one who has power renounce it.'"
+      ]
+    },
+    {
+      "number": 82,
+      "verses": [
+        "Jesus said, 'Whoever is near me is near the fire; whoever is far from me is far from the kingdom.'"
+      ]
+    },
+    {
+      "number": 83,
+      "verses": [
+        "Jesus said, 'Images are visible to people, but the light within them is hidden in the image of the Father's light. He will reveal himself, but his image is hidden by his light.'"
+      ]
+    },
+    {
+      "number": 84,
+      "verses": [
+        "Jesus said, 'When you see your likeness, you rejoice. But when you see your images that came into being before you — they neither die nor become visible — how much will you bear?'"
+      ]
+    },
+    {
+      "number": 85,
+      "verses": [
+        "Jesus said, 'Adam came from great power and great wealth, but he was not worthy of you. For had he been worthy, he would not have tasted death.'"
+      ]
+    },
+    {
+      "number": 86,
+      "verses": [
+        "Jesus said, 'Foxes have their dens and birds have their nests, but human beings have no place to lay down and rest.'"
+      ]
+    },
+    {
+      "number": 87,
+      "verses": [
+        "Jesus said, 'How miserable is the body that depends on a body! And how miserable is the soul that depends on these two!'"
+      ]
+    },
+    {
+      "number": 88,
+      "verses": [
+        "Jesus said, 'The messengers and the prophets will come to you and give you what is yours. You, in turn, give them what you have and say to yourselves, \"When will they come and take what is theirs?\"'"
+      ]
+    },
+    {
+      "number": 89,
+      "verses": [
+        "Jesus said, 'Why do you wash the outside of the cup? Do you not understand that the one who made the inside is also the one who made the outside?'"
+      ]
+    },
+    {
+      "number": 90,
+      "verses": [
+        "Jesus said, 'Come to me, for my yoke is gentle and my lordship is mild, and you will find rest for yourselves.'"
+      ]
+    },
+    {
+      "number": 91,
+      "verses": [
+        "They said to him, 'Tell us who you are so that we may believe in you.' He said to them, 'You examine the face of the sky and of the earth, but you have not come to know the one who is before you, and you do not know how to examine the present moment.'"
+      ]
+    },
+    {
+      "number": 92,
+      "verses": [
+        "Jesus said, 'Seek and you will find. In the past, however, I did not tell you the things about which you asked me then. Now I am willing to tell them, but you are not seeking them.'"
+      ]
+    },
+    {
+      "number": 93,
+      "verses": [
+        "Jesus said, 'Do not give what is holy to dogs, for they might throw it onto the manure pile. Do not throw pearls to swine, for they might make it into mud.'"
+      ]
+    },
+    {
+      "number": 94,
+      "verses": [
+        "Jesus said, 'One who seeks will find; for one who knocks, it will be opened.'"
+      ]
+    },
+    {
+      "number": 95,
+      "verses": [
+        "Jesus said, 'If you have money, do not lend it at interest. Rather, give it to someone from whom you will not get it back.'"
+      ]
+    },
+    {
+      "number": 96,
+      "verses": [
+        "Jesus said, 'The kingdom of the Father is like a woman who took a little leaven, hid it in dough, and made large loaves of it. Whoever has ears should hear.'"
+      ]
+    },
+    {
+      "number": 97,
+      "verses": [
+        "Jesus said, 'The kingdom of the Father is like a woman who was carrying a jar full of meal. While she was walking along a distant road, the handle of the jar broke and meal streamed out behind her along the road. She did not realize it; she had not noticed any trouble. When she reached her house, she set the jar down and found it empty.'"
+      ]
+    },
+    {
+      "number": 98,
+      "verses": [
+        "Jesus said, 'The kingdom of the Father is like a person who wanted to put a powerful person to death. He drew his sword in his own house and thrust it into the wall to test his strength. Then he killed the powerful one.'"
+      ]
+    },
+    {
+      "number": 99,
+      "verses": [
+        "The disciples said to him, 'Your brothers and your mother are standing outside.' He said to them, 'Those here who do the will of my Father are my brothers and my mother. They are the ones who will enter the kingdom of my Father.'"
+      ]
+    },
+    {
+      "number": 100,
+      "verses": [
+        "They showed Jesus a gold coin and said to him, 'Caesar's people demand taxes from us.' He said to them, 'Give Caesar what belongs to Caesar; give God what belongs to God; and give me what is mine.'"
+      ]
+    },
+    {
+      "number": 101,
+      "verses": [
+        "Jesus said, 'Whoever does not hate father and mother the way I do cannot be my disciple. And whoever does not love father and mother the way I do cannot be my disciple. For my mother gave me falsehood, but my true mother gave me life.'"
+      ]
+    },
+    {
+      "number": 102,
+      "verses": [
+        "Jesus said, 'Woe to the Pharisees, for they are like a dog sleeping in the cattle trough, for the dog neither eats nor lets the cattle eat.'"
+      ]
+    },
+    {
+      "number": 103,
+      "verses": [
+        "Jesus said, 'Blessed is the person who knows where the robbers will enter, so that he may get up, gather his strength, and be prepared before they invade.'"
+      ]
+    },
+    {
+      "number": 104,
+      "verses": [
+        "They said to Jesus, 'Come, let us pray today and let us fast.' Jesus said, 'What sin have I committed, or by what have I been overcome? Rather, when the bridegroom leaves the wedding chamber, then let people fast and pray.'"
+      ]
+    },
+    {
+      "number": 105,
+      "verses": [
+        "Jesus said, 'Whoever knows the father and the mother will be called the child of a prostitute.'"
+      ]
+    },
+    {
+      "number": 106,
+      "verses": [
+        "Jesus said, 'When you make the two into one, you will become children of Adam, and if you say, \"Mountain, move away,\" it will move.'"
+      ]
+    },
+    {
+      "number": 107,
+      "verses": [
+        "Jesus said, 'The kingdom is like a shepherd who had a hundred sheep. One of them, the largest, went astray. He left the ninety-nine and looked for the one until he found it. After he had gone to this trouble, he said to the sheep, \"I love you more than the ninety-nine.\"'"
+      ]
+    },
+    {
+      "number": 108,
+      "verses": [
+        "Jesus said, 'Whoever drinks from my mouth will become like me; I myself shall become that person, and what is hidden will be revealed to that person.'"
+      ]
+    },
+    {
+      "number": 109,
+      "verses": [
+        "Jesus said, 'The kingdom is like a person who had a treasure hidden in his field, unknown to him. After he died, he left it to his son. The son did not know about it. He took the field and sold it. The one who bought it went plowing and found the treasure. He began to lend money at interest to whomever he wished.'"
+      ]
+    },
+    {
+      "number": 110,
+      "verses": [
+        "Jesus said, 'Let one who has found the world and become wealthy renounce the world.'"
+      ]
+    },
+    {
+      "number": 111,
+      "verses": [
+        "Jesus said, 'The heavens and the earth will roll up in your presence, and whoever is living from the living one will not see death.' Does not Jesus say, 'Those who have found themselves, of them the world is not worthy?'"
+      ]
+    },
+    {
+      "number": 112,
+      "verses": [
+        "Jesus said, 'Woe to the flesh that depends on the soul. Woe to the soul that depends on the flesh.'"
+      ]
+    },
+    {
+      "number": 113,
+      "verses": [
+        "His disciples said to him, 'When will the kingdom come?' Jesus said, 'It will not come by waiting for it. They will not say, \"Look, here it is\" or \"Look, there it is.\" Rather, the kingdom of the Father is spread out upon the earth, and people do not see it.'"
+      ]
+    },
+    {
+      "number": 114,
+      "verses": [
+        "Simon Peter said to them, 'Let Mary leave us, for women are not worthy of life.' Jesus said, 'Look, I will guide her so that I may make her male, in order that she too may become a living spirit resembling you males. For every woman who makes herself male will enter the kingdom of heaven.'"
+      ]
+    }
+  ]
 }

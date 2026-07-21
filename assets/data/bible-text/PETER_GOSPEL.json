@@ -1,10 +1,132 @@
 {
-  "version": "Placeholder",
+  "version": "Deuterocanonical",
   "bookId": "PETER_GOSPEL",
   "title": "Gospel of Peter",
-  "writer": "Peter",
+  "writer": "Unknown (docetic tradition)",
   "era": "nt",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 14,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": [
+        "But of the Jews none washed their hands, neither Herod nor any of his judges. Since they were not willing to wash, Pilate stood up.",
+        "Then Herod the king commanded the Lord to be taken, saying to them, 'Do what I commanded you to do.'"
+      ]
+    },
+    {
+      "number": 2,
+      "verses": [
+        "Now there stood there Joseph, the friend of Pilate and of the Lord. Knowing that they were about to crucify him, he came to Pilate and asked for the body of the Lord for burial.",
+        "And Pilate sent to Herod and asked for the body.",
+        "Herod said, 'Brother Pilate, even if no one had asked for him, we would have buried him, since the Sabbath is dawning. For it is written in the Law: The sun shall not set on one who has been put to death.'"
+      ]
+    },
+    {
+      "number": 3,
+      "verses": [
+        "Then he delivered him to the people on the day before the Unleavened Bread, their feast. They took the Lord and pushed him as they ran, saying, 'Let us drag the Son of God, now that we have power over him.'",
+        "They clothed him in purple and set him on a judgment seat, saying, 'Judge righteously, O King of Israel.'",
+        "One of them brought a crown of thorns and set it on the Lord's head.",
+        "Others who stood by spat on his face; some struck his cheeks; others pierced him with a reed; and some scourged him."
+      ]
+    },
+    {
+      "number": 4,
+      "verses": [
+        "They brought two criminals and crucified the Lord between them. But he remained silent, as if feeling no pain.",
+        "When they set up the cross, they wrote upon it: 'This is the King of Israel.'",
+        "And they laid down the garments before him, divided them, and cast lots for them.",
+        "One of the criminals reproached them, saying, 'We have suffered thus for the evils we have done, but this man, who has become the Savior of humanity, what wrong has he done you?'",
+        "They were angered at him and commanded that his legs not be broken, so that he might die in torment."
+      ]
+    },
+    {
+      "number": 5,
+      "verses": [
+        "It was noon, and darkness covered all of Judea. They became troubled and anxious, fearing that the sun had set while he was still alive.",
+        "One of them said, 'Give him gall mixed with vinegar to drink.' And they mixed it and gave it to him.",
+        "Thus they fulfilled all things and completed the measure of their sins on their head.",
+        "Many went about with lamps, thinking it was night, and stumbled.",
+        "And the Lord cried out, 'My power, O power, you have forsaken me!' And having said this, he was taken up.",
+        "At that hour the veil of the temple of Jerusalem was torn in two."
+      ]
+    },
+    {
+      "number": 6,
+      "verses": [
+        "Then they drew out the nails from the Lord's hands and laid him on the earth. The whole earth shook, and there was great fear.",
+        "Then the sun shone forth; it was the ninth hour.",
+        "The Jews rejoiced and gave his body to Joseph to bury, for he had seen all the good that he had done. He took the Lord, washed him, wrapped him in linen, and buried him in a place called the Garden of Joseph."
+      ]
+    },
+    {
+      "number": 7,
+      "verses": [
+        "Then the Jews and the elders and the priests, knowing what evil they had done to themselves, began to lament and say, 'Woe to us for our sins; the judgment and the end of Jerusalem have drawn near.'",
+        "But I and my companions were grieved, and we hid in our hearts, for we were being sought by them as criminals.",
+        "Because of all these things we fasted and sat mourning and weeping night and day until the Sabbath."
+      ]
+    },
+    {
+      "number": 8,
+      "verses": [
+        "Now the scribes and Pharisees and elders assembled together and heard the people murmuring.",
+        "They were afraid and came to Pilate, saying, 'Give us soldiers so that we may guard his tomb for three days, lest his disciples come and steal him.'",
+        "Pilate therefore gave them the centurion Petronius with soldiers to guard the tomb.",
+        "And they rolled a great stone and placed it at the entrance of the tomb, and they sealed it with seven seals."
+      ]
+    },
+    {
+      "number": 9,
+      "verses": [
+        "Early in the morning, when the Sabbath dawned, a crowd came from Jerusalem to see the sealed tomb.",
+        "But in the night when the Lord's day dawned, while the soldiers were keeping watch, a great voice came from heaven.",
+        "They saw the heavens opened and two men descending from there, shining with great light, and they drew near to the tomb.",
+        "The stone that had been placed at the entrance rolled away of itself and withdrew to the side, and the tomb opened."
+      ]
+    },
+    {
+      "number": 10,
+      "verses": [
+        "When the soldiers saw this, they woke up the centurion and the elders. While they were telling what they had seen, they saw three men coming out of the tomb — two of them supporting the third, and a cross following them.",
+        "The heads of the two reached to heaven, but the head of the one being led by them reached beyond the heavens.",
+        "And they heard a voice from heaven saying, 'Have you preached to those who are asleep?'",
+        "And a response was heard from the cross: 'Yes.'"
+      ]
+    },
+    {
+      "number": 11,
+      "verses": [
+        "The soldiers decided to go and report these things to Pilate.",
+        "The centurion and those with him saw these things and hurried by night to Pilate, and reported everything they had seen, saying, 'Truly he was the Son of God.'",
+        "Pilate responded, 'I am clean of the blood of the Son of God; it was your decision.'",
+        "Then they all came to him, beseeching him to command the centurion not to report what they had seen."
+      ]
+    },
+    {
+      "number": 12,
+      "verses": [
+        "Early in the morning of the Lord's day, Mary Magdalene, a woman disciple of the Lord, came to the tomb.",
+        "She took with her her women friends and came to the tomb where he was laid.",
+        "They were afraid that the Jews might see them, and they said, 'Let us now do what is fitting at his tomb.'",
+        "'But who will roll away the stone for us, placed at the entrance of the tomb?'"
+      ]
+    },
+    {
+      "number": 13,
+      "verses": [
+        "When they arrived, they found the tomb opened. They approached, stooped down, and saw a young man sitting in the middle of the tomb, beautiful and clothed in a bright garment.",
+        "He said to them, 'Why have you come? Whom do you seek? Not the one who was crucified? He has risen and gone away. If you do not believe, stoop down and see that he is no longer here.'",
+        "Then the women fled in fear."
+      ]
+    },
+    {
+      "number": 14,
+      "verses": [
+        "But it was the final day of the Unleavened Bread, and many were leaving, returning to their homes. I, Simon Peter, and my brother Andrew, took our nets and went to the sea. And Levi the son of Alphaeus was with us.",
+        "The Lord said to them, 'Cast upon the right side of the boat, and you will find.' They cast and caught many fish.",
+        "I, Simon Peter, said, 'Let me also go.' And he said to me, 'If you are truly his disciple, cast your net upon the right side.' I cast my net and caught many fish."
+      ]
+    }
+  ]
 }

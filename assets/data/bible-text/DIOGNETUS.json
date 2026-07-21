@@ -1,10 +1,92 @@
 {
-  "version": "Placeholder",
+  "version": "Deuterocanonical",
   "bookId": "DIOGNETUS",
-  "title": "Letter to Diognetus",
+  "title": "Epistle to Diognetus",
   "writer": "Unknown",
   "era": "nt",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 12,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": [
+        "Since I see you, most excellent Diognetus, eagerly inquiring about the religion of the Christians, I commend your desire.",
+        "I ask God that I may so speak as you will benefit, and that you may so hear as I will benefit."
+      ]
+    },
+    {
+      "number": 2,
+      "verses": [
+        "The Greeks serve lifeless images of stone and wood and gold. They pray to things that cannot hear.",
+        "Let us examine the Jews as well. They worship one God, but their way of worship has more in common with error than with truth."
+      ]
+    },
+    {
+      "number": 3,
+      "verses": [
+        "Christians are not distinguished by country, language, or customs. They live in their own countries as aliens.",
+        "They participate in everything as citizens, and endure everything as foreigners. Every foreign country is their homeland."
+      ]
+    },
+    {
+      "number": 4,
+      "verses": [
+        "What the soul is in the body, the Christians are in the world. The soul is spread through all the members of the body.",
+        "The flesh hates the soul, yet the soul loves the flesh. Christians love those who hate them."
+      ]
+    },
+    {
+      "number": 5,
+      "verses": [
+        "God sent his Word not as a tyrant or judge, but as a king. He sent him in gentleness and meekness.",
+        "He sent him to save us by persuasion, not by compulsion, for compulsion is not God's way."
+      ]
+    },
+    {
+      "number": 6,
+      "verses": [
+        "Do you not see Christians thrown to wild beasts, yet they are not overcome? The more they are punished, the more they increase."
+      ]
+    },
+    {
+      "number": 7,
+      "verses": [
+        "God, the Lord and Creator, was not only gentle and kind, but also long-suffering. He alone is good.",
+        "When he revealed his plan through his beloved Son, he showed us participation in his benefits and his great care for us."
+      ]
+    },
+    {
+      "number": 8,
+      "verses": [
+        "God loved us and gave his Son as a ransom — the holy for the lawless, the righteous for the unrighteous.",
+        "O sweet exchange! O unsearchable work of God!"
+      ]
+    },
+    {
+      "number": 9,
+      "verses": [
+        "When the time came, God destroyed hatred and enmity and made peace through the one who is above all.",
+        "He gave his own Son as a ransom for us — the holy for the lawless, the immortal for the mortal."
+      ]
+    },
+    {
+      "number": 10,
+      "verses": [
+        "If you desire this faith, receive first the knowledge of the Father. God loved humanity and made the world for them.",
+        "When you have this knowledge, with what joy will you be filled? You will become an imitator of God."
+      ]
+    },
+    {
+      "number": 11,
+      "verses": [
+        "I do not speak strange things, but having been made a disciple of the apostles, I become a teacher of the Gentiles.",
+        "The Word appeared to them, being understood by the faithful and revealed by the Father."
+      ]
+    },
+    {
+      "number": 12,
+      "verses": [
+        "When you have fulfilled the commandment, you will rejoice and be truly alive. To him be glory and majesty forever. Amen."
+      ]
+    }
+  ]
 }

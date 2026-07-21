@@ -1,10 +1,94 @@
 {
-  "version": "Placeholder",
+  "version": "Deuterocanonical",
   "bookId": "MARY_GOSPEL",
   "title": "Gospel of Mary",
-  "writer": "Mary Magdalene",
+  "writer": "Unknown (gnostic tradition)",
   "era": "nt",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 10,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": [
+        "The Gospel of Mary is a Gnostic text preserved in the Berlin Gnostic Codex (BG 8502,1). The first six pages are lost. The surviving text begins in the middle of a dialogue.",
+        "The Savior said: 'All natures, all formations, all creatures exist in and with one another, and they will be resolved again into their own roots.'",
+        "'For the nature of matter is resolved into the roots of its nature alone.'",
+        "'Whoever has ears to hear, let him hear.'"
+      ]
+    },
+    {
+      "number": 2,
+      "verses": [
+        "Peter said to him: 'Since you have explained everything to us, tell us this also: What is the sin of the world?'",
+        "The Savior said: 'There is no sin. It is you who make sin when you act according to the nature of adultery, which is called sin.'",
+        "'That is why the Good came into your midst, to unite everything with its true nature and to restore each to its root.'"
+      ]
+    },
+    {
+      "number": 3,
+      "verses": [
+        "He continued: 'Blessed are you, that I have prepared you to receive this teaching. For the one who has understanding, let him understand.'",
+        "'Be on guard, then, that no one lead you astray. For the Son of Man is within you. Follow him. Those who seek him will find him.'",
+        "'Go, then, and preach the gospel of the kingdom. Do not lay down any rules beyond what I have given you.'"
+      ]
+    },
+    {
+      "number": 4,
+      "verses": [
+        "When he had said these things, he departed from them.",
+        "But they were grieved and wept greatly, saying: 'How shall we go to the Gentiles and preach the gospel? If they did not spare him, how will they spare us?'",
+        "Then Mary stood up, greeted them all, and said: 'Do not weep and be sad, for his grace will be with you all and will protect you.'"
+      ]
+    },
+    {
+      "number": 5,
+      "verses": [
+        "Peter said to Mary: 'Sister, we know that the Savior loved you more than other women. Tell us the words of the Savior that you remember, which you know and we do not.'",
+        "Mary answered: 'I will tell you what is hidden from you.'"
+      ]
+    },
+    {
+      "number": 6,
+      "verses": [
+        "She began to speak: 'I saw the Lord in a vision and said to him: Lord, I see you now in this vision.'",
+        "He said to me: 'Blessed are you, for you do not waver at the sight of me. For where the mind is, there is the treasure.'",
+        "I said to him: 'Lord, when someone sees a vision, does he see it through the soul or through the spirit?'",
+        "The Savior answered: 'He sees neither through the soul nor through the spirit, but through the mind, which is between the two.'"
+      ]
+    },
+    {
+      "number": 7,
+      "verses": [
+        "She continued: 'And desire said: I did not see you descending, but now I see you ascending.'",
+        "The soul answered: 'I saw you, but you did not see me, nor did you recognize me.'",
+        "Again it came to the third power, which is called Ignorance. It questioned the soul.",
+        "The soul said: 'Why do you judge me, though I have not judged? I was bound, but I have not bound.'"
+      ]
+    },
+    {
+      "number": 8,
+      "verses": [
+        "When the soul had overcome the third power, it ascended and saw the fourth power, which had seven forms:",
+        "The first form is darkness; the second, desire; the third, ignorance; the fourth, the zeal of death; the fifth, the kingdom of the flesh; the sixth, the foolish wisdom of the flesh; the seventh, the wisdom of wrath.",
+        "These are the seven powers of wrath. They questioned the soul.",
+        "The soul answered: 'What binds me is slain; what surrounds me is overcome; my desire is gone, and ignorance has died.'"
+      ]
+    },
+    {
+      "number": 9,
+      "verses": [
+        "Having said these things, Mary fell silent, for the Savior had spoken these words to her.",
+        "But Andrew said: 'Brothers, what do you think? I do not believe the Savior spoke these things.'",
+        "Peter also said: 'Did the Savior really speak with a woman secretly? Should we all listen to her? Did he prefer her to us?'",
+        "Then Mary wept and said: 'My brother Peter, do you think that I have invented this in my heart?'"
+      ]
+    },
+    {
+      "number": 10,
+      "verses": [
+        "Levi answered: 'Peter, you have always been a hot-tempered person. Now I see you contending against the woman like the adversaries. But if the Savior made her worthy, who are you to reject her?'",
+        "'Let us be ashamed, put on the perfect human, and go forth to preach the gospel, as he commanded us.'",
+        "When Levi said these things, they began to go out to preach and to proclaim."
+      ]
+    }
+  ]
 }

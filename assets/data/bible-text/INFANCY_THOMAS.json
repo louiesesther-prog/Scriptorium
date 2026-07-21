@@ -1,10 +1,126 @@
 {
-  "version": "Placeholder",
+  "version": "Deuterocanonical",
   "bookId": "INFANCY_THOMAS",
   "title": "Infancy Gospel of Thomas",
-  "writer": "Thomas",
+  "writer": "Unknown",
   "era": "nt",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 19,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": [
+        "I, Thomas the Israelite, make known to you the great deeds of the childhood of our Lord Jesus Christ.",
+        "When the boy Jesus was five years old, he made twelve sparrows from clay on the Sabbath. When Joseph scolded him, Jesus clapped his hands and the sparrows flew away."
+      ]
+    },
+    {
+      "number": 2,
+      "verses": [
+        "The son of Annas the scribe scattered the water Jesus had gathered. Jesus said: 'You will dry up like a tree.' The boy withered completely."
+      ]
+    },
+    {
+      "number": 3,
+      "verses": [
+        "A boy ran against Jesus' shoulder. Jesus said: 'You will not continue your journey.' The boy fell down and died."
+      ]
+    },
+    {
+      "number": 4,
+      "verses": [
+        "A teacher named Zacchaeus tried to teach Jesus letters. Jesus said: 'If you know the Alpha, teach us the Beta.' The teacher struck Jesus and died."
+      ]
+    },
+    {
+      "number": 5,
+      "verses": [
+        "Joseph was afraid and said to Mary: 'Do not let him go outside.'"
+      ]
+    },
+    {
+      "number": 6,
+      "verses": [
+        "Another teacher tried to teach Jesus. Jesus said: 'I know the letters better than you.' The teacher was amazed."
+      ]
+    },
+    {
+      "number": 7,
+      "verses": [
+        "Jesus said: 'I am from above. I have been sent for you, and I will teach you things no one else knows.' All who heard were amazed."
+      ]
+    },
+    {
+      "number": 8,
+      "verses": [
+        "Joseph took Jesus to a dyer. Jesus threw all the fabrics into a single vat of blue, then produced each in its proper color. The dyer praised God."
+      ]
+    },
+    {
+      "number": 9,
+      "verses": [
+        "Jesus found a dead fish and said: 'I command you, live.' The fish came to life and swam away."
+      ]
+    },
+    {
+      "number": 10,
+      "verses": [
+        "Jesus found a man working on the Sabbath and said: 'If you know what you do, you are blessed; if not, you are cursed.'"
+      ]
+    },
+    {
+      "number": 11,
+      "verses": [
+        "A boy broke Jesus' pitcher. Jesus spread his cloak, filled it with water, and carried it to his mother."
+      ]
+    },
+    {
+      "number": 12,
+      "verses": [
+        "Jesus sowed wheat with Joseph. The harvest yielded a hundred large measures. Joseph blessed him."
+      ]
+    },
+    {
+      "number": 13,
+      "verses": [
+        "Jesus spread his cloak and drew water when his pitcher was broken."
+      ]
+    },
+    {
+      "number": 14,
+      "verses": [
+        "Jesus made a short beam longer by stretching it. Joseph marveled at the miracle."
+      ]
+    },
+    {
+      "number": 15,
+      "verses": [
+        "Jesus took his mother's veil and caught seed a man was sowing. He returned it, saying: 'You will receive a hundredfold.'"
+      ]
+    },
+    {
+      "number": 16,
+      "verses": [
+        "At age twelve, Jesus remained in the temple among the teachers. All were amazed at his understanding.",
+        "Mary found him after three days. Jesus said: 'Do you not know that I must be in my Father's house?'"
+      ]
+    },
+    {
+      "number": 17,
+      "verses": [
+        "Jesus increased in wisdom and stature and in favor with God and humanity."
+      ]
+    },
+    {
+      "number": 18,
+      "verses": [
+        "After these things, Jesus performed many other miracles. I, Thomas, have written this account so that all may know his wonderful works."
+      ]
+    },
+    {
+      "number": 19,
+      "verses": [
+        "All these things are recorded in the archives of the temple. May the grace of our Lord Jesus Christ be with all who read. Amen."
+      ]
+    }
+  ]
 }

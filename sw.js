@@ -3,7 +3,7 @@ const ASSETS = [
   '/',
   '/scriptorium.html',
   '/index.html',
-  '/MAP.html',
+  '/map.html',
   '/genealogy.html',
   '/covenant-map.html',
   '/narthex.html',
@@ -44,6 +44,31 @@ self.addEventListener('activate', event => {
     ))
   );
   self.clients.claim();
+});
+
+self.addEventListener('push', event => {
+  var data = {};
+  try { data = event.data ? JSON.parse(event.data.text()) : {}; } catch(e) {}
+  var title = data.title || 'Scriptorium';
+  var body = data.body || 'Your daily devotion awaits.';
+  var url = data.url || '/';
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      body: body,
+      icon: '/assets/icons/icon-192.svg',
+      badge: '/assets/icons/icon-192.svg',
+      data: { url: url },
+      vibrate: [200, 100, 200]
+    })
+  );
+});
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  var url = event.notification.data && event.notification.data.url;
+  if (url) {
+    event.waitUntil(clients.openWindow(url));
+  }
 });
 
 self.addEventListener('fetch', event => {

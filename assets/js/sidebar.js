@@ -44,7 +44,7 @@ var SIDEBAR_HTML =
 '<a href="scriptorium.html" class="nav-link" title="THE THRESHOLD">&#8984;</a>' +
 '<a href="scriptorium.html" class="nav-link" title="MUSEUM"><span style="font-size:12px;letter-spacing:2px">MU</span></a>' +
 '<a href="covenant-map.html" class="nav-link" title="COVENANT MAP">&#128506;</a>' +
-'<a href="MAP.html" class="nav-link" title="BIBLICAL NAVIGATOR">&#129517;</a>' +
+'<a href="map.html" class="nav-link" title="BIBLICAL NAVIGATOR">&#129517;</a>' +
 '<div class="nav-divider"></div>' +
 '<a href="genealogy.html" class="nav-link" title="GENEALOGY">&#9812;</a>' +
 '<a href="tabernacle.html" class="nav-link" title="TABERNACLE">&#127963;</a>' +
@@ -56,6 +56,7 @@ var SIDEBAR_HTML =
 '<a href="scribes-chamber.html" class="nav-link" title="SCRIBES CHAMBER">&#128218;</a>' +
 '<a href="plans.html" class="nav-link" title="READING PLANS">&#128214;</a>' +
 '<a href="challenges.html" class="nav-link" title="MONTHLY CHALLENGES">&#128197;</a>' +
+'<a href="partners.html" class="nav-link" title="READING PARTNERS">&#129309;</a>' +
 '<a href="comparison-mode.html" class="nav-link" title="COMPARISON MODE">&#128100;</a>' +
 '<div class="nav-divider"></div>' +
 '<a href="settings.html" class="nav-link" title="RESTORATION ROOM">&#9881;</a>' +
@@ -64,7 +65,21 @@ var SIDEBAR_HTML =
 '<a href="#" class="nav-link" id="signOutBtn" title="SIGN OUT" style="display:none;">&#128682;</a>' +
 '<a href="#" class="nav-link" id="typologyToggleBtn" title="TYPOLOGY" style="display:none;">&#10018;</a>' +
 '</nav>' +
-'</aside>';
+'<div class="sidebar-streak" id="sidebarStreak">' +
+'<div class="streak-display"><span class="streak-icon">&#128293;</span><span class="streak-num" id="streakNum">-</span><span class="streak-label">DAY STREAK</span></div>' +
+'<div class="streak-grace" id="streakGrace" style="display:none;"><span class="grace-icon">&#10022;</span><span id="streakGraceMsg">Held in grace</span></div>' +
+'<div class="streak-comeback" id="streakComeback" style="display:none;"><span class="comeback-icon">&#10022;</span><span id="streakComebackMsg">Comeback available</span></div>' +
+'</div>' +
+'</aside>' +
+'<style>.sidebar-streak{padding:12px 8px;border-top:1px solid rgba(212,175,55,0.08);text-align:center;font-family:\'Cinzel\',serif;}' +
+'.streak-display{display:flex;flex-direction:column;align-items:center;gap:2px}' +
+'.streak-icon{font-size:1.2rem;line-height:1}' +
+'.streak-num{font-size:1.3rem;color:#d4af37;letter-spacing:2px;line-height:1}' +
+'.streak-display .streak-label{font-size:0.45rem;color:rgba(255,255,255,0.3);letter-spacing:2px;margin-top:2px}' +
+'.streak-grace,.streak-comeback{margin-top:6px;padding:4px 8px;border-radius:3px;font-size:0.5rem;letter-spacing:1px;}' +
+'.streak-grace{background:rgba(100,200,100,0.08);border:1px solid rgba(100,200,100,0.15);color:#8c8}' +
+'.streak-comeback{background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.15);color:#d4af37}' +
+'.grace-icon,.comeback-icon{margin-right:4px;opacity:0.6}</style>';
 function markActiveLink() {
 var page = location.pathname.split('/').pop() || 'scriptorium.html';
 var links = document.querySelectorAll('#sidebarContainer .nav-link[href]');
@@ -114,10 +129,34 @@ toggleTypology();
 });
 }
 }
+function loadStreakInfo() {
+  var token = null;
+  try { token = Scriptorium.getToken(); } catch(e) {}
+  if (!token) return;
+  var numEl = document.getElementById('streakNum');
+  var graceEl = document.getElementById('streakGrace');
+  var comebackEl = document.getElementById('streakComeback');
+  var graceMsg = document.getElementById('streakGraceMsg');
+  var comebackMsg = document.getElementById('streakComebackMsg');
+  fetch('/api/reading/streak', { headers: { 'Authorization': 'Bearer ' + token } })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.streak >= 0) {
+        if (numEl) numEl.textContent = data.streak;
+        if (data.withinGrace) {
+          var daysLeft = data.graceDays - data.gap;
+          if (graceEl) { graceEl.style.display = ''; if (graceMsg) graceMsg.textContent = 'Streak held in grace — ' + daysLeft + ' day' + (daysLeft !== 1 ? 's' : '') + ' to read.'; }
+        } else if (data.streak === 0 && data.prevStreak > 0) {
+          if (comebackEl) { comebackEl.style.display = ''; if (comebackMsg) comebackMsg.textContent = 'Comeback — ' + data.prevStreak + '-day streak lost. Start fresh today.'; }
+        }
+      }
+    }).catch(function() {});
+}
 if (document.readyState === 'loading') {
-document.addEventListener('DOMContentLoaded', injectSidebar);
+document.addEventListener('DOMContentLoaded', function() { injectSidebar(); setTimeout(loadStreakInfo, 1000); });
 } else {
 injectSidebar();
+setTimeout(loadStreakInfo, 1000);
 }
 if ('serviceWorker' in navigator) {
 navigator.serviceWorker.register('/sw.js').then(function(reg) {

@@ -1,10 +1,187 @@
 {
-  "version": "Placeholder",
+  "version": "Deuterocanonical",
   "bookId": "PROTOEVANGELIUM_JAMES",
   "title": "Protoevangelium of James",
-  "writer": "James",
+  "writer": "Unknown (attributed to James)",
   "era": "nt",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 25,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": [
+        "In the records of the twelve tribes of Israel, Joachim was a very rich man, and he brought all his offerings to the Lord.",
+        "But the great day of the Lord came, and Reuben stood before Joachim and said, 'You are not permitted to offer your gifts first, for you have not fathered any offspring in Israel.'",
+        "Joachim was deeply grieved and went to the wilderness, where he fasted for forty days and forty nights, saying, 'Prayer shall be my food and drink.'"
+      ]
+    },
+    {
+      "number": 2,
+      "verses": [
+        "His wife Anna mourned with a double mourning, saying, 'I mourn for my widowhood and I mourn for my childlessness.'",
+        "Anna went into her garden and prayed to the Lord, 'O God of our fathers, bless me and hear my prayer, as you blessed the womb of Sarah and gave her a son, Isaac.'"
+      ]
+    },
+    {
+      "number": 3,
+      "verses": [
+        "Anna looked up to heaven and saw a sparrow's nest in the laurel tree. She groaned and said, 'Alas, what am I like? I am not like the birds of heaven, for even the birds are fruitful before you.'"
+      ]
+    },
+    {
+      "number": 4,
+      "verses": [
+        "An angel of the Lord appeared to her and said, 'Anna, Anna, the Lord has heard your prayer. You will conceive and bear a child, and your offspring will be spoken of throughout the whole world.'",
+        "Anna said, 'If I give birth, I will bring it as a gift to the Lord my God.'"
+      ]
+    },
+    {
+      "number": 5,
+      "verses": [
+        "In the ninth month, Anna gave birth. The midwife said, 'A female.' Anna said, 'My soul is magnified this day.' She named her Mary.",
+        "When she was three years old, Joachim said, 'Let us bring her to the temple of the Lord.'"
+      ]
+    },
+    {
+      "number": 6,
+      "verses": [
+        "They brought her to the temple. The priest received her, kissed her, and blessed her. He placed her on the third step of the altar, and the Lord God sent grace upon her.",
+        "Mary was in the temple, nurtured like a dove, receiving food from the hand of an angel."
+      ]
+    },
+    {
+      "number": 7,
+      "verses": [
+        "When she was twelve years old, the priests held a council about what to do with her. The high priest prayed, and an angel told him to gather the widowers of the people.",
+        "Each was to bring a staff, and the one whom the Lord designated would be her guardian."
+      ]
+    },
+    {
+      "number": 8,
+      "verses": [
+        "Joseph threw down his carpenter's axe and joined the gathering. When the staves were returned, a dove came out of Joseph's staff and flew onto his head.",
+        "The high priest said, 'You have been chosen to take the virgin of the Lord into your keeping.'",
+        "Joseph was afraid and took her into his keeping."
+      ]
+    },
+    {
+      "number": 9,
+      "verses": [
+        "Mary took the purple and scarlet to spin for the temple veil. An angel appeared and said, 'Greetings, O favored one! The Lord is with you!'",
+        "Mary questioned this, and the angel said, 'The Holy Spirit will come upon you, and the holy one born will be called the Son of God.'",
+        "Mary said, 'Behold, the handmaid of the Lord.'"
+      ]
+    },
+    {
+      "number": 10,
+      "verses": [
+        "Mary went to Elizabeth, who blessed her. Mary spent three months with Elizabeth, and her womb grew.",
+        "When Joseph returned and found her pregnant, he was distressed and questioned her.",
+        "Mary said, 'I am pure and have not known a man.'"
+      ]
+    },
+    {
+      "number": 11,
+      "verses": [
+        "Joseph was greatly afraid. He thought to himself, 'If I hide her sin, I will be guilty; if I expose her, I fear the child is of angelic origin.'",
+        "An angel appeared to him in a dream and said, 'Do not be afraid. The child is from the Holy Spirit.'"
+      ]
+    },
+    {
+      "number": 12,
+      "verses": [
+        "Annius the scribe discovered Mary's pregnancy and reported it to the priest. Mary and Joseph were brought before the tribunal.",
+        "The priest said, 'Confess your sin.' But both maintained their innocence."
+      ]
+    },
+    {
+      "number": 13,
+      "verses": [
+        "The priest gave them the water of the conviction of the Lord to drink and sent them into the wilderness. They returned unharmed, and no sin was found in them.",
+        "The priest released them, saying, 'If the Lord has not revealed your sin, neither do I judge you.'"
+      ]
+    },
+    {
+      "number": 14,
+      "verses": [
+        "A decree went out from Augustus Caesar for a census. Joseph took Mary and set out for Bethlehem.",
+        "Near the halfway point, Mary said, 'The child presses to come out.' Joseph found a cave and brought her inside."
+      ]
+    },
+    {
+      "number": 15,
+      "verses": [
+        "Joseph went to seek a Hebrew midwife. As he walked, time stood still — the birds stopped in the air, the workers froze, and the river ceased flowing."
+      ]
+    },
+    {
+      "number": 16,
+      "verses": [
+        "A woman came down from the hill country and said, 'Where are you going?' Joseph said, 'I seek a Hebrew midwife.'",
+        "She went with him to the cave, where a bright cloud overshadowed it. A great light appeared, and the infant took the breast of his mother."
+      ]
+    },
+    {
+      "number": 17,
+      "verses": [
+        "The midwife went out and met Salome, saying, 'A virgin has given birth.' Salome said, 'If I do not test her condition, I will not believe.'",
+        "Salome examined Mary and her hand was consumed by fire. She prayed and was healed by touching the infant."
+      ]
+    },
+    {
+      "number": 18,
+      "verses": [
+        "Magi came from the east, saying, 'Where is the king of the Jews? We saw his star.' Herod sent them to Bethlehem.",
+        "The star led them to the cave, and they offered gold, frankincense, and myrrh."
+      ]
+    },
+    {
+      "number": 19,
+      "verses": [
+        "Herod, realizing he had been tricked, ordered the massacre of children two years and under.",
+        "Mary hid the infant in a cattle manger. Elizabeth took John and fled to the mountains."
+      ]
+    },
+    {
+      "number": 20,
+      "verses": [
+        "Herod searched for John and sent servants to Zacharias at the temple, demanding to know where his son was.",
+        "Zacharias said, 'I do not know where my son is. I am a martyr of God.'"
+      ]
+    },
+    {
+      "number": 21,
+      "verses": [
+        "Zacharias was murdered at the altar. The priests found congealed blood and heard a voice saying, 'Zacharias has been murdered.'",
+        "They mourned him for three days."
+      ]
+    },
+    {
+      "number": 22,
+      "verses": [
+        "The priests cast lots for his successor, and Simeon was chosen. Simeon had been told by the Holy Spirit that he would not see death until he saw the Christ."
+      ]
+    },
+    {
+      "number": 23,
+      "verses": [
+        "I, James, wrote this account after the disturbance in Jerusalem. I withdrew to the wilderness, glorifying God.",
+        "Grace be with those who fear the Lord God. Amen."
+      ]
+    },
+    {
+      "number": 24,
+      "verses": [
+        "But the priests went in at the appointed hour and did not receive the customary blessing from Zacharias. They waited, but he did not come.",
+        "They were all afraid. One ventured in and saw congealed blood beside the altar and heard a voice: Zacharias has been murdered.",
+        "They tore their garments and mourned for him three days."
+      ]
+    },
+    {
+      "number": 25,
+      "verses": [
+        "After three days, the priests cast lots for his successor, and the lot fell on Simeon. For Simeon was the one who had been warned by the Holy Spirit that he would not see death until he saw the Christ.",
+        "I, James, wrote this account when the disturbance broke out in Jerusalem at the time of Herods death."
+      ]
+    }
+  ]
 }

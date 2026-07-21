@@ -1,10 +1,67 @@
 {
-  "version": "Placeholder",
+  "version": "Generated from public domain sources — chapter structure only",
   "bookId": "SIBYLLINE",
   "title": "Sibylline Oracles",
-  "writer": "Sibyls",
+  "writer": "Unknown (Hellenistic Jewish / Christian)",
   "era": "ot",
-  "totalChapters": 0,
-  "chapters": [],
-  "note": "Digital text not yet available for this book."
+  "totalChapters": 14,
+  "chapters": [
+    {
+      "number": 1,
+      "verses": []
+    },
+    {
+      "number": 2,
+      "verses": []
+    },
+    {
+      "number": 3,
+      "verses": []
+    },
+    {
+      "number": 4,
+      "verses": []
+    },
+    {
+      "number": 5,
+      "verses": []
+    },
+    {
+      "number": 6,
+      "verses": []
+    },
+    {
+      "number": 7,
+      "verses": []
+    },
+    {
+      "number": 8,
+      "verses": []
+    },
+    {
+      "number": 9,
+      "verses": []
+    },
+    {
+      "number": 10,
+      "verses": []
+    },
+    {
+      "number": 11,
+      "verses": []
+    },
+    {
+      "number": 12,
+      "verses": []
+    },
+    {
+      "number": 13,
+      "verses": []
+    },
+    {
+      "number": 14,
+      "verses": []
+    }
+  ],
+  "note": "Text pending. Source: Sibylline Oracles — Charles, APOT Vol. II"
 }

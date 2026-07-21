@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading Partners — Scriptorium</title>
+<link rel="stylesheet" href="assets/css/shared.css">
+<link rel="stylesheet" href="assets/css/scriptorium.css">
+<link rel="stylesheet" href="assets/css/design-tokens.css">
+<meta property="og:image" content="og-image.svg">
+<link rel="icon" href="assets/icons/icon-192.svg" type="image/svg+xml">
+<style>
+.scr-partners{max-width:960px;margin:40px auto;padding:0 20px}
+.scr-partners h1{font-family:'Cinzel',serif;color:#d4af37;font-size:1.4rem;letter-spacing:4px;margin-bottom:4px}
+.scr-partners .subtitle{font-family:'Cormorant Garamond',serif;color:var(--text-secondary);font-size:0.85rem;margin-bottom:32px;font-style:italic}
+.partner-section{border:1px solid rgba(212,175,55,0.1);border-radius:6px;padding:24px;margin-bottom:24px;background:rgba(255,255,255,0.02)}
+.partner-section h2{font-family:'Cinzel',serif;font-size:0.8rem;color:#d4af37;letter-spacing:3px;margin:0 0 16px}
+.search-row{display:flex;gap:10px;margin-bottom:16px}
+.search-row input{flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(212,175,55,0.15);border-radius:4px;padding:10px 14px;color:#fff;font-family:'Cormorant Garamond',serif;font-size:0.9rem;outline:none}
+.search-row input:focus{border-color:#d4af37}
+.search-row button{background:#d4af37;color:#050505;border:none;border-radius:4px;padding:10px 20px;font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:2px;cursor:pointer;white-space:nowrap}
+.partner-card{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border:1px solid rgba(212,175,55,0.06);border-radius:4px;margin-bottom:8px;transition:background 0.2s}
+.partner-card:hover{background:rgba(212,175,55,0.03)}
+.partner-card .info{flex:1}
+.partner-card .name{font-family:'Cinzel',serif;font-size:0.75rem;color:rgba(255,255,255,0.8);letter-spacing:1px}
+.partner-card .meta{font-family:'Cormorant Garamond',serif;font-size:0.7rem;color:var(--text-secondary);margin-top:2px}
+.partner-card .actions{display:flex;gap:8px}
+.partner-card .actions button{background:transparent;border:1px solid rgba(212,175,55,0.2);color:#d4af37;padding:5px 12px;border-radius:3px;font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:1px;cursor:pointer;transition:0.2s}
+.partner-card .actions button.accept{background:rgba(100,200,100,0.1);border-color:rgba(100,200,100,0.3);color:#8c8}
+.partner-card .actions button.reject{background:rgba(200,100,100,0.1);border-color:rgba(200,100,100,0.3);color:#c88}
+.partner-card .actions button:hover{background:rgba(212,175,55,0.1)}
+.empty-state{text-align:center;padding:40px;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text-secondary)}
+.invite-link{display:block;text-align:center;margin-top:16px;font-family:'Cormorant Garamond',serif;font-size:0.85rem}
+.invite-link a{color:#d4af37;cursor:pointer}
+.invite-link a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div id="sidebar"></div>
+<div class="scr-partners">
+<h1>READING PARTNERS</h1>
+<p class="subtitle">Walk through the Scriptures together — shared plans, shared progress, shared accountability.</p>
+
+<div class="partner-section" id="findSection">
+<h2>FIND A PARTNER</h2>
+<div class="search-row">
+<input type="text" id="partnerSearchInput" placeholder="Search scribes by name or User ID..." maxlength="40">
+<button onclick="doPartnerSearch()">SEARCH</button>
+</div>
+<div id="searchResults"></div>
+</div>
+
+<div class="partner-section" id="requestsSection">
+<h2>PENDING REQUESTS</h2>
+<div id="requestsList"><div class="empty-state">No pending requests.</div></div>
+</div>
+
+<div class="partner-section" id="shipsSection">
+<h2>YOUR PARTNERSHIPS</h2>
+<div id="shipsList"><div class="empty-state">No reading partners yet. Search and invite another scribe.</div></div>
+</div>
+
+<div class="invite-link">Share your User ID with another scribe so they can invite you.</div>
+</div>
+
+<script src="assets/js/scriptorium-core.js"></script>
+<script>
+var token = null;
+try { token = Scriptorium.getToken(); } catch(e) {}
+if (!token) { document.title = 'Sign In — Scriptorium'; document.body.innerHTML = '<div style="text-align:center;padding:80px 20px;font-family:\'Cormorant Garamond\',serif;color:var(--text-secondary);"><div style="font-size:3rem;margin-bottom:20px;">&#128214;</div><p>Please <a href="/login.html" style="color:#d4af37;">sign in</a> to manage reading partners.</p></div>'; }
+
+var SCRIBE_DATA = null;
+try { SCRIBE_DATA = window.__getUnifiedUser(); } catch(e) {}
+
+function api(path, opts) {
+  opts = opts || {};
+  var headers = { 'Content-Type': 'application/json' };
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+  return fetch('/api' + path, { headers: headers, method: opts.method || 'GET', body: opts.body ? JSON.stringify(opts.body) : undefined }).then(function(r) { return r.json(); });
+}
+
+function doPartnerSearch() {
+  var q = document.getElementById('partnerSearchInput').value.trim();
+  if (q.length < 2) return;
+  api('/partners/scribes?q=' + encodeURIComponent(q)).then(function(data) {
+    var el = document.getElementById('searchResults');
+    if (!data.scribes || data.scribes.length === 0) {
+      el.innerHTML = '<div class="empty-state">No scribes found.</div>';
+      return;
+    }
+    var html = '';
+    data.scribes.forEach(function(s) {
+      html += '<div class="partner-card">' +
+        '<div class="info"><div class="name">' + escHtml(s.name) + '</div><div class="meta">' + escHtml(s.userId) + (s.tradition ? ' · ' + escHtml(s.tradition) : '') + (s.rank ? ' · ' + escHtml(s.rank) : '') + '</div></div>' +
+        '<div class="actions"><button onclick="sendRequest(\'' + s.userId.replace(/'/g,"\\'") + '\')">INVITE</button></div>' +
+        '</div>';
+    });
+    el.innerHTML = html;
+  });
+}
+
+function sendRequest(targetId) {
+  var planId = '365-day';
+  api('/partners/request', { method: 'POST', body: { targetId: targetId, planId: planId } }).then(function(data) {
+    if (data.error) { if (window.Scr && Scr.toast) Scr.toast(data.error, 'error'); return; }
+    if (window.Scr && Scr.toast) Scr.toast('Partner request sent!', 'success');
+    loadRequests();
+  });
+}
+
+function loadRequests() {
+  api('/partners/requests').then(function(data) {
+    var el = document.getElementById('requestsList');
+    if (!data.requests || data.requests.length === 0) {
+      el.innerHTML = '<div class="empty-state">No pending requests.</div>';
+      return;
+    }
+    var html = '';
+    data.requests.forEach(function(r) {
+      html += '<div class="partner-card">' +
+        '<div class="info"><div class="name">' + escHtml(r.requesterId) + '</div><div class="meta">Wants to partner on ' + escHtml(r.planId) + ' plan</div></div>' +
+        '<div class="actions"><button class="accept" onclick="respondTo(' + r.id + ',\'accepted\')">ACCEPT</button><button class="reject" onclick="respondTo(' + r.id + ',\'rejected\')">REJECT</button></div>' +
+        '</div>';
+    });
+    el.innerHTML = html;
+  });
+}
+
+function respondTo(id, status) {
+  api('/partners/respond', { method: 'POST', body: { id: id, status: status } }).then(function(data) {
+    if (data.error) { if (window.Scr && Scr.toast) Scr.toast(data.error, 'error'); return; }
+    if (window.Scr && Scr.toast) Scr.toast(status === 'accepted' ? 'Partnership accepted!' : 'Request rejected.', 'success');
+    loadRequests();
+    loadShips();
+  });
+}
+
+function loadShips() {
+  api('/partners/ships').then(function(data) {
+    var el = document.getElementById('shipsList');
+    if (!data.partnerships || data.partnerships.length === 0) {
+      el.innerHTML = '<div class="empty-state">No reading partners yet.</div>';
+      return;
+    }
+    var html = '';
+    data.partnerships.forEach(function(s) {
+      var partnerId = s.requesterId === (SCRIBE_DATA && SCRIBE_DATA.profile && SCRIBE_DATA.profile.userId) ? s.targetId : s.requesterId;
+      html += '<div class="partner-card">' +
+        '<div class="info"><div class="name">' + escHtml(partnerId) + '</div><div class="meta">Partnered on ' + escHtml(s.planId) + ' plan</div></div>' +
+        '<div class="actions"><button onclick="viewPartnerProgress(\'' + partnerId.replace(/'/g,"\\'") + '\')">PROGRESS</button></div>' +
+        '</div>';
+    });
+    el.innerHTML = html;
+  });
+}
+
+function viewPartnerProgress(userId) {
+  api('/partners/progress/' + encodeURIComponent(userId)).then(function(data) {
+    var msg = 'Partner progress data loaded.';
+    if (window.Scr && Scr.toast) Scr.toast(msg, 'success');
+  });
+}
+
+function escHtml(s) {
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+if (token) { loadRequests(); loadShips(); }
+</script>
+<script src="assets/js/sidebar.js"></script>
+</body>
+</html>
