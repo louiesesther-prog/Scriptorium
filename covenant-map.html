@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; style-src-elem 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' unpkg.com cdn.jsdelivr.net; img-src 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; img-src-elem 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; connect-src 'self' *.tile.openstreetmap.org *.basemaps.cartocdn.com; frame-src 'none';">
@@ -7,8 +7,8 @@
     <meta name="description" content="Interactive covenant timeline map tracing God's redemptive promises from Eden to the New Jerusalem.">
     <meta property="og:description" content="Scriptorium — a digital archive of biblical texts, maps, genealogies, and manuscript studies.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://scriptorium-sandy.vercel.app/covenant-map.html">
-    <meta property="og:image" content="https://scriptorium-sandy.vercel.app/og-image.svg">
+    <meta property="og:url" content="https://holyscriptorium.com/covenant-map.html">
+    <meta property="og:image" content="https://holyscriptorium.com/og-image.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCRIPTORIUM | Covenant Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -479,6 +479,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+        function escHtml(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
         var map = L.map('covenantMap').setView([31.5, 35.0], 6);
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
@@ -553,7 +554,7 @@
             var list = document.getElementById('scribeList');
             var entry = document.createElement('div');
             entry.className = 'entry';
-            entry.innerHTML = '<span>&bull; ' + name + '</span><span class="time">JUST NOW</span>';
+            entry.innerHTML = '<span>&bull; ' + escHtml(name) + '</span><span class="time">JUST NOW</span>';
             list.prepend(entry);
 
             if (window.ScriptoriumAudio) {
@@ -628,7 +629,7 @@
             var div = document.createElement('div');
             div.className = 'ledger-entry entry-' + entry.type;
             div.setAttribute('data-type', entry.type);
-            div.innerHTML = '<div class="entry-meta"><span class="entry-scribe">' + entry.scribe + '</span><span class="entry-time">' + entry.timestamp + '</span></div><div class="entry-content">"' + entry.text + '"</div>';
+            div.innerHTML = '<div class="entry-meta"><span class="entry-scribe">' + escHtml(entry.scribe) + '</span><span class="entry-time">' + escHtml(entry.timestamp) + '</span></div><div class="entry-content">"' + escHtml(entry.text) + '"</div>';
             container.prepend(div);
             applyFilter();
             if (container.scrollHeight > 200) container.scrollTop = 0;

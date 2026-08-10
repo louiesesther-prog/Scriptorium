@@ -1,0 +1,255 @@
+/* ═══════════════════════════════════════════════════════════════════
+   HOLY SCRIPTORIUM — PRELAUNCH LANDING PAGE
+   ═══════════════════════════════════════════════════════════════════ */
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #050504;
+  color: rgba(255,255,255,0.85);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.landing-shell {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(1200px 700px at 50% -10%, rgba(212,175,55,0.07) 0%, transparent 60%),
+    radial-gradient(900px 600px at 85% 110%, rgba(139,26,26,0.05) 0%, transparent 60%),
+    #050504;
+}
+
+/* ── floating scripture dust ── */
+.landing-shell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(212,175,55,0.18) 0, transparent 100%),
+    radial-gradient(1px 1px at 80% 20%, rgba(212,175,55,0.12) 0, transparent 100%),
+    radial-gradient(1.5px 1.5px at 60% 70%, rgba(212,175,55,0.10) 0, transparent 100%),
+    radial-gradient(1px 1px at 35% 85%, rgba(212,175,55,0.14) 0, transparent 100%),
+    radial-gradient(1px 1px at 90% 55%, rgba(212,175,55,0.10) 0, transparent 100%);
+  pointer-events: none;
+}
+
+.landing-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+/* ── ornamental frame ── */
+.landing-frame {
+  position: relative;
+  z-index: 1;
+  width: min(1080px, calc(100% - 48px));
+  margin: 40px auto;
+  border: 1px solid rgba(212,175,55,0.16);
+  background: rgba(8,7,5,0.72);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 80px rgba(0,0,0,0.6), inset 0 0 60px rgba(0,0,0,0.5);
+}
+
+.landing-frame::before,
+.landing-frame::after {
+  content: '';
+  position: absolute;
+  width: 34px; height: 34px;
+  border: 1px solid rgba(212,175,55,0.35);
+  pointer-events: none;
+}
+.landing-frame::before { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+.landing-frame::after  { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+.landing-inner {
+  position: relative;
+  padding: 72px 56px 56px;
+  text-align: center;
+}
+
+/* ── top ornament ── */
+.landing-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 74px; height: 74px;
+  border: 1px solid rgba(212,175,55,0.35);
+  border-radius: 50%;
+  margin-bottom: 26px;
+  position: relative;
+}
+.landing-seal svg { width: 40px; height: 40px; }
+.landing-seal::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 1px solid rgba(212,175,55,0.18);
+}
+
+/* ── wordmark ── */
+.landing-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 8px;
+  color: rgba(212,175,55,0.55);
+  text-transform: uppercase;
+  margin: 0 0 18px;
+}
+
+.landing-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2.1rem, 6vw, 3.6rem);
+  font-weight: 600;
+  letter-spacing: 10px;
+  line-height: 1.2;
+  color: #e8c44a;
+  margin: 0 0 6px;
+  text-shadow: 0 0 50px rgba(212,175,55,0.5), 0 0 120px rgba(212,175,55,0.2);
+}
+
+.landing-subtitle {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+  color: rgba(255,255,255,0.6);
+  margin: 16px 0 0;
+  letter-spacing: 0.03em;
+}
+
+/* ── divider ── */
+.landing-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  margin: 34px auto 30px;
+  max-width: 420px;
+}
+.landing-divider::before,
+.landing-divider::after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(to right, transparent, rgba(212,175,55,0.3), transparent);
+}
+.landing-divider span { color: rgba(212,175,55,0.5); font-size: 0.8rem; }
+
+/* ── launch badge ── */
+.landing-launch {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 6px;
+  color: rgba(255,255,255,0.55);
+  text-transform: uppercase;
+  margin: 34px 0 4px;
+}
+.landing-launch strong { color: #e8c44a; font-weight: 600; }
+
+/* ── email capture ── */
+.landing-capture {
+  margin: 26px auto 0;
+  max-width: 480px;
+}
+.landing-form {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+.landing-input {
+  flex: 1;
+  font-family: 'Montserrat', 'Cormorant Garamond', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.85);
+  background: rgba(10,9,7,0.9);
+  border: 1px solid rgba(212,175,55,0.22);
+  border-radius: 2px;
+  padding: 13px 16px;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.landing-input::placeholder { color: rgba(255,255,255,0.3); }
+.landing-input:focus {
+  border-color: rgba(212,175,55,0.55);
+  box-shadow: 0 0 0 3px rgba(212,175,55,0.08);
+}
+.landing-submit {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #050504;
+  background: #d4af37;
+  border: 1px solid #d4af37;
+  border-radius: 2px;
+  padding: 0 22px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+.landing-submit:hover {
+  background: #e8c44a;
+  border-color: #e8c44a;
+  box-shadow: 0 0 24px rgba(212,175,55,0.35);
+}
+.landing-submit:disabled { opacity: 0.55; cursor: wait; }
+.landing-note {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.35);
+  margin-top: 12px;
+}
+.landing-msg {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: rgba(212,175,55,0.85);
+  margin-top: 14px;
+  min-height: 1.2em;
+}
+.landing-msg.error { color: rgba(232,120,120,0.85); }
+
+/* ── footer ── */
+.landing-footer {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 0 20px 34px;
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  letter-spacing: 4px;
+  color: rgba(255,255,255,0.25);
+  text-transform: uppercase;
+}
+.landing-footer a {
+  color: rgba(212,175,55,0.55);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+.landing-footer a:hover { color: #d4af37; }
+
+/* ── responsiveness ── */
+@media (max-width: 760px) {
+  .landing-inner { padding: 48px 24px 40px; }
+  .landing-title { letter-spacing: 6px; }
+  .landing-form { flex-direction: column; }
+  .landing-submit { padding: 14px 22px; }
+  .landing-frame { width: calc(100% - 28px); margin: 22px auto; }
+}

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /scriptorium.html
+Disallow: /*.html
+
+Sitemap: https://holyscriptorium.com/sitemap.xml

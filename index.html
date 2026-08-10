@@ -2,21 +2,103 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=scriptorium.html">
-    <title>SCRIPTORIUM</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; style-src-elem 'self' 'unsafe-inline' unpkg.com cdn.jsdelivr.net; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' unpkg.com cdn.jsdelivr.net; img-src 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; img-src-elem 'self' data: *.tile.openstreetmap.org *.basemaps.cartocdn.com upload.wikimedia.org; connect-src 'self' *.tile.openstreetmap.org *.basemaps.cartocdn.com">
-    <link rel="canonical" href="https://scriptorium-sandy.vercel.app/index.html">
-    <meta property="og:title" content="SCRIPTORIUM">
-    <meta property="og:description" content="Scriptorium — a digital archive of biblical texts, maps, genealogies, and manuscript studies.">
-    <meta property="og:image" content="https://scriptorium-sandy.vercel.app/og-image.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self';">
+    <title>HOLY SCRIPTORIUM — Launching Soon</title>
+    <meta name="description" content="Holy Scriptorium — a digital archive of sacred texts. Launching soon. Join the mailing list to be informed.">
+    <meta property="og:title" content="HOLY SCRIPTORIUM">
+    <meta property="og:description" content="A digital archive of sacred texts. Launching soon.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://scriptorium-sandy.vercel.app/index.html">
+    <meta property="og:url" content="https://holyscriptorium.com/">
+    <meta property="og:image" content="https://holyscriptorium.com/og-image.svg">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="description" content="Scriptorium — a digital archive of biblical texts, maps, genealogies, and manuscript studies.">
+    <link rel="canonical" href="https://holyscriptorium.com/">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23050505'/%3E%3Ctext x='16' y='24' font-size='22' text-anchor='middle' fill='%23d4af37' font-family='serif'%3ES%3C/text%3E%3C/svg%3E">
-    <link rel="manifest" href="/manifest.json">
+    <link href="assets/fonts/fonts.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/landing.css">
 </head>
 <body>
-    <p>Redirecting to <a href="scriptorium.html">The Threshold</a>...</p>
+    <div class="landing-grain" aria-hidden="true"></div>
+
+    <div class="landing-shell">
+        <div class="landing-frame">
+            <div class="landing-inner">
+
+                <div class="landing-seal" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L3 7V17L12 22L21 17V7L12 2Z" stroke="rgba(212,175,55,0.5)" stroke-width="0.5"/>
+                        <path d="M12 2L3 7H21L12 2Z" fill="rgba(212,175,55,0.12)"/>
+                        <path d="M3 7V17L12 22V7" fill="rgba(212,175,55,0.06)"/>
+                        <path d="M21 7V17L12 22V7" fill="rgba(212,175,55,0.1)"/>
+                        <line x1="12" y1="7" x2="12" y2="22" stroke="rgba(212,175,55,0.2)"/>
+                    </svg>
+                </div>
+
+                <p class="landing-eyebrow">&#10018; The Archive Prepares &#10018;</p>
+                <h1 class="landing-title">HOLY SCRIPTORIUM</h1>
+
+                <div class="landing-divider"><span>&#10022;</span></div>
+
+                <p class="landing-launch">Launching <strong>Soon</strong></p>
+                <p class="landing-subtitle">The archive of sacred texts is being prepared. Leave your email below and we will keep you informed when the gates open.</p>
+
+                <div class="landing-capture">
+                    <form class="landing-form" id="landingForm" novalidate>
+                        <input class="landing-input" id="landingEmail" type="email" placeholder="scribe@holyscriptorium.com" autocomplete="email" aria-label="Email address" required>
+                        <button class="landing-submit" type="submit" id="landingSubmit">Inscribe Me</button>
+                    </form>
+                    <p class="landing-note">We will only contact you when there is news to share.</p>
+                    <p class="landing-msg" id="landingMsg" role="status" aria-live="polite"></p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer class="landing-footer">
+        &copy; <span id="landingYear"></span> Holy Scriptorium
+    </footer>
+
+    <script>
+    (function() {
+        var yearEl = document.getElementById('landingYear');
+        if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+        var form = document.getElementById('landingForm');
+        var input = document.getElementById('landingEmail');
+        var submitBtn = document.getElementById('landingSubmit');
+        var msg = document.getElementById('landingMsg');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var email = input.value.trim();
+            if (!email || email.indexOf('@') === -1) {
+                showMsg('Please enter a valid email address.', true);
+                return;
+            }
+            submitBtn.disabled = true;
+            msg.textContent = '';
+
+            fetch('/api/newsletter/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email })
+            }).then(function(r) { return r.json(); }).then(function(data) {
+                if (data.error) { showMsg(data.error, true); return; }
+                showMsg(data.message || 'Check your inbox to confirm your place in the archive.', false);
+                input.value = '';
+            }).catch(function() {
+                showMsg('Could not reach the archive. Please try again.', true);
+            }).finally(function() {
+                submitBtn.disabled = false;
+            });
+        });
+
+        function showMsg(text, isError) {
+            msg.textContent = text;
+            msg.className = 'landing-msg' + (isError ? ' error' : '');
+        }
+    })();
+    </script>
 </body>
 </html>

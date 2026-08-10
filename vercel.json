@@ -1,6 +1,8 @@
 {
+  "redirects": [
+    { "source": "/:path*.html", "destination": "/", "permanent": true }
+  ],
   "rewrites": [
-    { "source": "/", "destination": "/scriptorium.html" },
     { "source": "/api/(.*)", "destination": "/api" },
     { "source": "/:path*", "destination": "/:path*" }
   ],

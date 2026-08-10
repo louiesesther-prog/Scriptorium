@@ -122,10 +122,10 @@ var SearchUI = {
       .then(function(data) {
         var results = data.results || [];
         if (results.length === 0) {
-          SearchUI.resultsEl.innerHTML = '<div class="scr-search-empty">No results found for "' + q + '"</div>';
+          SearchUI.resultsEl.innerHTML = '<div class="scr-search-empty">No results found for "' + window.escHtml(q) + '"</div>';
           return;
         }
-        var html = '<div class="scr-search-count">' + results.length + ' result' + (results.length === 1 ? '' : 's') + ' for "' + q + '"</div>';
+        var html = '<div class="scr-search-count">' + results.length + ' result' + (results.length === 1 ? '' : 's') + ' for "' + window.escHtml(q) + '"</div>';
         results.forEach(function(r) {
           var ref = r.book + ' ' + r.chapter + ':' + r.verse;
           var era = r.era || '';

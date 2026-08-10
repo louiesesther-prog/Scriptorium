@@ -465,8 +465,9 @@ getEarnedBadges: function() {
   return earned;
 },
 
-// ── Shared toast notification (slides in from top, gold-bordered, auto-dismisses) ──
+// ── Shared toast notification (delegates to unified Scr.toast) ──
 showToast: function(msg, duration) {
+  if (window.Scr && window.Scr.toast) { window.Scr.toast(msg); return; }
   var t = document.createElement('div');
   t.className = 'scr-toast';
   t.textContent = msg;
@@ -508,7 +509,7 @@ window.Scr = {};
     t.className = 'scr-toast-item' + (type === 'error' ? ' scr-toast-error' : type === 'success' ? ' scr-toast-success' : '');
     var parts = message.split('|');
     if (parts.length > 1) {
-      t.innerHTML = '<div class="scr-toast-title">' + parts[0].trim() + '</div><div class="scr-toast-msg">' + parts.slice(1).join('|').trim() + '</div>';
+      t.innerHTML = '<div class="scr-toast-title">' + window.escHtml(parts[0].trim()) + '</div><div class="scr-toast-msg">' + window.escHtml(parts.slice(1).join('|').trim()) + '</div>';
     } else {
       t.textContent = message;
     }
@@ -523,38 +524,14 @@ window.Scr = {};
   };
 })();
 
-// ── Inject toast styles ────────────────────────────────────────────────
-(function() {
-  if (document.getElementById('scr-toast-style')) return;
-  var s = document.createElement('style');
-  s.id = 'scr-toast-style';
-  s.textContent =
-    '.scr-toast-container{position:fixed;top:20px;right:20px;z-index:20000;display:flex;flex-direction:column;gap:10px;pointer-events:none}' +
-    '.scr-toast-item{pointer-events:auto;padding:12px 20px;border-radius:3px;font-family:Cinzel,serif;font-size:0.65rem;letter-spacing:2px;background:rgba(10,10,10,0.95);border:1px solid rgba(212,175,55,0.15);color:rgba(255,255,255,0.6);backdrop-filter:blur(12px);box-shadow:0 4px 30px rgba(0,0,0,0.5);max-width:340px;opacity:0;transform:translateX(40px);transition:opacity 0.4s ease,transform 0.4s ease}' +
-    '.scr-toast-item.scr-toast-open{opacity:1;transform:translateX(0)}' +
-    '.scr-toast-item.scr-toast-out{opacity:0;transform:translateX(40px)}' +
-    '.scr-toast-item.scr-toast-error{border-color:#b84a4a;color:#d48a8a}' +
-    '.scr-toast-item.scr-toast-success{border-color:rgba(100,200,100,0.4);color:rgba(200,255,200,0.7)}' +
-    '.scr-toast-title{font-family:Cinzel,serif;letter-spacing:2px}' +
-    '.scr-toast-msg{font-family:Cormorant Garamond,serif;font-size:0.65rem;color:rgba(255,255,255,0.4);margin-top:4px}' +
-    '@keyframes scrToastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}';
-  document.head.appendChild(s);
-})();
 
-// Inject CSS for install toast animation if not present
-(function() {
-if (document.getElementById('pwa-toast-style')) return;
-var style = document.createElement('style');
-style.id = 'pwa-toast-style';
-style.textContent = '@keyframes fadeInUp{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}';
-document.head.appendChild(style);
-})();
 if (document.readyState === 'loading') {
 document.addEventListener('DOMContentLoaded', function() { ScriptoriumCore.init(); });
 } else {
 ScriptoriumCore.init();
 }
 })();
+window.escHtml = function(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; };
 window.activeBookContext = { id: '', era: '', downloadUrl: '' };
 window.launchScriptoriumReader = function(bookId, era, fileId) {
 var formattedId = bookId.toUpperCase().trim();
@@ -735,10 +712,10 @@ var html = '<p style="color:rgba(255,255,255,0.4);font-size:0.85rem;margin-botto
 data.results.forEach(function(r) {
 html += '<div class="search-result-item" style="border-bottom:1px solid rgba(212,175,55,0.08);padding:12px 0;cursor:pointer;" onclick="window.launchScriptoriumReader(\'' + r.bookId.replace(/'/g,"\\'") + '\',\'' + (r.era || 'ot') + '\');window.closeBibleSearch();">' +
 '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-'<span style="color:#d4af37;font-family:Cinzel,serif;font-size:0.85rem;">' + r.book + ' ' + r.chapter + ':' + r.verse + '</span>' +
-'<span style="color:rgba(255,255,255,0.25);font-size:0.7rem;">' + (r.era || 'OT').toUpperCase() + '</span>' +
-'</div>' +
-'<p style="color:rgba(255,255,255,0.7);margin:4px 0 0;font-size:0.95rem;line-height:1.5;">' + r.text + '</p>' +
+    '<span style="color:#d4af37;font-family:Cinzel,serif;font-size:0.85rem;">' + window.escHtml(r.book) + ' ' + window.escHtml(r.chapter) + ':' + window.escHtml(r.verse) + '</span>' +
+    '<span style="color:rgba(255,255,255,0.25);font-size:0.7rem;">' + window.escHtml((r.era || 'OT').toUpperCase()) + '</span>' +
+    '</div>' +
+    '<p style="color:rgba(255,255,255,0.7);margin:4px 0 0;font-size:0.95rem;line-height:1.5;">' + window.escHtml(r.text) + '</p>' +
 '</div>';
 });
 searchResults.innerHTML = html;

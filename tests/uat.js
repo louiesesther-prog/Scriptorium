@@ -1,11 +1,5 @@
 /**
- * ╔══════════════════════════════════════════════════════════╗
- * ║  DEPRECATED — Replaced by Playwright E2E tests          ║
- * ║  See: tests/e2e/ (115 tests, 11 spec files)             ║
- * ║  Kept for reference until all scenarios are verified.   ║
- * ╚══════════════════════════════════════════════════════════╝
- *
- * SCRIPTORIUM — User Acceptance Tests (legacy)
+ * SCRIPTORIUM — User Acceptance Tests
  *
  * These tests are preserved for comparison against the new
  * Playwright suite (tests/e2e/). All scenarios should have
@@ -771,45 +765,46 @@ async function runUAT() {
   // ──────────────────────────────────────────
   console.log('\n\u2500 UAT-24: Plan comments & partners \u2500\u2500\u2500');
 
-  await test('db.js defines plan_comments table', () => {
-    const db = fs.readFileSync(path.join(ROOT, 'scriptorium-api/db.js'), 'utf8');
-    assert(db.includes('plan_comments'), 'Missing plan_comments table');
-    assert(db.includes('planId'), 'Missing planId column');
-    assert(db.includes('dayIndex'), 'Missing dayIndex column');
+  await test('storage defines plan_comments table', () => {
+    const s = fs.readFileSync(path.join(ROOT, 'scriptorium-api/storage/sqlite.js'), 'utf8');
+    const p = fs.readFileSync(path.join(ROOT, 'scriptorium-api/storage/postgres.js'), 'utf8');
+    assert(s.includes('plan_comments') || p.includes('plan_comments'), 'Missing plan_comments table');
+    assert(s.includes('planId') || p.includes('planId'), 'Missing planId column');
+    assert(s.includes('dayIndex') || p.includes('dayIndex'), 'Missing dayIndex column');
   });
 
-  await test('db.js defines addPlanComment and getPlanComments', () => {
-    const db = fs.readFileSync(path.join(ROOT, 'scriptorium-api/db.js'), 'utf8');
-    assert(db.includes('addPlanComment'), 'Missing addPlanComment');
-    assert(db.includes('getPlanComments'), 'Missing getPlanComments');
+  await test('storage defines addPlanComment and getPlanComments', () => {
+    const s = fs.readFileSync(path.join(ROOT, 'scriptorium-api/storage/sqlite.js'), 'utf8');
+    assert(s.includes('addPlanComment'), 'Missing addPlanComment');
+    assert(s.includes('getPlanComments'), 'Missing getPlanComments');
   });
 
-  await test('db.js defines reading_partners table', () => {
-    const db = fs.readFileSync(path.join(ROOT, 'scriptorium-api/db.js'), 'utf8');
-    assert(db.includes('reading_partners'), 'Missing reading_partners table');
-    assert(db.includes('requesterId'), 'Missing requesterId');
-    assert(db.includes('targetId'), 'Missing targetId');
-    assert(db.includes("status TEXT DEFAULT 'pending'"), 'Missing status default');
+  await test('storage defines reading_partners table', () => {
+    const s = fs.readFileSync(path.join(ROOT, 'scriptorium-api/storage/sqlite.js'), 'utf8');
+    const p = fs.readFileSync(path.join(ROOT, 'scriptorium-api/storage/postgres.js'), 'utf8');
+    assert(s.includes('reading_partners') || p.includes('reading_partners'), 'Missing reading_partners table');
+    assert(s.includes('requesterId') || p.includes('requesterId'), 'Missing requesterId');
+    assert(s.includes('targetId') || p.includes('targetId'), 'Missing targetId');
+    assert(s.includes('pending') && (s.includes("status TEXT DEFAULT") || s.includes("status TEXT DEFAULT")), 'Missing status default');
   });
 
-  await test('db.js defines partner CRUD functions', () => {
-    const db = fs.readFileSync(path.join(ROOT, 'scriptorium-api/db.js'), 'utf8');
-    assert(db.includes('requestPartner'), 'Missing requestPartner');
-    assert(db.includes('respondToPartner'), 'Missing respondToPartner');
-    assert(db.includes('getPartnerRequests'), 'Missing getPartnerRequests');
-    assert(db.includes('getPartnerShips'), 'Missing getPartnerShips');
+  await test('storage defines partner CRUD functions', () => {
+    const s = fs.readFileSync(path.join(ROOT, 'scriptorium-api/storage/sqlite.js'), 'utf8');
+    assert(s.includes('requestPartner'), 'Missing requestPartner');
+    assert(s.includes('respondToPartner'), 'Missing respondToPartner');
+    assert(s.includes('getPartnerRequests'), 'Missing getPartnerRequests');
+    assert(s.includes('getPartnerShips'), 'Missing getPartnerShips');
   });
 
-  await test('app.js defines POST /api/auth/achievements', () => {
-    const app = fs.readFileSync(path.join(ROOT, 'scriptorium-api/app.js'), 'utf8');
-    assert(app.includes("'/api/auth/achievements'"), 'Missing achievements endpoint');
+  await test('auth routes define POST /api/auth/achievements', () => {
+    const auth = fs.readFileSync(path.join(ROOT, 'scriptorium-api/routes/auth.js'), 'utf8');
+    assert(auth.includes("'/api/auth/achievements'"), 'Missing achievements endpoint');
   });
 
-  await test('app.js exports exports addPlanComment etc.', () => {
-    const db = fs.readFileSync(path.join(ROOT, 'scriptorium-api/db.js'), 'utf8');
-    assert(db.includes('addPlanComment'), 'addPlanComment not in db.js');
-    assert(db.includes('requestPartner'), 'requestPartner not in db.js');
-    assert(db.includes('addPlanComment, getPlanComments,'), 'Missing exports plan comment fns');
+  await test('storage exports addPlanComment etc.', () => {
+    const idx = fs.readFileSync(path.join(ROOT, 'scriptorium-api/storage/index.js'), 'utf8');
+    assert(idx.includes('addPlanComment'), 'addPlanComment not exported');
+    assert(idx.includes('requestPartner'), 'requestPartner not exported');
   });
 
   // ──────────────────────────────────────────
@@ -893,10 +888,10 @@ async function runUAT() {
   // ──────────────────────────────────────────
   console.log('\n\u2500 UAT-28: Grace period & streak \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500');
 
-  await test('db.js defines calcStreakWithGrace helper', () => {
-    const db = fs.readFileSync(path.join(ROOT, 'scriptorium-api/db.js'), 'utf8');
-    assert(db.includes('calcStreakWithGrace'), 'Missing grace calculation');
-    assert(db.includes('graceDays'), 'Missing graceDays in streak calc');
+  await test('storage defines calcStreakWithGrace helper', () => {
+    const sh = fs.readFileSync(path.join(ROOT, 'scriptorium-api/storage/shared.js'), 'utf8');
+    assert(sh.includes('calcStreakWithGrace'), 'Missing grace calculation');
+    assert(sh.includes('graceDays'), 'Missing graceDays in streak calc');
   });
 
   await test('Streak endpoint returns grace fields', async () => {

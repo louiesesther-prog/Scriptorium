@@ -159,7 +159,7 @@ function renderLedger() {
     all.forEach(function(entry) {
         const row = document.createElement('div');
         row.className = 'ledger-row' + (entry.isUser ? ' user-row' : '');
-        row.innerHTML = '<span style="color:rgba(212,175,55,0.5);font-size: var(--text-micro);">&#9733;</span><span>' + entry.name + ' <span style="font-size: var(--text-micro);color:rgba(212,175,55,0.85);font-family:Cinzel,serif;letter-spacing:1px;">(YOU)</span></span><span style="font-family:Cinzel,serif;font-size: var(--text-micro);letter-spacing:1px;color:rgba(212,175,55,0.85);">' + entry.chars.toLocaleString() + '</span>';
+        row.innerHTML = '<span style="color:rgba(212,175,55,0.5);font-size: var(--text-micro);">&#9733;</span><span>' + window.escHtml(entry.name) + ' <span style="font-size: var(--text-micro);color:rgba(212,175,55,0.85);font-family:Cinzel,serif;letter-spacing:1px;">(YOU)</span></span><span style="font-family:Cinzel,serif;font-size: var(--text-micro);letter-spacing:1px;color:rgba(212,175,55,0.85);">' + entry.chars.toLocaleString() + '</span>';
         body.appendChild(row);
     });
 }
@@ -341,11 +341,11 @@ function initializeMuseumEnhancements() {
         var rankTitles = ["", "Novice Scribe", "Scholar Student", "Active Witness", "Master Scribe", "Archivist Sage"];
         var appliedRank = rankTitles[activeScribe.knowledgeLevel] || "Inscribed Scholar";
         var formalTitle = activeScribe.gender === 'female' ? 'Sister' : 'Brother';
-        dynamicGreeting.innerHTML = 'Welcome back, ' + formalTitle + ' ' + activeScribe.name + ' (<span style="color:var(--museum-gold);letter-spacing:1px;font-weight:600;">' + appliedRank + '</span>). The inner vaults stand ready for your continued inspection.';
+        dynamicGreeting.innerHTML = 'Welcome back, ' + window.escHtml(formalTitle) + ' ' + window.escHtml(activeScribe.name) + ' (<span style="color:var(--museum-gold);letter-spacing:1px;font-weight:600;">' + window.escHtml(appliedRank) + '</span>). The inner vaults stand ready for your continued inspection.';
     } else if (!activeScribe && dynamicGreeting) {
         var v2 = window.__getUnifiedUser ? window.__getUnifiedUser() : null;
         if (v2 && v2.profile.name) {
-            dynamicGreeting.innerHTML = 'Welcome back, ' + v2.profile.name + ' (<span style="color:var(--museum-gold);letter-spacing:1px;font-weight:600;">' + v2.rank.title + '</span>). The inner vaults stand ready for your continued inspection.';
+            dynamicGreeting.innerHTML = 'Welcome back, ' + window.escHtml(v2.profile.name) + ' (<span style="color:var(--museum-gold);letter-spacing:1px;font-weight:600;">' + window.escHtml(v2.rank.title) + '</span>). The inner vaults stand ready for your continued inspection.';
         }
     }
 }
