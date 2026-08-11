@@ -21,11 +21,11 @@
 <body>
     <div class="landing-grain" aria-hidden="true"></div>
 
-    <div class="landing-shell">
+    <div class="landing-shell" id="landingShell">
         <div class="landing-frame">
             <div class="landing-inner">
 
-                <div class="landing-seal" aria-hidden="true">
+                <div class="landing-seal reveal" id="landingSeal" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 2L3 7V17L12 22L21 17V7L12 2Z" stroke="rgba(212,175,55,0.5)" stroke-width="0.5"/>
                         <path d="M12 2L3 7H21L12 2Z" fill="rgba(212,175,55,0.12)"/>
@@ -35,15 +35,17 @@
                     </svg>
                 </div>
 
-                <p class="landing-eyebrow">&#10018; The Archive Prepares &#10018;</p>
-                <h1 class="landing-title">HOLY SCRIPTORIUM</h1>
+                <p class="landing-eyebrow reveal" style="animation-delay:0.05s">&#10018; The Archive Prepares &#10018;</p>
+                <h1 class="landing-title reveal" style="animation-delay:0.12s">HOLY SCRIPTORIUM</h1>
 
-                <div class="landing-divider"><span>&#10022;</span></div>
+                <div class="landing-divider reveal" style="animation-delay:0.2s"><span>&#10022;</span></div>
 
-                <p class="landing-launch">Launching <strong>Soon</strong></p>
-                <p class="landing-subtitle">The archive of sacred texts is being prepared. Leave your email below and we will keep you informed when the gates open.</p>
+                <p class="landing-verse reveal" style="animation-delay:0.26s" id="landingVerse" role="presentation"></p>
 
-                <div class="landing-capture">
+                <p class="landing-launch reveal" style="animation-delay:0.32s">Launching <strong>Soon</strong></p>
+                <p class="landing-subtitle reveal" style="animation-delay:0.36s">The archive of sacred texts is being prepared. Leave your email below and we will keep you informed when the gates open.</p>
+
+                <div class="landing-capture reveal" style="animation-delay:0.42s">
                     <form class="landing-form" id="landingForm" novalidate>
                         <input class="landing-input" id="landingEmail" type="email" placeholder="scribe@holyscriptorium.com" autocomplete="email" aria-label="Email address" required>
                         <button class="landing-submit" type="submit" id="landingSubmit">Inscribe Me</button>
@@ -52,6 +54,25 @@
                     <p class="landing-msg" id="landingMsg" role="status" aria-live="polite"></p>
                 </div>
 
+                <div class="landing-chronicle reveal" style="animation-delay:0.48s">
+                    <div class="chronicle-item">
+                        <span class="chronicle-num">39</span>
+                        <span class="chronicle-label">Old Testament Books</span>
+                    </div>
+                    <div class="chronicle-item">
+                        <span class="chronicle-num">27</span>
+                        <span class="chronicle-label">New Testament Books</span>
+                    </div>
+                    <div class="chronicle-item">
+                        <span class="chronicle-num">60</span>
+                        <span class="chronicle-label">Canon &amp; Hidden Texts</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="landing-marquee" aria-hidden="true">
+                <div class="marquee-track" id="marqueeTrack"></div>
             </div>
         </div>
     </div>
@@ -88,6 +109,7 @@
                 if (data.error) { showMsg(data.error, true); return; }
                 showMsg(data.message || 'Inscribed. Watch for the gates to open.', false);
                 input.value = '';
+                celebrate();
             }).catch(function() {
                 showMsg('Could not reach the archive. Please try again.', true);
             }).finally(function() {
@@ -99,6 +121,68 @@
             msg.textContent = text;
             msg.className = 'landing-msg' + (isError ? ' error' : '');
         }
+
+        function celebrate() {
+            var shell = document.getElementById('landingShell');
+            var seal = document.getElementById('landingSeal');
+            shell.classList.add('celebrating');
+            seal.classList.add('seal-glow');
+            submitBtn.classList.add('inscribed');
+            submitBtn.textContent = 'Inscribed';
+            setTimeout(function() {
+                submitBtn.textContent = 'Inscribe Me';
+                submitBtn.classList.remove('inscribed');
+                setTimeout(function() { shell.classList.remove('celebrating'); }, 300);
+            }, 2600);
+        }
+
+        var verses = [
+            ['Thy word is a lamp unto my feet, and a light unto my path.', 'Psalm 119:105'],
+            ['Let the wise hear and increase in learning.', 'Proverbs 1:5'],
+            ['The grass withereth, the flower fadeth: but the word of our God shall stand for ever.', 'Isaiah 40:8'],
+            ['Man shall not live by bread alone, but by every word that proceedeth out of the mouth of God.', 'Matthew 4:4'],
+            ['In the beginning was the Word, and the Word was with God, and the Word was God.', 'John 1:1']
+        ];
+        var verseEl = document.getElementById('landingVerse');
+        var vIdx = 0;
+        if (verseEl && verses.length) {
+            verseEl.innerHTML = '<span class="verse-text">' + verses[0][0] + '</span><span class="verse-ref">' + verses[0][1] + '</span>';
+            setInterval(function() {
+                vIdx = (vIdx + 1) % verses.length;
+                verseEl.classList.remove('verse-fade');
+                void verseEl.offsetWidth;
+                verseEl.innerHTML = '<span class="verse-text">' + verses[vIdx][0] + '</span><span class="verse-ref">' + verses[vIdx][1] + '</span>';
+                verseEl.classList.add('verse-fade');
+            }, 8000);
+        }
+
+        var books = ['Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth','1 Samuel','2 Samuel','1 Kings','2 Kings','1 Chronicles','2 Chronicles','Ezra','Nehemiah','Esther','Job','Psalms','Proverbs','Ecclesiastes','Song of Solomon','Isaiah','Jeremiah','Lamentations','Ezekiel','Daniel','Hosea','Joel','Amos','Obadiah','Jonah','Micah','Nahum','Habakkuk','Zephaniah','Haggai','Zechariah','Malachi','Matthew','Mark','Luke','John','Acts','Romans','1 Corinthians','2 Corinthians','Galatians','Ephesians','Philippians','Colossians','1 Thessalonians','2 Thessalonians','1 Timothy','2 Timothy','Titus','Philemon','Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation','Enoch','Jubilees','3 Maccabees','4 Maccabees'];
+        var track = document.getElementById('marqueeTrack');
+        if (track) {
+            var twice = books.concat(books);
+            var html = '';
+            for (var i = 0; i < twice.length; i++) {
+                html += '<span class="marquee-book">' + twice[i] + '</span>';
+                if (i % 4 === 3) html += '<span class="marquee-star">&#10022;</span>';
+            }
+            track.innerHTML = html;
+        }
+
+        function makeFireflies() {
+            var shell = document.getElementById('landingShell');
+            if (!shell) return;
+            var count = 9;
+            for (var i = 0; i < count; i++) {
+                var f = document.createElement('span');
+                f.className = 'firefly';
+                f.style.left = (8 + Math.random() * 84) + '%';
+                f.style.top = (12 + Math.random() * 76) + '%';
+                f.style.animationDuration = (9 + Math.random() * 10) + 's';
+                f.style.animationDelay = (Math.random() * 10) + 's';
+                shell.appendChild(f);
+            }
+        }
+        makeFireflies();
     })();
     </script>
 </body>
