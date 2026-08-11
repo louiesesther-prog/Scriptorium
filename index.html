@@ -85,7 +85,7 @@
                 body: JSON.stringify({ email: email })
             }).then(function(r) { return r.json(); }).then(function(data) {
                 if (data.error) { showMsg(data.error, true); return; }
-                showMsg(data.message || 'Check your inbox to confirm your place in the archive.', false);
+                showMsg(data.message || 'Inscribed. Watch for the gates to open.', false);
                 input.value = '';
             }).catch(function() {
                 showMsg('Could not reach the archive. Please try again.', true);

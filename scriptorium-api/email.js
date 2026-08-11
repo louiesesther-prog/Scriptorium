@@ -18,8 +18,14 @@ async function send(to, subject, html) {
   return true;
 }
 
+function appBase() {
+  if (process.env.RAILWAY_PUBLIC_DOMAIN) return 'https://' + process.env.RAILWAY_PUBLIC_DOMAIN;
+  if (process.env.VERCEL) return 'https://' + process.env.VERCEL_URL;
+  return 'http://localhost:5000';
+}
+
 async function sendConfirmEmail(to, token, email) {
-  const base = process.env.VERCEL ? 'https://' + process.env.VERCEL_URL : 'http://localhost:5000';
+  const base = appBase();
   const link = base + '/api/newsletter/confirm?token=' + token;
   const unsubLink = base + '/api/newsletter/unsubscribe?email=' + encodeURIComponent(email);
   return send(to, 'Confirm your Scriptorium subscription',
@@ -33,7 +39,7 @@ async function sendConfirmEmail(to, token, email) {
 }
 
 async function sendWelcomeEmail(to) {
-  const base = process.env.VERCEL ? 'https://' + process.env.VERCEL_URL : 'http://localhost:5000';
+  const base = appBase();
   const unsubLink = base + '/api/newsletter/unsubscribe?email=' + encodeURIComponent(to);
   return send(to, 'Welcome to the Scriptorium Archive',
     '<div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:24px;background:#0a0a0a;color:#e0e0e0;border:1px solid rgba(212,175,55,0.2)">' +
@@ -52,7 +58,7 @@ async function sendUnsubscribeEmail(to) {
 }
 
 async function sendPasswordResetEmail(to, resetToken) {
-  const base = process.env.VERCEL ? 'https://' + process.env.VERCEL_URL : 'http://localhost:5000';
+  const base = appBase();
   const link = base + '/reset-password.html?token=' + resetToken;
   return send(to, 'Reset your Scriptorium Cipher Key',
     '<div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:24px;background:#0a0a0a;color:#e0e0e0;border:1px solid rgba(212,175,55,0.2)">' +
@@ -63,4 +69,4 @@ async function sendPasswordResetEmail(to, resetToken) {
     '<p style="font-size:0.75rem;color:rgba(212,175,55,0.3);text-align:center;margin-top:30px">Scriptorium &mdash; The Eternal Record of the Word</p></div>');
 }
 
-module.exports = { send, sendConfirmEmail, sendWelcomeEmail, sendUnsubscribeEmail, sendPasswordResetEmail };
+module.exports = { appBase, send, sendConfirmEmail, sendWelcomeEmail, sendUnsubscribeEmail, sendPasswordResetEmail };

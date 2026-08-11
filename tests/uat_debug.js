@@ -1745,9 +1745,10 @@ async function runUAT() { console.log('RUNUAT_STARTED');
     });
   });
 
-  await test('index.html redirects to scriptorium.html', () => {
+  await test('index.html is the prelaunch landing page', () => {
     var html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-    assert(html.includes('scriptorium.html'), 'Missing redirect to scriptorium');
+    assert(html.includes('landingForm'), 'Missing newsletter capture form');
+    assert(!html.includes('scriptorium.html'), 'index.html should not link to the app before launch');
   });
 
   await test('ethiopian-canon.html links to genealogy page', () => {
