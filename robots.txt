@@ -3,4 +3,4 @@ Allow: /
 Disallow: /scriptorium.html
 Disallow: /*.html
 
-Sitemap: https://holyscriptorium.com/sitemap.xml
+Sitemap: https://www.holyscriptorium.com/sitemap.xml
