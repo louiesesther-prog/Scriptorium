@@ -29,6 +29,38 @@ body {
     #050504;
 }
 
+/* ── candlelight aurora behind the frame ── */
+.landing-shell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(560px 360px at 22% 18%, rgba(212,175,55,0.10) 0%, transparent 65%),
+    radial-gradient(520px 340px at 82% 26%, rgba(212,175,55,0.07) 0%, transparent 65%),
+    radial-gradient(620px 400px at 50% 96%, rgba(139,26,26,0.06) 0%, transparent 65%);
+  filter: blur(2px);
+  animation: auroraDrift 26s ease-in-out infinite alternate;
+}
+@keyframes auroraDrift {
+  0%   { opacity: 0.55; transform: translate3d(0, 0, 0) scale(1); }
+  50%  { opacity: 0.9;  transform: translate3d(18px, -14px, 0) scale(1.04); }
+  100% { opacity: 0.6;  transform: translate3d(-14px, 10px, 0) scale(0.98); }
+}
+
+/* ── soft gold cursor glow ── */
+.landing-glow {
+  position: fixed;
+  left: 0; top: 0;
+  width: 560px; height: 560px;
+  margin: -280px 0 0 -280px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(circle, rgba(212,175,55,0.09) 0%, rgba(212,175,55,0.03) 40%, transparent 70%);
+  will-change: transform;
+}
+
 /* ── floating scripture dust ── */
 .landing-shell::before {
   content: '';
@@ -311,6 +343,10 @@ body {
   .marquee-track { animation: none; }
   .firefly { display: none; }
   .landing-shell.celebrating::after { animation: none; content: none; }
+  .landing-shell::after { animation: none; opacity: 0.7; }
+  .landing-glow { display: none; }
+  .landing-submit::before, .landing-spinner::before, .spark { animation: none; }
+  .landing-form.shake { animation: none; }
 }
 
 /* ── email capture ── */

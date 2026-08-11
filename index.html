@@ -14,12 +14,20 @@
     <meta name="twitter:card" content="summary_large_image">
     <link rel="canonical" href="https://www.holyscriptorium.com/">
     <meta name="google-site-verification" content="googlefe3d222c7b74dc29">
+    <meta name="theme-color" content="#050504">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Scriptorium">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/assets/icons/icon-192.svg">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23050505'/%3E%3Ctext x='16' y='24' font-size='22' text-anchor='middle' fill='%23d4af37' font-family='serif'%3ES%3C/text%3E%3C/svg%3E">
     <link href="assets/fonts/fonts.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/landing.css">
 </head>
 <body>
     <div class="landing-grain" aria-hidden="true"></div>
+    <div class="landing-glow" id="landingGlow" aria-hidden="true"></div>
 
     <div class="landing-shell" id="landingShell">
         <div class="landing-frame">
@@ -179,7 +187,7 @@
             }
         }
 
-        var verses = [
+        var fallbackVerses = [
             ['Thy word is a lamp unto my feet, and a light unto my path.', 'Psalm 119:105'],
             ['Let the wise hear and increase in learning.', 'Proverbs 1:5'],
             ['The grass withereth, the flower fadeth: but the word of our God shall stand for ever.', 'Isaiah 40:8'],
@@ -187,16 +195,36 @@
             ['In the beginning was the Word, and the Word was with God, and the Word was God.', 'John 1:1']
         ];
         var verseEl = document.getElementById('landingVerse');
+        var versePool = fallbackVerses.slice();
         var vIdx = 0;
-        if (verseEl && verses.length) {
-            verseEl.innerHTML = '<span class="verse-text">' + verses[0][0] + '</span><span class="verse-ref">' + verses[0][1] + '</span>';
-            setInterval(function() {
-                vIdx = (vIdx + 1) % verses.length;
-                verseEl.classList.remove('verse-fade');
-                void verseEl.offsetWidth;
-                verseEl.innerHTML = '<span class="verse-text">' + verses[vIdx][0] + '</span><span class="verse-ref">' + verses[vIdx][1] + '</span>';
-                verseEl.classList.add('verse-fade');
-            }, 16000);
+
+        function renderVerse(text, ref) {
+            if (!verseEl) return;
+            verseEl.classList.remove('verse-fade');
+            void verseEl.offsetWidth;
+            verseEl.innerHTML = '<span class="verse-text"></span><span class="verse-ref"></span>';
+            verseEl.querySelector('.verse-text').textContent = text;
+            verseEl.querySelector('.verse-ref').textContent = ref;
+            verseEl.classList.add('verse-fade');
+        }
+        function renderNextVerse() {
+            if (!versePool.length) return;
+            vIdx = (vIdx + 1) % versePool.length;
+            renderVerse(versePool[vIdx][0], versePool[vIdx][1]);
+        }
+        if (verseEl) {
+            renderVerse(fallbackVerses[0][0], fallbackVerses[0][1]);
+            fetch('/api/daily-verse')
+                .then(function(r) { if (!r.ok) throw new Error('bad'); return r.json(); })
+                .then(function(d) {
+                    if (d && d.text && d.ref) {
+                        versePool = [[d.text, d.ref]].concat(fallbackVerses);
+                        vIdx = 0;
+                        renderVerse(versePool[0][0], versePool[0][1]);
+                    }
+                })
+                .catch(function() {});
+            setInterval(renderNextVerse, 16000);
         }
 
         var books = ['Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth','1 Samuel','2 Samuel','1 Kings','2 Kings','1 Chronicles','2 Chronicles','Ezra','Nehemiah','Esther','Job','Psalms','Proverbs','Ecclesiastes','Song of Solomon','Isaiah','Jeremiah','Lamentations','Ezekiel','Daniel','Hosea','Joel','Amos','Obadiah','Jonah','Micah','Nahum','Habakkuk','Zephaniah','Haggai','Zechariah','Malachi','Matthew','Mark','Luke','John','Acts','Romans','1 Corinthians','2 Corinthians','Galatians','Ephesians','Philippians','Colossians','1 Thessalonians','2 Thessalonians','1 Timothy','2 Timothy','Titus','Philemon','Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation','Enoch','Jubilees','3 Maccabees','4 Maccabees'];
@@ -226,6 +254,20 @@
             }
         }
         makeFireflies();
+
+        var glow = document.getElementById('landingGlow');
+        if (glow && window.matchMedia('(pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            var gx = 0, gy = 0, cx = 0, cy = 0;
+            window.addEventListener('pointermove', function(e) {
+                gx = e.clientX; gy = e.clientY;
+            });
+            (function glowLoop() {
+                cx += (gx - cx) * 0.08;
+                cy += (gy - cy) * 0.08;
+                glow.style.transform = 'translate(' + cx + 'px, ' + cy + 'px)';
+                requestAnimationFrame(glowLoop);
+            })();
+        }
     })();
     </script>
 </body>
