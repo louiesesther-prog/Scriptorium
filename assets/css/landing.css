@@ -317,6 +317,7 @@ body {
 .landing-capture {
   margin: 26px auto 0;
   max-width: 480px;
+  position: relative;
 }
 .landing-form {
   display: flex;
@@ -353,7 +354,9 @@ body {
   padding: 0 22px;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
 }
 .landing-submit:hover {
   background: #e8c44a;
@@ -361,6 +364,89 @@ body {
   box-shadow: 0 0 24px rgba(212,175,55,0.35);
 }
 .landing-submit:disabled { opacity: 0.55; cursor: wait; }
+
+/* ink flourish sweep across the button */
+.landing-submit::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -60%;
+  width: 45%; height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255,255,255,0.5), transparent);
+  transform: skewX(-20deg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+.landing-submit:hover::before,
+.landing-submit.loading::before {
+  opacity: 1;
+  animation: flourishSweep 0.9s ease forwards;
+}
+@keyframes flourishSweep {
+  from { left: -60%; }
+  to   { left: 120%; }
+}
+
+/* wax-seal press dip */
+.landing-submit.pressing {
+  transform: translateY(2px);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.35), 0 0 18px rgba(212,175,55,0.2);
+}
+
+/* loading spinner */
+.landing-spinner {
+  display: none;
+  width: 11px; height: 11px;
+  margin-right: 8px;
+  vertical-align: -1px;
+}
+.landing-spinner::before {
+  content: '\10022';
+  display: block;
+  font-size: 11px;
+  line-height: 1;
+  color: #050504;
+  animation: spinnerRotate 0.9s linear infinite;
+}
+.landing-submit.loading .landing-spinner { display: inline-block; }
+@keyframes spinnerRotate { to { transform: rotate(360deg); } }
+
+/* inscribed success state */
+.landing-submit.inscribed {
+  background: #e8c44a;
+  border-color: #e8c44a;
+  box-shadow: 0 0 26px rgba(212,175,55,0.5);
+}
+
+/* success sparks rising from the capture area */
+.spark {
+  position: absolute;
+  bottom: 26%;
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: rgba(232,196,74,0.9);
+  box-shadow: 0 0 6px 1px rgba(212,175,55,0.6);
+  pointer-events: none;
+  animation: sparkRise 1s ease-out forwards;
+}
+@keyframes sparkRise {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(-64px) scale(0.4); }
+}
+
+/* error shake + red input */
+.landing-form.shake { animation: formShake 0.4s ease; }
+@keyframes formShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-7px); }
+  75% { transform: translateX(7px); }
+}
+.landing-input.input-error {
+  border-color: rgba(232,120,120,0.7);
+  box-shadow: 0 0 0 3px rgba(232,120,120,0.12);
+}
+
+/* ── email capture note ── */
 .landing-note {
   font-family: 'Montserrat', sans-serif;
   font-size: 0.62rem;

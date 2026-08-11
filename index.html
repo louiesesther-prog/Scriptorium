@@ -45,10 +45,10 @@
                 <p class="landing-launch reveal" style="animation-delay:0.32s">Launching <strong>Soon</strong></p>
                 <p class="landing-subtitle reveal" style="animation-delay:0.36s">The archive of sacred texts is being prepared. Leave your email below and we will keep you informed when the gates open.</p>
 
-                <div class="landing-capture reveal" style="animation-delay:0.42s">
+                <div class="landing-capture reveal" id="landingCapture" style="animation-delay:0.42s">
                     <form class="landing-form" id="landingForm" novalidate>
                         <input class="landing-input" id="landingEmail" type="email" placeholder="scribe@holyscriptorium.com" autocomplete="email" aria-label="Email address" required>
-                        <button class="landing-submit" type="submit" id="landingSubmit">Inscribe Me</button>
+                        <button class="landing-submit" type="submit" id="landingSubmit"><span class="landing-spinner" aria-hidden="true"></span><span id="landingSubmitLabel">Inscribe Me</span></button>
                     </form>
                     <p class="landing-note">We will only contact you when there is news to share.</p>
                     <p class="landing-msg" id="landingMsg" role="status" aria-live="polite"></p>
@@ -89,6 +89,7 @@
         var form = document.getElementById('landingForm');
         var input = document.getElementById('landingEmail');
         var submitBtn = document.getElementById('landingSubmit');
+        var submitLabel = document.getElementById('landingSubmitLabel');
         var msg = document.getElementById('landingMsg');
 
         form.addEventListener('submit', function(e) {
@@ -96,30 +97,56 @@
             var email = input.value.trim();
             if (!email || email.indexOf('@') === -1) {
                 showMsg('Please enter a valid email address.', true);
+                failShake();
                 return;
             }
-            submitBtn.disabled = true;
             msg.textContent = '';
+            setLoading(true);
 
             fetch('/api/newsletter/subscribe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: email })
             }).then(function(r) { return r.json(); }).then(function(data) {
-                if (data.error) { showMsg(data.error, true); return; }
-                showMsg(data.message || 'Inscribed. Watch for the gates to open.', false);
+                if (data.error) {
+                    setLoading(false);
+                    showMsg(data.error, true);
+                    failShake();
+                    return;
+                }
                 input.value = '';
+                setLoading(false);
+                showMsg(data.message || 'Inscribed. Watch for the gates to open.', false);
                 celebrate();
             }).catch(function() {
+                setLoading(false);
                 showMsg('Could not reach the archive. Please try again.', true);
-            }).finally(function() {
-                submitBtn.disabled = false;
+                failShake();
             });
         });
+
+        function setLoading(on) {
+            submitBtn.disabled = on;
+            submitBtn.classList.toggle('pressing', on);
+            submitBtn.classList.toggle('loading', on);
+            submitLabel.textContent = on ? 'Inscribing' : 'Inscribe Me';
+        }
 
         function showMsg(text, isError) {
             msg.textContent = text;
             msg.className = 'landing-msg' + (isError ? ' error' : '');
+        }
+
+        function failShake() {
+            submitBtn.classList.remove('inscribed');
+            form.classList.remove('shake');
+            void form.offsetWidth;
+            form.classList.add('shake');
+            input.classList.remove('input-error');
+            void input.offsetWidth;
+            input.classList.add('input-error');
+            setTimeout(function() { form.classList.remove('shake'); }, 500);
+            setTimeout(function() { input.classList.remove('input-error'); }, 1600);
         }
 
         function celebrate() {
@@ -127,13 +154,29 @@
             var seal = document.getElementById('landingSeal');
             shell.classList.add('celebrating');
             seal.classList.add('seal-glow');
+            submitLabel.textContent = 'Inscribed';
             submitBtn.classList.add('inscribed');
-            submitBtn.textContent = 'Inscribed';
+            sparks();
             setTimeout(function() {
-                submitBtn.textContent = 'Inscribe Me';
+                submitLabel.textContent = 'Inscribe Me';
                 submitBtn.classList.remove('inscribed');
+                seal.classList.remove('seal-glow');
                 setTimeout(function() { shell.classList.remove('celebrating'); }, 300);
-            }, 2600);
+            }, 3000);
+        }
+
+        function sparks() {
+            var capture = document.getElementById('landingCapture');
+            if (!capture) return;
+            for (var i = 0; i < 10; i++) {
+                var s = document.createElement('span');
+                s.className = 'spark';
+                s.style.left = (20 + Math.random() * 60) + '%';
+                s.style.animationDuration = (0.9 + Math.random() * 0.8) + 's';
+                s.style.animationDelay = (Math.random() * 0.25) + 's';
+                capture.appendChild(s);
+                (function(el) { setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 2200); })(s);
+            }
         }
 
         var verses = [
